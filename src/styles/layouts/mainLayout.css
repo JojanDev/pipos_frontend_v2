@@ -1,0 +1,113 @@
+/* =============================================== */
+/* Contenedor padre */
+/* =============================================== */
+
+.layout {
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  grid-template-rows: 100px 1fr;
+  grid-template-areas:
+    "header header"
+    "nav main";
+}
+
+/* =============================================== */
+/* Encabezado */
+/* =============================================== */
+
+.header {
+  grid-area: header;
+  display: grid;
+  height: 100px;
+  grid-template-columns: 250px 1fr;
+  grid-template-rows: 1fr;
+  grid-template-areas: "logo user";
+}
+
+.logo {
+  grid-area: logo;
+  height: 100%;
+  max-height: 100px;
+  place-self: center;
+}
+
+.header__info-container {
+  grid-area: user;
+  margin-left: 20px;
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.header__user {
+  font-size: 40px;
+}
+
+.header__rol {
+  margin-top: -5px;
+}
+
+/* =============================================== */
+/* Barra de navegacion */
+/* =============================================== */
+
+.sidebar {
+  background-color: #0161b5;
+  width: 250px;
+  height: 100%;
+  grid-area: nav;
+}
+
+.sidebar__title {
+  color: #fff;
+  font-size: 30px;
+  text-align: center;
+  padding-top: 10px;
+}
+
+.sidebar__nav {
+  margin-top: 20px;
+}
+
+.sidebar__item {
+  display: flex;
+}
+
+.sidebar__link {
+  width: 100%;
+  height: 100%;
+  color: #fff;
+  text-decoration: none;
+  font-size: 18px;
+  padding: 10px 20px;
+}
+
+.sidebar__link:hover {
+  background-color: #004a8f;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+}
+
+/* =============================================== */
+/* Contenido principal */
+/* =============================================== */
+
+.main {
+  grid-area: main;
+  margin: 10px 20px 20px 20px;
+  background-color: #9bc3ee;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 20px 20px 15px 20px;
+}
+
+.main__message {
+  font-size: 24px;
+  font-weight: bold;
+  color: #404040;
+}

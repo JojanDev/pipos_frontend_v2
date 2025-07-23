@@ -1,0 +1,13 @@
+@import url(views-styles/home.css);
+@import url(views-styles/login.css);
+@import url(layouts/mainLayout.css);
+@import url(../components/button/button.css);
+@import url(../components/form/form.css);
+@import url(views-styles/register.css);
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}

@@ -1,0 +1,59 @@
+.main-login {
+  width: 100%;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 5px 1fr;
+  grid-template-rows: 1fr;
+  grid-template-areas: "logo line form";
+}
+
+.logo {
+  grid-area: logo;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo__img {
+  width: 100%;
+}
+
+.line {
+  grid-area: line;
+  background-color: #606060;
+  width: 100%;
+  height: 90%;
+  align-self: center;
+}
+
+.container-form {
+  height: 60%;
+  width: 60%;
+  grid-area: form;
+  margin: 0 auto;
+  display: flex;
+  align-self: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.container-form__title {
+  font-size: 54px;
+  margin-left: 15px;
+  white-space: nowrap;
+}
+
+.container-form__caption {
+  font-size: 24px;
+  font-weight: 600;
+  margin-left: 15px;
+}
+
+.container-form__link {
+  color: #104676;
+  font-size: 20px;
+  font-weight: 500;
+  /* align-self: flex-end; */
+  /* padding-left: 20px; */
+  justify-self: center;
+}

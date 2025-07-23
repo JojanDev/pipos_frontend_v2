@@ -1,0 +1,36 @@
+.btn {
+  /* background-color: #0161b5; */
+  /* width: 194px; */
+  padding: 10px 25px;
+  /* height: 68px; */
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  background-color: #0161b5;
+  color: #fff;
+  border: none;
+  align-self: center;
+}
+
+.btn:hover {
+  filter: brightness(70%);
+}
+
+.btn--small {
+  font-size: 16px;
+  height: 45px;
+  border-radius: 12px;
+}
+
+.btn--red {
+  background-color: #f62020;
+}
+
+.btn--big {
+  width: 70%;
+  font-size: 20px;
+}
+
+/* .btn--red:hover {
+  background-color: #f62020;
+} */
