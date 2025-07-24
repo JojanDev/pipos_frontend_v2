@@ -57,3 +57,29 @@
   /* padding-left: 20px; */
   justify-self: center;
 }
+
+.container-passwd {
+  position: relative;
+}
+
+.eye-icon {
+  cursor: pointer;
+  transition: 1s;
+  font-size: 20px;
+  color: #000;
+  position: absolute;
+  bottom: 0px;
+  right: 20px;
+  background-color: #dfdfdf;
+  border-radius: 10px;
+  height: 40px;
+  /* width: 40px; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.eye-icon:hover {
+  filter: brightness(80%);
+}

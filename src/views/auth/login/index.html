@@ -7,19 +7,38 @@
     <h3 class="container-form__title">INICIAR SESION</h3>
     <p class="container-form__caption">Personal</p>
 
-    <form action="#" class="form form--login">
-      <div class="form__container-field form__container-field--span">
-        <label for="" class="form__label">Usuario:</label>
-        <input type="text" class="form__input" id="usuario" />
+    <form action="#" id="form" novalidate>
+      <div class="form form--login">
+        <div class="form__container-field form__container-field--span">
+          <label for="" class="form__label">Usuario:</label>
+          <input
+            type="text"
+            class="form__input"
+            id="usuario"
+            name="usuario"
+            data-validate="alfanumerico"
+            required
+          />
+        </div>
+        <div
+          class="form__container-field form__container-field--span container-passwd"
+        >
+          <label for="" class="form__label">Contraseña:</label>
+          <input
+            type="password"
+            class="form__input"
+            id="contrasena"
+            name="contrasena"
+            data-validate="contrasena"
+            required
+          />
+          <i class="icon ri-eye-line eye-icon"></i>
+        </div>
+        <div class="form__container-btns">
+          <button class="btn btn--big" id="access">Iniciar sesion</button>
+        </div>
+        <a href="#/registro" class="container-form__link">Crear cuenta</a>
       </div>
-      <div class="form__container-field form__container-field--span">
-        <label for="" class="form__label">Contraseña:</label>
-        <input type="text" class="form__input" id="contrasena" />
-      </div>
-      <div class="form__container-btns">
-        <button class="btn btn--big" id="access">Iniciar sesion</button>
-      </div>
-      <a href="#/registro" class="container-form__link">Crear cuenta</a>
     </form>
   </div>
 </main>

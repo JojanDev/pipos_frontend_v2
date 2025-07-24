@@ -1,21 +1,19 @@
 import { error, loginSuccess } from "../../../helpers/alertas";
+import { post } from "../../../helpers/api";
+import {
+  configurarValidaciones,
+  validarAlfanumericos,
+  validarCampo,
+  validarCampos,
+  validarContrasena,
+} from "../../../helpers/validaciones";
 
 //Funcion para validar los datos de inicio de sesion
-const validarSesion = async () => {
-  //Se obtienen los datos ingresados
-  const userInput = document.querySelector("#usuario");
-  const passwdInput = document.querySelector("#contrasena");
-
+const validarSesion = async (userInput, passwdInput) => {
   //Se realiza la peticion
-  const response = await fetch("http://localhost:8081/api/personal/login", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      usuario: userInput.value,
-      contrasena: passwdInput.value,
-    }),
+  const response = await post("personal/login", {
+    usuario: userInput.value,
+    contrasena: passwdInput.value,
   });
 
   //Se obtiene la respuesta
@@ -37,12 +35,30 @@ const validarSesion = async () => {
 };
 
 export const loginController = async () => {
-  const boton = document.querySelector("#access");
+  const form = document.querySelector("#form");
+  //Se obtienen los datos ingresados
+  const userInput = document.querySelector("#usuario");
+  const passwdInput = document.querySelector("#contrasena");
 
-  boton.addEventListener("click", async (event) => {
-    event.preventDefault();
+  // userInput.addEventListener("blur", validarCampo);
+  // userInput.addEventListener("input", (e) => {
+  //   validarCampo(e);
+  //   validarAlfanumericos(e);
+  // });
 
-    if (await validarSesion()) {
+  // passwdInput.addEventListener("blur", validarCampo);
+  // passwdInput.addEventListener("input", (e) => {
+  //   validarCampo(e);
+  //   validarContrasena(e.target);
+  // });
+  configurarValidaciones(form);
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    if (!validarCampos(e)) return;
+
+    if (await validarSesion(userInput, passwdInput)) {
       localStorage.setItem("isAuthenticated", "true");
       window.location.hash = "#/inicio";
     }

@@ -29,6 +29,7 @@
   /* width: auto; */
   flex-direction: column;
   gap: 10px;
+  position: relative;
 }
 
 .form__label {
@@ -50,6 +51,7 @@
   background-color: #e0e0e09a;
   font-size: 18px;
   padding-left: 10px;
+  color: #242424;
 }
 
 .form__input--select {
@@ -77,4 +79,14 @@
   /* box-shadow: none; */
   width: 100%;
   /* height: 100%; */
+}
+
+.form__container-field.error::after {
+  content: var(--error-content);
+  position: absolute;
+  font-size: 14px;
+  color: #d32f2f;
+  font-weight: bold;
+  right: 25px;
+  bottom: -20px;
 }
