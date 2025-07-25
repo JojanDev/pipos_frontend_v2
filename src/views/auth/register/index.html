@@ -14,11 +14,21 @@
       <div class="form">
         <div class="form__container-field form__container-field--span">
           <label for="" class="form__label">Usuario</label>
-          <input type="text" class="form__input" required />
+          <input
+            type="text"
+            class="form__input"
+            required
+            data-validate="alfanumerico"
+          />
         </div>
         <div class="form__container-field form__container-field--span">
           <label for="" class="form__label">Contraseña</label>
-          <input type="text" class="form__input" required />
+          <input
+            type="text"
+            class="form__input"
+            required
+            data-validate="contrasena"
+          />
         </div>
       </div>
 
@@ -28,7 +38,12 @@
       <div class="form">
         <div class="form__container-field form__container-field--span">
           <label for="" class="form__label">Nombre Completo</label>
-          <input type="text" class="form__input" required />
+          <input
+            type="text"
+            class="form__input"
+            required
+            data-validate="texto"
+          />
         </div>
         <div
           class="form__container-fields form__container-fields--grid-variant"

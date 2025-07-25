@@ -1,6 +1,9 @@
 import { error } from "../../../helpers/alertas";
 import { get } from "../../../helpers/api";
-import { validarCampos } from "../../../helpers/validaciones";
+import {
+  configurarEventosValidaciones,
+  validarCampos,
+} from "../../../helpers/validaciones";
 
 const cargarTiposDcoumento = async (select) => {
   const datos = await get("tipos-documentos");
@@ -20,15 +23,13 @@ const cargarTiposDcoumento = async (select) => {
 };
 
 export const registerController = async () => {
-  console.log("hola");
-
   const form = document.querySelector("#form-register");
   const selectTipoDocumento = document.querySelector("#tipos-documento");
-  console.log(selectTipoDocumento.selectedIndex);
-
   await cargarTiposDcoumento(selectTipoDocumento);
 
-  form.addEventListener("submit", (e) => {
+  configurarEventosValidaciones(form);
+
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     if (!validarCampos(e)) return;
