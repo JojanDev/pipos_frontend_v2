@@ -1,0 +1,41 @@
+<section class="container-clients">
+  <header class="header-clients">
+    <h3 class="header-clients__title">Lista de Clientes</h3>
+    <div class="header-clients__container-right">
+      <a href="#/clientes/crear">
+        <button
+          class="btn btn--small header-clients__btn"
+          id="btn-registro-cliente"
+        >
+          Registrar cliente
+        </button>
+      </a>
+      <i class="ri-search-2-line header-clients__search-logo"></i>
+    </div>
+  </header>
+
+  <div class="table-wrapper">
+    <!-- Encabezado fijo -->
+    <table class="table table--header">
+      <thead class="table__header">
+        <tr class="table__row-header">
+          <th class="table__cell-header">ID</th>
+          <th class="table__cell-header">Nombre</th>
+          <th class="table__cell-header">Teléfono</th>
+          <th class="table__cell-header">Documento</th>
+          <th class="table__cell-header">Dirección</th>
+          <th class="table__cell-header">Correo</th>
+        </tr>
+      </thead>
+    </table>
+
+    <!-- Body con scroll -->
+    <div class="table-scroll">
+      <table class="table table--body" id="clientes">
+        <tbody class="table__body">
+          <!-- Filas de clientes dinámicas -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>

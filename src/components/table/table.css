@@ -1,11 +1,21 @@
+.table-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 15px;
+}
+
+.table-scroll {
+  flex: 1;
+  overflow-y: auto;
+}
+
 .table {
   min-width: 700px;
-  /* width: 100%; */
-  height: 100%;
   border-collapse: collapse;
-  border-radius: 15px;
-  overflow: hidden;
   background-color: #e0eefc;
+  border-radius: 0 0 15px 15px;
 }
 
 .table__header {
@@ -29,11 +39,7 @@
 }
 
 .table__body {
-  /* background-color: #e0eefc; */
   font-size: 16px;
-  display: block;
-  /* height: 100%; */
-  overflow-y: auto;
 }
 
 .table__header,

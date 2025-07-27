@@ -96,14 +96,15 @@
 
 .main {
   grid-area: main;
-  margin: 10px 20px 20px 20px;
+  margin: 10px 20px 20px 20px; /* margen externo: lo mantenemos */
   background-color: #9bc3ee;
   border-radius: 15px;
+  padding: 20px; /* padding interno para que el contenido respire */
   display: flex;
-  align-items: center;
-  justify-content: center;
   flex-direction: column;
-  padding: 20px 20px 15px 20px;
+  height: calc(100% - 30px); /* compensar el margen superior+inferior */
+  box-sizing: border-box;
+  overflow: hidden; /* evita desbordes visuales */
 }
 
 .main__message {

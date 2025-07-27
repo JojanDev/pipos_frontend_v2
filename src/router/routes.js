@@ -2,16 +2,39 @@ import {
   loginController,
   registerController,
   homeController,
+  clientsController,
+  createController,
+  profileController,
 } from "../views/index";
-import mainLayout from "../layouts/mainLayout.html?raw";
 
 export const routes = {
   inicio: {
     path: "home/index.html",
     controller: homeController,
     private: true,
-    layout: mainLayout,
+    layout: "mainLayout.html",
     slot: "main",
+  },
+  clientes: {
+    "/": {
+      path: "clients/index.html",
+      controller: clientsController,
+      private: true,
+      layout: "mainLayout.html",
+      slot: "main",
+    },
+    crear: {
+      path: "clients/create/index.html",
+      controller: createController,
+      private: true,
+      addHtml: true,
+    },
+    perfil: {
+      path: "clients/profile/index.html",
+      controller: profileController,
+      private: true,
+      addHtml: true,
+    },
   },
   login: {
     path: "auth/login/index.html",

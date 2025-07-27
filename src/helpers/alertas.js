@@ -2,9 +2,21 @@ import Swal from "sweetalert2";
 
 export const success = (message) => {
   return Swal.fire({
-    title: message,
+    title: "Exito!",
+    text: message,
     icon: "success",
     draggable: true,
+  });
+};
+
+export const successTemporal = (message) => {
+  return Swal.fire({
+    icon: "success",
+    title: "Exito!",
+    text: message,
+    showConfirmButton: false,
+    timer: 2000,
+    timerProgressBar: true,
   });
 };
 

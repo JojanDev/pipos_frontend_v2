@@ -21,7 +21,7 @@
 }
 
 .form__container-fields--grid-variant {
-  grid-template-columns: 1.5fr 1fr;
+  grid-template-columns: 1.2fr 1fr;
 }
 
 .form__container-field {
@@ -63,8 +63,8 @@
   background-image: url(../../assets/arrow-down.svg);
   background-size: 25px;
   background-repeat: no-repeat;
-  background-position: calc(100% - 10px) center; /*Lo posicionamos a la derecha*/
-  padding-right: 24px; /*le damos algo de espacio para que el caret no se superponga al texto */
+  background-position: calc(100% - 5px) center; /*Lo posicionamos a la derecha*/
+  padding-right: 30px; /*le damos algo de espacio para que el caret no se superponga al texto */
   cursor: pointer;
 }
 

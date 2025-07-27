@@ -1,9 +1,16 @@
-@import url(views-styles/home.css);
-@import url(views-styles/login.css);
+/*=============== Layout ===============*/
 @import url(layouts/mainLayout.css);
+/*=============== Components ===============*/
 @import url(../components/button/button.css);
 @import url(../components/form/form.css);
-@import url(views-styles/register.css);
+@import url(../components/table/table.css);
+@import url(../components/sectionForm/sectionForm.css);
+@import url(../components/modal/modal.css);
+/*=============== Views ===============*/
+@import url(views-styles/home.css);
+@import url(views-styles/login.css);
+@import url(views-styles/clients.css);
+@import url(views-styles/profileClient.css);
 
 * {
   padding: 0;

@@ -1,31 +1,16 @@
-import { error } from "../../../helpers/alertas";
-import { get } from "../../../helpers/api";
+import { error, loginSuccess, success } from "../../../helpers/alertas";
+import { get, post } from "../../../helpers/api";
+import { cargarTiposDocumento } from "../../../helpers/cargarTiposDocumento";
 import {
   configurarEventosValidaciones,
+  datos,
   validarCampos,
 } from "../../../helpers/validaciones";
-
-const cargarTiposDcoumento = async (select) => {
-  const datos = await get("tipos-documentos");
-
-  console.log(datos);
-
-  if (!datos.success) {
-    await error(datos.message);
-  }
-
-  datos.data.forEach((tipo) => {
-    const option = document.createElement("option");
-    option.value = tipo.id;
-    option.textContent = tipo.nombre;
-    select.appendChild(option);
-  });
-};
 
 export const registerController = async () => {
   const form = document.querySelector("#form-register");
   const selectTipoDocumento = document.querySelector("#tipos-documento");
-  await cargarTiposDcoumento(selectTipoDocumento);
+  await cargarTiposDocumento(selectTipoDocumento);
 
   configurarEventosValidaciones(form);
 
@@ -33,5 +18,20 @@ export const registerController = async () => {
     e.preventDefault();
 
     if (!validarCampos(e)) return;
+    console.log(datos);
+
+    const response = await post("personal", datos);
+
+    console.log(response);
+
+    //Se valida el inicio exitoso
+    if (response.success) {
+      //Se muestra un mensaje
+      await success(response.message);
+      window.location.hash = "#/login";
+    } else {
+      //Se muestra un mensaje
+      await error(response.message);
+    }
   });
 };

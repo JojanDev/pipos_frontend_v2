@@ -12,10 +12,11 @@ const teclasEspeciales = [
 
 // Validación para los campos de texto con límite de caracteres
 export const validarLimite = (event, limite) => {
-  const key = event.key;
-  if (!teclasEspeciales.includes(key) && event.target.value.length >= limite) {
-    event.preventDefault(); // Evitamos la acción de la tecla si el campo supera el límite
-    return { valid: false, message: `Se permiten maximo ${limite} caracteres` };
+  const valor = event.target.value;
+
+  if (valor.length > limite) {
+    event.target.value = valor.slice(0, limite); // recorta al límite permitido
+    return { valid: false, message: `Se permiten máximo ${limite} caracteres` };
   }
 
   return { valid: true };
@@ -23,14 +24,14 @@ export const validarLimite = (event, limite) => {
 
 // Validación para los campos de texto
 export const validarTexto = (event) => {
-  const key = event.key; // Obtenemos la tecla presionada
-  const regex = /^[\D]*$/i; // Expresión regular para letras y caracteres especiales
+  const regex = /[^A-Za-z ]/g; // Expresión regular para letras y caracteres especiales
+  const limpio = event.target.value.replace(regex, "");
 
-  // Validamos si la tecla no es una letra
-  if (!regex.test(key) && !teclasEspeciales.includes(key)) {
-    event.preventDefault(); // Evitamos la acción de la tecla
+  if (limpio !== event.target.value) {
+    event.target.value = limpio;
     return { valid: false, message: "Solo se permiten letras" };
   }
+
   return { valid: true };
 };
 
@@ -38,36 +39,25 @@ export const validarTexto = (event) => {
 export const validarAlfanumericos = (event) => {
   const regex = /[^\w_.]/g;
   const limpio = event.target.value.replace(regex, "");
-  // const key = event.key || event.target.value.slice(-1);
-  // console.log("Tecla presionada:", key);
-  // console.log("Regex:", regex.test(key));
-  // console.log("Es especial:", teclasEspeciales.includes(key));
-
-  // if (!regex.test(key) && !teclasEspeciales.includes(key)) {
-  //   console.log("NO válido, se bloquea");
-  //   event.preventDefault();
-  //   return { valid: false, message: "Solo se permiten alfanumericos" };
-  // }
 
   if (limpio !== event.target.value) {
     event.target.value = limpio;
     return { valid: false, message: "Solo se permiten alfanumericos" };
   }
 
-  console.log("Sí válido");
   return { valid: true };
 };
 
 // Validación para los campos de número
 export const validarNumero = (event) => {
-  const key = event.key; // Obtenemos la tecla presionada
-  const regex = /^[\d]*$/; // Expresión regular para números
+  const regex = /[^\d]/g; // Expresión regular para números
+  const limpio = event.target.value.replace(regex, "");
 
-  // Validamos si la tecla no es un número
-  if (!regex.test(key) && !teclasEspeciales.includes(key)) {
-    event.preventDefault(); // Evitamos la acción de la tecla
+  if (limpio !== event.target.value) {
+    event.target.value = limpio;
     return { valid: false, message: "Solo se permiten numeros" };
   }
+
   return { valid: true };
 };
 
@@ -224,7 +214,11 @@ export const validarCampos = (event) => {
 
   campos.forEach((campo) => {
     if (!validarCampo({ target: campo })) valido = false;
-    datos[campo.getAttribute("name")] = campo.value;
+
+    const valor = campo.value.trim();
+    datos[campo.getAttribute("name")] = /^\d+$/.test(valor)
+      ? parseInt(valor)
+      : valor;
   });
 
   return valido;

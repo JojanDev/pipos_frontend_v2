@@ -1,0 +1,38 @@
+.container-clients {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  width: 100%;
+}
+
+.header-clients {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.header-clients__container-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-right: 10px;
+}
+
+.header-clients__title {
+  font-size: 35px;
+  color: #fff;
+  text-shadow: 0 0 10px #656565;
+}
+
+.header-clients__search-logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  background-color: #fff;
+  font-size: 25px;
+}

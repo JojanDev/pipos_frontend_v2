@@ -15,20 +15,17 @@ const validarSesion = async ({ usuario, contrasena }) => {
     contrasena,
   });
 
-  //Se obtiene la respuesta
-  const data = await response.json();
-
   //Se valida el inicio exitoso
-  if (data.code == 200) {
+  if (response.code == 200) {
     //Se muestra un mensaje
-    await loginSuccess(data.message);
+    await loginSuccess(response.message);
     return true;
   }
 
   //Se valida si ocurrio un error
-  if (data.code > 200) {
+  if (response.code > 200) {
     //Se muestra un mensaje
-    await error(data.message);
+    await error(response.message);
     return false;
   }
 };
