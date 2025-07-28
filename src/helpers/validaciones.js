@@ -15,47 +15,44 @@ export const validarLimite = (event, limite) => {
   const valor = event.target.value;
 
   if (valor.length > limite) {
-    event.target.value = valor.slice(0, limite); // recorta al límite permitido
-    return { valid: false, message: `Se permiten máximo ${limite} caracteres` };
+    event.target.value = valor.slice(0, limite);
+    return { valid: false, message: `Máx. ${limite} caracteres` };
   }
 
   return { valid: true };
 };
 
-// Validación para los campos de texto
 export const validarTexto = (event) => {
-  const regex = /[^A-Za-z ]/g; // Expresión regular para letras y caracteres especiales
+  const regex = /[^A-Za-z ]/g;
   const limpio = event.target.value.replace(regex, "");
 
   if (limpio !== event.target.value) {
     event.target.value = limpio;
-    return { valid: false, message: "Solo se permiten letras" };
+    return { valid: false, message: "Solo letras" };
   }
 
   return { valid: true };
 };
 
-// Validación para los campos de texto
 export const validarAlfanumericos = (event) => {
   const regex = /[^\w_.]/g;
   const limpio = event.target.value.replace(regex, "");
 
   if (limpio !== event.target.value) {
     event.target.value = limpio;
-    return { valid: false, message: "Solo se permiten alfanumericos" };
+    return { valid: false, message: "Solo alfanumérico" };
   }
 
   return { valid: true };
 };
 
-// Validación para los campos de número
 export const validarNumero = (event) => {
-  const regex = /[^\d]/g; // Expresión regular para números
+  const regex = /[^\d]/g;
   const limpio = event.target.value.replace(regex, "");
 
   if (limpio !== event.target.value) {
     event.target.value = limpio;
-    return { valid: false, message: "Solo se permiten numeros" };
+    return { valid: false, message: "Solo números" };
   }
 
   return { valid: true };
@@ -129,38 +126,39 @@ const quitarError = (campo) => {
 //=======================================================
 
 export const validarCampo = (event) => {
-  const campo = event.target; // El input o select actual
-  const tipo = campo.dataset.validate; // Cadena de validadores, como "alfanumerico, limite:10"
-  const eventoActual = event.type; // Tipo de evento actual (keydown, input, blur)
+  const campo = event.target;
+  const tipo = campo.dataset.validate;
+  // const eventoActual = event.type;
 
-  // Validación de campo vacío
-  const vacio =
-    (campo.tagName === "INPUT" && campo.value.trim() === "") ||
-    (campo.tagName === "SELECT" && campo.selectedIndex === 0);
+  const esRequerido = campo.hasAttribute("required");
+  const valor = campo.value.trim();
+  const vacioInput = campo.tagName === "INPUT" && valor === "";
+  const vacioSelect = campo.tagName === "SELECT" && campo.selectedIndex === 0;
 
-  if (vacio) {
-    agregarError(campo.parentElement);
+  // Si el campo es requerido y está vacío, mostramos el error de obligatorio
+  if (esRequerido && (vacioInput || vacioSelect)) {
+    agregarError(campo.parentElement, "El campo es obligatorio.");
     return false;
   }
 
+  // Si el campo no es requerido y está vacío, entonces es válido (no validamos nada más)
+  if (!esRequerido && valor === "") {
+    quitarError(campo.parentElement);
+    return true;
+  }
+
+  // Si tiene validaciones específicas, las aplicamos
   if (tipo) {
-    // Separa los validadores por coma y elimina espacios
     const tipos = tipo.split(",").map((t) => t.trim());
 
     for (let t of tipos) {
-      // Permite validadores con parámetros: por ejemplo "limite:10"
       const [nombre, param] = t.split(":").map((p) => p.trim());
 
-      // Solo ejecuta el validador si:
-      // 1. Existe en el objeto validadoresInput
-      // 2. Está asignado para ejecutarse en el tipo de evento actual
       if (validadoresInput[nombre]) {
-        // Ejecuta el validador, pasándole el parámetro si existe
         const resultado = param
           ? validadoresInput[nombre](event, param)
           : validadoresInput[nombre](event);
 
-        // Si el resultado indica error, se muestra y se detiene la validación
         if (!resultado.valid) {
           agregarError(campo.parentElement, resultado.message);
           return false;
@@ -169,13 +167,15 @@ export const validarCampo = (event) => {
     }
   }
 
-  // Si pasó todas las validaciones, se limpia el mensaje de error
+  // Si pasó todas las validaciones, quitamos errores
   quitarError(campo.parentElement);
   return true;
 };
 
 export const configurarEventosValidaciones = (formulario) => {
-  const campos = obtenerCamposValidables(formulario);
+  const requeridos = obtenerCamposValidables(formulario); // Campos con atributo required
+  const opcionales = obtenerCamposOpcionales(formulario); // Campos sin required pero con data-validate
+  const campos = [...requeridos, ...opcionales]; // Unimos ambos grupos
 
   console.log("Registrando validaciones a:", campos);
 
@@ -200,6 +200,16 @@ const validadoresInput = {
   // Puedes seguir agregando más tipos según crezcas
 };
 
+// Esta función obtiene los campos que no son requeridos pero tienen validaciones específicas definidas en data-validate
+const obtenerCamposOpcionales = (formulario) => {
+  return [...formulario].filter(
+    (elemento) =>
+      !elemento.hasAttribute("required") &&
+      (elemento.tagName === "INPUT" || elemento.tagName === "SELECT") &&
+      elemento.dataset.validate // Solo campos con data-validate
+  );
+};
+
 const obtenerCamposValidables = (formulario) => {
   return [...formulario].filter(
     (elemento) =>
@@ -210,12 +220,28 @@ const obtenerCamposValidables = (formulario) => {
 
 export const validarCampos = (event) => {
   let valido = true;
-  const campos = obtenerCamposValidables(event.target);
+
+  const requeridos = obtenerCamposValidables(event.target); // Campos con required
+  const opcionales = obtenerCamposOpcionales(event.target); // Campos sin required pero con data-validate
+  const campos = [...requeridos, ...opcionales]; // Unimos ambos para procesarlos
 
   campos.forEach((campo) => {
-    if (!validarCampo({ target: campo })) valido = false;
+    // Validamos los campos requeridos normalmente
+    if (campo.hasAttribute("required")) {
+      if (!validarCampo({ target: campo })) valido = false;
+    } else {
+      // Para campos no requeridos:
+      // Solo se valida si el usuario escribió algo.
+      // Si está vacío, no se valida porque no es obligatorio.
+      // Pero si tiene contenido, se valida su formato.
+      if (campo.value.trim() !== "") {
+        if (!validarCampo({ target: campo })) valido = false;
+      }
+    }
 
     const valor = campo.value.trim();
+
+    // Guardamos en el objeto datos, convirtiendo números si es necesario
     datos[campo.getAttribute("name")] = /^\d+$/.test(valor)
       ? parseInt(valor)
       : valor;

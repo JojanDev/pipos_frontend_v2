@@ -2,17 +2,21 @@ import { error, successTemporal } from "../../../helpers/alertas";
 import { post } from "../../../helpers/api";
 import { cargarTiposDocumento } from "../../../helpers/cargarTiposDocumento";
 import { crearFila } from "../../../helpers/crearFila";
-import { cerrarModalYVolverAVistaBase } from "../../../helpers/modal";
+import {
+  cerrarModal,
+  cerrarModalYVolverAVistaBase,
+} from "../../../helpers/modal";
 import {
   configurarEventosValidaciones,
   datos,
   validarCampos,
 } from "../../../helpers/validaciones";
 
-export const createController = async () => {
+export const createClientController = async () => {
   const form = document.querySelector("#form-register-client");
   const selectTipoDocumento = document.querySelector("#tipos-documento");
   const tbody = document.querySelector("#clientes .table__body");
+  const esModal = !location.hash.includes("clientes/crear");
 
   await cargarTiposDocumento(selectTipoDocumento);
 
@@ -33,34 +37,31 @@ export const createController = async () => {
       return;
     }
 
-    const {
-      data: {
-        id,
-        info: { nombre, telefono, numeroDocumento, direccion, correo },
-      },
-    } = response;
-
-    const row = crearFila([
-      id,
-      nombre,
-      telefono,
-      numeroDocumento,
-      direccion,
-      correo,
-    ]);
+    await successTemporal(response.message);
+    console.log(response);
 
     if (tbody) {
+      const { id, nombre, telefono, numeroDocumento, direccion, correo } =
+        response.data;
+
+      const row = crearFila([
+        id,
+        nombre,
+        telefono,
+        numeroDocumento,
+        direccion,
+        correo,
+      ]);
       tbody.insertAdjacentElement("afterbegin", row);
     }
 
-    await successTemporal(response.message);
-    cerrarModalYVolverAVistaBase();
+    esModal ? cerrarModal("create-client") : cerrarModalYVolverAVistaBase();
   });
 
   document.addEventListener("click", (event) => {
     const arrow = event.target.closest("#back-register-client");
     if (arrow) {
-      cerrarModalYVolverAVistaBase();
+      esModal ? cerrarModal("create-client") : cerrarModalYVolverAVistaBase();
     }
   });
 };

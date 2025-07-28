@@ -6,7 +6,7 @@
   background-color: #fff;
   width: 600px;
   padding: 30px;
-  gap: 15px;
+  gap: 20px;
   display: grid;
   border-radius: 20px;
   box-shadow: 0 0 5px 0px #00000047;
@@ -22,6 +22,17 @@
 
 .form__container-fields--grid-variant {
   grid-template-columns: 1.2fr 1fr;
+}
+
+.form__container-fields--3-col {
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 0px;
+}
+
+.form__label--col-span {
+  grid-column: 1 / 4;
+  grid-row: 1 / 2;
 }
 
 .form__container-field {
@@ -89,4 +100,8 @@
   font-weight: bold;
   right: 25px;
   bottom: -20px;
+}
+
+.form--w-700 {
+  width: 700px;
 }

@@ -1,41 +1,35 @@
-<div class="modal__backdrop" data-modal>
+<div class="modal__backdrop" data-modal="profile-client">
   <div class="contenedor-perfil modal__container">
     <div class="perfil__rol-contenedor">
-      <h3 class="perfil__rol">
-        Cliente:
-        <span class="perfil__nombre" id="profile-nombre">Johan Delgado</span>
-      </h3>
-      <i class="bx bx-x btn-atras" id="back-perfil"></i>
+      <div>
+        <h3 class="perfil__nombre" id="profile-nombre"></h3>
+        <p class="perfil__rol">Cliente</p>
+      </div>
+      <i class="ri-close-line btn-atras" id="back-perfil"></i>
     </div>
     <p class="perfil__separador">Datos personales</p>
-    <div class="perfil__contenedor_datos-personales">
+    <div class="perfil__contenedor-datos-personales">
       <!-- <div class="perfil__contenedor-documento">
       </div> -->
       <p class="perfil__campo">
         Tipo de documento:
-        <span class="perfil__valor" id="profile-tipoDocumento">C.C.</span>
+        <span class="perfil__valor" id="profile-tipoDocumento"></span>
       </p>
       <p class="perfil__campo">
         Numero:
-        <span class="perfil__valor" id="profile-numeroDocumento"
-          >1095916126</span
-        >
+        <span class="perfil__valor" id="profile-numeroDocumento"></span>
       </p>
       <p class="perfil__campo">
         Direccion:
-        <span class="perfil__valor" id="profile-direccion"
-          >Cll 11 #27 A 39 / Arenales 1</span
-        >
+        <span class="perfil__valor" id="profile-direccion"></span>
       </p>
       <p class="perfil__campo">
         Telefono:
-        <span class="perfil__valor" id="profile-telefono">3157958759</span>
+        <span class="perfil__valor" id="profile-telefono"></span>
       </p>
       <p class="perfil__campo perfil__campo--margen">
         E-mail:
-        <span class="perfil__valor" id="profile-correo"
-          >johan24.dev@gmail.com</span
-        >
+        <span class="perfil__valor" id="profile-correo"></span>
       </p>
     </div>
     <p class="perfil__separador">Lista de mascotas</p>
@@ -57,23 +51,16 @@
 
       <!-- Body con scroll -->
       <div class="table-scroll">
-        <table class="table table--body">
+        <table class="table table--body" id="pets-client">
           <tbody class="table__body">
-            <!-- Filas de clientes dinámicas -->
-            <tr class="table__row-body">
-              <td class="table__cell-body">1</td>
-              <td class="table__cell-body">Carlos</td>
-              <td class="table__cell-body">3214567890</td>
-              <td class="table__cell-body">123456789</td>
-              <td class="table__cell-body">Calle 123</td>
-              <td class="table__cell-body">correo@example.com</td>
-            </tr>
-            <!-- Más filas... -->
+            <!-- Filas de mascotas dinámicas -->
           </tbody>
         </table>
       </div>
     </div>
 
-    <button class="perfil__boton">Registrar</button>
+    <button class="btn perfil__boton" id="register-pets-client">
+      Registrar mascota
+    </button>
   </div>
 </div>

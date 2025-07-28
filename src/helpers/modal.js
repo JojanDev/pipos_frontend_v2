@@ -20,3 +20,16 @@ export function cerrarModalYVolverAVistaBase() {
     history.replaceState(null, "", `#/${rutaBaseHash}`);
   }
 }
+
+export const cerrarModal = (modalKey) => {
+  const modal = document.querySelector(`[data-modal="${modalKey}"]`);
+  if (!modal) return;
+
+  // Si quieres añadir animación de salida, puedes hacerlo aquí:
+  // modal.classList.add("modal--closing");
+
+  // Y usar timeout si es necesario:
+  // setTimeout(() => modal.remove(), 200);
+
+  modal.remove();
+};

@@ -56,3 +56,27 @@
 .arrow-left--bottom {
   top: 34px;
 }
+
+.form__container-field:has(input[name="anios"])::after,
+.form__container-field:has(input[name="meses"])::after,
+.form__container-field:has(input[name="semanas"])::after {
+  /* content: "Años"; */
+  position: absolute;
+  font-size: 18px;
+  color: #707070;
+  font-weight: 500;
+  right: 30px;
+  top: 7px;
+}
+
+.form__container-field:has(input[name="anios"])::after {
+  content: "Años";
+}
+
+.form__container-field:has(input[name="meses"])::after {
+  content: "Meses";
+}
+
+.form__container-field:has(input[name="semanas"])::after {
+  content: "Semanas";
+}

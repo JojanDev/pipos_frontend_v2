@@ -1,14 +1,15 @@
+import { error } from "../../../helpers/alertas";
 import { get } from "../../../helpers/api";
+import { crearFila } from "../../../helpers/crearFila";
+import { capitalizarPrimeraLetra } from "../../../helpers/diseño";
+import {
+  cerrarModal,
+  cerrarModalYVolverAVistaBase,
+} from "../../../helpers/modal";
+import { cargarComponente } from "../../../helpers/renderView";
+import { routes } from "../../../router/routes";
 
-export const profileController = async (parametros = null) => {
-  const { id } = parametros;
-
-  const response = await get(`clientes/${id}`);
-
-  if (!response.success) {
-    await error(response.message);
-  }
-
+const asignarDatosCliente = (data) => {
   const spanNombre = document.querySelector("#profile-nombre");
   const spanTipoDocumento = document.querySelector("#profile-tipoDocumento");
   const spanNumeroDocumento = document.querySelector(
@@ -25,7 +26,7 @@ export const profileController = async (parametros = null) => {
     numeroDocumento,
     telefono,
     tipoDocumento,
-  } = response.data.info;
+  } = data.info;
 
   spanNombre.textContent = nombre;
   spanTipoDocumento.textContent = tipoDocumento.nombre;
@@ -33,4 +34,66 @@ export const profileController = async (parametros = null) => {
   spanDireccion.textContent = direccion;
   spanTelefono.textContent = telefono;
   spanCorreo.textContent = correo;
+};
+
+export const profileController = async (parametros = null) => {
+  const tbody = document.querySelector("#pets-client .table__body");
+  const btnAtras = document.querySelector("#back-perfil");
+  const btnRegisterPets = document.querySelector("#register-pets-client");
+  const esModal = !location.hash.includes("clientes/perfil");
+
+  console.log(btnAtras);
+
+  const { id } = parametros;
+
+  const response = await get(`clientes/${id}`);
+  console.log(response);
+
+  if (!response.success) {
+    await error(response.message);
+    cerrarModalYVolverAVistaBase();
+    return;
+  }
+
+  asignarDatosCliente(response.data);
+
+  const responseMascotas = await get(`mascotas/cliente/${id}`);
+  console.log(responseMascotas);
+
+  if (responseMascotas.code == 500) {
+    await error(responseMascotas.message);
+    esModal ? cerrarModal("profile-client") : cerrarModalYVolverAVistaBase();
+    return;
+  }
+
+  if (responseMascotas.success) {
+    if (tbody) {
+      responseMascotas.data.forEach(
+        ({ id, edadFormateada, nombre, raza, sexo }) => {
+          const row = crearFila([
+            id,
+            nombre,
+            raza.especie.nombre,
+            raza.nombre,
+            edadFormateada,
+            capitalizarPrimeraLetra(sexo),
+          ]);
+          tbody.insertAdjacentElement("afterbegin", row);
+        }
+      );
+    }
+  }
+
+  btnAtras.addEventListener("click", () => {
+    console.log("BOTON");
+
+    esModal ? cerrarModal("profile-client") : cerrarModalYVolverAVistaBase();
+  });
+
+  btnRegisterPets.addEventListener("click", () => {
+    const container = document.querySelector(`[data-slot="main"]`);
+    const { path, controller } = routes.mascotas.crear;
+
+    cargarComponente({ path, container, controller }, id);
+  });
 };
