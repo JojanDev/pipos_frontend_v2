@@ -59,6 +59,10 @@
   border-radius: 10px;
 }
 
+.perfil__separador--margin-bottom {
+  margin-bottom: 15px;
+}
+
 .perfil__contenedor-documento {
   display: flex;
   align-items: center;

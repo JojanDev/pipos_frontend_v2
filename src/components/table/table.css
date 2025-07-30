@@ -1,72 +1,91 @@
-.table-wrapper {
-  flex: 1;
+.table-container {
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-  border-radius: 15px;
+  height: 100vh;
+  /* padding: 2rem; */
+  max-height: 100%;
+  overflow: auto;
   box-shadow: 0 5px 10px -8px #3d3d3d;
 }
 
-.table-scroll {
-  flex: 1;
-  overflow-y: auto;
-  background-color: #e0eefc;
-  /* box-shadow: inset 0 -8px 12px -8px rgba(0, 0, 0, 0.3); */
-}
-
 .table {
-  min-width: 700px;
-  border-collapse: collapse;
-  background-color: #e0eefc;
-  border-radius: 0 0 15px 15px;
-}
-
-.table--body {
-  height: 100%;
-}
-
-.table__header {
-  background-color: #293241;
-}
-
-.table__row-header {
-  font-size: 18px;
-  height: 35px;
-}
-
-.table__cell-header {
-  padding: 0 10px;
-  color: #fff;
-  font-weight: 400;
-}
-
-.table__cell-header:nth-child(1),
-.table__cell-body:nth-child(1) {
-  width: 60px;
-}
-
-.table__body {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  /* border: 1px solid #ccc; */
+  border-radius: 6px;
+  overflow: hidden;
+  flex: 1;
   font-size: 16px;
   color: #000;
 }
 
-.table__header,
-.table__row-body {
-  display: table;
-  width: 100%;
-  table-layout: fixed;
+.table__header {
+  display: grid;
+  grid-template-columns: 50px 1.5fr 1fr 1fr 1.5fr;
 }
 
-.table__row-body {
-  height: 35px;
-  transition: 0.5s;
-}
-
-.table__row-body:hover {
+.table__header {
+  background-color: #293241;
+  color: #fff;
   font-weight: 600;
-  background-color: #70c4f8d0;
+  font-size: 18px;
+  /* border-bottom: 2px solid rgb(171, 171, 171); */
+  /* box-shadow: 0 2px 10px 2px #000; */
 }
 
-.table__cell-body {
+.table__header .table__cell {
+  /* text-align: center; */
+}
+
+.table__body {
+  display: grid;
+  grid-auto-rows: 40px; /* ← evita que las filas se expandan por espacio libre */
+  overflow-y: auto;
+  background-color: #e0eefc;
+}
+
+.table__row {
+  display: grid;
+  grid-template-columns: 50px 1.5fr 1fr 1fr 1.5fr;
+  max-height: 40px; /* ← aquí estableces el mínimo */
+  transition: 0.5s ease;
+}
+
+.table__row:hover {
+  background-color: rgba(255, 3, 3, 0.2);
+  /* transition: background-color 0.5s ease; */
+  font-size: 16.5px;
+}
+
+.table__cell {
+  padding: 10px;
+  /* display: flex;
+  align-items: center; */
+  line-height: 1.2;
+  white-space: nowrap; /* No saltar de línea */
+  overflow: hidden; /* Ocultar lo que se sale */
+  text-overflow: ellipsis; /* Mostrar puntos suspensivos */
+}
+
+.table__body .table__cell:first-child {
+  /* display: flex;
+  justify-content: center; */
   text-align: center;
+}
+
+.table__body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.table__body::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+#pets-client .table__header {
+  grid-template-columns: 50px 1fr 0.7fr 1fr 1.2fr 1fr;
+}
+
+#pets-client .table__row {
+  grid-template-columns: 50px 1fr 0.7fr 1fr 1.2fr 1fr;
 }
