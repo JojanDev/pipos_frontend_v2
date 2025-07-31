@@ -6,6 +6,7 @@ import {
   createClientController,
   profileController,
   createPetController,
+  petsController,
 } from "../views/index";
 
 export const routes = {
@@ -38,6 +39,13 @@ export const routes = {
     },
   },
   mascotas: {
+    "/": {
+      path: "pets/index.html",
+      controller: petsController,
+      private: true,
+      layout: "mainLayout.html",
+      slot: "main",
+    },
     crear: {
       path: "pets/create/index.html",
       controller: createPetController,

@@ -10,6 +10,8 @@ export function obtenerVistaBase() {
 
 // Cierra el modal y redirige al hash correspondiente a la vista base
 export function cerrarModalYVolverAVistaBase() {
+  console.log("cerrarModalYVolverAVistaBase");
+
   const vistaBase = obtenerVistaBase();
   if (!vistaBase) return;
 
@@ -22,6 +24,8 @@ export function cerrarModalYVolverAVistaBase() {
 }
 
 export const cerrarModal = (modalKey) => {
+  console.log("cerrarModal");
+
   const modal = document.querySelector(`[data-modal="${modalKey}"]`);
   if (!modal) return;
 

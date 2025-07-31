@@ -80,3 +80,7 @@
 .form__container-field:has(input[name="semanas"])::after {
   content: "Semanas";
 }
+
+.hidden {
+  display: none;
+}

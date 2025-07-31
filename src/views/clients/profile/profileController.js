@@ -90,10 +90,14 @@ export const profileController = async (parametros = null) => {
     esModal ? cerrarModal("profile-client") : cerrarModalYVolverAVistaBase();
   });
 
-  btnRegisterPets.addEventListener("click", () => {
+  btnRegisterPets.addEventListener("click", async () => {
     const container = document.querySelector(`[data-slot="main"]`);
     const { path, controller } = routes.mascotas.crear;
 
-    cargarComponente({ path, container, controller }, id);
+    await cargarComponente({ path, container, controller }, id);
+    const selectCliente = document.querySelector("#select-clients");
+    const contenedor = selectCliente?.closest(".form__container-field");
+    contenedor.classList.add("hidden");
+    console.log(contenedor);
   });
 };

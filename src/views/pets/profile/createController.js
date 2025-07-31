@@ -5,7 +5,6 @@ import {
   llenarSelect,
 } from "../../../helpers/cargarTiposDocumento";
 import { crearFila } from "../../../helpers/crearFila";
-import { capitalizarPrimeraLetra } from "../../../helpers/diseño";
 import {
   cerrarModal,
   cerrarModalYVolverAVistaBase,
@@ -33,8 +32,10 @@ export const createPetController = async (idDueno) => {
   const tbody = document.querySelector("#pets-client .table__body");
   const esModal = !location.hash.includes("mascotas/crear");
   const containerSelectClient = document.querySelector(
-    "#container-select-clients"
-  );
+    ".form__container-field.hidden"
+  )
+    ? false
+    : true;
 
   if (containerSelectClient) {
     llenarSelect({
@@ -96,22 +97,12 @@ export const createPetController = async (idDueno) => {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const containerSelectClient = document
-      .querySelector("#container-select-clients")
-      .classList.contains("hidden")
-      ? false
-      : true;
-
     if (!validarCampos(e)) return;
 
     console.log(datos);
 
     const edad_semanas = calcularSemanasTotales(datos);
     const { nombre, sexo, id_raza, id_cliente } = datos;
-
-    console.log(containerSelectClient);
-    console.log(id_cliente);
-    console.log(idDueno);
 
     const response = await post("mascotas", {
       nombre,
@@ -129,22 +120,22 @@ export const createPetController = async (idDueno) => {
 
     await success(response.message);
 
-    if (tbody) {
-      const { id, nombre, sexo, raza, edadFormateada } = response.data;
+    // if (tbody) {
+    //   const { id, nombre, sexo, raza, edadFormateada } = response.data;
 
-      const row = crearFila([
-        id,
-        nombre,
-        raza.especie.nombre,
-        raza.nombre,
-        edadFormateada,
-        capitalizarPrimeraLetra(sexo),
-        ,
-      ]);
-      tbody.insertAdjacentElement("afterbegin", row);
-    }
+    //   const row = crearFila([
+    //     id,
+    //     nombre,
+    //     raza.especie.nombre,
+    //     raza.nombre,
+    //     edadFormateada,
+    //     capitalizarPrimeraLetra(sexo),
+    //     ,
+    //   ]);
+    //   tbody.insertAdjacentElement("afterbegin", row);
+    // }
 
-    esModal ? cerrarModal("create-pet") : cerrarModalYVolverAVistaBase();
+    // esModal ? cerrarModal("create-pet") : cerrarModalYVolverAVistaBase();
 
     // console.log(response);
 

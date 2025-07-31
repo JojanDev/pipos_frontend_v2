@@ -205,6 +205,7 @@ const obtenerCamposOpcionales = (formulario) => {
   return [...formulario].filter(
     (elemento) =>
       !elemento.hasAttribute("required") &&
+      !elemento.parentElement.classList.contains("hidden") &&
       (elemento.tagName === "INPUT" || elemento.tagName === "SELECT") &&
       elemento.dataset.validate // Solo campos con data-validate
   );
@@ -214,6 +215,7 @@ const obtenerCamposValidables = (formulario) => {
   return [...formulario].filter(
     (elemento) =>
       elemento.hasAttribute("required") &&
+      !elemento.parentElement.classList.contains("hidden") &&
       (elemento.tagName === "INPUT" || elemento.tagName === "SELECT")
   );
 };

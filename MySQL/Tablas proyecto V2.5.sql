@@ -59,8 +59,9 @@ CREATE TABLE mascotas (
 CREATE TABLE antecedentes (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	id_mascota INT,
+    titulo varchar(100),
 	diagnositco TEXT,
-	fecha_creado DATETIME,
+	fecha_creado TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	FOREIGN KEY (id_mascota) REFERENCES mascotas(id)
 );
 
@@ -68,7 +69,9 @@ CREATE TABLE antecedentes (
 CREATE TABLE antecedentes_tratamientos(
 	id INT AUTO_INCREMENT PRIMARY KEY,
     id_antecedente INT,
+    titulo varchar(100),
     descripcion TEXT,
+    fecha_creado TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_antecedente) REFERENCES antecedentes(id)
 );
 
@@ -140,7 +143,7 @@ CREATE TABLE ventas (
 CREATE TABLE detalles_ventas (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	id_venta INT,
-	id_producto INT,
+	id_producto INT, -- Medicamentos ID
 	cantidad INT,
 	subtotal DECIMAL(7,2),
 	FOREIGN KEY (id_venta) REFERENCES ventas(id),
@@ -223,4 +226,5 @@ INSERT INTO mascotas (id_cliente, nombre, id_raza, edad_semanas, sexo, estado_vi
 -- JOIN razas r ON m.id_raza = r.id
 -- JOIN especies e ON r.id_especie = e.id;
 
-select * from personal;
+use veterinaria_pipos;
+select * from mascotas;

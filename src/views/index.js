@@ -5,3 +5,4 @@ export * from "./clients/clientsController.js";
 export * from "./clients/create/createController.js";
 export * from "./clients/profile/profileController.js";
 export * from "./pets/create/createController.js";
+export * from "./pets/petsController.js";

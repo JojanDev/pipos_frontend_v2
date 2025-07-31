@@ -15,3 +15,29 @@ export const cargarTiposDocumento = async (select) => {
     select.appendChild(option);
   });
 };
+
+// Ejemplo de usabilidad
+// await llenarSelect({
+//     endpoint: 'tipos-documento',
+//     selector: '#tipos-documentos',
+//     optionMapper: tipo => ({ id: tipo.id, text: tipo.nombre })
+// });
+
+// funcion
+export async function llenarSelect({ endpoint, selector, optionMapper }) {
+  const select = document.querySelector(selector);
+
+  const respuesta = await get(endpoint);
+  if (!respuesta.success) {
+    console.error(respuesta.message || respuesta.errors);
+    return;
+  }
+
+  respuesta.data.forEach((item) => {
+    const { id, text } = optionMapper(item);
+    const option = document.createElement("option");
+    option.value = id;
+    option.textContent = text;
+    select.appendChild(option);
+  });
+}
