@@ -36,7 +36,7 @@ const asignarDatosCliente = (data) => {
   spanCorreo.textContent = correo;
 };
 
-export const profileController = async (parametros = null) => {
+export const profileClientController = async (parametros = null) => {
   const tbody = document.querySelector("#pets-client .table__body");
   const btnAtras = document.querySelector("#back-perfil");
   const btnRegisterPets = document.querySelector("#register-pets-client");

@@ -65,6 +65,13 @@
   color: #242424;
 }
 
+.form__input--textarea {
+  resize: vertical;
+  max-height: 400px;
+  height: 100px;
+  min-height: 40px;
+}
+
 .form__input--select {
   /* Empezamos eliminando el caret de systema*/
   -moz-appearance: none; /*Firefox legacy*/

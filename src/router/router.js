@@ -5,6 +5,8 @@ const app = document.querySelector("#app");
 let layoutActual = null;
 
 export const router = async () => {
+  console.log("ADIOS");
+
   const hash = location.hash.slice(2);
   const [ruta, parametros, claveBase] = recorrerRutas(routes, hash); // ✅ Ahora recibimos también la clave base
   const auth = isAuthenticated();
@@ -95,7 +97,9 @@ const recorrerRutas = (routes, hash) => {
 
     parametrosSeparados.forEach((param) => {
       const [clave, valor] = param.split("=");
-      parametros[clave] = valor;
+      parametros[clave] = valor.includes("%20")
+        ? valor.replace(/%20/g, " ")
+        : valor;
     });
 
     arrayHash.pop(); // Quitamos los parámetros

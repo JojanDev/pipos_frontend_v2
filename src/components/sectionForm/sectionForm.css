@@ -84,3 +84,7 @@
 .hidden {
   display: none;
 }
+
+.form--w-800 {
+  width: 800px;
+}

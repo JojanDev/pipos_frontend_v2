@@ -30,7 +30,10 @@ const calcularSemanasTotales = ({ anios = 0, meses = 0, semanas = 0 }) => {
 export const createPetController = async (idDueno) => {
   const form = document.querySelector("#form-register-pet");
 
-  const tbody = document.querySelector("#pets-client .table__body");
+  const tbody_perfilCliente = document.querySelector(
+    "#pets-client .table__body"
+  );
+  const tbody_Mascotas = document.querySelector("#pets .table__body");
   const esModal = !location.hash.includes("mascotas/crear");
   const containerSelectClient = document.querySelector(
     "#container-select-clients"
@@ -129,7 +132,7 @@ export const createPetController = async (idDueno) => {
 
     await success(response.message);
 
-    if (tbody) {
+    if (tbody_perfilCliente) {
       const { id, nombre, sexo, raza, edadFormateada } = response.data;
 
       const row = crearFila([
@@ -139,9 +142,26 @@ export const createPetController = async (idDueno) => {
         raza.nombre,
         edadFormateada,
         capitalizarPrimeraLetra(sexo),
-        ,
       ]);
-      tbody.insertAdjacentElement("afterbegin", row);
+
+      tbody_perfilCliente.insertAdjacentElement("afterbegin", row);
+    } else if (tbody_Mascotas) {
+      console.log(tbody_Mascotas);
+      console.log(response.data);
+
+      const { id, nombre, raza, cliente, ultimo_antecedente } = response.data;
+      const row = crearFila([
+        id,
+        nombre,
+        raza.especie.nombre,
+        raza.nombre,
+        cliente.info.nombre,
+        cliente.info.telefono,
+        ultimo_antecedente ?? "Sin registros", //PENDIENTE HACER OBTENER LA FECHA DEL ULTIMO ANTECEDENTE
+      ]);
+      console.log(row);
+
+      tbody_Mascotas.insertAdjacentElement("afterbegin", row);
     }
 
     esModal ? cerrarModal("create-pet") : cerrarModalYVolverAVistaBase();

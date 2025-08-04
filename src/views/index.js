@@ -6,3 +6,6 @@ export * from "./clients/create/createController.js";
 export * from "./clients/profile/profileController.js";
 export * from "./pets/create/createController.js";
 export * from "./pets/petsController.js";
+export * from "./pets/profile/profileController.js";
+export * from "./pets/antecedent/treatment/treatmentController.js";
+export * from "./pets/antecedent/create/createController.js";

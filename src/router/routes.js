@@ -4,9 +4,12 @@ import {
   homeController,
   clientsController,
   createClientController,
-  profileController,
+  profileClientController,
   createPetController,
   petsController,
+  profilePetController,
+  treatmentController,
+  createAntecedentController,
 } from "../views/index";
 
 export const routes = {
@@ -33,7 +36,7 @@ export const routes = {
     },
     perfil: {
       path: "clients/profile/index.html",
-      controller: profileController,
+      controller: profileClientController,
       private: true,
       addHtml: true,
     },
@@ -49,6 +52,27 @@ export const routes = {
     crear: {
       path: "pets/create/index.html",
       controller: createPetController,
+      private: true,
+      addHtml: true,
+    },
+    perfil: {
+      path: "pets/profile/index.html",
+      controller: profilePetController,
+      private: true,
+      layout: "mainLayout.html",
+      slot: "main",
+    },
+  },
+  antecedente: {
+    crear: {
+      path: "pets/antecedent/create/index.html",
+      controller: createAntecedentController,
+      private: true,
+      addHtml: true,
+    },
+    tratamiento: {
+      path: "pets/antecedent/treatment/index.html",
+      controller: treatmentController,
       private: true,
       addHtml: true,
     },

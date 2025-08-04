@@ -132,7 +132,8 @@ export const validarCampo = (event) => {
 
   const esRequerido = campo.hasAttribute("required");
   const valor = campo.value.trim();
-  const vacioInput = campo.tagName === "INPUT" && valor === "";
+  const vacioInput =
+    (campo.tagName === "INPUT" || campo.tagName === "TEXTAREA") && valor === "";
   const vacioSelect = campo.tagName === "SELECT" && campo.selectedIndex === 0;
 
   // Si el campo es requerido y está vacío, mostramos el error de obligatorio
@@ -206,7 +207,9 @@ const obtenerCamposOpcionales = (formulario) => {
     (elemento) =>
       !elemento.hasAttribute("required") &&
       !elemento.parentElement.classList.contains("hidden") &&
-      (elemento.tagName === "INPUT" || elemento.tagName === "SELECT") &&
+      (elemento.tagName === "INPUT" ||
+        elemento.tagName === "SELECT" ||
+        elemento.tagName === "TEXTAREA") &&
       elemento.dataset.validate // Solo campos con data-validate
   );
 };
@@ -216,7 +219,9 @@ const obtenerCamposValidables = (formulario) => {
     (elemento) =>
       elemento.hasAttribute("required") &&
       !elemento.parentElement.classList.contains("hidden") &&
-      (elemento.tagName === "INPUT" || elemento.tagName === "SELECT")
+      (elemento.tagName === "INPUT" ||
+        elemento.tagName === "SELECT" ||
+        elemento.tagName === "TEXTAREA")
   );
 };
 

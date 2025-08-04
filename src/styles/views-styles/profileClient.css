@@ -25,8 +25,18 @@
   margin-bottom: 15px;
 }
 
+.perfil__rol-contenedor--margin-small {
+  margin-bottom: 5px;
+}
+
 .perfil__rol {
   margin: -10px 0 0 5px;
+  /* color: #000; */
+  font-weight: 600;
+}
+
+.perfil__rol--margin {
+  margin-top: 0;
   /* color: #000; */
   font-weight: 600;
 }
@@ -57,6 +67,14 @@
   font-size: 24px;
   letter-spacing: 0.5px;
   border-radius: 10px;
+}
+
+.perfil__separador--treatment {
+  padding: 0 0 0 10px;
+  font-size: 18px;
+  border-radius: 5px;
+  margin: 10px -10px;
+  /* font-weight: 600; */
 }
 
 .perfil__separador--margin-bottom {
@@ -97,4 +115,164 @@
 
 .contenedor-perfil .table-wrapper {
   margin-top: 20px;
+}
+
+/* PERFIL DE LA MASCOTA */
+
+.contenedor-perfil--pet {
+  width: 100%;
+  background-color: transparent;
+  box-shadow: none;
+  height: 100%;
+  padding: 0 20px;
+  overflow: hidden;
+  overflow-y: auto;
+  position: relative;
+  flex: 1;
+  display: block;
+  color: #333333;
+}
+
+.perfil__contenedor-datos-personales--pet {
+  grid-template-columns: 1fr 1fr;
+}
+
+.perfil__separador--sticky {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+}
+
+/* ANTECEDENTES (PRUEBA) */
+
+.antecedentes-container {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: min-content; /* altura fija para scroll interno */
+  max-height: calc(100% - 60px);
+}
+
+.antecedentes-header {
+  background-color: #1976d2;
+  color: white;
+  padding: 10px 15px;
+  font-weight: bold;
+  /* position: sticky;
+  top: 0;
+  z-index: 1; */
+}
+
+.contenedor-ant {
+  overflow-y: auto;
+  padding: 5px 10px 5px 5px;
+  flex: 1;
+}
+
+.antecedente {
+  /* border: 1px solid #ccc; */
+  border-radius: 5px;
+  margin-bottom: 10px;
+  background-color: #fff;
+  overflow: hidden;
+  box-shadow: 0 0 5px 0px #c0c0c0;
+}
+
+.antecedente-header {
+  background-color: #eaeaea;
+  /* background-color: #e0eefc; */
+  padding: 10px;
+  cursor: pointer;
+  user-select: none;
+  transition: 0.5s;
+  display: grid;
+  grid-template-columns: 120px 1fr;
+}
+
+.antecedente-header:hover {
+  background-color: #e0eefc;
+}
+
+.antecedente-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: 0.5s;
+  padding: 0px 15px;
+  position: relative;
+}
+
+.antecedente-body.open {
+  padding: 15px;
+  max-height: 1000px;
+}
+
+.tratamiento {
+  border-top: 1px solid #ddd;
+  padding: 5px 0 5px 10px;
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.tratamiento:hover {
+  /* filter: brightness(20%); */
+  background-color: #eaeaea;
+}
+
+/* TRATAMIENTOS MASCOTA */
+
+.perfil__valor--margin {
+  margin: 15px 0;
+}
+
+.plus-icon {
+  background-color: #0161b5;
+  color: #fff;
+  font-size: 30px;
+  width: 40px;
+  height: 40px;
+  padding: 5px;
+  border-radius: 50%;
+  position: absolute;
+  right: 20px;
+  bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.plus-icon:hover {
+  filter: brightness(70%);
+}
+
+.plus-icon--bg {
+  background-color: #fff;
+  /* padding: 2px; */
+  height: 35px;
+  width: 35px;
+  right: 20px;
+  bottom: initial;
+  color: #0161b5;
+}
+
+.antecedentes-container .perfil__campo {
+  margin-left: 5px;
+  font-size: 20px;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.contenedor-ant:hover::-webkit-scrollbar-thumb,
+.contenedor-perfil--pet:hover::-webkit-scrollbar-thumb {
+  background-color: #ffffff;
+  border-radius: 10px;
 }
