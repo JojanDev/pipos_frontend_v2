@@ -10,6 +10,8 @@ import {
   profilePetController,
   treatmentController,
   createAntecedentController,
+  createTreatmentController,
+  createMedicamentController,
 } from "../views/index";
 
 export const routes = {
@@ -65,14 +67,26 @@ export const routes = {
   },
   antecedente: {
     crear: {
-      path: "pets/antecedent/create/index.html",
+      path: "antecedent/create/index.html",
       controller: createAntecedentController,
       private: true,
       addHtml: true,
     },
     tratamiento: {
-      path: "pets/antecedent/treatment/index.html",
+      path: "antecedent/treatment/index.html",
       controller: treatmentController,
+      private: true,
+      addHtml: true,
+    },
+    tratamientoCrear: {
+      path: "antecedent/treatment/create/index.html",
+      controller: createTreatmentController,
+      private: true,
+      addHtml: true,
+    },
+    medicamento: {
+      path: "antecedent/treatment/medicament/create/index.html",
+      controller: createMedicamentController,
       private: true,
       addHtml: true,
     },

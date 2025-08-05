@@ -97,9 +97,11 @@ const recorrerRutas = (routes, hash) => {
 
     parametrosSeparados.forEach((param) => {
       const [clave, valor] = param.split("=");
-      parametros[clave] = valor.includes("%20")
-        ? valor.replace(/%20/g, " ")
-        : valor;
+      // parametros[clave] = valor.includes("%20")
+      //   ? valor.replace(/%20/g, " ")
+      //   : valor;
+      // decodeURIComponent decodifica cualquier caracter especial
+      parametros[clave] = valor ? decodeURIComponent(valor) : "";
     });
 
     arrayHash.pop(); // Quitamos los parámetros

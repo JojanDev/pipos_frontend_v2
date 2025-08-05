@@ -1,11 +1,14 @@
-import { error, loginSuccess, success } from "../../../helpers/alertas";
-import { get, post } from "../../../helpers/api";
-import { cargarTiposDocumento } from "../../../helpers/cargarTiposDocumento";
 import {
+  error,
+  loginSuccess,
+  success,
+  get,
+  post,
+  cargarTiposDocumento,
   configurarEventosValidaciones,
   datos,
   validarCampos,
-} from "../../../helpers/validaciones";
+} from "../../../helpers";
 
 export const registerController = async () => {
   const form = document.querySelector("#form-register");

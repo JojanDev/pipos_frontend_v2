@@ -1,16 +1,15 @@
-import { error, successTemporal } from "../../../helpers/alertas";
-import { post } from "../../../helpers/api";
-import { cargarTiposDocumento } from "../../../helpers/cargarTiposDocumento";
-import { crearFila } from "../../../helpers/crearFila";
 import {
+  error,
+  successTemporal,
+  post,
+  cargarTiposDocumento,
+  crearFila,
   cerrarModal,
   cerrarModalYVolverAVistaBase,
-} from "../../../helpers/modal";
-import {
   configurarEventosValidaciones,
   datos,
   validarCampos,
-} from "../../../helpers/validaciones";
+} from "../../../helpers";
 
 export const createClientController = async () => {
   const form = document.querySelector("#form-register-client");

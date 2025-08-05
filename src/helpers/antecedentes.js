@@ -1,4 +1,5 @@
 export const crearBloqueAntecedenteCompleto = ({
+  idAntecedente,
   titulo,
   diagnostico,
   fecha_creado,
@@ -10,6 +11,7 @@ export const crearBloqueAntecedenteCompleto = ({
   // 📦 Contenedor principal
   const divAntecedente = document.createElement("div");
   divAntecedente.classList.add("antecedente");
+  divAntecedente.setAttribute("data-idAntecendente", idAntecedente);
 
   // 🧷 Encabezado
   const divHeader = document.createElement("div");
@@ -20,7 +22,7 @@ export const crearBloqueAntecedenteCompleto = ({
 
   const spanTitulo = document.createElement("span");
   spanTitulo.textContent = titulo;
-  spanTitulo.setAttribute("id", "title-antecedent");
+  spanTitulo.classList.add("antecedente-titulo");
 
   divHeader.appendChild(spanFecha);
   divHeader.appendChild(spanTitulo);
@@ -42,18 +44,7 @@ export const crearBloqueAntecedenteCompleto = ({
   // 🔽 Tratamientos o mensaje si no hay
   if (tratamientos.length > 0) {
     tratamientos.forEach((tratamiento) => {
-      const divTratamiento = document.createElement("div");
-      divTratamiento.classList.add("tratamiento");
-      divTratamiento.setAttribute("data-idTratamiento", tratamiento.id);
-
-      const spanFechaTratamiento = document.createElement("span");
-      spanFechaTratamiento.textContent = convertirADiaMesAño(
-        tratamiento.fecha_creado
-      );
-
-      divTratamiento.appendChild(spanFechaTratamiento);
-      divTratamiento.appendChild(document.createTextNode(tratamiento.titulo));
-
+      const divTratamiento = crearElementoTratamiento(tratamiento);
       divBody.appendChild(divTratamiento);
     });
   } else if (message) {
@@ -66,6 +57,8 @@ export const crearBloqueAntecedenteCompleto = ({
   // 🔘 Botón/ícono para agregar tratamientos (opcional)
   const icono = document.createElement("i");
   icono.classList.add("ri-add-line", "plus-icon");
+  icono.setAttribute("id", "register-treatment-antecedent");
+
   divBody.appendChild(icono);
 
   // 🧷 Ensamblar todo
@@ -73,6 +66,20 @@ export const crearBloqueAntecedenteCompleto = ({
   divAntecedente.appendChild(divBody);
 
   return divAntecedente;
+};
+
+export const crearElementoTratamiento = ({ id, titulo, fecha_creado }) => {
+  const divTratamiento = document.createElement("div");
+  divTratamiento.classList.add("tratamiento");
+  divTratamiento.setAttribute("data-idTratamiento", id);
+
+  const spanFechaTratamiento = document.createElement("span");
+  spanFechaTratamiento.textContent = convertirADiaMesAño(fecha_creado);
+
+  divTratamiento.appendChild(spanFechaTratamiento);
+  divTratamiento.appendChild(document.createTextNode(titulo));
+
+  return divTratamiento;
 };
 
 export const convertirADiaMesAño = (fechaCompleta) => {

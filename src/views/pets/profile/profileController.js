@@ -1,9 +1,8 @@
-// ===============================
-// 🎯 FUNCIÓN: Alternar apertura/cierre del cuerpo del antecedente (tipo acordeón)
-
-import { crearBloqueAntecedenteCompleto } from "../../../helpers/antecedentes";
-import { get } from "../../../helpers/api";
-import { capitalizarPrimeraLetra } from "../../../helpers/diseño";
+import {
+  crearBloqueAntecedenteCompleto,
+  get,
+  capitalizarPrimeraLetra,
+} from "../../../helpers";
 
 // ===============================
 function toggleBody(headerElement) {
@@ -12,34 +11,6 @@ function toggleBody(headerElement) {
 
   // Alterna la clase 'open' para expandir o contraer el cuerpo
   body.classList.toggle("open");
-}
-
-// ===============================
-// 🎯 FUNCIÓN: Abrir el modal de medicamentos para un tratamiento específico
-// ===============================
-function abrirModal(nombreTratamiento) {
-  const modal = document.getElementById("modal");
-  const modalBody = document.getElementById("modal-body");
-
-  // Inserta contenido dinámico sobre el tratamiento (esto podrías conectarlo a backend luego)
-  modalBody.innerHTML = `
-  <p><strong>Tratamiento:</strong> ${nombreTratamiento}</p>
-  <ul>
-    <li>Otoclean - 500mg</li>
-    <li>Aplicar 1 vez al día durante 7 días</li>
-  </ul>
-`;
-
-  // Muestra el modal (asegúrate que esté con display: flex en CSS cuando activo)
-  modal.style.display = "flex";
-}
-
-// ===============================
-// 🎯 FUNCIÓN: Cerrar el modal de medicamentos
-// ===============================
-function cerrarModal() {
-  const modal = document.getElementById("modal");
-  modal.style.display = "none";
 }
 
 const asignarDatosCliente = (data) => {
@@ -127,8 +98,25 @@ export const profilePetController = async (parametros = null) => {
 
     if (e.target.classList.contains("tratamiento")) {
       const idTratamiento = e.target.getAttribute("data-idtratamiento");
-      const titleAntecedent = document.querySelector("#title-antecedent");
-      location.hash = `#/antecedente/tratamiento/id=${idTratamiento}&tituloAntecedente=${titleAntecedent.textContent}`;
+      // Encuentra el contenedor .antecedente más cercano al tratamiento clickeado
+      const contenedorAntecedente = e.target.closest(".antecedente");
+
+      // Dentro de ese contenedor busca el título
+      const tituloElemento = contenedorAntecedente.querySelector(
+        ".antecedente-titulo"
+      );
+      const tituloAntecedente = tituloElemento?.textContent || "Sin título";
+
+      location.hash = `#/antecedente/tratamiento/id=${idTratamiento}&tituloAntecedente=${encodeURIComponent(
+        tituloAntecedente
+      )}`;
+    }
+
+    if (e.target.id == "register-treatment-antecedent") {
+      const contenedorId = e.target.closest("[data-idAntecendente]");
+      const idAntecedente = contenedorId.getAttribute("data-idAntecendente");
+
+      location.hash = `#/antecedente/tratamientoCrear/idAntecedente=${idAntecedente}`;
     }
   });
 };

@@ -1,22 +1,17 @@
-import { error, success, successTemporal } from "../../../helpers/alertas";
-import { get, post } from "../../../helpers/api";
 import {
-  cargarTiposDocumento,
+  error,
+  success,
+  get,
+  post,
   llenarSelect,
-} from "../../../helpers/cargarTiposDocumento";
-import { crearFila } from "../../../helpers/crearFila";
-import { capitalizarPrimeraLetra } from "../../../helpers/diseño";
-import {
+  crearFila,
+  capitalizarPrimeraLetra,
   cerrarModal,
   cerrarModalYVolverAVistaBase,
-} from "../../../helpers/modal";
-import {
   configurarEventosValidaciones,
   datos,
-  validarCampo,
   validarCampos,
-  validarNumero,
-} from "../../../helpers/validaciones";
+} from "../../../helpers";
 
 const calcularSemanasTotales = ({ anios = 0, meses = 0, semanas = 0 }) => {
   const semanasPorMes = 4.345;

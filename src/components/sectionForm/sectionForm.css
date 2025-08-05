@@ -57,9 +57,10 @@
   top: 34px;
 }
 
-.form__container-field:has(input[name="anios"])::after,
-.form__container-field:has(input[name="meses"])::after,
-.form__container-field:has(input[name="semanas"])::after {
+.form__container-field:has(input[name="anios"])::before,
+.form__container-field:has(input[name="meses"])::before,
+.form__container-field:has(input[name="semanas"])::before,
+.form__container-field:has(input[name="dias"])::before {
   /* content: "Años"; */
   position: absolute;
   font-size: 18px;
@@ -69,15 +70,19 @@
   top: 7px;
 }
 
-.form__container-field:has(input[name="anios"])::after {
+.form__container-field:has(input[name="anios"])::before {
   content: "Años";
 }
 
-.form__container-field:has(input[name="meses"])::after {
+.form__container-field:has(input[name="dias"])::before {
+  content: "Dias";
+}
+
+.form__container-field:has(input[name="meses"])::before {
   content: "Meses";
 }
 
-.form__container-field:has(input[name="semanas"])::after {
+.form__container-field:has(input[name="semanas"])::before {
   content: "Semanas";
 }
 

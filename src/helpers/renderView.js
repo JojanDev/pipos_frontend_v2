@@ -4,17 +4,16 @@ export const renderLayout = async (container, layout) => {
   container.innerHTML = html;
 };
 
-export const cargarComponente = async (
-  { path, container, controller },
-  param = null
-) => {
+export const cargarComponente = async ({ path, controller }, param = null) => {
   try {
     // Cargamos el archivo HTML desde la ruta indicada
     const response = await fetch(`./src/views/${path}`);
     const html = await response.text();
 
     // Insertamos el HTML al final del contenedor, sin eliminar lo que ya tenía
-    container.insertAdjacentHTML("beforeend", html);
+    document
+      .querySelector(`[data-slot="main"]`)
+      .insertAdjacentHTML("beforeend", html);
 
     // Si hay controlador, lo ejecutamos
     if (typeof controller === "function") {

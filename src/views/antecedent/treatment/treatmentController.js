@@ -1,14 +1,18 @@
-import { error } from "../../../../helpers/alertas";
-import { convertirADiaMesAño } from "../../../../helpers/antecedentes";
-import { get } from "../../../../helpers/api";
-import { crearFila } from "../../../../helpers/crearFila";
 import {
+  error,
+  convertirADiaMesAño,
+  get,
+  crearFila,
   cerrarModal,
   cerrarModalYVolverAVistaBase,
-} from "../../../../helpers/modal";
+  cargarComponente,
+} from "../../../helpers";
+import { routes } from "../../../router/routes";
 
 export const treatmentController = async (parametros = null) => {
   const { id, tituloAntecedente } = parametros;
+  console.log(parametros);
+
   const modal = document.querySelector('[data-modal="pet-treatment"]');
   const esModal = !location.hash.includes("antecedente/tratamiento");
   const tbody = document.querySelector(
@@ -35,6 +39,7 @@ export const treatmentController = async (parametros = null) => {
   }
 
   const { titulo, descripcion, fecha_creado } = responseTratamiento.data;
+  console.log(responseTratamiento);
 
   tituloTratamiento.textContent = titulo;
   fechaTratamiento.textContent = convertirADiaMesAño(fecha_creado);
@@ -65,8 +70,14 @@ export const treatmentController = async (parametros = null) => {
     }
   }
 
-  modal.addEventListener("click", (e) => {
+  modal.addEventListener("click", async (e) => {
     console.log(e.target);
+
+    if (e.target.id == "register-antecedent-treatment-medicament") {
+      await cargarComponente(routes.antecedente.medicamento, {
+        idTratamiento: id,
+      });
+    }
 
     if (e.target.id == "back-treatment") {
       esModal ? cerrarModal("create-client") : cerrarModalYVolverAVistaBase();

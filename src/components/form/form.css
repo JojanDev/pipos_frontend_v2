@@ -107,8 +107,13 @@
   font-weight: bold;
   right: 25px;
   bottom: -20px;
+  z-index: 100;
 }
 
 .form--w-700 {
   width: 700px;
+}
+
+.form__container-fields--medicaments {
+  grid-template-columns: 1fr 1fr 1fr;
 }

@@ -23,7 +23,7 @@ export const validarLimite = (event, limite) => {
 };
 
 export const validarTexto = (event) => {
-  const regex = /[^A-Za-z ]/g;
+  const regex = /[^A-Za-zÁÉÍÓÚáéíóúÜüÑñ ]/g;
   const limpio = event.target.value.replace(regex, "");
 
   if (limpio !== event.target.value) {
@@ -162,6 +162,9 @@ export const validarCampo = (event) => {
 
         if (!resultado.valid) {
           agregarError(campo.parentElement, resultado.message);
+          console.log("resultado.message", resultado.message);
+          console.log("campo.parentElement", campo.parentElement);
+
           return false;
         }
       }
@@ -207,9 +210,7 @@ const obtenerCamposOpcionales = (formulario) => {
     (elemento) =>
       !elemento.hasAttribute("required") &&
       !elemento.parentElement.classList.contains("hidden") &&
-      (elemento.tagName === "INPUT" ||
-        elemento.tagName === "SELECT" ||
-        elemento.tagName === "TEXTAREA") &&
+      (elemento.tagName === "INPUT" || elemento.tagName === "SELECT") &&
       elemento.dataset.validate // Solo campos con data-validate
   );
 };

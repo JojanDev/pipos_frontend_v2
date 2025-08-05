@@ -1,6 +1,4 @@
-import { get } from "../../helpers/api.js";
-import { cargarTiposDocumento } from "../../helpers/cargarTiposDocumento.js";
-import { crearFila } from "../../helpers/crearFila.js";
+import { get, cargarTiposDocumento, crearFila } from "../../helpers";
 
 const cargarTabla = async () => {
   const clientes = await get("clientes");

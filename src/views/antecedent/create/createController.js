@@ -1,13 +1,14 @@
-import { error, success } from "../../../../helpers/alertas";
-import { crearBloqueAntecedenteCompleto } from "../../../../helpers/antecedentes";
-import { post } from "../../../../helpers/api";
-import { llenarSelect } from "../../../../helpers/cargarTiposDocumento";
-import { cerrarModalYVolverAVistaBase } from "../../../../helpers/modal";
 import {
+  error,
+  success,
+  crearBloqueAntecedenteCompleto,
+  post,
+  llenarSelect,
+  cerrarModalYVolverAVistaBase,
   configurarEventosValidaciones,
   datos,
   validarCampos,
-} from "../../../../helpers/validaciones";
+} from "../../../helpers";
 
 export const createAntecedentController = (parametros = null) => {
   const { id } = parametros;

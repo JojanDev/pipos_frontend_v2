@@ -1,13 +1,13 @@
-import { error } from "../../../helpers/alertas";
-import { get } from "../../../helpers/api";
-import { crearFila } from "../../../helpers/crearFila";
-import { capitalizarPrimeraLetra } from "../../../helpers/diseño";
+import { routes } from "../../../router/routes";
 import {
+  error,
+  get,
+  crearFila,
+  capitalizarPrimeraLetra,
   cerrarModal,
   cerrarModalYVolverAVistaBase,
-} from "../../../helpers/modal";
-import { cargarComponente } from "../../../helpers/renderView";
-import { routes } from "../../../router/routes";
+  cargarComponente,
+} from "../../../helpers";
 
 const asignarDatosCliente = (data) => {
   const spanNombre = document.querySelector("#profile-nombre");
@@ -91,10 +91,7 @@ export const profileClientController = async (parametros = null) => {
   });
 
   btnRegisterPets.addEventListener("click", async () => {
-    const container = document.querySelector(`[data-slot="main"]`);
-    const { path, controller } = routes.mascotas.crear;
-
-    await cargarComponente({ path, container, controller }, id);
+    await cargarComponente(routes.mascotas.crear, id);
     const selectCliente = document.querySelector("#select-clients");
     const contenedor = selectCliente?.closest(".form__container-field");
     contenedor.classList.add("hidden");

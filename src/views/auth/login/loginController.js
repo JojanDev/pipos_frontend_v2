@@ -1,11 +1,12 @@
-import { error, loginSuccess } from "../../../helpers/alertas";
-import { post } from "../../../helpers/api";
 import {
+  error,
+  loginSuccess,
+  post,
   configurarEventosValidaciones,
   datos,
   validarAlfanumericos,
   validarCampos,
-} from "../../../helpers/validaciones";
+} from "../../../helpers";
 
 //Funcion para validar los datos de inicio de sesion
 const validarSesion = async ({ usuario, contrasena }) => {
