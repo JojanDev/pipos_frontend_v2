@@ -1,7 +1,10 @@
 import {
+  capitalizarPrimeraLetra,
   configurarEventosValidaciones,
   crearElementoTratamiento,
+  datos,
   error,
+  llenarSelect,
   success,
   validarCampos,
 } from "../../../../../helpers";
@@ -9,6 +12,17 @@ import {
 export const createMedicamentController = async (parametros = null) => {
   const { idTratamiento } = parametros;
   console.log(idTratamiento, "CREATRE MEDICAMENT CONTROLLER");
+
+  llenarSelect({
+    endpoint: "medicamentos/info/",
+    selector: "#select-medicamentos-info",
+    optionMapper: ({ id, nombre, presentacion, via_administracion }) => ({
+      id: id,
+      text: `${nombre} (${capitalizarPrimeraLetra(
+        presentacion
+      )} - ${capitalizarPrimeraLetra(via_administracion)})`,
+    }),
+  });
 
   const form = document.querySelector(
     "#form-register-pet-antecedent-treatment-medicament"
@@ -29,43 +43,46 @@ export const createMedicamentController = async (parametros = null) => {
     if (!validarCampos(e)) return;
 
     if (
-      inputMeses.textContent == "" ||
-      inputSemanas.textContent == "" ||
-      inputDias.textContent == ""
+      inputMeses.value == "" &&
+      inputSemanas.value == "" &&
+      inputDias.value == ""
     ) {
       error("Ingrese al menos un valor en la seccion de Duracion");
-    }
-
-    datos["id_antecedente"] = idAntecedente;
-    console.log(datos);
-
-    const responseTratamiento = await post("tratamientos", datos);
-
-    if (!responseTratamiento.success) {
-      await error(responseTratamiento.message);
       return;
     }
 
-    const divTratamiento = crearElementoTratamiento(responseTratamiento.data);
+    datos["id_tratamiento"] = idTratamiento;
+    console.log(datos);
 
-    // Busca el antecedente donde insertar el tratamiento
-    const antecedenteContainer = document.querySelector(
-      `[data-idAntecendente="${idAntecedente}"]`
-    );
+    // const responseMedicamentoTratamiento = await post("medicamento", {
+    //   id_tratamiento: idTratamiento,
+    // });
 
-    const body = antecedenteContainer?.querySelector(".antecedente-body");
+    // if (!responseTratamiento.success) {
+    //   await error(responseTratamiento.message);
+    //   return;
+    // }
 
-    // Quita el mensaje de "No hay tratamientos", si existe
-    const mensaje = body?.querySelector(".mensaje-sin-tratamientos");
-    if (mensaje) mensaje.remove();
+    // const divTratamiento = crearElementoTratamiento(responseTratamiento.data);
 
-    // Inserta el tratamiento justo después del separador
-    const separador = body?.querySelector(".perfil__separador--treatment");
-    if (separador) {
-      separador.insertAdjacentElement("afterend", divTratamiento);
-    }
+    // // Busca el antecedente donde insertar el tratamiento
+    // const antecedenteContainer = document.querySelector(
+    //   `[data-idAntecendente="${idAntecedente}"]`
+    // );
 
-    await success(responseTratamiento.message);
+    // const body = antecedenteContainer?.querySelector(".antecedente-body");
+
+    // // Quita el mensaje de "No hay tratamientos", si existe
+    // const mensaje = body?.querySelector(".mensaje-sin-tratamientos");
+    // if (mensaje) mensaje.remove();
+
+    // // Inserta el tratamiento justo después del separador
+    // const separador = body?.querySelector(".perfil__separador--treatment");
+    // if (separador) {
+    //   separador.insertAdjacentElement("afterend", divTratamiento);
+    // }
+
+    // await success(responseTratamiento.message);
 
     // esModal ? cerrarModal("create-pet") : cerrarModalYVolverAVistaBase();
   });

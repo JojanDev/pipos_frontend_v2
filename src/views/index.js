@@ -11,3 +11,5 @@ export * from "./antecedent/treatment/treatmentController.js";
 export * from "./antecedent/create/createController.js";
 export * from "./antecedent/treatment/create/createController.js";
 export * from "./antecedent/treatment/medicament/create/createController.js";
+export * from "./inventory/inventoryController.js";
+export * from "./inventory/products/create/createController.js";

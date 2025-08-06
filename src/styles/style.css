@@ -11,6 +11,7 @@
 @import url(views-styles/login.css);
 @import url(views-styles/container.css);
 @import url(views-styles/profileClient.css);
+@import url(views-styles/inventory.css);
 
 * {
   padding: 0;

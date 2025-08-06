@@ -12,6 +12,8 @@ import {
   createAntecedentController,
   createTreatmentController,
   createMedicamentController,
+  inventoryController,
+  createProductController,
 } from "../views/index";
 
 export const routes = {
@@ -87,6 +89,23 @@ export const routes = {
     medicamento: {
       path: "antecedent/treatment/medicament/create/index.html",
       controller: createMedicamentController,
+      private: true,
+      addHtml: true,
+    },
+  },
+  inventario: {
+    "/": {
+      path: "inventory/index.html",
+      controller: inventoryController,
+      private: true,
+      layout: "mainLayout.html",
+      slot: "main",
+    },
+  },
+  productos: {
+    crear: {
+      path: "inventory/products/create/index.html",
+      controller: createProductController,
       private: true,
       addHtml: true,
     },

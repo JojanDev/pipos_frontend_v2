@@ -10,15 +10,19 @@
     <h1 class="section-form__title">Agregar Medicamento</h1>
     <hr class="section-form__line section-form__line--margin-bottom" />
 
-    <form action="#" id="form-register-pet-antecedent-treatment-medicament" novalidate>
+    <form
+      action="#"
+      id="form-register-pet-antecedent-treatment-medicament"
+      novalidate
+    >
       <div class="form form--w-800">
         <div class="form__container-field">
           <label for="" class="form__label">Medicamento</label>
           <select
             class="form__input form__input--select"
             required
-            id="tipos-documento"
-            name="idTipoDocumento"
+            id="select-medicamentos-info"
+            name="id_medicamento_info"
           >
             <!-- Opciones -->
             <option disabled selected value="">
@@ -33,8 +37,8 @@
               type="text"
               class="form__input"
               required
-              data-validate="alfanumerico"
-              name="nombre"
+              data-validate=""
+              name="dosis"
             />
           </div>
           <div class="form__container-field form__container-field--span">
@@ -43,8 +47,8 @@
               type="text"
               class="form__input"
               required
-              data-validate="texto"
-              name="nombre"
+              data-validate=""
+              name="frecuencia_aplicacion"
             />
           </div>
         </div>

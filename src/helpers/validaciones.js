@@ -22,6 +22,29 @@ export const validarLimite = (event, limite) => {
   return { valid: true };
 };
 
+export const validarFecha = (event) => {
+  const input = event.target;
+  const valor = input.value;
+
+  if (!valor) {
+    return { valid: false, message: "Fecha requerida" };
+  }
+
+  const fecha = new Date(valor);
+  const min = input.getAttribute("min");
+  const max = input.getAttribute("max");
+
+  if (min && fecha < new Date(min)) {
+    return { valid: false, message: `Mínimo ${min}` };
+  }
+
+  if (max && fecha > new Date(max)) {
+    return { valid: false, message: `Máximo ${max}` };
+  }
+
+  return { valid: true };
+};
+
 export const validarTexto = (event) => {
   const regex = /[^A-Za-zÁÉÍÓÚáéíóúÜüÑñ ]/g;
   const limpio = event.target.value.replace(regex, "");
@@ -108,13 +131,13 @@ export const validarCorreo = (correo) => {
 // Funciones para agregar y quitar errores
 
 // Agrega un borde rojo y un mensaje de advertencia al campo
-const agregarError = (campo, mensaje = "El campo es obligatorio.") => {
+export const agregarError = (campo, mensaje = "El campo es obligatorio.") => {
   campo.classList.add("error");
   campo.style.setProperty("--error-content", `"${mensaje}"`);
 };
 
 // Quita el borde rojo y el mensaje de advertencia del campo
-const quitarError = (campo) => {
+export const quitarError = (campo) => {
   campo.classList.remove("error");
 };
 
@@ -201,6 +224,7 @@ const validadoresInput = {
   contrasena: (e) => validarContrasena(e.target),
   correo: (e) => validarCorreo(e.target),
   limite: validarLimite,
+  fecha: validarFecha,
   // Puedes seguir agregando más tipos según crezcas
 };
 

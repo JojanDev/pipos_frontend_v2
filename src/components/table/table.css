@@ -82,26 +82,27 @@
   border-radius: 4px;
 }
 
-#pets-client .table__header {
-  grid-template-columns: 50px 1fr 0.7fr 1fr 1.2fr 1fr;
-}
-
+#pets-client .table__header,
 #pets-client .table__row {
   grid-template-columns: 50px 1fr 0.7fr 1fr 1.2fr 1fr;
 }
 
-#pets .table__header {
-  grid-template-columns: 50px 1fr 0.7fr 1fr 1fr 1fr 1fr;
-}
-
+#pets .table__header,
 #pets .table__row {
   grid-template-columns: 50px 1fr 0.7fr 1fr 1fr 1fr 1fr;
 }
 
-#pet-antecedent-treatment .table__header {
+#pet-antecedent-treatment .table__header,
+#pet-antecedent-treatment .table__row {
   grid-template-columns: 50px 1fr 2.5fr 1fr 0.8fr 1.2fr 1fr;
 }
 
-#pet-antecedent-treatment .table__row {
-  grid-template-columns: 50px 1fr 2.5fr 1fr 0.8fr 1.2fr 1fr;
+#products .table__header,
+#products .table__row {
+  grid-template-columns: 50px 1.5fr repeat(4, 1fr);
+}
+
+#medicaments .table__header,
+#medicaments .table__row {
+  grid-template-columns: 50px 1fr 2fr 0.8fr 1fr 1fr 0.7fr 0.5fr;
 }
