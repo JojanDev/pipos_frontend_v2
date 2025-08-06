@@ -114,6 +114,7 @@ CREATE TABLE medicamentos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_info INT NOT NULL,
     precio DECIMAL NOT NULL,
+    stock INT NOT NULL DEFAULT 0,
     FOREIGN KEY (id_info) REFERENCES medicamentos_info(id)
 );
 
@@ -133,9 +134,8 @@ CREATE TABLE medicamentos_tratamiento (
 	dosis VARCHAR(100) DEFAULT 'No aplica',
 	frecuencia_aplicacion VARCHAR(100),
 	duracion INT,
-	FOREIGN KEY (id_tratamiento) REFERENCES antecedentes_tratamientos(id),
-    
-    
+
+	FOREIGN KEY (id_tratamiento) REFERENCES antecedentes_tratamientos(id),	
 	FOREIGN KEY (id_medicamento_info) REFERENCES medicamentos_info(id)
 );
 
@@ -279,5 +279,34 @@ INSERT INTO medicamentos_tratamiento (
   frecuencia_aplicacion,
   duracion
 ) VALUES
-  (11, 2, '10 mg', 'Cada 8 horas', 7),
-  (11, 3, '5 gotas', 'Una vez al día', 5);
+  (1, 2, '10 mg', 'Cada 8 horas', 7),
+  (1, 3, '5 gotas', 'Una vez al día', 5);
+
+use veterinaria_pipos;
+
+INSERT INTO tipos_productos (nombre) VALUES 
+('Accesorio'),
+('Alimento'),
+('Higiene'),
+('Juguete');
+
+
+INSERT INTO productos (nombre, precio, descripcion, fecha_caducidad, id_tipo, stock) VALUES 
+('Collar Reflectivo', 15000.00, 'Collar para perro con tira reflectiva.', '2030-01-01 00:00:00', 1, 100),
+('Concentrado DogChow 10kg', 120000.00, 'Alimento seco para perros adultos.', '2025-12-20 00:00:00', 2, 20),
+('Shampoo Suave para Cachorros', 28000.00, 'Shampoo para el baño de cachorros con aroma a avena.', '2027-03-10 00:00:00', 3, 35),
+('Pelota de Goma', 9000.00, 'Pelota resistente para perros medianos.', '2030-12-31 00:00:00', 4, 60);
+
+INSERT INTO medicamentos_info (nombre, uso_general, especie_destinada, via_administracion, presentacion, informacion_adicional) VALUES
+('Amoxicilina 500mg', 'Infecciones bacterianas', 'perro', 'oral', 'tabletas', 'Administrar con alimentos para evitar irritación estomacal.'),
+('Ivermectina', 'Control de parásitos', 'todos', 'inyectable', 'solución', 'No administrar a perros de razas collie.'),
+('Meloxicam 1.5mg/ml', 'Dolor e inflamación', 'gato', 'oral', 'jarabe', 'Usar con jeringa dosificadora.'),
+('Enrofloxacina 50mg', 'Antibiótico', 'aves', 'oral', 'tabletas', 'Mantener en lugar fresco y seco.');
+
+INSERT INTO medicamentos (id_info, precio, stock) VALUES
+(1, 18000.00, 30),
+(2, 25000.00, 15),
+(3, 22000.00, 40),
+(4, 19500.00, 10);
+
+select * from medicamentos_info;
