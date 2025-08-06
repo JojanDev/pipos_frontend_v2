@@ -1,74 +1,42 @@
 <div class="modal__backdrop" data-modal="create-client">
   <section class="section-form modal__container">
-    <i
-      class="ri-arrow-left-line arrow-left arrow-left--bottom"
-      id="back-register-client"
-    ></i>
+    <i class="ri-arrow-left-line arrow-left arrow-left--bottom" id="back-register-client"></i>
 
     <h1 class="section-form__title">Registro de Producto</h1>
     <hr class="section-form__line section-form__line--margin-bottom" />
 
     <form action="#" id="form-register-product" novalidate>
-      <div class="form">
-        <div class="form__container-field form__container-field--span">
-          <label for="" class="form__label">Nombre</label>
-          <input
-            type="text"
-            class="form__input"
-            required
-            data-validate="texto"
-            name="nombre"
-          />
-        </div>
-        <div
-          class="form__container-fields form__container-fields--grid-variant"
-        >
+      <div class="form form--w-700">
+        <div class="form__container-fields form__container-fields--grid-variant">
+          <div class="form__container-field">
+            <label for="" class="form__label">Nombre</label>
+            <input type="text" class="form__input" required data-validate="textoNumeros" name="nombre" />
+          </div>
           <div class="form__container-field">
             <label for="" class="form__label">Tipo de Producto</label>
-            <select
-              class="form__input form__input--select"
-              required
-              id="tipos-documento"
-              name="idTipoDocumento"
-            >
+            <select class="form__input form__input--select" required id="tipos-productos" name="id_tipo">
               <!-- Opciones -->
               <option disabled selected value="">Seleccione una opcion</option>
             </select>
           </div>
-          <div class="form__container-field">
-            <label for="" class="form__label">Fecha de caducidad</label>
-            <input
-              type="date"
-              class="form__input"
-              required
-              data-validate=""
-              name="fecha_caducidad"
-            />
+        </div>
+        <div class="form__container-field">
+          <label for="" class="form__label">Fecha de caducidad</label>
+          <input type="date" class="form__input" required data-validate="" name="fecha_caducidad" />
+        </div>
+        <div class="form__container-fields">
+          <div class="form__container-field form__container-field--span">
+            <label for="" class="form__label">Precio</label>
+            <input type="text" class="form__input" required data-validate="numero" name="precio" />
+          </div>
+          <div class="form__container-field form__container-field--span">
+            <label for="" class="form__label">Stock</label>
+            <input type="text" class="form__input" required data-validate="numero" name="stock" />
           </div>
         </div>
         <div class="form__container-field form__container-field--span">
-          <label for="" class="form__label">Teléfono</label>
-          <input
-            type="text"
-            class="form__input"
-            required
-            data-validate="numero"
-            name="telefono"
-          />
-        </div>
-        <div class="form__container-field form__container-field--span">
-          <label for="" class="form__label">Correo</label>
-          <input
-            type="text"
-            class="form__input"
-            required
-            data-validate="correo"
-            name="correo"
-          />
-        </div>
-        <div class="form__container-field form__container-field--span">
-          <label for="" class="form__label">Dirección / Barrio</label>
-          <input type="text" class="form__input" required name="direccion" />
+          <label for="" class="form__label">Descripcion</label>
+          <textarea name="descripcion" required class="form__input form__input--textarea"></textarea>
         </div>
         <div class="form__container-btns">
           <button type="submit" class="btn btn--lower-height">Registrar</button>

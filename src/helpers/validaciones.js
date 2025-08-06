@@ -22,28 +22,28 @@ export const validarLimite = (event, limite) => {
   return { valid: true };
 };
 
-export const validarFecha = (event) => {
-  const input = event.target;
-  const valor = input.value;
+// export const validarFecha = (event) => {
+//   const input = event.target;
+//   const valor = input.value;
 
-  if (!valor) {
-    return { valid: false, message: "Fecha requerida" };
-  }
+//   if (!valor) {
+//     return { valid: false, message: "Fecha requerida" };
+//   }
 
-  const fecha = new Date(valor);
-  const min = input.getAttribute("min");
-  const max = input.getAttribute("max");
+//   const fecha = new Date(valor);
+//   const min = input.getAttribute("min");
+//   const max = input.getAttribute("max");
 
-  if (min && fecha < new Date(min)) {
-    return { valid: false, message: `Mínimo ${min}` };
-  }
+//   if (min && fecha < new Date(min)) {
+//     return { valid: false, message: `Mínimo ${min}` };
+//   }
 
-  if (max && fecha > new Date(max)) {
-    return { valid: false, message: `Máximo ${max}` };
-  }
+//   if (max && fecha > new Date(max)) {
+//     return { valid: false, message: `Máximo ${max}` };
+//   }
 
-  return { valid: true };
-};
+//   return { valid: true };
+// };
 
 export const validarTexto = (event) => {
   const regex = /[^A-Za-zÁÉÍÓÚáéíóúÜüÑñ ]/g;
@@ -52,6 +52,18 @@ export const validarTexto = (event) => {
   if (limpio !== event.target.value) {
     event.target.value = limpio;
     return { valid: false, message: "Solo letras" };
+  }
+
+  return { valid: true };
+};
+
+export const validarTextoYNumeros = (event) => {
+  const regex = /[^A-Za-zÁÉÍÓÚáéíóúÜüÑñ\w ]/g;
+  const limpio = event.target.value.replace(regex, "");
+
+  if (limpio !== event.target.value) {
+    event.target.value = limpio;
+    return { valid: false, message: "Solo letras y numeros" };
   }
 
   return { valid: true };
@@ -224,7 +236,7 @@ const validadoresInput = {
   contrasena: (e) => validarContrasena(e.target),
   correo: (e) => validarCorreo(e.target),
   limite: validarLimite,
-  fecha: validarFecha,
+  textoNumeros: validarTextoYNumeros,
   // Puedes seguir agregando más tipos según crezcas
 };
 

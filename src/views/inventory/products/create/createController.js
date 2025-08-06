@@ -1,4 +1,4 @@
-import { agregarError, quitarError } from "../../../../helpers";
+import { agregarError, llenarSelect, quitarError } from "../../../../helpers";
 import {
   error,
   successTemporal,
@@ -36,12 +36,37 @@ function validarFechaCaducidad(valorFecha) {
 export const createProductController = async () => {
   const form = document.querySelector("#form-register-product");
   const selectTipoDocumento = document.querySelector("#tipos-documento");
-  const tbody = document.querySelector("#clients .table__body");
+  const tbodyProducts = document.querySelector("#products .table__body");
   const esModal = !location.hash.includes("clientes/crear");
 
-  await cargarTiposDocumento(selectTipoDocumento);
+  llenarSelect({
+    endpoint: "tipos-productos",
+    selector: "#tipos-productos",
+    optionMapper: ({id, nombre}) => ({ id: id, text: nombre })
+  }); 
 
   configurarEventosValidaciones(form);
+  const inputFecha = document.querySelector("[name='fecha_caducidad']");
+
+  inputFecha.addEventListener('blur', (e) => {
+    const resultado = validarFechaCaducidad(inputFecha.value);
+  
+    if (!resultado.valid) {
+      agregarError(inputFecha.parentElement, resultado.message);
+    } else {
+      quitarError(inputFecha.parentElement);
+    }
+  })
+
+  inputFecha.addEventListener('input', (e) => {
+    const resultado = validarFechaCaducidad(inputFecha.value);
+  
+    if (!resultado.valid) {
+      agregarError(inputFecha.parentElement, resultado.message);
+    } else {
+      quitarError(inputFecha.parentElement);
+    }
+  })
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -49,46 +74,42 @@ export const createProductController = async () => {
     if (!validarCampos(e)) return;
     console.log(datos);
 
-    const inputFecha = document.querySelector("#fecha_caducidad");
-
     const resultado = validarFechaCaducidad(inputFecha.value);
+  
+    if (!resultado.valid) return;
 
-    if (!resultado.valid) {
-      agregarError(inputFecha.parentElement, resultado.message);
-    } else {
-      quitarError(inputFecha.parentElement);
+    const response = await post("productos", datos);
+    console.log(response);
+
+    if (!response.success) {
+      await error(response.message);
+      return;
     }
+
+    await successTemporal(response.message);
+
+    if (tbodyProducts) {
+      const {
+        id,
+        nombre,
+        tipoProducto,
+      } = response.data;
+
+      const fila = response.data.map(({id, nombre, tipoProducto}) => {
+        return 
+      });
+
+      const row = crearFila([id, nombre, telefono, numeroDocumento, direccion]);
+      tbodyProducts.insertAdjacentElement("afterbegin", row);
+    }
+
+    esModal ? cerrarModal("create-client") : cerrarModalYVolverAVistaBase();
   });
 
-  //   const response = await post("clientes", datos);
-
-  //   console.log(response);
-
-  //   if (!response.success) {
-  //     await error(response.message);
-  //     return;
-  //   }
-
-  //   await successTemporal(response.message);
-  //   console.log(response);
-
-  //   if (tbody) {
-  //     const {
-  //       id,
-  //       info: { nombre, telefono, numeroDocumento, direccion },
-  //     } = response.data;
-
-  //     const row = crearFila([id, nombre, telefono, numeroDocumento, direccion]);
-  //     tbody.insertAdjacentElement("afterbegin", row);
-  //   }
-
-  //   esModal ? cerrarModal("create-client") : cerrarModalYVolverAVistaBase();
-  // });
-
-  // document.addEventListener("click", (event) => {
-  //   const arrow = event.target.closest("#back-register-client");
-  //   if (arrow) {
-  //     esModal ? cerrarModal("create-client") : cerrarModalYVolverAVistaBase();
-  //   }
-  // });
+  document.addEventListener("click", (event) => {
+    const arrow = event.target.closest("#back-register-client");
+    if (arrow) {
+      esModal ? cerrarModal("create-client") : cerrarModalYVolverAVistaBase();
+    }
+  });
 };

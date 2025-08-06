@@ -67,7 +67,7 @@
 
 .form__input--textarea {
   resize: vertical;
-  max-height: 400px;
+  max-height: 200px;
   height: 100px;
   min-height: 40px;
 }
