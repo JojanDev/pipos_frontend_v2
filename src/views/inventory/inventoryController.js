@@ -80,4 +80,19 @@ export const inventoryController = () => {
   const vistaInventory = document.querySelector("#inventory");
 
   vistaInventory.addEventListener("click", (e) => {});
+
+  const tablaClientes = document.querySelector("#products");
+
+  tablaClientes.addEventListener("click", (event) => {
+    const fila = event.target.closest("tr[data-id]");
+
+    if (fila) {
+      const idProducto = fila.getAttribute("data-id");
+      console.log("Cliente clickeado con ID:", idProducto);
+      location.hash = `#/inventario/productosPerfil/id=${idProducto}`;
+
+      // Aquí puedes llamar a una función para ver más detalles, abrir modal, etc.
+      // ejemplo: mostrarDetalleCliente(idCliente);
+    }
+  });
 };

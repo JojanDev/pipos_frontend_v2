@@ -26,6 +26,10 @@
   color: #707070;
 }
 
+.section-form__title--w-450 {
+  width: 450px;
+}
+
 .section-form__subtitle {
   margin-left: 20px;
   font-size: 30px;
@@ -64,7 +68,7 @@
   /* content: "Años"; */
   position: absolute;
   font-size: 18px;
-  color: #707070; 
+  color: #707070;
   font-weight: 500;
   right: 30px;
   top: 7px;

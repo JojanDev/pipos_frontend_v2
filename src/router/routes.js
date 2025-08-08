@@ -14,6 +14,21 @@ import {
   createMedicamentController,
   inventoryController,
   createProductController,
+  createProductTypeController,
+  createBreedController,
+  createSpecieController,
+  profileSpecieController,
+  editSpecieController,
+  profileProductTypeController,
+  editProductTypeController,
+  createServiceController,
+  servicesController,
+  administrationController,
+  editBreedController,
+  profileBreedController,
+  editServiceController,
+  createMedicamentInventoryController,
+  createMedicamentInfoController,
 } from "../views/index";
 
 export const routes = {
@@ -38,6 +53,12 @@ export const routes = {
       private: true,
       addHtml: true,
     },
+    editar: {
+      path: "clients/edit/index.html",
+      controller: () => {},
+      private: true,
+      addHtml: true,
+    },
     perfil: {
       path: "clients/profile/index.html",
       controller: profileClientController,
@@ -56,6 +77,12 @@ export const routes = {
     crear: {
       path: "pets/create/index.html",
       controller: createPetController,
+      private: true,
+      addHtml: true,
+    },
+    editar: {
+      path: "pets/edit/index.html",
+      controller: () => {},
       private: true,
       addHtml: true,
     },
@@ -93,6 +120,90 @@ export const routes = {
       addHtml: true,
     },
   },
+  administrar_datos: {
+    "/": {
+      path: "administration/index.html",
+      controller: administrationController,
+      private: true,
+      layout: "mainLayout.html",
+      slot: "main",
+    },
+    especiesCrear: {
+      path: "administration/species/create/index.html",
+      controller: createSpecieController,
+      private: true,
+      addHtml: true,
+    },
+    razasCrear: {
+      path: "administration/breeds/create/index.html",
+      controller: createBreedController,
+      private: true,
+      addHtml: true,
+    },
+    tipos_productosCrear: {
+      path: "administration/productsTypes/create/index.html",
+      controller: createProductTypeController,
+      private: true,
+      addHtml: true,
+    },
+    especiesPerfil: {
+      path: "administration/species/profile/index.html",
+      controller: profileSpecieController,
+      private: true,
+      addHtml: true,
+    },
+    razasPerfil: {
+      path: "administration/breeds/profile/index.html",
+      controller: profileBreedController,
+      private: true,
+      addHtml: true,
+    },
+    tipos_productosPerfil: {
+      path: "administration/productsTypes/profile/index.html",
+      controller: profileProductTypeController,
+      private: true,
+      addHtml: true,
+    },
+    especiesEditar: {
+      path: "administration/species/edit/index.html",
+      controller: editSpecieController,
+      private: true,
+      addHtml: true,
+    },
+    razasEditar: {
+      path: "administration/breeds/edit/index.html",
+      controller: editBreedController,
+      private: true,
+      addHtml: true,
+    },
+    tipos_productosEditar: {
+      path: "administration/productsTypes/edit/index.html",
+      controller: editProductTypeController,
+      private: true,
+      addHtml: true,
+    },
+  },
+  servicios: {
+    "/": {
+      path: "services/index.html",
+      controller: servicesController,
+      private: true,
+      layout: "mainLayout.html",
+      slot: "main",
+    },
+    crear: {
+      path: "services/create/index.html",
+      controller: createServiceController,
+      private: true,
+      addHtml: true,
+    },
+    editar: {
+      path: "services/edit/index.html",
+      controller: editServiceController,
+      private: true,
+      addHtml: true,
+    },
+  },
   inventario: {
     "/": {
       path: "inventory/index.html",
@@ -101,11 +212,41 @@ export const routes = {
       layout: "mainLayout.html",
       slot: "main",
     },
-  },
-  productos: {
-    crear: {
+    productosCrear: {
       path: "inventory/products/create/index.html",
       controller: createProductController,
+      private: true,
+      addHtml: true,
+    },
+    productosPerfil: {
+      path: "inventory/products/profile/index.html",
+      controller: () => {},
+      private: true,
+      addHtml: true,
+    },
+    medicamentosCrear: {
+      path: "inventory/medicaments/create/index.html",
+      controller: createMedicamentInventoryController,
+      private: true,
+      addHtml: true,
+    },
+    medicamentosPerfil: {
+      path: "inventory/products/profile/index.html",
+      controller: () => {},
+      private: true,
+      addHtml: true,
+    },
+  },
+  medicamentos_info: {
+    crear: {
+      path: "medicaments/create/index.html",
+      controller: createMedicamentInfoController,
+      private: true,
+      addHtml: true,
+    },
+    perfil: {
+      path: "inventory/products/profile/index.html",
+      controller: () => {},
       private: true,
       addHtml: true,
     },

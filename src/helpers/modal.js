@@ -16,6 +16,8 @@ export function cerrarModalYVolverAVistaBase() {
   if (!vistaBase) return;
 
   const rutaBaseHash = vistaBase.split("/")[0];
+  console.log("rutaBaseHash", rutaBaseHash);
+
   const modal = document.querySelector(".modal__backdrop");
   if (modal) {
     modal.remove();

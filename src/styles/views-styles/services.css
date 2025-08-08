@@ -1,0 +1,58 @@
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  grid-auto-rows: 150px; /* altura automática pero con mínimo */
+  gap: 30px;
+}
+
+.card {
+  background-color: #f6f6f6;
+  /* text-align: s; */
+  padding: 20px;
+  /* padding-left: 5px; */
+  border: 1px solid #ccc;
+  font-size: 1.2rem;
+
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  overflow: hidden;
+  border-radius: 10px;
+  gap: 10px;
+  box-shadow: 0 0 5px 1px #00000025;
+  position: relative;
+}
+
+.card__img {
+  /* width: 100px;
+  height: 30px; */
+  height: auto;
+  width: 90%;
+  /* align-self: center; */
+}
+
+.scroll-cont {
+  overflow-y: auto;
+}
+
+.card__title {
+  color: #0161b5;
+  word-break: break-word;
+}
+
+.card__description {
+  word-break: break-word;
+  /* height: 120px; */
+}
+
+.card .btn--edit {
+  position: absolute;
+  bottom: 10px;
+  right: 50px;
+}
+
+.card .btn--red {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  font-weight: 500;
+}

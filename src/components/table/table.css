@@ -8,6 +8,10 @@
   box-shadow: 0 5px 10px -8px #3d3d3d;
 }
 
+/* .table-container--fijo {
+  min-height: 200px;
+} */
+
 .table {
   display: grid;
   grid-template-rows: auto 1fr;
@@ -42,6 +46,7 @@
   grid-auto-rows: 40px; /* ← evita que las filas se expandan por espacio libre */
   overflow-y: auto;
   background-color: #e0eefc;
+  position: relative;
 }
 
 .table__row {
@@ -57,14 +62,19 @@
   font-size: 16.5px;
 }
 
-.table__cell {
+.table__header .table__cell {
   padding: 10px;
+}
+
+.table__cell {
+  /* padding: 10px; */
   /* display: flex;
   align-items: center; */
   line-height: 1.2;
   white-space: nowrap; /* No saltar de línea */
   overflow: hidden; /* Ocultar lo que se sale */
   text-overflow: ellipsis; /* Mostrar puntos suspensivos */
+  align-self: center;
 }
 
 .table__body .table__cell:first-child {
@@ -105,4 +115,21 @@
 #medicaments .table__header,
 #medicaments .table__row {
   grid-template-columns: 50px 1fr 2fr 0.8fr 1fr 1fr 0.7fr 0.5fr;
+}
+
+.table-container--administrar_datos .table__header,
+.table-container--administrar_datos .table__row {
+  grid-template-columns: 50px 1fr 50px;
+}
+
+.placeholder {
+  font-size: 30px;
+  font-weight: 600;
+  color: #696969;
+  position: absolute;
+  top: 50%;
+  right: 50%;
+  transform: translate(50%, -50%);
+  width: 90%;
+  text-align: center;
 }

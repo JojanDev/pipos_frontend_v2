@@ -65,7 +65,7 @@ export const profilePetController = async (parametros = null) => {
   const responseMascota = await get(`mascotas/${id}`);
   const responseAntecedentesMascota = await get(`antecedentes/mascota/${id}`);
   console.log(responseMascota);
-  console.log(responseAntecedentesMascota);
+  console.log("responseAntecedentesMascota", responseAntecedentesMascota);
 
   asignarDatosCliente(responseMascota.data);
   asignarDatosMascota(responseMascota.data);
@@ -117,6 +117,10 @@ export const profilePetController = async (parametros = null) => {
       const idAntecedente = contenedorId.getAttribute("data-idAntecendente");
 
       location.hash = `#/antecedente/tratamientoCrear/idAntecedente=${idAntecedente}`;
+    }
+
+    if (e.target.id == "edit-pet") {
+      location.hash = `#/mascotas/editar/id=${id}`;
     }
   });
 };

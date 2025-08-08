@@ -93,7 +93,7 @@ CREATE TABLE productos (
 	nombre VARCHAR(255) NOT NULL,
 	precio DECIMAL NOT NULL,
 	descripcion TEXT,
-	fecha_caducidad DATETIME NOT NULL,
+	fecha_caducidad DATE NOT NULL,
 	id_tipo int,
 	stock INT NOT NULL,
     FOREIGN KEY (id_tipo) REFERENCES tipos_productos(id)

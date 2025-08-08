@@ -22,6 +22,17 @@ export const validarLimite = (event, limite) => {
   return { valid: true };
 };
 
+export const validarLote = (event) => {
+  const regex = /[^A-Za-z0-9]/g;
+  const limpio = event.target.value.replace(regex, "");
+
+  if (limpio !== event.target.value) {
+    event.target.value = limpio;
+    return { valid: false, message: "Solo letras y numeros" };
+  }
+
+  return { valid: true };
+};
 // export const validarFecha = (event) => {
 //   const input = event.target;
 //   const valor = input.value;
@@ -237,6 +248,7 @@ const validadoresInput = {
   correo: (e) => validarCorreo(e.target),
   limite: validarLimite,
   textoNumeros: validarTextoYNumeros,
+  lote: validarLote
   // Puedes seguir agregando más tipos según crezcas
 };
 

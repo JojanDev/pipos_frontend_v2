@@ -1,5 +1,5 @@
 export const crearBloqueAntecedenteCompleto = ({
-  idAntecedente,
+  id,
   titulo,
   diagnostico,
   fecha_creado,
@@ -11,7 +11,7 @@ export const crearBloqueAntecedenteCompleto = ({
   // 📦 Contenedor principal
   const divAntecedente = document.createElement("div");
   divAntecedente.classList.add("antecedente");
-  divAntecedente.setAttribute("data-idAntecendente", idAntecedente);
+  divAntecedente.setAttribute("data-idAntecendente", id);
 
   // 🧷 Encabezado
   const divHeader = document.createElement("div");

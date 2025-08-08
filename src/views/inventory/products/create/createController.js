@@ -1,4 +1,10 @@
-import { agregarError, llenarSelect, quitarError } from "../../../../helpers";
+import {
+  agregarError,
+  convertirADiaMesAño,
+  formatearPrecioConPuntos,
+  llenarSelect,
+  quitarError,
+} from "../../../../helpers";
 import {
   error,
   successTemporal,
@@ -37,36 +43,36 @@ export const createProductController = async () => {
   const form = document.querySelector("#form-register-product");
   const selectTipoDocumento = document.querySelector("#tipos-documento");
   const tbodyProducts = document.querySelector("#products .table__body");
-  const esModal = !location.hash.includes("clientes/crear");
+  const esModal = !location.hash.includes("inventario/productosCrear");
 
   llenarSelect({
     endpoint: "tipos-productos",
     selector: "#tipos-productos",
-    optionMapper: ({id, nombre}) => ({ id: id, text: nombre })
-  }); 
+    optionMapper: ({ id, nombre }) => ({ id: id, text: nombre }),
+  });
 
   configurarEventosValidaciones(form);
   const inputFecha = document.querySelector("[name='fecha_caducidad']");
 
-  inputFecha.addEventListener('blur', (e) => {
+  inputFecha.addEventListener("blur", (e) => {
     const resultado = validarFechaCaducidad(inputFecha.value);
-  
-    if (!resultado.valid) {
-      agregarError(inputFecha.parentElement, resultado.message);
-    } else {
-      quitarError(inputFecha.parentElement);
-    }
-  })
 
-  inputFecha.addEventListener('input', (e) => {
-    const resultado = validarFechaCaducidad(inputFecha.value);
-  
     if (!resultado.valid) {
       agregarError(inputFecha.parentElement, resultado.message);
     } else {
       quitarError(inputFecha.parentElement);
     }
-  })
+  });
+
+  inputFecha.addEventListener("input", (e) => {
+    const resultado = validarFechaCaducidad(inputFecha.value);
+
+    if (!resultado.valid) {
+      agregarError(inputFecha.parentElement, resultado.message);
+    } else {
+      quitarError(inputFecha.parentElement);
+    }
+  });
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -75,7 +81,7 @@ export const createProductController = async () => {
     console.log(datos);
 
     const resultado = validarFechaCaducidad(inputFecha.value);
-  
+
     if (!resultado.valid) return;
 
     const response = await post("productos", datos);
@@ -89,27 +95,29 @@ export const createProductController = async () => {
     await successTemporal(response.message);
 
     if (tbodyProducts) {
-      const {
+      const { id, nombre, tipoProducto, precio, stock, fecha_caducidad } =
+        response.data;
+
+      // console.log("fila", datosFila);
+
+      const row = crearFila([
         id,
         nombre,
-        tipoProducto,
-      } = response.data;
-
-      const fila = response.data.map(({id, nombre, tipoProducto}) => {
-        return 
-      });
-
-      const row = crearFila([id, nombre, telefono, numeroDocumento, direccion]);
+        tipoProducto.nombre,
+        formatearPrecioConPuntos(precio),
+        stock,
+        convertirADiaMesAño(fecha_caducidad),
+      ]);
       tbodyProducts.insertAdjacentElement("afterbegin", row);
     }
 
-    esModal ? cerrarModal("create-client") : cerrarModalYVolverAVistaBase();
+    esModal ? cerrarModal("create-product") : cerrarModalYVolverAVistaBase();
   });
 
   document.addEventListener("click", (event) => {
     const arrow = event.target.closest("#back-register-client");
     if (arrow) {
-      esModal ? cerrarModal("create-client") : cerrarModalYVolverAVistaBase();
+      esModal ? cerrarModal("create-product") : cerrarModalYVolverAVistaBase();
     }
   });
 };

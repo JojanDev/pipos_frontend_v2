@@ -1,0 +1,90 @@
+<div class="modal__backdrop" data-modal="create-medicament-inventory">
+  <section class="section-form modal__container">
+    <i
+      class="ri-arrow-left-line arrow-left arrow-left--bottom"
+      id="back-register-medicament-inventory"
+    ></i>
+
+    <h1 class="section-form__title">Registro de Medicamento</h1>
+    <hr class="section-form__line section-form__line--margin-bottom" />
+
+    <form action="#" id="form-register-medicament-inventory" novalidate>
+      <div class="form form--w-800">
+        <div class="form__container-fields form__container-fields--btn">
+          <div class="form__container-field">
+            <label for="" class="form__label">Medicamento</label>
+            <select
+              class="form__input form__input--select"
+              required
+              id="select-medicamentos-info"
+              name="id_medicamento_info"
+            >
+              <!-- Opciones -->
+              <option disabled selected value="">
+                Seleccione un medicamento
+              </option>
+            </select>
+          </div>
+          <button
+            type="submit"
+            class="btn btn--padding"
+            id="register-medicament-info"
+          >
+            Agregar
+          </button>
+        </div>
+        <div
+          class="form__container-fields form__container-fields--grid-variant"
+        >
+          <div class="form__container-field">
+            <label for="" class="form__label">Fecha de caducidad</label>
+            <input
+              type="date"
+              class="form__input"
+              required
+              data-validate=""
+              name="fecha_caducidad"
+            />
+          </div>
+          <div class="form__container-field form__container-field--span">
+            <label for="" class="form__label">Num. Lote</label>
+            <input
+              type="text"
+              class="form__input"
+              required
+              data-validate="lote"
+              name="nombre"
+            />
+          </div>
+        </div>
+        <div
+          class="form__container-fields form__container-fields--grid-variant"
+        >
+          <div class="form__container-field">
+            <label for="" class="form__label">Precio</label>
+            <input
+              type="text"
+              class="form__input"
+              required
+              data-validate="numero"
+              name="numeroDocumento"
+            />
+          </div>
+          <div class="form__container-field">
+            <label for="" class="form__label">Cantidad</label>
+            <input
+              type="text"
+              class="form__input"
+              required
+              data-validate="numero"
+              name="numeroDocumento"
+            />
+          </div>
+        </div>
+        <div class="form__container-btns">
+          <button type="submit" class="btn btn--lower-height">Registrar</button>
+        </div>
+      </div>
+    </form>
+  </section>
+</div>

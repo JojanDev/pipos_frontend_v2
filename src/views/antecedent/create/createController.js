@@ -59,6 +59,8 @@ export const createAntecedentController = (parametros = null) => {
 
     const responseAntecedente = await post("antecedentes", datos);
 
+    console.log(responseAntecedente);
+
     if (!responseAntecedente.success) {
       await error(responseAntecedente.message);
       return;

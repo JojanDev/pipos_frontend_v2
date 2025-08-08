@@ -56,6 +56,7 @@
   font-weight: 600;
   font-size: 40px;
   color: #333333;
+  word-break: break-all;
 }
 
 .perfil__separador {
@@ -117,16 +118,16 @@
 
 .contenedor-perfil--pet {
   width: 100%;
-  background-color: transparent;
+  /* background-color: transparent; */
   box-shadow: none;
   height: 100%;
-  padding: 0 20px;
+  /* padding: 0 20px; */
   overflow: hidden;
   overflow-y: auto;
   position: relative;
   flex: 1;
   display: block;
-  color: #333333;
+  /* color: #333333; */
 }
 
 .perfil__contenedor-datos-personales--pet {
@@ -151,11 +152,11 @@
   max-height: calc(100% - 60px);
 }
 
-.antecedentes-header {
+.antecedente-header {
   background-color: #1976d2;
-  color: white;
+  /* color: rgb(0, 0, 0); */
   padding: 10px 15px;
-  font-weight: bold;
+  font-weight: 600;
   /* position: sticky;
   top: 0;
   z-index: 1; */
@@ -173,11 +174,11 @@
   margin-bottom: 10px;
   background-color: #fff;
   overflow: hidden;
-  box-shadow: 0 0 5px 0px #c0c0c0;
+  box-shadow: 0 0 2px 0px #b5b5b5;
 }
 
 .antecedente-header {
-  background-color: #eaeaea;
+  background-color: #d9d9d9;
   /* background-color: #e0eefc; */
   padding: 10px;
   cursor: pointer;
@@ -271,4 +272,21 @@
 .contenedor-perfil--pet:hover::-webkit-scrollbar-thumb {
   background-color: #ffffff;
   border-radius: 10px;
+}
+
+.perfil__editar-pet {
+  position: absolute;
+  top: 40px;
+  right: 10px;
+}
+
+.perfil__valor--scroll {
+  min-height: 100px;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.contenedor-perfil--pequeño {
+  width: 550px;
+  height: min-content;
 }

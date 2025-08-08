@@ -10,10 +10,34 @@
   color: #fff;
   border: none;
   align-self: center;
+  transition: 0.5s;
 }
 
 .btn:hover {
   filter: brightness(70%);
+}
+
+.btn--orange {
+  background-color: #ea9c0e;
+}
+
+.btn--edit {
+  background-color: #ea9c0e;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  /* width: ; */
+  /* align-self: center; */
+  /* justify-self: center; */
+  margin: 0 auto;
+  height: 30px;
+  width: 30px;
+  padding: 5px;
+  font-size: 20px;
+  border-radius: 5px;
+  z-index: 2;
+  cursor: pointer;
 }
 
 .btn--small {
@@ -21,10 +45,6 @@
   /* height: 45px; */
   border-radius: 5px;
   padding: 3px 4px;
-}
-
-.btn--red {
-  background-color: #f62020;
 }
 
 .btn--big {
@@ -35,3 +55,16 @@
 /* .btn--red:hover {
   background-color: #f62020;
 } */
+
+.btn:disabled {
+  filter: brightness(60%);
+  cursor: default;
+}
+
+.btn--red {
+  background-color: #cc1010;
+}
+
+.btn--padding {
+  padding: 10px;
+}
