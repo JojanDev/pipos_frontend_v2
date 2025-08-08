@@ -93,8 +93,8 @@ CREATE TABLE productos (
 	nombre VARCHAR(255) NOT NULL,
 	precio DECIMAL NOT NULL,
 	descripcion TEXT,
-	fecha_caducidad DATE NOT NULL,
-	id_tipo int,
+	fecha_caducidad DATE,
+	id_tipo int NOT NULL,
 	stock INT NOT NULL,
     FOREIGN KEY (id_tipo) REFERENCES tipos_productos(id)
 );
@@ -103,7 +103,6 @@ CREATE TABLE productos (
 		id INT AUTO_INCREMENT PRIMARY KEY,
 		nombre VARCHAR(255) NOT NULL,              -- Nombre comercial del medicamento
 		uso_general VARCHAR(255),                  -- ¿Para qué sirve? (dolor, infecciones, etc.)
-		especie_destinada VARCHAR(100),            -- Ej: perro, gato, aves, todos
 		via_administracion VARCHAR(100),           -- Ej: oral, inyectable
 		presentacion VARCHAR(100),                 -- Ej: tabletas, jarabe, polvo, solución
 		informacion_adicional TEXT                 -- Texto libre con cualquier cosa útil
@@ -112,20 +111,22 @@ CREATE TABLE productos (
 -- Medicamentos registrados en inventario
 CREATE TABLE medicamentos (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    id_info INT NOT NULL,
+    id_medicamento_info INT NOT NULL,
     precio DECIMAL NOT NULL,
-    stock INT NOT NULL DEFAULT 0,
-    FOREIGN KEY (id_info) REFERENCES medicamentos_info(id)
-);
-
-CREATE TABLE lotes_medicamento (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	id_medicamento INT NOT NULL,
-	fecha_caducidad DATE,
+    fecha_caducidad DATE,
 	cantidad INT NOT NULL,
 	numero_lote VARCHAR(100),
-	FOREIGN KEY (id_medicamento) REFERENCES medicamentos(id)
+    FOREIGN KEY (id_medicamento_info) REFERENCES medicamentos_info(id)
 );
+
+#CREATE TABLE lotes_medicamento (
+	#id INT AUTO_INCREMENT PRIMARY KEY,
+	#id_medicamento INT NOT NULL,
+	#fecha_caducidad DATE,
+	#cantidad INT NOT NULL,
+	#numero_lote VARCHAR(100),
+	#FOREIGN KEY (id_medicamento) REFERENCES medicamentos(id)
+#);
 
 CREATE TABLE medicamentos_tratamiento (
 	id INT AUTO_INCREMENT PRIMARY KEY,
@@ -152,7 +153,8 @@ CREATE TABLE ventas (
 
 CREATE TABLE servicios(
 	id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre varchar(255) NOT NULL
+    nombre varchar(255) NOT NULL,
+    descripcion TEXT NOT NULL
     -- No tiene monto ya que va a ser cualitativo, no cuantitativo
 );
 
@@ -260,7 +262,6 @@ VALUES
 INSERT INTO medicamentos_info (
     nombre,
     uso_general,
-    especie_destinada,
     via_administracion,
     presentacion,
     informacion_adicional
@@ -292,10 +293,10 @@ INSERT INTO tipos_productos (nombre) VALUES
 
 
 INSERT INTO productos (nombre, precio, descripcion, fecha_caducidad, id_tipo, stock) VALUES 
-('Collar Reflectivo', 15000.00, 'Collar para perro con tira reflectiva.', '2030-01-01 00:00:00', 1, 100),
-('Concentrado DogChow 10kg', 120000.00, 'Alimento seco para perros adultos.', '2025-12-20 00:00:00', 2, 20),
-('Shampoo Suave para Cachorros', 28000.00, 'Shampoo para el baño de cachorros con aroma a avena.', '2027-03-10 00:00:00', 3, 35),
-('Pelota de Goma', 9000.00, 'Pelota resistente para perros medianos.', '2030-12-31 00:00:00', 4, 60);
+('Collar Reflectivo', 15000.00, 'Collar para perro con tira reflectiva.', '2030-01-01', 1, 100),
+('Concentrado DogChow 10kg', 120000.00, 'Alimento seco para perros adultos.', '2025-12-20', 2, 20),
+('Shampoo Suave para Cachorros', 28000.00, 'Shampoo para el baño de cachorros con aroma a avena.', '2027-03-10', 3, 35),
+('Pelota de Goma', 9000.00, 'Pelota resistente para perros medianos.', '2030-12-31', 4, 60);
 
 INSERT INTO medicamentos_info (nombre, uso_general, especie_destinada, via_administracion, presentacion, informacion_adicional) VALUES
 ('Amoxicilina 500mg', 'Infecciones bacterianas', 'perro', 'oral', 'tabletas', 'Administrar con alimentos para evitar irritación estomacal.'),
@@ -310,3 +311,5 @@ INSERT INTO medicamentos (id_info, precio, stock) VALUES
 (4, 19500.00, 10);
 
 select * from medicamentos_info;
+
+use veterinaria_pipos;
