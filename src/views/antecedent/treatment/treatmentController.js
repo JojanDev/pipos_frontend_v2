@@ -6,10 +6,34 @@ import {
   cerrarModal,
   cerrarModalYVolverAVistaBase,
   cargarComponente,
+  capitalizarPrimeraLetra,
+  del,
+  success,
+  mostrarMensajeSiNoHayTratamientos,
 } from "../../../helpers";
 import { routes } from "../../../router/routes";
 
+function eliminarTratamiento(idTratamiento, idAntecedente) {
+  const tratamiento = document.querySelector(
+    `[data-idTratamiento='${idTratamiento}']`
+  );
+  if (tratamiento) {
+    tratamiento.remove();
+    mostrarMensajeSiNoHayTratamientos(idAntecedente);
+  }
+}
+
 export const treatmentController = async (parametros = null) => {
+  const dataJSON = localStorage.getItem("data");
+  const data = JSON.parse(dataJSON);
+  console.log(data);
+
+  if (data.id_rol == 2) {
+    const opcionesAdmin = document.querySelectorAll(".admin");
+    [...opcionesAdmin].forEach((element) => {
+      element.remove();
+    });
+  }
   const { id, tituloAntecedente } = parametros;
   console.log(parametros);
 
@@ -52,17 +76,32 @@ export const treatmentController = async (parametros = null) => {
 
     if (responseMedicamentos.success) {
       responseMedicamentos.data.forEach((medicamentoTratamiento) => {
-        const { medicamento, dosis, duracion, frecuencia_aplicacion } =
-          medicamentoTratamiento;
+        const {
+          id,
+          medicamento,
+          dosis,
+          duracionFormateada,
+          frecuencia_aplicacion,
+        } = medicamentoTratamiento;
+
+        const iconDelete = document.createElement("i");
+        // spanTitulo.textContent = titulo;
+        iconDelete.classList.add(
+          "ri-delete-bin-line",
+          "delete-tabla",
+          "btn--red",
+          "admin"
+        );
 
         const row = crearFila([
-          medicamento.id,
+          id,
           medicamento.nombre,
           medicamento.uso_general,
-          medicamento.via_administracion,
+          capitalizarPrimeraLetra(medicamento.via_administracion),
           dosis,
           frecuencia_aplicacion,
-          duracion,
+          duracionFormateada[1],
+          iconDelete,
         ]);
 
         tbody.append(row);
@@ -80,7 +119,45 @@ export const treatmentController = async (parametros = null) => {
     }
 
     if (e.target.id == "back-treatment") {
-      esModal ? cerrarModal("create-client") : cerrarModalYVolverAVistaBase();
+      esModal ? cerrarModal("pet-treatment") : cerrarModalYVolverAVistaBase();
+    }
+
+    if (e.target.classList.contains("delete-tabla")) {
+      const medicament = e.target.closest(`[data-id]`);
+      const idMedicament = medicament.getAttribute("data-id");
+
+      const responseDelete = await del(
+        "medicamentos/tratamiento/" + idMedicament
+      );
+
+      if (!responseDelete.success) {
+        await error(responseDelete.message);
+        return;
+      }
+
+      medicament.remove();
+      // const idAntecedente = fila.getAttribute("data-id");
+
+      // esModal ? cerrarModal("pet-treatment") : cerrarModalYVolverAVistaBase();
+      // history.replaceState(null, "", `#/mascotas/perfil`);
+      await success(responseDelete.message);
+      // esModal ? cerrarModal("pet-treatment") : cerrarModalYVolverAVistaBase();
+    }
+
+    if (e.target.id == "delete-treatment") {
+      const responseDelete = await del("tratamientos/" + id);
+
+      if (!responseDelete.success) {
+        await error(responseDelete.message);
+        return;
+      }
+
+      // const idAntecedente = fila.getAttribute("data-id");
+      eliminarTratamiento(id, responseTratamiento.data.id_antecedente);
+
+      esModal ? cerrarModal("pet-treatment") : cerrarModalYVolverAVistaBase();
+      // history.replaceState(null, "", `#/mascotas/perfil`);
+      await success(responseDelete.message);
     }
   });
 };

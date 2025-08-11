@@ -47,6 +47,8 @@ export const createServiceController = (parametros = null) => {
 
       const card = crearCardServicio(id, nombre, descripcion);
       containerCards.insertAdjacentElement("afterbegin", card);
+      const placeholderAnterior = document.querySelector(".placeholder");
+      if (placeholderAnterior) placeholderAnterior.remove();
     }
 
     await success(responseServicios.message);

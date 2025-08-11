@@ -1,0 +1,79 @@
+<div class="modal__backdrop" data-modal="edit-personal">
+  <section class="section-form modal__container">
+    <i
+      class="ri-arrow-left-line arrow-left arrow-left--bottom"
+      id="back-register-personal"
+    ></i>
+
+    <h1 class="section-form__title">Modificar Empleado</h1>
+    <hr class="section-form__line section-form__line--margin-bottom" />
+
+    <form action="#" id="form-edit-personal" novalidate>
+      <div class="form">
+        <div class="form__container-field form__container-field--span">
+          <label for="" class="form__label">Nombre Completo</label>
+          <input
+            type="text"
+            class="form__input"
+            required
+            data-validate="texto"
+            name="nombre"
+          />
+        </div>
+        <div
+          class="form__container-fields form__container-fields--grid-variant"
+        >
+          <div class="form__container-field">
+            <label for="" class="form__label">Tipo de Documento</label>
+            <select
+              class="form__input form__input--select"
+              required
+              id="tipos-documento"
+              name="id_tipo_documento"
+            >
+              <!-- Opciones -->
+              <option disabled selected value="">Seleccione una opcion</option>
+            </select>
+          </div>
+          <div class="form__container-field">
+            <label for="" class="form__label">Número</label>
+            <input
+              type="text"
+              class="form__input"
+              required
+              data-validate="numero"
+              name="numero_documento"
+            />
+          </div>
+        </div>
+        <div class="form__container-field form__container-field--span">
+          <label for="" class="form__label">Teléfono</label>
+          <input
+            type="text"
+            class="form__input"
+            required
+            data-validate="numero"
+            name="telefono"
+          />
+        </div>
+        <div class="form__container-field form__container-field--span">
+          <label for="" class="form__label">Correo</label>
+          <input
+            type="text"
+            class="form__input"
+            required
+            data-validate="correo"
+            name="correo"
+          />
+        </div>
+        <div class="form__container-field form__container-field--span">
+          <label for="" class="form__label">Dirección / Barrio</label>
+          <input type="text" class="form__input" required name="direccion" />
+        </div>
+        <div class="form__container-btns">
+          <button type="submit" class="btn btn--lower-height">Guardar</button>
+        </div>
+      </div>
+    </form>
+  </section>
+</div>

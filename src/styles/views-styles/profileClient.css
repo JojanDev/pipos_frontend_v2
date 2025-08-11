@@ -11,11 +11,19 @@
   flex-direction: column;
 }
 
+.w-800 {
+  width: 800px;
+}
+
+.h {
+  height: auto;
+}
+
 .perfil__contenedor-datos-personales {
   display: grid;
   grid-template-columns: 1.5fr 1fr;
   gap: 10px;
-  margin: 10px 0;
+  margin: 10px 10px;
 }
 
 .perfil__rol-contenedor {
@@ -56,7 +64,10 @@
   font-weight: 600;
   font-size: 40px;
   color: #333333;
-  word-break: break-all;
+  /* word-break: break-all; */
+  white-space: nowrap; /* No saltar de línea */
+  overflow: hidden; /* Ocultar lo que se sale */
+  text-overflow: ellipsis;
 }
 
 .perfil__separador {
@@ -93,8 +104,19 @@
   /* margin: 15px 0; */
 }
 
+#medicaments-info .perfil__campo,
+#medicaments-info .perfil__valor {
+  white-space: nowrap; /* No saltar de línea */
+  overflow: hidden; /* Ocultar lo que se sale */
+  text-overflow: ellipsis;
+}
+
 .perfil__contenedor-documento .perfil__campo {
   margin-bottom: 0;
+}
+
+.perfil__campo--span-2 {
+  grid-column: span 2;
 }
 
 .perfil__valor {
@@ -152,6 +174,13 @@
   max-height: calc(100% - 60px);
 }
 
+.placeholder-antecedentes {
+  font-size: 40px;
+  color: #696969;
+  font-weight: 600;
+  text-align: center;
+}
+
 .antecedente-header {
   background-color: #1976d2;
   /* color: rgb(0, 0, 0); */
@@ -186,6 +215,19 @@
   transition: 0.5s;
   display: grid;
   grid-template-columns: 120px 1fr;
+  position: relative;
+}
+
+.delete-antecedent {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  border-radius: 5px;
+  /* background-color: rgb(165, 0, 0); */
+  color: #fff;
+  font-size: 20px;
+  padding: 5px;
+  font-weight: 400;
 }
 
 .antecedente-header:hover {
@@ -289,4 +331,17 @@
 .contenedor-perfil--pequeño {
   width: 550px;
   height: min-content;
+}
+
+.perfil__contenedor-datos-personales--col-1 {
+  grid-template-columns: 1fr;
+}
+
+.perfil__campo--beetwen {
+  display: flex;
+  justify-content: space-between;
+}
+
+.w {
+  width: auto;
 }

@@ -16,9 +16,14 @@ const validarSesion = async ({ usuario, contrasena }) => {
     contrasena,
   });
 
+  console.log(response);
+
   //Se valida el inicio exitoso
   if (response.code == 200) {
     //Se muestra un mensaje
+    // localStorage.clear();
+    localStorage.setItem("isAuthenticated", true);
+    localStorage.setItem("data", JSON.stringify(response.data));
     await loginSuccess(response.message);
     return true;
   }
@@ -42,7 +47,6 @@ export const loginController = async () => {
     if (!validarCampos(e)) return;
 
     if (await validarSesion(datos)) {
-      localStorage.setItem("isAuthenticated", "true");
       window.location.hash = "#/inicio";
     }
   });

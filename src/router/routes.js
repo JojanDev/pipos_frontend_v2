@@ -1,6 +1,5 @@
 import {
   loginController,
-  registerController,
   homeController,
   clientsController,
   createClientController,
@@ -29,6 +28,21 @@ import {
   editServiceController,
   createMedicamentInventoryController,
   createMedicamentInfoController,
+  profileMedicamentController,
+  editMedicamentInfoController,
+  medicamentsController,
+  personalController,
+  createPersonalController,
+  createPersonalExistController,
+  profilePersonalController,
+  editPersonalController,
+  editClientController,
+  createClienteExistController,
+  resumeController,
+  createDetailsController,
+  createVentaController,
+  ventasController,
+  editVentaController,
 } from "../views/index";
 
 export const routes = {
@@ -53,9 +67,15 @@ export const routes = {
       private: true,
       addHtml: true,
     },
+    crearExistente: {
+      path: "clients/createExist/index.html",
+      controller: createClienteExistController,
+      private: false,
+      addHtml: true,
+    },
     editar: {
       path: "clients/edit/index.html",
-      controller: () => {},
+      controller: editClientController,
       private: true,
       addHtml: true,
     },
@@ -80,12 +100,12 @@ export const routes = {
       private: true,
       addHtml: true,
     },
-    editar: {
-      path: "pets/edit/index.html",
-      controller: () => {},
-      private: true,
-      addHtml: true,
-    },
+    // editar: {
+    //   path: "pets/edit/index.html",
+    //   controller: editPetController,
+    //   private: true,
+    //   addHtml: true,
+    // },
     perfil: {
       path: "pets/profile/index.html",
       controller: profilePetController,
@@ -231,13 +251,20 @@ export const routes = {
       addHtml: true,
     },
     medicamentosPerfil: {
-      path: "inventory/products/profile/index.html",
-      controller: () => {},
+      path: "inventory/medicaments/profile/index.html",
+      controller: profileMedicamentController,
       private: true,
       addHtml: true,
     },
   },
   medicamentos_info: {
+    "/": {
+      path: "medicaments/index.html",
+      controller: medicamentsController,
+      private: true,
+      layout: "mainLayout.html",
+      slot: "main",
+    },
     crear: {
       path: "medicaments/create/index.html",
       controller: createMedicamentInfoController,
@@ -245,8 +272,14 @@ export const routes = {
       addHtml: true,
     },
     perfil: {
-      path: "inventory/products/profile/index.html",
+      path: "medicaments/profile/index.html",
       controller: () => {},
+      private: true,
+      addHtml: true,
+    },
+    editar: {
+      path: "medicaments/edit/index.html",
+      controller: editMedicamentInfoController,
       private: true,
       addHtml: true,
     },
@@ -256,9 +289,74 @@ export const routes = {
     controller: loginController,
     private: false,
   },
-  registro: {
-    path: "auth/register/index.html",
-    controller: registerController,
-    private: false,
+  personal: {
+    "/": {
+      path: "personal/index.html",
+      controller: personalController,
+      private: true,
+      layout: "mainLayout.html",
+      slot: "main",
+    },
+    crear: {
+      path: "personal/create/index.html",
+      controller: createPersonalController,
+      private: false,
+      layout: "mainLayout.html",
+      slot: "main",
+    },
+    crearExistente: {
+      path: "personal/createExist/index.html",
+      controller: createPersonalExistController,
+      private: false,
+      addHtml: true,
+    },
+    perfil: {
+      path: "personal/profile/index.html",
+      controller: profilePersonalController,
+      private: true,
+      addHtml: true,
+    },
+    editar: {
+      path: "personal/edit/index.html",
+      controller: editPersonalController,
+      private: true,
+      addHtml: true,
+    },
+  },
+
+  ventas: {
+    "/": {
+      path: "ventas/index.html",
+      controller: ventasController,
+      private: true,
+      layout: "mainLayout.html",
+      slot: "main",
+    },
+    crear: {
+      path: "ventas/create/index.html",
+      controller: createVentaController,
+      private: false,
+      layout: "mainLayout.html",
+      slot: "main",
+    },
+    editar: {
+      path: "ventas/edit/index.html",
+      controller: editVentaController,
+      private: true,
+      addHtml: true,
+    },
+    agregarProducto: {
+      path: "ventas/details/create/index.html",
+      controller: createDetailsController,
+      private: false,
+      layout: "mainLayout.html",
+      slot: "main",
+    },
+    resumenVenta: {
+      path: "ventas/resume/index.html",
+      controller: resumeController,
+      private: true,
+      addHtml: true,
+    },
   },
 };

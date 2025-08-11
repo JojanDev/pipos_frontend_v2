@@ -20,13 +20,13 @@
               name="id_medicamento_info"
             >
               <!-- Opciones -->
-              <option disabled selected value="">
+              <option disabled selected value="" id="option-placeholder">
                 Seleccione un medicamento
               </option>
             </select>
           </div>
           <button
-            type="submit"
+            type="button"
             class="btn btn--padding"
             id="register-medicament-info"
           >
@@ -42,7 +42,7 @@
               type="date"
               class="form__input"
               required
-              data-validate=""
+              data-validate="fecha"
               name="fecha_caducidad"
             />
           </div>
@@ -52,8 +52,8 @@
               type="text"
               class="form__input"
               required
-              data-validate="lote"
-              name="nombre"
+              data-validate="numero"
+              name="numero_lote"
             />
           </div>
         </div>
@@ -67,7 +67,7 @@
               class="form__input"
               required
               data-validate="numero"
-              name="numeroDocumento"
+              name="precio"
             />
           </div>
           <div class="form__container-field">
@@ -77,7 +77,7 @@
               class="form__input"
               required
               data-validate="numero"
-              name="numeroDocumento"
+              name="cantidad"
             />
           </div>
         </div>

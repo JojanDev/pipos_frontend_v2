@@ -1,4 +1,9 @@
-import { get, cargarTiposDocumento, crearFila } from "../../helpers";
+import {
+  get,
+  cargarTiposDocumento,
+  crearFila,
+  convertirADiaMesAño,
+} from "../../helpers";
 
 export const petsController = async () => {
   const response = await get("mascotas");
@@ -11,7 +16,7 @@ export const petsController = async () => {
 
   const tbody = document.querySelector("#pets .table__body");
 
-  response.data.forEach(({ id, nombre, raza, cliente, ultimo_antecedente }) => {
+  response.data.forEach(({ id, nombre, raza, cliente, ultimo_registro }) => {
     const row = crearFila([
       id,
       nombre,
@@ -19,7 +24,7 @@ export const petsController = async () => {
       raza.nombre,
       cliente.info.nombre,
       cliente.info.telefono,
-      ultimo_antecedente ?? "Sin registros", //PENDIENTE HACER OBTENER LA FECHA DEL ULTIMO ANTECEDENTE
+      ultimo_registro ? convertirADiaMesAño(ultimo_registro) : "Sin registros", //PENDIENTE HACER OBTENER LA FECHA DEL ULTIMO ANTECEDENTE
     ]);
     tbody.append(row);
   });

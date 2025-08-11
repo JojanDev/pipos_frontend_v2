@@ -2,7 +2,12 @@ import {
   crearBloqueAntecedenteCompleto,
   get,
   capitalizarPrimeraLetra,
+  del,
+  error,
+  success,
+  cargarComponente,
 } from "../../../helpers";
+import { routes } from "../../../router/routes";
 
 // ===============================
 function toggleBody(headerElement) {
@@ -58,6 +63,16 @@ const asignarDatosMascota = (data) => {
 };
 
 export const profilePetController = async (parametros = null) => {
+  const dataJSON = localStorage.getItem("data");
+  const data = JSON.parse(dataJSON);
+  console.log(data);
+
+  if (data.id_rol == 2) {
+    const opcionesAdmin = document.querySelectorAll(".admin");
+    [...opcionesAdmin].forEach((element) => {
+      element.remove();
+    });
+  }
   // ID de la mascota
   const { id } = parametros;
 
@@ -70,11 +85,14 @@ export const profilePetController = async (parametros = null) => {
   asignarDatosCliente(responseMascota.data);
   asignarDatosMascota(responseMascota.data);
 
+  const contenedorAntecedente = document.querySelector(
+    "#profile-pet-antecedent"
+  );
   if (responseAntecedentesMascota.success) {
-    const contenedorAntecedente = document.querySelector(
-      "#profile-pet-antecedent"
+    const placeholderAnterior = document.querySelector(
+      ".placeholder-antecedentes"
     );
-
+    if (placeholderAnterior) placeholderAnterior.remove();
     if (contenedorAntecedente) {
       responseAntecedentesMascota.data.forEach((antecedente) => {
         const bloqueAntecedenteCreado =
@@ -82,18 +100,40 @@ export const profilePetController = async (parametros = null) => {
         contenedorAntecedente.append(bloqueAntecedenteCreado);
       });
     }
+  } else {
+    const placeholder = document.createElement("p");
+    placeholder.classList.add("placeholder-antecedentes");
+    placeholder.textContent = "No hay antecedentes registrados";
+    contenedorAntecedente.append(placeholder);
+    // return;
   }
 
   const contenedorPerfil = document.querySelector(".contenedor-perfil--pet");
 
-  contenedorPerfil.addEventListener("click", (e) => {
+  contenedorPerfil.addEventListener("click", async (e) => {
     console.log(e.target.classList);
+
+    if (e.target.closest(".delete-antecedent")) {
+      // toggleBody(e.target.closest(".antecedente-header"));
+      const contenedorId = e.target.closest("[data-idAntecendente]");
+      const idAntecedente = contenedorId.getAttribute("data-idAntecendente");
+      const responseDelete = await del("antecedentes/" + idAntecedente);
+      if (!responseDelete.success) {
+        await error(responseDelete.message);
+        return;
+      }
+      contenedorId.remove();
+      await success(responseDelete.message);
+      return;
+    }
+
     if (e.target.closest(".antecedente-header")) {
       toggleBody(e.target.closest(".antecedente-header"));
     }
 
     if (e.target.id == "register-antecedent") {
-      location.hash = `#/antecedente/crear/id=${id}`;
+      await cargarComponente(routes.antecedente.crear, { id, id });
+      // location.hash = `#/antecedente/crear/id=${id}`;
     }
 
     if (e.target.classList.contains("tratamiento")) {
@@ -119,8 +159,8 @@ export const profilePetController = async (parametros = null) => {
       location.hash = `#/antecedente/tratamientoCrear/idAntecedente=${idAntecedente}`;
     }
 
-    if (e.target.id == "edit-pet") {
-      location.hash = `#/mascotas/editar/id=${id}`;
-    }
+    // if (e.target.id == "edit-pet") {
+    //   location.hash = `#/mascotas/editar/id=${id}`;
+    // }
   });
 };

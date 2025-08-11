@@ -7,3 +7,4 @@ export * from "./diseño";
 export * from "./modal";
 export * from "./renderView";
 export * from "./validaciones";
+export * from "./ventas";

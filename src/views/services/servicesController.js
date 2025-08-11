@@ -1,6 +1,17 @@
 import { del, error, get, success } from "../../helpers";
 
 export const crearCardServicio = (id, nombre, descripcion) => {
+  const dataJSON = localStorage.getItem("data");
+  const data = JSON.parse(dataJSON);
+  console.log(data);
+
+  if (data.id_rol == 2) {
+    const opcionesAdmin = document.querySelectorAll(".admin");
+    [...opcionesAdmin].forEach((element) => {
+      element.remove();
+    });
+  }
+
   const card = document.createElement("div");
   card.classList.add("card");
   card.dataset.id = id;
@@ -50,7 +61,9 @@ export const crearCardServicio = (id, nombre, descripcion) => {
   card.appendChild(imagen);
   card.appendChild(contenido);
   card.appendChild(btnEdit);
-  card.appendChild(btnDelete);
+  if (data.id_rol == 1) {
+    card.appendChild(btnDelete);
+  }
 
   return card;
 };

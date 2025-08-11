@@ -1,13 +1,26 @@
 import {
   capitalizarPrimeraLetra,
+  cerrarModal,
   configurarEventosValidaciones,
   crearElementoTratamiento,
+  crearFila,
   datos,
   error,
   llenarSelect,
+  post,
   success,
   validarCampos,
 } from "../../../../../helpers";
+
+const calcularDiasTotales = ({ meses = 0, semanas = 0, dias = 0 }) => {
+  const diasPorMes = 30.4375;
+  const diasPorSemana = 7;
+
+  const totalDias =
+    meses * diasPorMes + semanas * diasPorSemana + parseInt(dias || 0);
+
+  return Math.floor(totalDias);
+};
 
 export const createMedicamentController = async (parametros = null) => {
   const { idTratamiento } = parametros;
@@ -51,47 +64,60 @@ export const createMedicamentController = async (parametros = null) => {
       return;
     }
 
-    datos["id_tratamiento"] = idTratamiento;
+    const { id_medicamento_info, frecuencia_aplicacion, dosis } = datos;
+    const duracion = calcularDiasTotales(datos);
     console.log(datos);
 
-    // const responseMedicamentoTratamiento = await post("medicamento", {
-    //   id_tratamiento: idTratamiento,
-    // });
+    const responseMedicamentoTratamiento = await post(
+      "medicamentos/tratamiento",
+      {
+        id_tratamiento: idTratamiento,
+        id_medicamento_info,
+        frecuencia_aplicacion,
+        duracion,
+        dosis,
+      }
+    );
 
-    // if (!responseTratamiento.success) {
-    //   await error(responseTratamiento.message);
-    //   return;
-    // }
+    if (!responseMedicamentoTratamiento.success) {
+      await error(responseMedicamentoTratamiento.message);
+      return;
+    }
 
-    // const divTratamiento = crearElementoTratamiento(responseTratamiento.data);
+    const tbody = document.querySelector(
+      "#pet-antecedent-treatment .table__body"
+    );
 
-    // // Busca el antecedente donde insertar el tratamiento
-    // const antecedenteContainer = document.querySelector(
-    //   `[data-idAntecendente="${idAntecedente}"]`
-    // );
+    if (tbody) {
+      const { medicamento, dosis, frecuencia_aplicacion, duracionFormateada } =
+        responseMedicamentoTratamiento.data;
+      const row = crearFila([
+        medicamento.id,
+        medicamento.nombre,
+        medicamento.uso_general,
+        capitalizarPrimeraLetra(medicamento.via_administracion),
+        dosis,
+        frecuencia_aplicacion,
+        duracionFormateada[1],
+      ]);
 
-    // const body = antecedenteContainer?.querySelector(".antecedente-body");
+      tbody.insertAdjacentElement("afterbegin", row);
+    }
 
-    // // Quita el mensaje de "No hay tratamientos", si existe
-    // const mensaje = body?.querySelector(".mensaje-sin-tratamientos");
-    // if (mensaje) mensaje.remove();
+    await success(responseMedicamentoTratamiento.message);
 
-    // // Inserta el tratamiento justo después del separador
-    // const separador = body?.querySelector(".perfil__separador--treatment");
-    // if (separador) {
-    //   separador.insertAdjacentElement("afterend", divTratamiento);
-    // }
-
-    // await success(responseTratamiento.message);
-
-    // esModal ? cerrarModal("create-pet") : cerrarModalYVolverAVistaBase();
+    esModal
+      ? cerrarModal("create-pet-antecedent-treatment-medicament")
+      : cerrarModalYVolverAVistaBase();
   });
 
-  // const btnAtras = document.querySelector(
-  //   "#back-register-pet-antecedent-treatment"
-  // );
+  const btnAtras = document.querySelector(
+    "#back-register-pet-antecedent-treatment-medicament"
+  );
 
-  // btnAtras.addEventListener("click", () => {
-  //   esModal ? cerrarModal("create-pet") : cerrarModalYVolverAVistaBase();
-  // });
+  btnAtras.addEventListener("click", () => {
+    esModal
+      ? cerrarModal("create-pet-antecedent-treatment-medicament")
+      : cerrarModalYVolverAVistaBase();
+  });
 };

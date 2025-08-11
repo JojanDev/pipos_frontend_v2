@@ -1,6 +1,6 @@
 import { get, cargarTiposDocumento, crearFila } from "../../helpers";
 
-const cargarTabla = async () => {
+export const cargarTabla = async () => {
   const clientes = await get("clientes");
 
   console.log(clientes);
@@ -10,6 +10,7 @@ const cargarTabla = async () => {
   }
 
   const tbody = document.querySelector("#clients .table__body");
+  tbody.innerHTML = "";
 
   const clientesInfo = clientes.data.map((cliente) => {
     // console.log("cliente", cliente);

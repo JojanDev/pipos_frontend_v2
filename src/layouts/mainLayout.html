@@ -2,8 +2,8 @@
   <header class="header">
     <img src="./src/assets/logoSinFondo.png" alt="logo" class="logo" />
     <div class="header__info-container">
-      <h3 class="header__user">Lady Mantilla</h3>
-      <p class="header__rol">Administrador</p>
+      <h3 class="header__user" id="empleado-nombre-header">Lady Mantilla</h3>
+      <p class="header__rol">Usuario</p>
     </div>
   </header>
   <aside class="sidebar">
@@ -17,21 +17,43 @@
           <a href="#/mascotas" class="sidebar__link">Mascotas</a>
         </li>
         <li class="sidebar__item">
-          <a href="#" class="sidebar__link">Ventas</a>
+          <a href="#/ventas/" class="sidebar__link">Ventas</a>
         </li>
         <li class="sidebar__item">
           <a href="#/inventario" class="sidebar__link">Inventario</a>
         </li>
-        <li class="sidebar__item">
+        <li class="sidebar__item admin">
           <a href="#/administrar_datos" class="sidebar__link"
             >Administrar Datos</a
           >
         </li>
         <li class="sidebar__item">
+          <a href="#/medicamentos_info/" class="sidebar__link"
+            >Info. Medicamentos</a
+          >
+        </li>
+        <li class="sidebar__item">
           <a href="#/servicios" class="sidebar__link">Servicios</a>
+        </li>
+        <li class="sidebar__item admin">
+          <a href="#/personal" class="sidebar__link">Empleados</a>
         </li>
       </ul>
     </nav>
+    <div class="cuenta-contenedor cuenta-sidebar" id="cuenta">
+      <i class="ri-user-3-line user-icon cuenta-icon"></i>
+      <p class="cuenta">Cuenta</p>
+    </div>
+    <div class="cuenta-opciones">
+      <!-- <div class="cuenta-contenedor">
+        <i class="ri-user-3-line cuenta-icon" id="perfil-usuario"></i>
+        <p class="cuenta">Ver Perfil</p>
+      </div> -->
+      <div class="cuenta-contenedor" id="salir-usuario">
+        <i class="ri-logout-box-r-line cuenta-icon"></i>
+        <p class="cuenta">Salir</p>
+      </div>
+    </div>
   </aside>
   <main class="main" data-slot="main"></main>
 </div>

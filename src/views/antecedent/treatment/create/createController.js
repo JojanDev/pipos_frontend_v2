@@ -56,7 +56,9 @@ export const createTreatmentController = (parametros = null) => {
 
     await success(responseTratamiento.message);
 
-    // esModal ? cerrarModal("create-pet") : cerrarModalYVolverAVistaBase();
+    esModal
+      ? cerrarModal("create-pet-antecedent-treatment")
+      : cerrarModalYVolverAVistaBase();
   });
 
   const btnAtras = document.querySelector(
@@ -64,6 +66,8 @@ export const createTreatmentController = (parametros = null) => {
   );
 
   btnAtras.addEventListener("click", () => {
-    esModal ? cerrarModal("create-pet") : cerrarModalYVolverAVistaBase();
+    esModal
+      ? cerrarModal("create-pet-antecedent-treatment")
+      : cerrarModalYVolverAVistaBase();
   });
 };

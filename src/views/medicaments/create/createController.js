@@ -9,13 +9,30 @@ import {
   configurarEventosValidaciones,
   datos,
   validarCampos,
+  capitalizarPrimeraLetra,
 } from "../../../helpers";
+import { crearCartaMedicamento } from "../medicamentsController";
 
 export const createMedicamentInfoController = async () => {
+  const dataJSON = localStorage.getItem("data");
+  const data = JSON.parse(dataJSON);
+  console.log(data);
+
+  if (data.id_rol == 2) {
+    const opcionesAdmin = document.querySelectorAll(".admin");
+    [...opcionesAdmin].forEach((element) => {
+      element.remove();
+    });
+  }
+
   const form = document.querySelector("#form-register-medicament-info");
   // const selectTipoDocumento = document.querySelector("#tipos-documento");
   const tbody = document.querySelector("#medicament-infos .table__body");
   const esModal = !location.hash.includes("medicamentos_info/crear");
+
+  const optionMedicamentosInfo = document.querySelector(
+    "#form-register-medicament-inventory #select-medicamentos-info #option-placeholder"
+  );
 
   const selectMedicamentosInfo = document.querySelector(
     "#form-register-medicament-inventory #select-medicamentos-info"
@@ -35,13 +52,20 @@ export const createMedicamentInfoController = async () => {
 
     console.log(response);
 
-    // if (!response.success) {
-    //   await error(response.message);
-    //   return;
-    // }
+    if (!response.success) {
+      await error(response.message);
+      return;
+    }
 
-    // await successTemporal(response.message);
-    // console.log(response);
+    await successTemporal(response.message);
+    console.log(response);
+
+    const contenedor = document.querySelector("#medicaments-info");
+
+    if (contenedor) {
+      const carta = crearCartaMedicamento(response.data);
+      contenedor.insertAdjacentElement("afterbegin", carta);
+    }
 
     // const {
     //   id,
@@ -53,18 +77,19 @@ export const createMedicamentInfoController = async () => {
     //   const row = crearFila([id, nombre, telefono, numeroDocumento, direccion]);
     //   tbody.insertAdjacentElement("afterbegin", row);
     // }
-    // if (selectMedicamentosInfo) {
-    //   const option = document.createElement("option");
-    //   option.value = response.data.id;
-    //   option.textContent = `${nombre} (${capitalizarPrimeraLetra(
-    //     presentacion
-    //   )} - ${capitalizarPrimeraLetra(via_administracion)})`;
-    //   selectMedicamentosInfo.appendChild(option);
-    // }
+    if (optionMedicamentosInfo) {
+      const option = document.createElement("option");
+      option.value = response.data.id;
+      option.textContent = `${response.data.nombre} (${capitalizarPrimeraLetra(
+        response.data.presentacion
+      )} - ${capitalizarPrimeraLetra(response.data.via_administracion)})`;
+      optionMedicamentosInfo.insertAdjacentElement("afterend", option);
+      selectMedicamentosInfo.value = response.data.id;
+    }
 
-    // esModal
-    //   ? cerrarModal("create-medicament-info")
-    //   : cerrarModalYVolverAVistaBase();
+    esModal
+      ? cerrarModal("create-medicament-info")
+      : cerrarModalYVolverAVistaBase();
   });
 
   document.addEventListener("click", (event) => {

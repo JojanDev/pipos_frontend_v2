@@ -18,7 +18,7 @@ import {
   validarCampos,
 } from "../../../../helpers";
 
-function validarFechaCaducidad(valorFecha) {
+export function validarFechaCaducidad(valorFecha) {
   if (!valorFecha) {
     return { valid: false, message: "La fecha es obligatoria" };
   }

@@ -10,7 +10,7 @@ import {
   validarCampos,
 } from "../../../helpers";
 
-export const registerController = async () => {
+export const createPersonalController = async () => {
   const form = document.querySelector("#form-register");
   const selectTipoDocumento = document.querySelector("#tipos-documento");
   await cargarTiposDocumento(selectTipoDocumento);
@@ -31,7 +31,7 @@ export const registerController = async () => {
     if (response.success) {
       //Se muestra un mensaje
       await success(response.message);
-      window.location.hash = "#/login";
+      window.location.hash = "#/personal";
     } else {
       //Se muestra un mensaje
       await error(response.message);

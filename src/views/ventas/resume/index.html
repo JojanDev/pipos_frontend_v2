@@ -1,0 +1,50 @@
+<div class="modal__backdrop" data-modal="venta-resume">
+  <div class="contenedor-perfil modal__container w h" id="resumen-venta">
+    <div class="perfil__rol-contenedor">
+      <div>
+        <h3 class="perfil__nombre" id="resume-cliente">Cliente</h3>
+        <p class="perfil__rol" id="venta-empleado">Empleado</p>
+      </div>
+      <i class="ri-close-line btn-atras" id="back-resume"></i>
+    </div>
+    <form action="#" id="form-resume-venta">
+      <div class="valorAgregado">
+        <label for="" class="form__label">Valor agregado</label>
+        <input
+          type="text"
+          class="form__input"
+          data-validate="numero"
+          name="numero_documento"
+          id="resume-valor-agregado"
+          placeholder="$"
+        />
+      </div>
+      <p class="perfil__separador">
+        Total
+        <span id="resume-total"></span>
+      </p>
+      <div class="valorAgregado mt-10">
+        <label for="" class="form__label">Valor a cancelar</label>
+        <input
+          type="text"
+          class="form__input"
+          required
+          data-validate="numero"
+          name="valor_cancelado"
+          placeholder="$"
+          id="valor_cancelado"
+        />
+      </div>
+
+      <div class="form__container-btns mt-10">
+        <button
+          type="button"
+          class="btn btn--lower-height"
+          id="resume-finalizar-venta"
+        >
+          Finalizar venta
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

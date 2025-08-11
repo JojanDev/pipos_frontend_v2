@@ -1,0 +1,53 @@
+<div class="contenedor-perfil" id="venta">
+  <div class="perfil__rol-contenedor">
+    <h3 class="perfil__nombre" id="profile-nombrePet">Nueva venta</h3>
+    <p class="perfil__campo">
+      Total:
+      <span class="perfil__valor" id="venta-total">$0</span>
+    </p>
+  </div>
+  <div class="venta-cuerpo">
+    <p class="perfil__separador">
+      Cliente
+      <select
+        class="form__input form__input--select"
+        required
+        id="select-clientes"
+        name="id_info"
+      >
+        <!-- Opciones -->
+        <option disabled selected value="">Seleccione un cliente</option>
+      </select>
+    </p>
+    <div class="contenedor-venta">
+      <div class="venta-productos">
+        <p class="venta-productos-placeholder">Agregue elementos</p>
+        <!-- <div class="producto">
+          <p class="producto__item" id="producto-nombre">Nombre</p>
+          <p class="producto__item" id="producto-cantidad">x1</p>
+          <p class="producto__item" id="producto-precio">$10000</p>
+          <i class="ri-delete-bin-line delete-producto"></i>
+        </div> -->
+      </div>
+
+      <div class="icon-container">
+        <i class="ri-add-line plus-icon" id="add-product"></i>
+      </div>
+    </div>
+    <div class="form__container-btns">
+      <button
+        type="submit"
+        class="btn btn--lower-height btn--red"
+        id="venta-cancelar"
+      >
+        Cancelar
+      </button>
+      <!-- <button class="btn perfil__boton" id="register-pets-client">
+          Registrar mascota
+        </button> -->
+      <button type="submit" class="btn btn--lower-height" id="venta-siguiente">
+        Siguiente
+      </button>
+    </div>
+  </div>
+</div>

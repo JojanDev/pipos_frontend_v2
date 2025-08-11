@@ -238,7 +238,7 @@ export const configurarEventosValidaciones = (formulario) => {
 // --------------------------------------------------------
 // Función para validar todos los campos del formulario
 
-export const datos = {}; // Objeto para almacenar los datos del formulario
+export let datos = {}; // Objeto para almacenar los datos del formulario
 //Objeto con las funciones validadoras
 const validadoresInput = {
   texto: validarTexto,
@@ -248,7 +248,7 @@ const validadoresInput = {
   correo: (e) => validarCorreo(e.target),
   limite: validarLimite,
   textoNumeros: validarTextoYNumeros,
-  lote: validarLote
+  lote: validarLote,
   // Puedes seguir agregando más tipos según crezcas
 };
 
@@ -276,6 +276,7 @@ const obtenerCamposValidables = (formulario) => {
 
 export const validarCampos = (event) => {
   let valido = true;
+  datos = {};
 
   const requeridos = obtenerCamposValidables(event.target); // Campos con required
   const opcionales = obtenerCamposOpcionales(event.target); // Campos sin required pero con data-validate
@@ -298,6 +299,7 @@ export const validarCampos = (event) => {
     const valor = campo.value.trim();
 
     // Guardamos en el objeto datos, convirtiendo números si es necesario
+
     datos[campo.getAttribute("name")] = /^\d+$/.test(valor)
       ? parseInt(valor)
       : valor;

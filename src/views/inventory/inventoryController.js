@@ -39,7 +39,7 @@ const listarProductos = async () => {
   });
 };
 
-const listarMedicamentos = async () => {
+export const listarMedicamentos = async () => {
   const responseMedicamentos = await get("medicamentos");
 
   console.log(responseMedicamentos);
@@ -51,18 +51,19 @@ const listarMedicamentos = async () => {
   }
 
   const tbody = document.querySelector("#medicaments .table__body");
+  tbody.innerHTML = "";
 
   const medicamentosFilas = responseMedicamentos.data.map(
-    ({ id, info, precio, stock }) => {
+    ({ id, info, precio, cantidad, numero_lote }) => {
       return [
         id,
+        numero_lote,
         info.nombre,
         info.uso_general,
-        capitalizarPrimeraLetra(info.especie_destinada),
         capitalizarPrimeraLetra(info.via_administracion),
         capitalizarPrimeraLetra(info.presentacion),
         formatearPrecioConPuntos(precio),
-        stock,
+        cantidad,
       ];
     }
   );
@@ -81,15 +82,30 @@ export const inventoryController = () => {
 
   vistaInventory.addEventListener("click", (e) => {});
 
-  const tablaClientes = document.querySelector("#products");
+  // const tablaProductos = document.querySelector("#products");
 
-  tablaClientes.addEventListener("click", (event) => {
+  // tablaProductos.addEventListener("click", (event) => {
+  //   const fila = event.target.closest("tr[data-id]");
+
+  //   if (fila) {
+  //     const idProducto = fila.getAttribute("data-id");
+  //     console.log("Cliente clickeado con ID:", idProducto);
+  //     location.hash = `#/inventario/productosPerfil/id=${idProducto}`;
+
+  //     // Aquí puedes llamar a una función para ver más detalles, abrir modal, etc.
+  //     // ejemplo: mostrarDetalleCliente(idCliente);
+  //   }
+  // });
+
+  const tablaMedicamentos = document.querySelector("#medicaments");
+
+  tablaMedicamentos.addEventListener("click", (event) => {
     const fila = event.target.closest("tr[data-id]");
 
     if (fila) {
-      const idProducto = fila.getAttribute("data-id");
-      console.log("Cliente clickeado con ID:", idProducto);
-      location.hash = `#/inventario/productosPerfil/id=${idProducto}`;
+      const id = fila.getAttribute("data-id");
+      console.log("Cliente clickeado con ID:", id);
+      location.hash = `#/inventario/medicamentosPerfil/id=${id}`;
 
       // Aquí puedes llamar a una función para ver más detalles, abrir modal, etc.
       // ejemplo: mostrarDetalleCliente(idCliente);

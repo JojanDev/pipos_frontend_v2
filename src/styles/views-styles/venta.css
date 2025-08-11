@@ -1,0 +1,150 @@
+/* =========================
+   ESTRUCTURA PRINCIPAL
+========================= */
+#venta.contenedor-perfil {
+  display: grid;
+  grid-template-rows: 60px 1fr;
+  width: 100%;
+  height: 100%;
+  box-shadow: none;
+  overflow: initial;
+}
+
+.venta-cuerpo {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto; /* Zona central flexible */
+  height: 100%;
+  gap: 20px;
+  min-height: 0;
+}
+
+.contenedor-venta {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.venta-productos {
+  overflow-y: auto;
+  /* flex-grow: 1; */
+  max-height: none; /* Evita restricciones fijas */
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
+  padding-right: 10px;
+}
+
+.venta-productos-placeholder {
+  position: relative;
+  text-align: center;
+  font-size: 30px;
+  font-weight: 600;
+}
+
+/* =========================
+   CABECERA Y CAMPOS
+========================= */
+#venta .perfil__separador {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-content: space-between;
+}
+
+#venta .form__input--select {
+  margin: 0;
+  justify-self: end;
+  margin-right: -10px;
+}
+
+#venta .perfil__campo {
+  font-size: 30px;
+}
+
+/* =========================
+   PRODUCTOS
+========================= */
+.producto {
+  display: grid;
+  grid-template-columns: 1fr 70px 1fr 30px;
+  padding: 5px;
+  background-color: #cdcdcd;
+  color: #000;
+  border-radius: 10px;
+  align-items: center;
+  gap: 10px;
+  padding-left: 10px;
+}
+
+.producto__item {
+  text-overflow: ellipsis;
+  text-wrap: nowrap;
+  overflow: hidden;
+}
+
+.delete-producto {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  padding: 5px;
+  font-size: 20px;
+  font-weight: 400;
+  color: #fff;
+  background-color: #cc1010;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 1;
+}
+
+/* =========================
+   ICONOS Y BOTONES
+========================= */
+.icon-container {
+  width: 100%;
+  display: flex;
+  justify-content: end;
+  margin-top: 20px;
+}
+
+#venta .plus-icon {
+  position: initial;
+  font-size: 35px;
+}
+
+#venta .form__container-btns {
+  align-self: flex-end;
+  margin: 0;
+}
+
+.w-550 {
+  width: 550px;
+}
+
+/* RESUMEN */
+
+.valorAgregado {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 15px;
+}
+
+.valorAgregado .form__input {
+  width: 200px;
+  margin: 0;
+  flex-grow: initial;
+}
+
+.valorAgregado-label {
+}
+
+#resumen-venta .perfil__separador {
+  display: flex;
+  justify-content: space-between;
+}
+
+.mt-10 {
+  margin-top: 10px;
+}

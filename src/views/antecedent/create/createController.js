@@ -8,6 +8,7 @@ import {
   configurarEventosValidaciones,
   datos,
   validarCampos,
+  cerrarModal,
 } from "../../../helpers";
 
 export const createAntecedentController = (parametros = null) => {
@@ -78,16 +79,24 @@ export const createAntecedentController = (parametros = null) => {
         "afterbegin",
         bloqueAntecedenteCreado
       );
+      const placeholderAnterior = document.querySelector(
+        ".placeholder-antecedentes"
+      );
+      if (placeholderAnterior) placeholderAnterior.remove();
     }
 
     await success(responseAntecedente.message);
 
-    // esModal ? cerrarModal("create-pet") : cerrarModalYVolverAVistaBase();
+    esModal
+      ? cerrarModal("create-pet-antecedent")
+      : cerrarModalYVolverAVistaBase();
   });
 
   const btnAtras = document.querySelector("#back-register-pet-antecedent");
 
   btnAtras.addEventListener("click", () => {
-    esModal ? cerrarModal("create-pet") : cerrarModalYVolverAVistaBase();
+    esModal
+      ? cerrarModal("create-pet-antecedent")
+      : cerrarModalYVolverAVistaBase();
   });
 };

@@ -13,6 +13,7 @@
 @import url(views-styles/profileClient.css);
 @import url(views-styles/inventory.css);
 @import url(views-styles/services.css);
+@import url(views-styles/venta.css);
 
 * {
   padding: 0;

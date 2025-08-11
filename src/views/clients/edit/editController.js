@@ -9,14 +9,25 @@ import {
   configurarEventosValidaciones,
   datos,
   validarCampos,
+  put,
+  get,
 } from "../../../helpers";
+import { asignarDatosCliente } from "../../personal/profile/profileController";
+import { cargarTabla } from "../clientsController";
 
-export const createClientController = async () => {
+export const editClientController = async (parametros = null) => {
+  const { id } = parametros;
+  const form = document.querySelector("#form-edit-client");
+  const selectTipoDocumento = document.querySelector("#tipos-documento");
+  const tbody = document.querySelector("#clients .table__body");
+  const esModal = !location.hash.includes("clientes/editar");
+  console.log("ID CLIENTE", id);
+
+  await cargarTiposDocumento(selectTipoDocumento);
+
   // Obtenemos el formulario
-  const formulario = document.querySelector("#form-edit-client");
-
   // Obtenemos todos los inputs dentro del formulario que tengan atributo name
-  const inputsConNombre = formulario.querySelectorAll("[name]");
+  const inputsConNombre = form.querySelectorAll("[name]");
 
   // Creamos un objeto donde guardamos las referencias a los inputs usando su atributo name como clave
   const campos = {};
@@ -25,14 +36,16 @@ export const createClientController = async () => {
     campos[nombreCampo] = input;
   });
 
+  const cliente = await get(`clientes/${id}`);
+
   // Aquí puedes definir los datos que quieres precargar en los inputs
   const datosCliente = {
-    nombre: "Carlos Pérez",
-    idTipoDocumento: "1", // Asegúrate de que el value del option coincida
-    numeroDocumento: "123456789",
-    telefono: "3123456789",
-    correo: "carlos@example.com",
-    direccion: "Calle 123, Barrio Centro",
+    nombre: cliente.data.info.nombre,
+    id_tipo_documento: cliente.data.info.tipoDocumento.id, // Asegúrate de que el value del option coincida
+    numero_documento: cliente.data.info.numeroDocumento,
+    telefono: cliente.data.info.telefono,
+    correo: cliente.data.info.correo,
+    direccion: cliente.data.info.direccion,
   };
 
   // Asignamos los valores del objeto a los inputs
@@ -43,12 +56,6 @@ export const createClientController = async () => {
   }
 
   ///////////////////////////////////////////////////////////
-  const form = document.querySelector("#form-register-client");
-  const selectTipoDocumento = document.querySelector("#tipos-documento");
-  const tbody = document.querySelector("#clients .table__body");
-  const esModal = !location.hash.includes("clientes/crear");
-
-  // await cargarTiposDocumento(selectTipoDocumento);
 
   configurarEventosValidaciones(form);
 
@@ -58,7 +65,7 @@ export const createClientController = async () => {
     if (!validarCampos(e)) return;
     console.log(datos);
 
-    const response = await post("clientes", datos);
+    const response = await put(`clientes/${cliente.data.info.id}`, datos);
 
     console.log(response);
 
@@ -67,26 +74,32 @@ export const createClientController = async () => {
       return;
     }
 
+    const clienteActualizado = await get(`clientes/${id}`);
+    console.log(clienteActualizado);
+
+    asignarDatosCliente(clienteActualizado.data);
+    cargarTabla();
+
     await successTemporal(response.message);
-    console.log(response);
+    // console.log(response);
 
-    if (tbody) {
-      const {
-        id,
-        info: { nombre, telefono, numeroDocumento, direccion },
-      } = response.data;
+    // if (tbody) {
+    //   const {
+    //     id,
+    //     info: { nombre, telefono, numeroDocumento, direccion },
+    //   } = response.data;
 
-      const row = crearFila([id, nombre, telefono, numeroDocumento, direccion]);
-      tbody.insertAdjacentElement("afterbegin", row);
-    }
+    //   const row = crearFila([id, nombre, telefono, numeroDocumento, direccion]);
+    //   tbody.insertAdjacentElement("afterbegin", row);
+    // }
 
-    esModal ? cerrarModal("create-client") : cerrarModalYVolverAVistaBase();
+    esModal ? cerrarModal("edit-client") : cerrarModalYVolverAVistaBase();
   });
 
   document.addEventListener("click", (event) => {
-    const arrow = event.target.closest("#back-register-client");
+    const arrow = event.target.closest("#back-edit-client");
     if (arrow) {
-      esModal ? cerrarModal("create-client") : cerrarModalYVolverAVistaBase();
+      esModal ? cerrarModal("edit-client") : cerrarModalYVolverAVistaBase();
     }
   });
 };

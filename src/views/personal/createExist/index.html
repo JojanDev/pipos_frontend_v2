@@ -1,0 +1,55 @@
+<div class="modal__backdrop" data-modal="create-personalExist">
+  <section class="section-form modal__container">
+    <i
+      class="ri-arrow-left-line arrow-left arrow-left--bottom"
+      id="back-create-personalExist"
+    ></i>
+
+    <h1 class="section-form__title">Registro de Empleado</h1>
+    <hr class="section-form__line" />
+
+    <p class="section-form__description">
+      Registrar empleado con información ya registrada
+    </p>
+
+    <form action="#" id="form-register-personalExist" novalidate>
+      <div class="form">
+        <div class="form__container-field">
+          <label for="" class="form__label">Seleccione una informacion</label>
+          <select
+            class="form__input form__input--select"
+            required
+            id="select-info"
+            name="id_info"
+          >
+            <!-- Opciones -->
+            <option disabled selected value="">Seleccione una opcion</option>
+          </select>
+        </div>
+        <div class="form__container-field form__container-field--span">
+          <label for="" class="form__label">Usuario</label>
+          <input
+            type="text"
+            class="form__input"
+            required
+            data-validate="alfanumerico"
+            name="usuario"
+          />
+        </div>
+        <div class="form__container-field form__container-field--span">
+          <label for="" class="form__label">Contraseña</label>
+          <input
+            type="text"
+            class="form__input"
+            required
+            data-validate="contrasena"
+            name="contrasena"
+          />
+        </div>
+        <div class="form__container-btns">
+          <button type="submit" class="btn btn--lower-height">Registrar</button>
+        </div>
+      </div>
+    </form>
+  </section>
+</div>

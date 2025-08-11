@@ -59,6 +59,7 @@
   width: 250px;
   height: 100%;
   grid-area: nav;
+  position: relative;
 }
 
 .sidebar__title {
@@ -89,6 +90,82 @@
   background-color: #004a8f;
   font-weight: bold;
   letter-spacing: 0.5px;
+}
+
+.cuenta-sidebar {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+}
+
+.cuenta-opciones {
+  height: 70px;
+  /* width: 230px; */
+  /* padding: 10px; */
+  background-color: #0161b5;
+  display: flex;
+  flex-direction: column;
+  /* gap: 10px; */
+  border-radius: 10px;
+  box-shadow: 0 0 10px 0 #000047;
+  position: absolute;
+  bottom: 20px;
+  left: 270px;
+  z-index: 1000;
+  transition: max-width 0.5s;
+  overflow: hidden;
+  /* min-width: 0; */
+  max-width: 0;
+  /* padding: 0; */
+}
+
+.cuenta-opciones .cuenta-contenedor {
+  margin: 10px 10px 0 10px;
+}
+
+.cuenta-hidden {
+  max-width: 230px;
+  /* padding: 10px; */
+}
+
+.cuenta-contenedor {
+  height: 50px;
+  width: 210px;
+  background-color: #004a8f;
+  display: flex;
+  border-radius: 10px;
+  display: flex;
+  padding: 10px 20px;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 0 5px 0 #459bec;
+  transition: 0.5s;
+  cursor: pointer;
+}
+
+.cuenta-contenedor:hover {
+  filter: brightness(80%);
+}
+
+.cuenta-icon {
+  width: 30px;
+  height: 30px;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+}
+
+.user-icon {
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+}
+
+.cuenta {
+  font-size: 20px;
+  color: #fff;
+  font-weight: 500;
 }
 
 /* =============================================== */

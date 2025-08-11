@@ -1,0 +1,87 @@
+<div class="modal__backdrop" data-modal="venta-details">
+  <section class="section-form modal__container" id="venta-details">
+    <h1 class="section-form__title">Agregar elemento</h1>
+    <hr class="section-form__line section-form__line--margin-bottom" />
+
+    <form action="#" id="form-venta-details" novalidate>
+      <div class="form">
+        <div class="form__container-field form__container-field--span">
+          <div class="form__container-field">
+            <label for="" class="form__label">Tipo de producto</label>
+            <select
+              class="form__input form__input--select"
+              required
+              id="tipo-producto"
+              name="tipo_elemento"
+            >
+              <!-- Opciones -->
+              <option disabled selected value="">Seleccione un tipo</option>
+              <option value="medicamento">Medicamento</option>
+              <option value="producto">Producto</option>
+              <option value="servicio">Servicio</option>
+            </select>
+          </div>
+        </div>
+        <div class="form__container-field form__container-field--span">
+          <div class="form__container-field">
+            <label for="" class="form__label">Elemento</label>
+            <select
+              class="form__input form__input--select"
+              required
+              id="select-elementos"
+              name="elemento"
+            >
+              <!-- Opciones -->
+              <option disabled selected value="">Seleccione un elemento</option>
+            </select>
+          </div>
+        </div>
+        <div
+          class="form__container-fields form__container-fields--grid-variant"
+        >
+          <div class="form__container-field">
+            <label for="" class="form__label">Precio</label>
+            <input
+              type="text"
+              class="form__input"
+              required
+              data-validate="numero"
+              name="precio"
+              id="precio"
+            />
+          </div>
+          <div class="form__container-field">
+            <label for="" class="form__label">Cantidad</label>
+            <input
+              type="text"
+              class="form__input"
+              data-validate="numero"
+              name="cantidad"
+              id="cantidad"
+              min="1"
+            />
+          </div>
+        </div>
+        <div class="form__container-btns">
+          <button
+            type="submit"
+            class="btn btn--lower-height btn--red"
+            id="back-venta-details"
+          >
+            Cancelar
+          </button>
+          <!-- <button class="btn perfil__boton" id="register-pets-client">
+          Registrar mascota
+        </button> -->
+          <button
+            type="submit"
+            class="btn btn--lower-height"
+            id="register-pets-client"
+          >
+            Agregar
+          </button>
+        </div>
+      </div>
+    </form>
+  </section>
+</div>

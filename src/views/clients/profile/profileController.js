@@ -101,7 +101,7 @@ export const profileClientController = async (parametros = null) => {
   const btnEditProfile = document.querySelector("#edit-client");
 
   btnEditProfile.addEventListener("click", async () => {
-    await cargarComponente(routes.clientes.editar, id);
+    await cargarComponente(routes.clientes.editar, { id });
     // const selectCliente = document.querySelector("#select-clients");
     // const contenedor = selectCliente?.closest(".form__container-field");
     // contenedor.classList.add("hidden");

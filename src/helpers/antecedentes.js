@@ -6,6 +6,16 @@ export const crearBloqueAntecedenteCompleto = ({
   tratamientos = [],
   message = "No hay tratamientos registrados",
 }) => {
+  const dataJSON = localStorage.getItem("data");
+  const data = JSON.parse(dataJSON);
+  console.log(data);
+
+  if (data.id_rol == 2) {
+    const opcionesAdmin = document.querySelectorAll(".admin");
+    [...opcionesAdmin].forEach((element) => {
+      element.remove();
+    });
+  }
   const fechaFormateada = convertirADiaMesAño(fecha_creado);
 
   // 📦 Contenedor principal
@@ -24,8 +34,21 @@ export const crearBloqueAntecedenteCompleto = ({
   spanTitulo.textContent = titulo;
   spanTitulo.classList.add("antecedente-titulo");
 
+  const iconDelete = document.createElement("i");
+  // spanTitulo.textContent = titulo;
+  iconDelete.classList.add(
+    "ri-delete-bin-line",
+    "delete-antecedent",
+    "btn--red",
+    "admin"
+  );
+
   divHeader.appendChild(spanFecha);
   divHeader.appendChild(spanTitulo);
+
+  if (data.id_rol == 1) {
+    divHeader.appendChild(iconDelete);
+  }
 
   // 📄 Cuerpo
   const divBody = document.createElement("div");
@@ -91,3 +114,26 @@ export const convertirADiaMesAño = (fechaCompleta) => {
     .padStart(2, "0")}/${fecha.getFullYear()}`;
   return fechaFormateada;
 };
+
+export function mostrarMensajeSiNoHayTratamientos(idAntecedente) {
+  const divBody = document.querySelector(
+    `[data-idAntecendente='${idAntecedente}'] .antecedente-body`
+  );
+  if (!divBody) return;
+
+  // Buscar si quedan tratamientos
+  const tratamientosRestantes = divBody.querySelectorAll(".tratamiento");
+
+  // Si ya hay mensaje, no volver a ponerlo
+  const mensajeExistente = divBody.querySelector(".mensaje-sin-tratamientos");
+
+  if (tratamientosRestantes.length === 0 && !mensajeExistente) {
+    const mensajeSinTratamientos = document.createElement("p");
+    mensajeSinTratamientos.classList.add("mensaje-sin-tratamientos");
+    mensajeSinTratamientos.textContent = "No hay tratamientos registrados";
+
+    // Insertar antes del botón "+"
+    const plusIcon = divBody.querySelector(".plus-icon");
+    divBody.insertBefore(mensajeSinTratamientos, plusIcon);
+  }
+}

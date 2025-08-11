@@ -11,8 +11,13 @@ import {
   validarCampos,
   cargarComponente,
   llenarSelect,
+  capitalizarPrimeraLetra,
+  agregarError,
+  quitarError,
+  formatearPrecioConPuntos,
 } from "../../../../helpers";
 import { routes } from "../../../../router/routes";
+import { validarFechaCaducidad } from "../../products/create/createController";
 
 export const createMedicamentInventoryController = async () => {
   llenarSelect({
@@ -34,11 +39,36 @@ export const createMedicamentInventoryController = async () => {
   // await cargarTiposDocumento(selectTipoDocumento);
 
   configurarEventosValidaciones(form);
+  const inputFecha = document.querySelector("[name='fecha_caducidad']");
+
+  inputFecha.addEventListener("blur", (e) => {
+    const resultado = validarFechaCaducidad(inputFecha.value);
+
+    if (!resultado.valid) {
+      agregarError(inputFecha.parentElement, resultado.message);
+    } else {
+      quitarError(inputFecha.parentElement);
+    }
+  });
+
+  inputFecha.addEventListener("input", (e) => {
+    const resultado = validarFechaCaducidad(inputFecha.value);
+
+    if (!resultado.valid) {
+      agregarError(inputFecha.parentElement, resultado.message);
+    } else {
+      quitarError(inputFecha.parentElement);
+    }
+  });
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     if (!validarCampos(e)) return;
+
+    const resultado = validarFechaCaducidad(inputFecha.value);
+
+    if (!resultado.valid) return;
     console.log(datos);
 
     const response = await post("medicamentos", datos);
@@ -53,13 +83,21 @@ export const createMedicamentInventoryController = async () => {
     await successTemporal(response.message);
     console.log(response);
 
-    if (tbody) {
-      const {
-        id,
-        info: { nombre, telefono, numeroDocumento, direccion },
-      } = response.data;
+    const tbody = document.querySelector("#medicaments .table__body");
 
-      const row = crearFila([id, nombre, telefono, numeroDocumento, direccion]);
+    if (tbody) {
+      const { id, info, precio, cantidad, numero_lote } = response.data;
+      const filaNueva = [
+        id,
+        numero_lote,
+        info.nombre,
+        info.uso_general,
+        capitalizarPrimeraLetra(info.via_administracion),
+        capitalizarPrimeraLetra(info.presentacion),
+        formatearPrecioConPuntos(precio),
+        cantidad,
+      ];
+      const row = crearFila(filaNueva);
       tbody.insertAdjacentElement("afterbegin", row);
     }
 
@@ -77,10 +115,7 @@ export const createMedicamentInventoryController = async () => {
     }
 
     if (event.target.id == "register-medicament-info") {
-      await cargarComponente(routes.medicamentos_info.crear, {
-        id: null,
-        // nombre: response.data.nombre,
-      });
+      await cargarComponente(routes.medicamentos_info.crear);
     }
   });
 };
