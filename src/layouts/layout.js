@@ -1,10 +1,21 @@
-export const layoutController = () => {
+import { get } from "../helpers/api";
+
+// let layoutEjecutado = false;
+export const layoutController = async () => {
+  // if (layoutEjecutado) {
+  //   return;
+  // }
+  // layoutEjecutado = true;
+
   const dataJSON = localStorage.getItem("data");
   const data = JSON.parse(dataJSON);
   console.log(data);
 
+  
+  const getPer = await get("personal/" + data.id);
+  
   const nombreEmpleado = document.querySelector("#empleado-nombre-header");
-  nombreEmpleado.textContent = data.usuario;
+  nombreEmpleado.textContent = getPer.data.info.nombre;
 
   if (data.id_rol == 2) {
     const opcionesAdmin = document.querySelectorAll(".admin");
@@ -14,17 +25,13 @@ export const layoutController = () => {
   }
 
   const btnCuenta = document.querySelector("#cuenta");
-  console.log(btnCuenta);
 
   btnCuenta?.addEventListener("click", (e) => {
     const btnOpciones = document.querySelector(".cuenta-opciones");
-    console.log(btnOpciones);
 
-    if (btnOpciones.classList.contains("cuenta-hidden")) {
+    if (btnOpciones.classList.contains("cuenta-hidden"))
       btnOpciones.classList.remove("cuenta-hidden");
-    } else {
-      btnOpciones.classList.add("cuenta-hidden");
-    }
+    else btnOpciones.classList.add("cuenta-hidden");
   });
 
   const layout = document.querySelector(".layout");
@@ -33,11 +40,8 @@ export const layoutController = () => {
     if (e.target.id == "perfil-usuario") {
       // window.location.hash = "#/personal/";
     }
-    console.log("SI");
 
     if (e.target.id == "salir-usuario") {
-      console.log("SI");
-
       localStorage.clear();
       window.location.hash = "#/login/";
     }

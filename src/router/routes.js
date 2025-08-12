@@ -70,7 +70,7 @@ export const routes = {
     crearExistente: {
       path: "clients/createExist/index.html",
       controller: createClienteExistController,
-      private: false,
+      private: true,
       addHtml: true,
     },
     editar: {

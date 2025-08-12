@@ -7,6 +7,7 @@ import {
   validarAlfanumericos,
   validarCampos,
 } from "../../../helpers";
+import { layoutController } from "../../../layouts/layout";
 
 //Funcion para validar los datos de inicio de sesion
 const validarSesion = async ({ usuario, contrasena }) => {
@@ -37,6 +38,7 @@ const validarSesion = async ({ usuario, contrasena }) => {
 };
 
 export const loginController = async () => {
+  localStorage.clear();
   const form = document.querySelector("#form");
 
   configurarEventosValidaciones(form);
@@ -48,6 +50,7 @@ export const loginController = async () => {
 
     if (await validarSesion(datos)) {
       window.location.hash = "#/inicio";
+      layoutController();
     }
   });
 };

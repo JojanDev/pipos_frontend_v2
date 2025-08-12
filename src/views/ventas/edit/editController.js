@@ -1,4 +1,4 @@
-import { cerrarModal, error, get, put, success } from "../../../helpers";
+import { cerrarModal, error, formatearPrecioConPuntos, get, put, success } from "../../../helpers";
 import { cargarTablaVentas } from "../ventaController";
 
 export const editVentaController = async (parametros = null) => {
@@ -25,7 +25,7 @@ export const editVentaController = async (parametros = null) => {
   total.textContent = venta.total;
 
   // Setear el monto actual
-  valorAgregar.value = venta.monto;
+  valorAgregar.value = venta.total - venta.monto;
 
   // Si la venta ya está completada → ocultar el botón
   if (venta.estado === "completada") {
@@ -37,14 +37,17 @@ export const editVentaController = async (parametros = null) => {
       const nuevoMonto = parseFloat(valorAgregar.value) || 0;
       const montoAnterior = venta.monto;
 
-      if (nuevoMonto < montoAnterior) {
+      // if (nuevoMonto < montoAnterior) {
+      //   await error(
+      //     `No puedes ingresar un monto menor a ${montoAnterior.toLocaleString()}`
+      //   );
+      //   return;
+      // }
+      // else
+      const precioFalMax = venta.total - venta.monto;
+        if (nuevoMonto > precioFalMax) {
         await error(
-          `No puedes ingresar un monto menor a ${montoAnterior.toLocaleString()}`
-        );
-        return;
-      } else if (nuevoMonto > venta.total) {
-        await error(
-          `No puedes ingresar un monto mayor a ${venta.total.toLocaleString()}`
+          `No puedes ingresar un monto mayor a ${precioFalMax.toLocaleString()}`
         );
         return;
       }

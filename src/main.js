@@ -6,7 +6,9 @@ import "remixicon/fonts/remixicon.css";
 
 window.addEventListener("DOMContentLoaded", async () => {
   await router();
-  layoutController();
+  await layoutController();
+  // console.log("DOM CONTENT LOAD");
+  
   // const dataJSON = localStorage.getItem("data");
   // const dataINFO = JSON.parse(dataJSON);
   // console.log(dataINFO);
@@ -20,5 +22,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 
 window.addEventListener("hashchange", async () => {
   await router();
-  layoutController();
+  // await layoutController();
+  console.log("HASH GHACNE");
+
 });

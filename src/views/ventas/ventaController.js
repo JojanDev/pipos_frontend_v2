@@ -5,6 +5,7 @@ import {
   convertirADiaMesAño,
   capitalizarPrimeraLetra,
   cargarComponente,
+  formatearPrecioConPuntos,
 } from "../../helpers";
 import { routes } from "../../router/routes";
 
@@ -42,24 +43,20 @@ export const cargarTablaVentas = async () => {
   tbody.innerHTML = "";
 
   const ventasInfo = ventas.data.map((venta) => {
-    // console.log("cliente", cliente);
-
-    // const info = venta.info;
-    // console.log("info", info);
-
     return [
       venta.id,
       formatoCorto(venta.fecha),
       venta.cliente.info.nombre,
-      venta.monto,
-      venta.total,
+      formatearPrecioConPuntos(venta.monto),
+      formatearPrecioConPuntos(venta.total - venta.monto),
+      formatearPrecioConPuntos(venta.total),
       capitalizarPrimeraLetra(venta.estado),
     ];
   });
   console.log(ventasInfo);
 
-  ventasInfo.forEach((cliente) => {
-    const row = crearFila(cliente);
+  ventasInfo.forEach((venta) => {
+    const row = crearFila(venta);
     tbody.append(row);
   });
 };

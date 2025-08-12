@@ -63,11 +63,13 @@
 }
 
 .table__header .table__cell {
-  padding: 10px;
+  padding: 10px 0 10px 5px;
+  /* padding-left: 5px; */
 }
 
 .table__cell {
-  /* padding: 10px; */
+  /* padding: 0 10px; */
+  padding-left: 10px;
   /* display: flex;
   align-items: center; */
   line-height: 1.2;
@@ -114,7 +116,7 @@
 
 #medicaments .table__header,
 #medicaments .table__row {
-  grid-template-columns: 50px 1fr 2fr 0.8fr 1fr 1fr 0.7fr 0.5fr;
+  grid-template-columns: 50px 110px 2fr 1fr 1fr 1fr 0.7fr 0.5fr;
 }
 
 .table-container--administrar_datos .table__header,
@@ -129,7 +131,7 @@
 
 #ventas .table__header,
 #ventas .table__row {
-  grid-template-columns: 50px 1fr 1.5fr 1.3fr 1fr 1fr;
+  grid-template-columns: 50px 170px 1.7fr 1fr 1fr 1fr 1fr;
 }
 
 .placeholder {
@@ -153,4 +155,8 @@
   font-weight: 400;
   z-index: 1;
   cursor: pointer;
+}
+
+.completada{
+  background-color: #00ff0442;
 }
