@@ -57,7 +57,7 @@
 
 //   const responseMascota = await get("mascotas/" + id);
 
-//   console.log(responseMascota);
+//
 
 //   const tbody_perfilCliente = document.querySelector(
 //     "#pets-client .table__body"
@@ -82,7 +82,7 @@
 //   configurarEventosValidaciones(form);
 
 //   const response = await get("especies");
-//   console.log(response);
+//
 
 //   if (response.success) {
 //     const especiesConRazas = response.data;
@@ -140,14 +140,14 @@
 
 //     if (!validarCampos(e)) return;
 
-//     console.log(datos);
+//
 
 //     const edad_semanas = calcularSemanasTotales(datos);
 //     const { nombre, sexo, id_raza, id_cliente } = datos;
 
-//     console.log(containerSelectClient);
-//     console.log(id_cliente);
-//     console.log(idDueno);
+//
+//
+//
 
 //     const response = await post("mascotas", {
 //       nombre,
@@ -157,7 +157,7 @@
 //       id_cliente: containerSelectClient ? id_cliente : idDueno,
 //     });
 
-//     console.log(response);
+//
 
 //     if (!response.success) {
 //       await error(response.message);
@@ -179,8 +179,8 @@
 
 //       tbody_perfilCliente.insertAdjacentElement("afterbegin", row);
 //     } else if (tbody_Mascotas) {
-//       console.log(tbody_Mascotas);
-//       console.log(response.data);
+//
+//
 
 //       const { id, nombre, raza, cliente, ultimo_antecedente } = response.data;
 //       const row = crearFila([
@@ -192,14 +192,14 @@
 //         cliente.info.telefono,
 //         ultimo_antecedente ?? "Sin registros", //PENDIENTE HACER OBTENER LA FECHA DEL ULTIMO ANTECEDENTE
 //       ]);
-//       console.log(row);
+//
 
 //       tbody_Mascotas.insertAdjacentElement("afterbegin", row);
 //     }
 
 //     esModal ? cerrarModal("create-pet") : cerrarModalYVolverAVistaBase();
 
-//     // console.log(response);
+//     //
 
 //     // if (!response.success) {
 //     //   await error(response.message);

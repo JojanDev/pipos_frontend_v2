@@ -208,9 +208,6 @@ export const validarCampo = (event) => {
 
         if (!resultado.valid) {
           agregarError(campo.parentElement, resultado.message);
-          console.log("resultado.message", resultado.message);
-          console.log("campo.parentElement", campo.parentElement);
-
           return false;
         }
       }

@@ -8,10 +8,13 @@ import {
   cerrarModalYVolverAVistaBase,
   cargarComponente,
   del,
+  success,
+  put,
 } from "../../../helpers";
 
 export const asignarDatosCliente = (data) => {
   const spanNombre = document.querySelector("#profile-nombre");
+  const spanRol = document.querySelector("#profile-rol");
   const spanTipoDocumento = document.querySelector("#profile-tipoDocumento");
   const spanNumeroDocumento = document.querySelector(
     "#profile-numeroDocumento"
@@ -36,6 +39,7 @@ export const asignarDatosCliente = (data) => {
   spanDireccion.textContent = direccion;
   spanTelefono.textContent = telefono;
   spanCorreo.textContent = correo;
+  spanRol.textContent = capitalizarPrimeraLetra(data.rol.nombre);
   if (spanUsuario) spanUsuario.textContent = data.usuario;
 };
 
@@ -44,12 +48,13 @@ export const profilePersonalController = async (parametros = null) => {
   const btnAtras = document.querySelector("#back-profile-personal");
   const btnRegisterPets = document.querySelector("#register-pets-client");
   const esModal = !location.hash.includes("personal/perfil");
-
-  console.log(btnAtras);
+  const btnActivar = document.querySelector("#activar-personal");
+  const btnEliminar = document.querySelector("#delete-personal");
 
   const { id } = parametros;
 
   const response = await get(`personal/${id}`);
+
   console.log(response);
 
   if (!response.success) {
@@ -58,19 +63,48 @@ export const profilePersonalController = async (parametros = null) => {
     return;
   }
 
+  if (response.data.activo) {
+    btnActivar.remove();
+  } else {
+    btnEliminar.remove();
+  }
   asignarDatosCliente(response.data);
 
   const modal = document.querySelector("[data-modal='profile-personal']");
 
   modal.addEventListener("click", async (e) => {
     if (e.target.id == "edit-personal") {
-      console.log("id EDITAR PERSONAL", id);
       await cargarComponente(routes.personal.editar, { id: id });
     }
 
     if (e.target.id == "delete-personal") {
       const eliminado = await del(`personal/${id}`);
-      console.log(eliminado);
+      // console.log(eliminado);
+      if (!eliminado.success) {
+        await error(eliminado.message);
+        return;
+      }
+
+      await success(eliminado.message);
+      esModal
+        ? cerrarModal("profile-personal")
+        : cerrarModalYVolverAVistaBase();
+      return;
+    }
+
+    if (e.target.id == "activar-personal") {
+      const activado = await put(`personal/activar/${id}`);
+      // console.log(eliminado);
+      if (!activado.success) {
+        await error(activado.message);
+        return;
+      }
+
+      await success(activado.message);
+      esModal
+        ? cerrarModal("profile-personal")
+        : cerrarModalYVolverAVistaBase();
+      return;
     }
 
     if (e.target.id == "back-profile-personal") {

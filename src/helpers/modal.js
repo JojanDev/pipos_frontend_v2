@@ -10,13 +10,10 @@ export function obtenerVistaBase() {
 
 // Cierra el modal y redirige al hash correspondiente a la vista base
 export function cerrarModalYVolverAVistaBase() {
-  console.log("cerrarModalYVolverAVistaBase");
-
   const vistaBase = obtenerVistaBase();
   if (!vistaBase) return;
 
   const rutaBaseHash = vistaBase.split("/")[0];
-  console.log("rutaBaseHash", rutaBaseHash);
 
   const modal = document.querySelector(".modal__backdrop");
   if (modal) {
@@ -26,16 +23,8 @@ export function cerrarModalYVolverAVistaBase() {
 }
 
 export const cerrarModal = (modalKey) => {
-  console.log("cerrarModal");
-
   const modal = document.querySelector(`[data-modal="${modalKey}"]`);
   if (!modal) return;
-
-  // Si quieres añadir animación de salida, puedes hacerlo aquí:
-  // modal.classList.add("modal--closing");
-
-  // Y usar timeout si es necesario:
-  // setTimeout(() => modal.remove(), 200);
 
   modal.remove();
 };

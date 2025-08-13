@@ -24,8 +24,6 @@ export const editBreedController = (parametros = null) => {
 
   titulo.value = nombre;
 
-  console.log(form);
-
   configurarEventosValidaciones(form);
 
   form.addEventListener("submit", async (e) => {
@@ -34,7 +32,6 @@ export const editBreedController = (parametros = null) => {
     if (!validarCampos(e)) return;
 
     // datos["id_antecedente"] = idAntecedente;
-    console.log(datos);
     if (nombre == datos.nombre) {
       esModal ? cerrarModal("edit-breed") : cerrarModalYVolverAVistaBase();
 
@@ -45,8 +42,6 @@ export const editBreedController = (parametros = null) => {
 
     const responseEspecie = await put(`razas/${id}`, datos);
 
-    console.log(responseEspecie);
-
     if (!responseEspecie.success) {
       await error(responseEspecie.message);
       return;
@@ -54,7 +49,6 @@ export const editBreedController = (parametros = null) => {
 
     await success(responseEspecie.message);
     listarEspecies();
-    // Justo después de insertar la nueva fila:
 
     const titulo = document.querySelector("#breed-title");
 

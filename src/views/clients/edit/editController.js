@@ -21,7 +21,6 @@ export const editClientController = async (parametros = null) => {
   const selectTipoDocumento = document.querySelector("#tipos-documento");
   const tbody = document.querySelector("#clients .table__body");
   const esModal = !location.hash.includes("clientes/editar");
-  console.log("ID CLIENTE", id);
 
   await cargarTiposDocumento(selectTipoDocumento);
 
@@ -63,11 +62,8 @@ export const editClientController = async (parametros = null) => {
     e.preventDefault();
 
     if (!validarCampos(e)) return;
-    console.log(datos);
 
     const response = await put(`clientes/${cliente.data.info.id}`, datos);
-
-    console.log(response);
 
     if (!response.success) {
       await error(response.message);
@@ -75,13 +71,12 @@ export const editClientController = async (parametros = null) => {
     }
 
     const clienteActualizado = await get(`clientes/${id}`);
-    console.log(clienteActualizado);
 
     asignarDatosCliente(clienteActualizado.data);
     cargarTabla();
 
     await successTemporal(response.message);
-    // console.log(response);
+    //
 
     // if (tbody) {
     //   const {

@@ -44,12 +44,9 @@ export const profileMedicamentController = async (parametros = null) => {
   const btnAtras = document.querySelector("#back-profile-medicament-info");
   const esModal = !location.hash.includes("medicamentos_info/perfil");
 
-  console.log(btnAtras);
-
   const { id } = parametros;
 
   const response = await get(`medicamentos/info/${id}`);
-  console.log(response);
 
   if (!response.success) {
     await error(response.message);
@@ -63,8 +60,6 @@ export const profileMedicamentController = async (parametros = null) => {
   asignarDatosMedicamentoInfo(response.data);
 
   btnAtras.addEventListener("click", () => {
-    console.log("BOTON");
-
     esModal
       ? cerrarModal("profile-medicament-info")
       : cerrarModalYVolverAVistaBase();

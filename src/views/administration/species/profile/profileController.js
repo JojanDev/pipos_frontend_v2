@@ -14,13 +14,11 @@ import { listarEspecies } from "../../administrationController";
 
 export const profileSpecieController = async (parametros = null) => {
   const { id } = parametros;
-  console.log(id, "ID ESPECIE");
 
   const modal = document.querySelector('[data-modal="specie-profile"]');
   const esModal = !location.hash.includes("administrar_datos/especiesPerfil");
 
   const response = await get(`especies/${id}`);
-  console.log(response);
 
   if (!response.success) {
     await error(response.message);
@@ -33,8 +31,6 @@ export const profileSpecieController = async (parametros = null) => {
   titulo.textContent = response.data.nombre;
 
   modal.addEventListener("click", async (e) => {
-    console.log(e.target);
-
     if (e.target.id == "edit-specie") {
       await cargarComponente(routes.administrar_datos.especiesEditar, {
         id: id,

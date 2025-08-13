@@ -1,4 +1,5 @@
 import { venta, ventaInformacion } from "../views";
+import { formatearPrecioConPuntos } from "./diseño";
 
 export function renderizarCarrito() {
   const contenedor = document.querySelector(".venta-productos");
@@ -36,8 +37,10 @@ export function crearProductoHTML(detalle, index) {
   return `
     <div class="producto" data-index="${index}">
       <p class="producto__item producto-nombre">${detalle.nombre}</p>
+      <p class="producto__item producto-precio">${formatearPrecioConPuntos(detalle.precio)}</p>
       <p class="producto__item producto-cantidad">x${detalle.cantidad || 1}</p>
-      <p class="producto__item producto-precio">$${detalle.subtotal}</p>
+      <p class="producto__item producto-adicional">${formatearPrecioConPuntos(detalle.valor_adicional)}</p>
+      <p class="producto__item producto-subtotal">${formatearPrecioConPuntos(detalle.subtotal)}</p>
       <i class="ri-delete-bin-line delete-producto" data-index="${index}"></i>
     </div>
   `;

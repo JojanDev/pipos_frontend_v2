@@ -18,8 +18,6 @@ export const createBreedController = (parametros = null) => {
   const form = document.querySelector("#form-register-breed");
   const esModal = !location.hash.includes("razasCrear");
 
-  console.log(form);
-
   configurarEventosValidaciones(form);
 
   form.addEventListener("submit", async (e) => {
@@ -27,12 +25,9 @@ export const createBreedController = (parametros = null) => {
 
     if (!validarCampos(e)) return;
 
-    console.log(datos);
     datos["id_especie"] = id_especie;
 
     const responseRaza = await post("razas", datos);
-
-    console.log(responseRaza);
 
     if (!responseRaza.success) {
       await error(responseRaza.message);

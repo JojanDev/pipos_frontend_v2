@@ -48,7 +48,6 @@ export const createPetController = async (idDueno) => {
   configurarEventosValidaciones(form);
 
   const response = await get("especies");
-  console.log(response);
 
   if (response.success) {
     const especiesConRazas = response.data;
@@ -102,14 +101,8 @@ export const createPetController = async (idDueno) => {
 
     if (!validarCampos(e)) return;
 
-    console.log(datos);
-
     const edad_semanas = calcularSemanasTotales(datos);
     const { nombre, sexo, id_raza, id_cliente } = datos;
-
-    console.log(containerSelectClient);
-    console.log(id_cliente);
-    console.log(idDueno);
 
     const response = await post("mascotas", {
       nombre,
@@ -118,8 +111,6 @@ export const createPetController = async (idDueno) => {
       edad_semanas,
       id_cliente: containerSelectClient ? id_cliente : idDueno,
     });
-
-    console.log(response);
 
     if (!response.success) {
       await error(response.message);
@@ -141,9 +132,6 @@ export const createPetController = async (idDueno) => {
 
       tbody_perfilCliente.insertAdjacentElement("afterbegin", row);
     } else if (tbody_Mascotas) {
-      console.log(tbody_Mascotas);
-      console.log(response.data);
-
       const { id, nombre, raza, cliente, ultimo_antecedente } = response.data;
       const row = crearFila([
         id,
@@ -154,14 +142,13 @@ export const createPetController = async (idDueno) => {
         cliente.info.telefono,
         ultimo_antecedente ?? "Sin registros", //PENDIENTE HACER OBTENER LA FECHA DEL ULTIMO ANTECEDENTE
       ]);
-      console.log(row);
 
       tbody_Mascotas.insertAdjacentElement("afterbegin", row);
     }
 
     esModal ? cerrarModal("create-pet") : cerrarModalYVolverAVistaBase();
 
-    // console.log(response);
+    //
 
     // if (!response.success) {
     //   await error(response.message);

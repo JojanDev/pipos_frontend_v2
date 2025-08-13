@@ -65,9 +65,8 @@ const asignarDatosMascota = (data) => {
 export const profilePetController = async (parametros = null) => {
   const dataJSON = localStorage.getItem("data");
   const data = JSON.parse(dataJSON);
-  console.log(data);
 
-  if (data.id_rol == 2) {
+  if (data.id_rol != 1) {
     const opcionesAdmin = document.querySelectorAll(".admin");
     [...opcionesAdmin].forEach((element) => {
       element.remove();
@@ -79,8 +78,6 @@ export const profilePetController = async (parametros = null) => {
   //Peticion para obtener la informacion de la mascota
   const responseMascota = await get(`mascotas/${id}`);
   const responseAntecedentesMascota = await get(`antecedentes/mascota/${id}`);
-  console.log(responseMascota);
-  console.log("responseAntecedentesMascota", responseAntecedentesMascota);
 
   asignarDatosCliente(responseMascota.data);
   asignarDatosMascota(responseMascota.data);
@@ -111,8 +108,6 @@ export const profilePetController = async (parametros = null) => {
   const contenedorPerfil = document.querySelector(".contenedor-perfil--pet");
 
   contenedorPerfil.addEventListener("click", async (e) => {
-    console.log(e.target.classList);
-
     if (e.target.closest(".delete-antecedent")) {
       // toggleBody(e.target.closest(".antecedente-header"));
       const contenedorId = e.target.closest("[data-idAntecendente]");
@@ -147,9 +142,10 @@ export const profilePetController = async (parametros = null) => {
       );
       const tituloAntecedente = tituloElemento?.textContent || "Sin título";
 
-      location.hash = `#/antecedente/tratamiento/id=${idTratamiento}&tituloAntecedente=${encodeURIComponent(
-        tituloAntecedente
-      )}`;
+      await cargarComponente(routes.antecedente.tratamiento, {
+        id: idTratamiento,
+        tituloAntecedente: tituloAntecedente,
+      });
     }
 
     if (e.target.id == "register-treatment-antecedent") {
@@ -158,9 +154,5 @@ export const profilePetController = async (parametros = null) => {
 
       location.hash = `#/antecedente/tratamientoCrear/idAntecedente=${idAntecedente}`;
     }
-
-    // if (e.target.id == "edit-pet") {
-    //   location.hash = `#/mascotas/editar/id=${id}`;
-    // }
   });
 };

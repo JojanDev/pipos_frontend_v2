@@ -26,13 +26,11 @@ function formatoCorto(localDateTime) {
 }
 
 // Ejemplo
-console.log(formatoCorto("2025-08-09T15:45:00"));
+
 // 👉 "09/08/2025 15:45"
 
 export const cargarTablaVentas = async () => {
   const ventas = await get("ventas");
-
-  console.log(ventas);
 
   if (!ventas.success) {
     // await error(response.message);
@@ -53,7 +51,6 @@ export const cargarTablaVentas = async () => {
       capitalizarPrimeraLetra(venta.estado),
     ];
   });
-  console.log(ventasInfo);
 
   ventasInfo.forEach((venta) => {
     const row = crearFila(venta);
@@ -71,7 +68,7 @@ export const ventasController = async () => {
 
     if (fila) {
       const idVenta = fila.getAttribute("data-id");
-      console.log("Cliente clickeado con ID:", idVenta);
+
       await cargarComponente(routes.ventas.editar, { id: idVenta });
       // location.hash = `#/ventas/perfil/id=${idCliente}`;
 

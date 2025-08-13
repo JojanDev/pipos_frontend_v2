@@ -9,6 +9,7 @@ import {
   validarCampos,
   get,
   datos,
+  formatearPrecioConPuntos,
 } from "../../../helpers";
 
 export const editServiceController = async (parametros = null) => {
@@ -24,14 +25,16 @@ export const editServiceController = async (parametros = null) => {
     return;
   }
 
-  const { nombre, descripcion } = response.data;
+  const { nombre, descripcion, precio } = response.data;
 
   // 2. Asignar los valores a los inputs
   const inputNombre = document.querySelector("#nombreServicio");
   const inputDescripcion = document.querySelector("#descripcionServicio");
+  const inputPrecio = document.querySelector("#precioServicio");
 
   inputNombre.value = nombre;
   inputDescripcion.value = descripcion;
+  inputPrecio.value = precio;
 
   configurarEventosValidaciones(form);
 
@@ -41,7 +44,11 @@ export const editServiceController = async (parametros = null) => {
 
     if (!validarCampos(e)) return;
 
-    if (nombre === datos.nombre && descripcion === datos.descripcion) {
+    if (
+      nombre === datos.nombre &&
+      descripcion === datos.descripcion &&
+      precio === datos.precio
+    ) {
       esModal ? cerrarModal("edit-service") : cerrarModalYVolverAVistaBase();
       return;
     }
@@ -62,6 +69,8 @@ export const editServiceController = async (parametros = null) => {
         responseUpdate.data.nombre;
       card.querySelector(".card__description").textContent =
         responseUpdate.data.descripcion;
+      card.querySelector(".card__precio").textContent =
+        "Valor: " + formatearPrecioConPuntos(responseUpdate.data.precio);
     }
 
     esModal ? cerrarModal("edit-service") : cerrarModalYVolverAVistaBase();

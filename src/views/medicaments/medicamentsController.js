@@ -1,11 +1,11 @@
-import { capitalizarPrimeraLetra, get } from "../../helpers";
+import { capitalizarPrimeraLetra, cargarComponente, get } from "../../helpers";
+import { routes } from "../../router/routes";
 
 export function crearCartaMedicamento(medicamento) {
   const dataJSON = localStorage.getItem("data");
   const data = JSON.parse(dataJSON);
-  console.log(data);
 
-  if (data.id_rol == 2) {
+  if (data.id_rol != 1) {
     const opcionesAdmin = document.querySelectorAll(".admin");
     [...opcionesAdmin].forEach((element) => {
       element.remove();
@@ -79,6 +79,7 @@ export function crearCartaMedicamento(medicamento) {
   // Botón editar
   const btnEdit = document.createElement("button");
   btnEdit.classList.add("btn", "btn--edit", "btn-servicio-edit");
+  btnEdit.id = "#editar-info-medicamento";
   btnEdit.title = "Editar servicio";
   btnEdit.innerHTML = `<i class="ri-edit-box-line"></i>`;
 
@@ -113,5 +114,16 @@ export const medicamentsController = async () => {
   response.data.forEach((medicamento) => {
     const carta = crearCartaMedicamento(medicamento);
     contenedor.appendChild(carta);
+  });
+
+  const btnEditInfo = document.querySelector("#medicaments-info");
+
+  btnEditInfo.addEventListener("click", async (event) => {
+    const fila = event.target.closest(".card[data-id]");
+
+    if (fila) {
+      const id_info = fila.getAttribute("data-id");
+      await cargarComponente(routes.medicamentos_info.editar, { id: id_info });
+    }
   });
 };

@@ -3,8 +3,6 @@ import { get, cargarTiposDocumento, crearFila } from "../../helpers";
 export const cargarTabla = async () => {
   const clientes = await get("clientes");
 
-  console.log(clientes);
-
   if (!clientes.success) {
     await error(response.message);
   }
@@ -13,10 +11,10 @@ export const cargarTabla = async () => {
   tbody.innerHTML = "";
 
   const clientesInfo = clientes.data.map((cliente) => {
-    // console.log("cliente", cliente);
+    //
 
     const info = cliente.info;
-    // console.log("info", info);
+    //
 
     return [
       cliente.id,
@@ -26,8 +24,6 @@ export const cargarTabla = async () => {
       info.direccion,
     ];
   });
-
-  console.log(clientesInfo);
 
   clientesInfo.forEach((cliente) => {
     const row = crearFila(cliente);
@@ -45,7 +41,7 @@ export const clientsController = async () => {
 
     if (fila) {
       const idCliente = fila.getAttribute("data-id");
-      console.log("Cliente clickeado con ID:", idCliente);
+
       location.hash = `#/clientes/perfil/id=${idCliente}`;
 
       // Aquí puedes llamar a una función para ver más detalles, abrir modal, etc.

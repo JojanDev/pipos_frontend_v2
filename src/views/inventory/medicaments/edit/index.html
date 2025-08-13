@@ -1,0 +1,71 @@
+<div class="modal__backdrop" data-modal="edit-medicament-inventory">
+  <section class="section-form modal__container">
+    <i
+      class="ri-arrow-left-line arrow-left arrow-left--bottom"
+      id="back-edit-medicament-inventory"
+    ></i>
+
+    <h1 class="section-form__title">Editar de Medicamento</h1>
+    <hr class="section-form__line section-form__line--margin-bottom" />
+
+    <form action="#" id="form-register-medicament-inventory" novalidate>
+      <div class="form form--w-800">
+        <div
+          class="form__container-fields form__container-fields--grid-variant"
+        >
+          <div class="form__container-field">
+            <label for="" class="form__label">Fecha de caducidad</label>
+            <input
+              type="date"
+              class="form__input"
+              required
+              data-validate="fecha"
+              name="fecha_caducidad"
+              id="fecha"
+            />
+          </div>
+          <div class="form__container-field form__container-field--span">
+            <label for="" class="form__label">Num. Lote</label>
+            <input
+              type="text"
+              class="form__input"
+              required
+              data-validate="numero"
+              name="numero_lote"
+              id="lote"
+            />
+          </div>
+        </div>
+        <div
+          class="form__container-fields form__container-fields--grid-variant"
+        >
+          <div class="form__container-field">
+            <label for="" class="form__label">Precio</label>
+            <input
+              type="text"
+              class="form__input"
+              required
+              data-validate="numero"
+              name="precio"
+              id="precio"
+            />
+          </div>
+          <div class="form__container-field">
+            <label for="" class="form__label">Cantidad</label>
+            <input
+              type="text"
+              class="form__input"
+              required
+              data-validate="numero"
+              name="cantidad"
+              id="cantidad"
+            />
+          </div>
+        </div>
+        <div class="form__container-btns">
+          <button type="submit" class="btn btn--lower-height">Editar</button>
+        </div>
+      </div>
+    </form>
+  </section>
+</div>

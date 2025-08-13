@@ -21,7 +21,7 @@ export const createVentaController = (parametros = null) => {
   //   placeholder.style.display = "none";
   // }
 
-  // console.log(venta.detalles_venta.length);
+  //
 
   llenarSelect({
     endpoint: "clientes",
@@ -37,7 +37,6 @@ export const createVentaController = (parametros = null) => {
       await cargarComponente(routes.ventas.agregarProducto);
     }
     const selectClientes = document.querySelector("#select-clientes");
-    console.log(selectClientes.value == true);
 
     if (e.target.id == "venta-siguiente") {
       if (!selectClientes.value) {
@@ -54,11 +53,9 @@ export const createVentaController = (parametros = null) => {
       venta.cliente = selectClientes.options[selectClientes.selectedIndex].text;
       venta.id_cliente = selectClientes.value;
       const personal = await get("personal/" + data.id);
-      console.log(personal);
 
       venta.id_personal = data.id;
       venta.nombrePersonal = personal.data.info.nombre;
-      console.log(venta);
 
       await cargarComponente(routes.ventas.resumenVenta);
     }
@@ -76,7 +73,6 @@ export const createVentaController = (parametros = null) => {
           if (!isNaN(index)) {
             venta.detalles_venta.splice(index, 1);
             renderizarCarrito();
-            console.log(venta);
           }
         }
       });

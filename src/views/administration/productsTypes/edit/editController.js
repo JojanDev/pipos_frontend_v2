@@ -23,8 +23,6 @@ export const editProductTypeController = (parametros = null) => {
 
   titulo.value = nombre;
 
-  console.log(form);
-
   configurarEventosValidaciones(form);
 
   form.addEventListener("submit", async (e) => {
@@ -33,7 +31,7 @@ export const editProductTypeController = (parametros = null) => {
     if (!validarCampos(e)) return;
 
     // datos["id_antecedente"] = idAntecedente;
-    console.log(datos);
+
     if (nombre == datos.nombre) {
       esModal
         ? cerrarModal("edit-productType")
@@ -43,8 +41,6 @@ export const editProductTypeController = (parametros = null) => {
     }
 
     const responseTipo = await put(`tipos-productos/${id}`, datos);
-
-    console.log(responseTipo);
 
     if (!responseTipo.success) {
       await error(responseTipo.message);

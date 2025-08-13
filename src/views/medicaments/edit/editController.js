@@ -50,13 +50,12 @@ export const editMedicamentInfoController = async (parametros = null) => {
 
   const { idInfo, idMedicamento } = parametros;
 
-  console.log("idMedicamento", idMedicamento);
-
   const info = await get("medicamentos/info/" + idInfo);
 
   const contenedorPerfilMedicamento = document.querySelector(
     "[data-modal='profile-medicament']"
   );
+
   asignarDatosMedicamentoInfoEditar(info.data);
 
   const contenedorTablaMedicamentos = document.querySelector("#medicaments");
@@ -67,11 +66,8 @@ export const editMedicamentInfoController = async (parametros = null) => {
     e.preventDefault();
 
     if (!validarCampos(e)) return;
-    console.log(datos);
 
     const response = await put("medicamentos/info/" + idInfo, datos);
-
-    console.log(response);
 
     if (!response.success) {
       await error(response.message);
@@ -79,15 +75,11 @@ export const editMedicamentInfoController = async (parametros = null) => {
     }
 
     await successTemporal(response.message);
-    console.log(response);
 
     const responseMedi = await get(`medicamentos/${idMedicamento}`);
-    console.log(responseMedi);
 
     if (contenedorPerfilMedicamento)
       asignarDatosMedicamentoInfo(responseMedi.data.info);
-
-    console.log(contenedorTablaMedicamentos);
 
     if (contenedorTablaMedicamentos) listarMedicamentos();
 

@@ -18,7 +18,6 @@ export const createAntecedentController = (parametros = null) => {
     ".contenedor-perfil--pet"
   );
 
-  console.log(containerPerfilMascota);
   const selectPets = document.querySelector("#select-pets");
 
   if (!containerPerfilMascota) {
@@ -40,8 +39,6 @@ export const createAntecedentController = (parametros = null) => {
   const form = document.querySelector("#form-register-pet-antecedent");
   const esModal = !location.hash.includes("antecedente/crear");
 
-  console.log(form);
-
   configurarEventosValidaciones(form);
 
   form.addEventListener("submit", async (e) => {
@@ -56,11 +53,8 @@ export const createAntecedentController = (parametros = null) => {
     if (!validarCampos(e)) return;
 
     datos["id_mascota"] = id;
-    console.log(datos);
 
     const responseAntecedente = await post("antecedentes", datos);
-
-    console.log(responseAntecedente);
 
     if (!responseAntecedente.success) {
       await error(responseAntecedente.message);

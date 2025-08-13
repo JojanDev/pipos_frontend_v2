@@ -23,8 +23,6 @@ export const editSpecieController = (parametros = null) => {
 
   titulo.value = nombre;
 
-  console.log(form);
-
   configurarEventosValidaciones(form);
 
   form.addEventListener("submit", async (e) => {
@@ -33,7 +31,7 @@ export const editSpecieController = (parametros = null) => {
     if (!validarCampos(e)) return;
 
     // datos["id_antecedente"] = idAntecedente;
-    console.log(datos);
+
     if (nombre == datos.nombre) {
       esModal ? cerrarModal("edit-specie") : cerrarModalYVolverAVistaBase();
 
@@ -41,8 +39,6 @@ export const editSpecieController = (parametros = null) => {
     }
 
     const responseEspecie = await put(`especies/${id}`, datos);
-
-    console.log(responseEspecie);
 
     if (!responseEspecie.success) {
       await error(responseEspecie.message);

@@ -16,9 +16,8 @@ import { crearCartaMedicamento } from "../medicamentsController";
 export const createMedicamentInfoController = async () => {
   const dataJSON = localStorage.getItem("data");
   const data = JSON.parse(dataJSON);
-  console.log(data);
 
-  if (data.id_rol == 2) {
+  if (data.id_rol != 1) {
     const opcionesAdmin = document.querySelectorAll(".admin");
     [...opcionesAdmin].forEach((element) => {
       element.remove();
@@ -46,11 +45,8 @@ export const createMedicamentInfoController = async () => {
     e.preventDefault();
 
     if (!validarCampos(e)) return;
-    console.log(datos);
 
     const response = await post("medicamentos/info", datos);
-
-    console.log(response);
 
     if (!response.success) {
       await error(response.message);
@@ -58,7 +54,6 @@ export const createMedicamentInfoController = async () => {
     }
 
     await successTemporal(response.message);
-    console.log(response);
 
     const contenedor = document.querySelector("#medicaments-info");
 

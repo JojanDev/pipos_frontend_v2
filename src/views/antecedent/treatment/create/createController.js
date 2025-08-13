@@ -6,6 +6,8 @@ import {
   configurarEventosValidaciones,
   datos,
   validarCampos,
+  llenarSelect,
+  error,
 } from "../../../../helpers";
 
 export const createTreatmentController = (parametros = null) => {
@@ -16,7 +18,14 @@ export const createTreatmentController = (parametros = null) => {
   );
   const esModal = !location.hash.includes("antecedente/tratamientoCrear");
 
-  console.log(form);
+  llenarSelect({
+    endpoint: "personal/veterinarios/",
+    selector: "#select-veterinarios",
+    optionMapper: (veterinario) => ({
+      id: veterinario.id,
+      text: veterinario.info.nombre,
+    }),
+  });
 
   configurarEventosValidaciones(form);
 
@@ -26,7 +35,6 @@ export const createTreatmentController = (parametros = null) => {
     if (!validarCampos(e)) return;
 
     datos["id_antecedente"] = idAntecedente;
-    console.log(datos);
 
     const responseTratamiento = await post("tratamientos", datos);
 

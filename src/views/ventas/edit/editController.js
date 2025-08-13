@@ -1,4 +1,11 @@
-import { cerrarModal, error, formatearPrecioConPuntos, get, put, success } from "../../../helpers";
+import {
+  cerrarModal,
+  error,
+  formatearPrecioConPuntos,
+  get,
+  put,
+  success,
+} from "../../../helpers";
 import { cargarTablaVentas } from "../ventaController";
 
 export const editVentaController = async (parametros = null) => {
@@ -8,8 +15,6 @@ export const editVentaController = async (parametros = null) => {
   const total = document.querySelector("#perfil-venta-total");
   const valorAgregar = document.querySelector("#valor-agregar");
   const botonAgregar = document.querySelector("#resume-finalizar-venta");
-
-  console.log("VENTA NUMERO: ", id);
 
   const response = await get("ventas/" + id);
 
@@ -45,7 +50,7 @@ export const editVentaController = async (parametros = null) => {
       // }
       // else
       const precioFalMax = venta.total - venta.monto;
-        if (nuevoMonto > precioFalMax) {
+      if (nuevoMonto > precioFalMax) {
         await error(
           `No puedes ingresar un monto mayor a ${precioFalMax.toLocaleString()}`
         );
@@ -53,10 +58,8 @@ export const editVentaController = async (parametros = null) => {
       }
 
       // Aquí iría tu lógica para enviar el nuevo monto
-      console.log("Monto válido, enviando...");
-      const responseUpdate = await put(`ventas/${id}/monto`, nuevoMonto);
 
-      console.log(responseUpdate);
+      const responseUpdate = await put(`ventas/${id}/monto`, nuevoMonto);
 
       if (!responseUpdate.success) {
         await error(responseUpdate.message);

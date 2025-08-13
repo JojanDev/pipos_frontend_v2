@@ -42,12 +42,9 @@ export const profileClientController = async (parametros = null) => {
   const btnRegisterPets = document.querySelector("#register-pets-client");
   const esModal = !location.hash.includes("inventario/productosPerfil");
 
-  console.log(btnAtras);
-
   const { id } = parametros;
 
   const response = await get(`clientes/${id}`);
-  console.log(response);
 
   if (!response.success) {
     await error(response.message);
@@ -58,7 +55,6 @@ export const profileClientController = async (parametros = null) => {
   asignarDatosCliente(response.data);
 
   const responseMascotas = await get(`mascotas/cliente/${id}`);
-  console.log(responseMascotas);
 
   if (responseMascotas.code == 500) {
     await error(responseMascotas.message);
@@ -85,8 +81,6 @@ export const profileClientController = async (parametros = null) => {
   }
 
   btnAtras.addEventListener("click", () => {
-    console.log("BOTON");
-
     esModal ? cerrarModal("profile-client") : cerrarModalYVolverAVistaBase();
   });
 
@@ -95,6 +89,5 @@ export const profileClientController = async (parametros = null) => {
     const selectCliente = document.querySelector("#select-clients");
     const contenedor = selectCliente?.closest(".form__container-field");
     contenedor.classList.add("hidden");
-    console.log(contenedor);
   });
 };

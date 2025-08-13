@@ -11,6 +11,7 @@ import {
   llenarSelect,
   crearFila,
   cerrarModalYVolverAVistaBase,
+  capitalizarPrimeraLetra,
 } from "../../../helpers";
 
 export const createPersonalExistController = async () => {
@@ -28,17 +29,22 @@ export const createPersonalExistController = async () => {
     }),
   });
 
+  llenarSelect({
+    endpoint: "roles",
+    selector: "#select-roles",
+    optionMapper: (rol) => ({
+      id: rol.id,
+      text: capitalizarPrimeraLetra(rol.nombre),
+    }),
+  });
   configurarEventosValidaciones(form);
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     if (!validarCampos(e)) return;
-    console.log(datos);
 
     const response = await post("personal/infoExistente", datos);
-
-    console.log(response);
 
     //Se valida el inicio exitoso
     if (!response.success) {
@@ -57,6 +63,7 @@ export const createPersonalExistController = async () => {
       const row = crearFila([
         response.data.id,
         response.data.usuario,
+        capitalizarPrimeraLetra(response.data.rol.nombre),
         info.nombre,
         info.telefono,
         info.numeroDocumento,

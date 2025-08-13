@@ -10,7 +10,7 @@ export const crearBloqueAntecedenteCompleto = ({
   const data = JSON.parse(dataJSON);
   console.log(data);
 
-  if (data.id_rol == 2) {
+  if (data.id_rol != 1) {
     const opcionesAdmin = document.querySelectorAll(".admin");
     [...opcionesAdmin].forEach((element) => {
       element.remove();

@@ -25,11 +25,8 @@ export const createClientController = async () => {
     e.preventDefault();
 
     if (!validarCampos(e)) return;
-    console.log(datos);
 
     const response = await post("clientes", datos);
-
-    console.log(response);
 
     if (!response.success) {
       await error(response.message);
@@ -37,7 +34,6 @@ export const createClientController = async () => {
     }
 
     await successTemporal(response.message);
-    console.log(response);
 
     if (tbody) {
       const {

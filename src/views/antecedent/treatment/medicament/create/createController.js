@@ -24,7 +24,6 @@ const calcularDiasTotales = ({ meses = 0, semanas = 0, dias = 0 }) => {
 
 export const createMedicamentController = async (parametros = null) => {
   const { idTratamiento } = parametros;
-  console.log(idTratamiento, "CREATRE MEDICAMENT CONTROLLER");
 
   llenarSelect({
     endpoint: "medicamentos/info/",
@@ -42,8 +41,6 @@ export const createMedicamentController = async (parametros = null) => {
   );
 
   const esModal = !location.hash.includes("antecedente/tratamientoCrear");
-
-  console.log(form);
 
   configurarEventosValidaciones(form);
 
@@ -66,7 +63,6 @@ export const createMedicamentController = async (parametros = null) => {
 
     const { id_medicamento_info, frecuencia_aplicacion, dosis } = datos;
     const duracion = calcularDiasTotales(datos);
-    console.log(datos);
 
     const responseMedicamentoTratamiento = await post(
       "medicamentos/tratamiento",
@@ -91,6 +87,16 @@ export const createMedicamentController = async (parametros = null) => {
     if (tbody) {
       const { medicamento, dosis, frecuencia_aplicacion, duracionFormateada } =
         responseMedicamentoTratamiento.data;
+
+      const iconDelete = document.createElement("i");
+      // spanTitulo.textContent = titulo;
+      iconDelete.classList.add(
+        "ri-delete-bin-line",
+        "delete-tabla",
+        "btn--red",
+        "admin"
+      );
+
       const row = crearFila([
         medicamento.id,
         medicamento.nombre,
@@ -99,6 +105,7 @@ export const createMedicamentController = async (parametros = null) => {
         dosis,
         frecuencia_aplicacion,
         duracionFormateada[1],
+        iconDelete,
       ]);
 
       tbody.insertAdjacentElement("afterbegin", row);

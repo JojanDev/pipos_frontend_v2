@@ -8,8 +8,6 @@ import {
 export const petsController = async () => {
   const response = await get("mascotas");
 
-  console.log(response);
-
   if (!response.success) {
     await error(response.message);
   }
@@ -35,7 +33,7 @@ export const petsController = async () => {
 
     if (fila) {
       const idPet = fila.getAttribute("data-id");
-      console.log("Cliente clickeado con ID:", idPet);
+
       location.hash = `#/mascotas/perfil/id=${idPet}`;
 
       // Aquí puedes llamar a una función para ver más detalles, abrir modal, etc.

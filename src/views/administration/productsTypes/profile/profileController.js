@@ -14,7 +14,6 @@ import { listarTiposProductos } from "../../administrationController";
 
 export const profileProductTypeController = async (parametros = null) => {
   const { id } = parametros;
-  console.log(id, "ID producto");
 
   const modal = document.querySelector('[data-modal="productType-profile"]');
   const esModal = !location.hash.includes(
@@ -22,7 +21,6 @@ export const profileProductTypeController = async (parametros = null) => {
   );
 
   const response = await get(`tipos-productos/${id}`);
-  console.log(response);
 
   if (!response.success) {
     await error(response.message);
@@ -37,8 +35,6 @@ export const profileProductTypeController = async (parametros = null) => {
   titulo.textContent = response.data.nombre;
 
   modal.addEventListener("click", async (e) => {
-    console.log(e.target);
-
     if (e.target.id == "edit-productType") {
       await cargarComponente(routes.administrar_datos.tipos_productosEditar, {
         id: id,

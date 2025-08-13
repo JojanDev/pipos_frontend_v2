@@ -26,36 +26,39 @@ function eliminarTratamiento(idTratamiento, idAntecedente) {
 export const treatmentController = async (parametros = null) => {
   const dataJSON = localStorage.getItem("data");
   const data = JSON.parse(dataJSON);
-  console.log(data);
 
-  if (data.id_rol == 2) {
+  if (data.id_rol != 1) {
     const opcionesAdmin = document.querySelectorAll(".admin");
     [...opcionesAdmin].forEach((element) => {
       element.remove();
     });
   }
   const { id, tituloAntecedente } = parametros;
-  console.log(parametros);
 
   const modal = document.querySelector('[data-modal="pet-treatment"]');
   const esModal = !location.hash.includes("antecedente/tratamiento");
   const tbody = document.querySelector(
     "#pet-antecedent-treatment .table__body"
   );
-  console.log(tbody);
 
   const tituloTratamiento = document.querySelector("#treatment-title");
   const fechaTratamiento = document.querySelector("#treatment-date");
+  const vetTratamiento = document.querySelector("#treatment-veterinario");
   const descripcionTratamiento = document.querySelector(
     "#treatment-description"
   );
 
   const titleAntecedent = document.querySelector("#treatment-title-antecedent");
-  console.log(titleAntecedent);
 
   titleAntecedent.textContent = "Tratamiento para: " + tituloAntecedente;
 
   const responseTratamiento = await get(`tratamientos/${id}`);
+  const veterinario = await get(
+    "personal/" + responseTratamiento.data.id_personal
+  );
+
+  vetTratamiento.textContent =
+    "Veterinario asociado: " + veterinario.data.info.nombre;
 
   if (!responseTratamiento.success) {
     await error(responseTratamiento.message);
@@ -63,7 +66,6 @@ export const treatmentController = async (parametros = null) => {
   }
 
   const { titulo, descripcion, fecha_creado } = responseTratamiento.data;
-  console.log(responseTratamiento);
 
   tituloTratamiento.textContent = titulo;
   fechaTratamiento.textContent = convertirADiaMesAño(fecha_creado);
@@ -85,7 +87,7 @@ export const treatmentController = async (parametros = null) => {
         } = medicamentoTratamiento;
 
         const iconDelete = document.createElement("i");
-        // spanTitulo.textContent = titulo;
+
         iconDelete.classList.add(
           "ri-delete-bin-line",
           "delete-tabla",
@@ -101,7 +103,7 @@ export const treatmentController = async (parametros = null) => {
           dosis,
           frecuencia_aplicacion,
           duracionFormateada[1],
-          iconDelete,
+          data.id_rol == 1 ? iconDelete : "",
         ]);
 
         tbody.append(row);
@@ -110,8 +112,6 @@ export const treatmentController = async (parametros = null) => {
   }
 
   modal.addEventListener("click", async (e) => {
-    console.log(e.target);
-
     if (e.target.id == "register-antecedent-treatment-medicament") {
       await cargarComponente(routes.antecedente.medicamento, {
         idTratamiento: id,

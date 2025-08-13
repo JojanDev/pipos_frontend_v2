@@ -28,8 +28,6 @@ export const editPersonalController = async (parametros = null) => {
 
   configurarEventosValidaciones(form);
 
-  console.log("id EDITAR PERSONAL", id);
-
   // Obtenemos el formulario
   const formulario = document.querySelector("#form-edit-personal");
 
@@ -44,8 +42,6 @@ export const editPersonalController = async (parametros = null) => {
   });
 
   const response = await get(`personal/${id}`);
-  console.log(response);
-  console.log(response.data.info.tipoDocumento.id);
 
   // Aquí puedes definir los datos que quieres precargar en los inputs
   const datosCliente = {
@@ -68,12 +64,10 @@ export const editPersonalController = async (parametros = null) => {
     e.preventDefault();
 
     if (!validarCampos(e)) return;
-    console.log(datos);
+
     datos["numero_documento"] = "122311";
 
     const responsePut = await put(`personal/${response.data.info.id}`, datos);
-
-    console.log(responsePut);
 
     if (!responsePut.success) {
       await error(responsePut.message);
@@ -81,7 +75,6 @@ export const editPersonalController = async (parametros = null) => {
     }
 
     await successTemporal(responsePut.message);
-    console.log(responsePut);
 
     const responseP = await get(`personal/${id}`);
     asignarDatosCliente(responseP.data);

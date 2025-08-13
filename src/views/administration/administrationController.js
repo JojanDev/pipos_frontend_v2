@@ -124,7 +124,6 @@ export const administrationController = () => {
 
     if (fila) {
       const idRaza = fila.getAttribute("data-id");
-      console.log("Cliente clickeado con ID:", idRaza);
       location.hash = `#/administrar_datos/razasPerfil/id=${idRaza}`;
 
       // Aquí puedes llamar a una función para ver más detalles, abrir modal, etc.
@@ -140,21 +139,9 @@ export const administrationController = () => {
 
     if (btn) {
       const idEspecie = fila.getAttribute("data-id");
-      console.log("Cliente clickeado con ID:", idEspecie);
+
       location.hash = `#/administrar_datos/especiesPerfil/id=${idEspecie}`;
-
-      // Aquí puedes llamar a una función para ver más detalles, abrir modal, etc.
-      // ejemplo: mostrarDetalleCliente(idCliente);
     }
-
-    // if (fila) {
-    //   const idEspecie = fila.getAttribute("data-id");
-    //   console.log("Cliente clickeado con ID:", idEspecie);
-    //   location.hash = `#/administrar_datos/especiesPerfil/id=${idEspecie}`;
-
-    //   // Aquí puedes llamar a una función para ver más detalles, abrir modal, etc.
-    //   // ejemplo: mostrarDetalleCliente(idCliente);
-    // }
   });
 
   const tablaTipoProducto = document.querySelector("#productsTypes");
@@ -164,11 +151,8 @@ export const administrationController = () => {
 
     if (fila) {
       const idTipo = fila.getAttribute("data-id");
-      console.log("Cliente clickeado con ID:", idTipo);
-      location.hash = `#/administrar_datos/tipos_productosPerfil/id=${idTipo}`;
 
-      // Aquí puedes llamar a una función para ver más detalles, abrir modal, etc.
-      // ejemplo: mostrarDetalleCliente(idCliente);
+      location.hash = `#/administrar_datos/tipos_productosPerfil/id=${idTipo}`;
     }
   });
 };

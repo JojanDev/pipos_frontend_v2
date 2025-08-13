@@ -14,27 +14,33 @@ import {
   agregarError,
   quitarError,
   formatearPrecioConPuntos,
+  get,
+  put,
 } from "../../../../helpers"; // Utilidades y funciones auxiliares
 
 import { routes } from "../../../../router/routes"; // Rutas del sistema
+import { listarMedicamentos } from "../../inventoryController";
 import { validarFechaCaducidad } from "../../products/create/createController"; // Función para validar fechas de caducidad
 
 /**
  * Controlador para crear registros de inventario de medicamentos.
  * Maneja la carga inicial del formulario, validaciones, envío y actualización de la tabla.
  */
-export const createMedicamentInventoryController = async () => {
-  // Llenar el select con la lista de medicamentos disponibles desde el backend
-  llenarSelect({
-    endpoint: "medicamentos/info/",
-    selector: "#select-medicamentos-info",
-    optionMapper: ({ id, nombre, presentacion, via_administracion }) => ({
-      id: id,
-      text: `${nombre} (${capitalizarPrimeraLetra(
-        presentacion
-      )} - ${capitalizarPrimeraLetra(via_administracion)})`,
-    }),
-  });
+export const editMedicamentInventoryController = async (parametros = null) => {
+  const { id } = parametros;
+
+  const responseMedi = await get("medicamentos/" + id);
+
+  console.log(responseMedi);
+  const fecha = document.querySelector("#fecha");
+  const lote = document.querySelector("#lote");
+  const precio = document.querySelector("#precio");
+  const cantidad = document.querySelector("#cantidad");
+
+  fecha.value = responseMedi.data.fecha_caducidad;
+  lote.value = responseMedi.data.numero_lote;
+  precio.value = responseMedi.data.precio;
+  cantidad.value = responseMedi.data.cantidad;
 
   // Referencias a elementos del DOM
   const form = document.querySelector("#form-register-medicament-inventory");
@@ -42,7 +48,7 @@ export const createMedicamentInventoryController = async () => {
   const tbody = document.querySelector("#medicament-inventorys .table__body");
 
   // Detecta si se está usando en modal o en vista completa
-  const esModal = !location.hash.includes("inventario/medicamentosCrear");
+  const esModal = !location.hash.includes("inventario/medicamentosEditar");
 
   // Configura las validaciones automáticas de los campos del formulario
   configurarEventosValidaciones(form);
@@ -81,34 +87,36 @@ export const createMedicamentInventoryController = async () => {
     const resultado = validarFechaCaducidad(inputFecha.value);
     if (!resultado.valid) return;
 
+    datos["id_medicamento_info"] = responseMedi.data.info.id;
     // Envío de datos al backend
-    const response = await post("medicamentos", datos);
+    const response = await put("medicamentos/" + id, datos);
 
     if (!response.success) {
       await error(response.message); // Muestra error si la respuesta no es exitosa
       return;
     }
 
+    listarMedicamentos();
     // Mensaje de éxito temporal
     await successTemporal(response.message);
 
     // Si hay tabla visible, insertar la nueva fila en la parte superior
-    const tbody = document.querySelector("#medicaments .table__body");
-    if (tbody) {
-      const { id, info, precio, cantidad, numero_lote } = response.data;
-      const filaNueva = [
-        id,
-        numero_lote,
-        info.nombre,
-        info.uso_general,
-        capitalizarPrimeraLetra(info.via_administracion),
-        capitalizarPrimeraLetra(info.presentacion),
-        formatearPrecioConPuntos(precio), // Formatea precio con puntos
-        cantidad,
-      ];
-      const row = crearFila(filaNueva);
-      tbody.insertAdjacentElement("afterbegin", row);
-    }
+    // const tbody = document.querySelector("#medicaments .table__body");
+    // if (tbody) {
+    //   const { id, info, precio, cantidad, numero_lote } = response.data;
+    //   const filaNueva = [
+    //     id,
+    //     numero_lote,
+    //     info.nombre,
+    //     info.uso_general,
+    //     capitalizarPrimeraLetra(info.via_administracion),
+    //     capitalizarPrimeraLetra(info.presentacion),
+    //     formatearPrecioConPuntos(precio), // Formatea precio con puntos
+    //     cantidad,
+    //   ];
+    //   const row = crearFila(filaNueva);
+    //   tbody.insertAdjacentElement("afterbegin", row);
+    // }
 
     // Cierra modal o vuelve a vista base según el contexto
     esModal
@@ -119,16 +127,11 @@ export const createMedicamentInventoryController = async () => {
   // Escucha eventos de click generales en el documento
   document.addEventListener("click", async (event) => {
     // Botón de retroceso
-    const arrow = event.target.closest("#back-register-medicament-inventory");
+    const arrow = event.target.closest("#back-edit-medicament-inventory");
     if (arrow) {
       esModal
-        ? cerrarModal("create-medicament-inventory")
+        ? cerrarModal("edit-medicament-inventory")
         : cerrarModalYVolverAVistaBase();
-    }
-
-    // Botón para registrar información de medicamento adicional
-    if (event.target.id == "register-medicament-info") {
-      await cargarComponente(routes.medicamentos_info.crear);
     }
   });
 };

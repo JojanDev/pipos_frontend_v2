@@ -15,8 +15,6 @@ export const createProductTypeController = (parametros = null) => {
   const form = document.querySelector("#form-register-productType");
   const esModal = !location.hash.includes("tipos_productosCrear");
 
-  console.log(form);
-
   configurarEventosValidaciones(form);
 
   form.addEventListener("submit", async (e) => {
@@ -25,8 +23,6 @@ export const createProductTypeController = (parametros = null) => {
     if (!validarCampos(e)) return;
 
     const responseTipoProducto = await post("tipos-productos", datos);
-
-    console.log(responseTipoProducto);
 
     if (!responseTipoProducto.success) {
       await error(responseTipoProducto.message);

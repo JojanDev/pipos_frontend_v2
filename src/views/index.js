@@ -45,6 +45,7 @@ export * from "./inventory/products/create/createController.js";
 // ----- Medicamentos -----
 export * from "./inventory/medicaments/create/createController.js";
 export * from "./inventory/medicaments/profile/profileController.js";
+export * from "./inventory/medicaments/edit/editController.js";
 
 // =========================
 // MEDICAMENTOS (módulo principal, fuera de inventario)

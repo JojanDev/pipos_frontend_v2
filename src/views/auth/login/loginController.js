@@ -17,8 +17,6 @@ const validarSesion = async ({ usuario, contrasena }) => {
     contrasena,
   });
 
-  console.log(response);
-
   //Se valida el inicio exitoso
   if (response.code == 200) {
     //Se muestra un mensaje

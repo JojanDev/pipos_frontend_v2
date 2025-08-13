@@ -35,11 +35,8 @@ export const createClienteExistController = async () => {
     e.preventDefault();
 
     if (!validarCampos(e)) return;
-    console.log(datos);
 
     const response = await post("clientes/infoExistente", datos);
-
-    console.log(response);
 
     //Se valida el inicio exitoso
     if (!response.success) {

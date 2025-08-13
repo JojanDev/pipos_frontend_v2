@@ -19,8 +19,6 @@ export const createServiceController = (parametros = null) => {
   const form = document.querySelector("#form-register-service");
   const esModal = !location.hash.includes("servicios/crear");
 
-  console.log(form);
-
   configurarEventosValidaciones(form);
 
   form.addEventListener("submit", async (e) => {
@@ -29,11 +27,8 @@ export const createServiceController = (parametros = null) => {
     if (!validarCampos(e)) return;
 
     // datos["id_antecedente"] = idAntecedente;
-    console.log(datos);
 
     const responseServicios = await post("servicios", datos);
-
-    console.log(responseServicios);
 
     if (!responseServicios.success) {
       await error(responseServicios.message);
@@ -43,9 +38,9 @@ export const createServiceController = (parametros = null) => {
     const containerCards = document.querySelector("#services");
 
     if (containerCards) {
-      const { id, nombre, descripcion } = responseServicios.data;
+      const { id, nombre, descripcion, precio } = responseServicios.data;
 
-      const card = crearCardServicio(id, nombre, descripcion);
+      const card = crearCardServicio(id, nombre, descripcion, precio);
       containerCards.insertAdjacentElement("afterbegin", card);
       const placeholderAnterior = document.querySelector(".placeholder");
       if (placeholderAnterior) placeholderAnterior.remove();

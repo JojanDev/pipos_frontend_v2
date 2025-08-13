@@ -1,15 +1,15 @@
 import {
   capitalizarPrimeraLetra,
+  cargarComponente,
   convertirADiaMesAño,
   crearFila,
   formatearPrecioConPuntos,
   get,
 } from "../../helpers";
+import { routes } from "../../router/routes";
 
 const listarProductos = async () => {
   const responseProductos = await get("productos");
-
-  console.log(responseProductos);
 
   if (!responseProductos.success) {
     // await error(response.message);
@@ -31,7 +31,6 @@ const listarProductos = async () => {
       ];
     }
   );
-  console.log(productosFilas);
 
   productosFilas.forEach((producto) => {
     const row = crearFila(producto);
@@ -41,8 +40,6 @@ const listarProductos = async () => {
 
 export const listarMedicamentos = async () => {
   const responseMedicamentos = await get("medicamentos");
-
-  console.log(responseMedicamentos);
 
   if (!responseMedicamentos.success) {
     // await error(response.message);
@@ -67,7 +64,7 @@ export const listarMedicamentos = async () => {
       ];
     }
   );
-  console.log(medicamentosFilas);
+
   medicamentosFilas.forEach((medicamento) => {
     const row = crearFila(medicamento);
     tbody.append(row);
@@ -89,7 +86,7 @@ export const inventoryController = () => {
 
   //   if (fila) {
   //     const idProducto = fila.getAttribute("data-id");
-  //     console.log("Cliente clickeado con ID:", idProducto);
+  //
   //     location.hash = `#/inventario/productosPerfil/id=${idProducto}`;
 
   //     // Aquí puedes llamar a una función para ver más detalles, abrir modal, etc.
@@ -99,13 +96,14 @@ export const inventoryController = () => {
 
   const tablaMedicamentos = document.querySelector("#medicaments");
 
-  tablaMedicamentos.addEventListener("click", (event) => {
+  tablaMedicamentos.addEventListener("click", async (event) => {
     const fila = event.target.closest("tr[data-id]");
 
     if (fila) {
       const id = fila.getAttribute("data-id");
-      console.log("Cliente clickeado con ID:", id);
-      location.hash = `#/inventario/medicamentosPerfil/id=${id}`;
+
+      location.hash = `#/inventario/medicamentosEditar/id=${id}`;
+      // await cargarComponente(routes);
 
       // Aquí puedes llamar a una función para ver más detalles, abrir modal, etc.
       // ejemplo: mostrarDetalleCliente(idCliente);

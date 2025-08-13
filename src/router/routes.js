@@ -43,6 +43,7 @@ import {
   createVentaController,
   ventasController,
   editVentaController,
+  editMedicamentInventoryController,
 } from "../views/index";
 
 export const routes = {
@@ -250,9 +251,15 @@ export const routes = {
       private: true,
       addHtml: true,
     },
-    medicamentosPerfil: {
-      path: "inventory/medicaments/profile/index.html",
-      controller: profileMedicamentController,
+    // medicamentosPerfil: {
+    //   path: "inventory/medicaments/profile/index.html",
+    //   controller: profileMedicamentController,
+    //   private: true,
+    //   addHtml: true,
+    // },
+    medicamentosEditar: {
+      path: "inventory/medicaments/edit/index.html",
+      controller: editMedicamentInventoryController,
       private: true,
       addHtml: true,
     },

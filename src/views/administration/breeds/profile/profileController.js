@@ -14,13 +14,11 @@ import { listarEspecies } from "../../administrationController";
 
 export const profileBreedController = async (parametros = null) => {
   const { id } = parametros;
-  console.log(id, "ID RAZA");
 
   const modal = document.querySelector('[data-modal="breed-profile"]');
   const esModal = !location.hash.includes("administrar_datos/razasPerfil");
 
   const response = await get(`razas/${id}`);
-  console.log(response);
 
   if (!response.success) {
     await error(response.message);
@@ -35,8 +33,6 @@ export const profileBreedController = async (parametros = null) => {
   especieNombre.textContent = `Raza de la especie ${response.data.especie.nombre}`;
 
   modal.addEventListener("click", async (e) => {
-    console.log(e.target);
-
     if (e.target.id == "edit-breed") {
       await cargarComponente(routes.administrar_datos.razasEditar, {
         id: id,

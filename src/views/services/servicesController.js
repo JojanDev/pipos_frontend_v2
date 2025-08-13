@@ -1,11 +1,16 @@
-import { del, error, get, success } from "../../helpers";
+import {
+  del,
+  error,
+  formatearPrecioConPuntos,
+  get,
+  success,
+} from "../../helpers";
 
-export const crearCardServicio = (id, nombre, descripcion) => {
+export const crearCardServicio = (id, nombre, descripcion, precio) => {
   const dataJSON = localStorage.getItem("data");
   const data = JSON.parse(dataJSON);
-  console.log(data);
 
-  if (data.id_rol == 2) {
+  if (data.id_rol != 1) {
     const opcionesAdmin = document.querySelectorAll(".admin");
     [...opcionesAdmin].forEach((element) => {
       element.remove();
@@ -20,6 +25,10 @@ export const crearCardServicio = (id, nombre, descripcion) => {
   imagen.src = "../../../public/logoService.png";
   imagen.alt = "";
   imagen.classList.add("card__img");
+
+  const precioP = document.createElement("p");
+  precioP.classList.add("card__precio");
+  precioP.textContent = "Valor: " + formatearPrecioConPuntos(precio);
 
   const contenido = document.createElement("div");
   contenido.classList.add("scroll-cont");
@@ -60,6 +69,7 @@ export const crearCardServicio = (id, nombre, descripcion) => {
 
   card.appendChild(imagen);
   card.appendChild(contenido);
+  card.appendChild(precioP);
   card.appendChild(btnEdit);
   if (data.id_rol == 1) {
     card.appendChild(btnDelete);
@@ -92,7 +102,8 @@ const listarServicios = async (contenedor) => {
     const card = crearCardServicio(
       servicio.id,
       servicio.nombre,
-      servicio.descripcion
+      servicio.descripcion,
+      servicio.precio
     );
     contenedor.appendChild(card);
   });
@@ -113,12 +124,10 @@ export const servicesController = () => {
     const idServicio = card.dataset.id;
 
     if (event.target.closest(".btn-servicio-edit")) {
-      console.log("Editar servicio con ID:", idServicio);
       location.hash = `#/servicios/editar/id=${idServicio}`;
     }
 
     if (event.target.closest(".btn-servicio-delete")) {
-      console.log("Eliminar servicio con ID:", idServicio);
       const response = await del(`servicios/${idServicio}`);
 
       if (response.success) {
