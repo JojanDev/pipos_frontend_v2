@@ -4,6 +4,7 @@ import {
   formatearPrecioConPuntos,
   get,
   put,
+  renderizarPerfilVenta,
   success,
 } from "../../../helpers";
 import { cargarTablaVentas } from "../ventaController";
@@ -67,6 +68,12 @@ export const editVentaController = async (parametros = null) => {
 
       cargarTablaVentas();
 
+      const ventaDesdeBackend = await get(`ventas/perfil/${id}`);
+
+      renderizarPerfilVenta(ventaDesdeBackend.data);
+      if (ventaDesdeBackend.data.estado == "completada") {
+        document.querySelector("#venta-finalizar").remove();
+      }
       await success(responseUpdate.message);
       cerrarModal("venta-edit");
     });

@@ -23,7 +23,7 @@ export const createDetailsController = () => {
   const inputCantidad = document.querySelector("#cantidad");
   const inputPrecio = document.querySelector("#precio");
   const form = document.querySelector("#form-venta-details");
-  
+
   // Variables globales para almacenar precio y cantidad disponible del elemento seleccionado
   let precioElementos = 0;
   let cantidadElemento = 0;
@@ -111,7 +111,7 @@ export const createDetailsController = () => {
 
       // Establecer cantidad por defecto si está vacía
       if (inputCantidad.value == "") inputCantidad.value = 1;
-      
+
     } else if (selectTipo.value == "producto") {
       // Obtener datos del producto seleccionado
       const productos = await get("productos/" + selectElementos.value);
@@ -124,7 +124,7 @@ export const createDetailsController = () => {
       cantidadElemento = productos.data.stock;
 
       if (inputCantidad.value == "") inputCantidad.value = 1;
-      
+
     } else if (selectTipo.value == "servicio") {
       // Obtener datos del servicio seleccionado
       const servicio = await get("servicios/" + selectElementos.value);
@@ -167,8 +167,8 @@ export const createDetailsController = () => {
     }
 
     // Extraer datos del formulario
-    const { tipo_elemento, elemento, precio, cantidad, valor_adicional = 0 } = datos;
-
+    let { tipo_elemento, elemento, precio, cantidad, valor_adicional } = datos;
+    valor_adicional = valor_adicional == "" ? 0 : valor_adicional;
     /**
      * Verificar si el elemento ya existe en el carrito
      * Busca por ID según el tipo de elemento
@@ -176,9 +176,9 @@ export const createDetailsController = () => {
     let existente = venta.detalles_venta.find((det) => {
       if (tipo_elemento === "medicamento")
         return det.id_medicamento === elemento;
-      if (tipo_elemento === "producto") 
+      if (tipo_elemento === "producto")
         return det.id_producto === elemento;
-      if (tipo_elemento === "servicio") 
+      if (tipo_elemento === "servicio")
         return det.id_servicio === elemento;
       return false;
     });
@@ -216,23 +216,23 @@ export const createDetailsController = () => {
         existente.valor_adicional += valor_adicional;
         // Recalcular subtotal: (cantidad * precio_unitario) + valor_adicional
         existente.subtotal = (existente.cantidad * precioElementos) + existente.valor_adicional;
-      } 
+      }
     } else {
       // Si no existe, crear nuevo objeto para el carrito
       const objeto = { precio: precioElementos };
-      
-      if (tipo_elemento === "medicamento") 
+
+      if (tipo_elemento === "medicamento")
         objeto.id_medicamento = elemento;
-      else if (tipo_elemento === "producto") 
+      else if (tipo_elemento === "producto")
         objeto.id_producto = elemento;
-      else if (tipo_elemento === "servicio") 
+      else if (tipo_elemento === "servicio")
         objeto.id_servicio = elemento;
-      
+
 
       objeto.cantidad = cantidad;
       objeto.subtotal = (cantidad * precioElementos) + valor_adicional;
       objeto.valor_adicional = valor_adicional;
-      
+
       // Agregar al carrito y obtener nombre para mostrar
       venta.detalles_venta.push(objeto);
       const nombreSeleccionado =
@@ -240,7 +240,7 @@ export const createDetailsController = () => {
       objeto.nombre = nombreSeleccionado;
 
       console.log(venta);
-      
+
     }
 
     // Actualizar la visualización del carrito

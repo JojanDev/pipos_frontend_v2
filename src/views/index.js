@@ -98,3 +98,4 @@ export * from "./ventas/resume/resumeController.js";
 export * from "./ventas/create/createController.js";
 export * from "./ventas/ventaController.js";
 export * from "./ventas/edit/editController.js";
+export * from "./ventas/profile/profileController.js";

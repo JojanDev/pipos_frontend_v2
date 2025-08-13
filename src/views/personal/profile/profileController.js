@@ -44,9 +44,6 @@ export const asignarDatosCliente = (data) => {
 };
 
 export const profilePersonalController = async (parametros = null) => {
-  const tbody = document.querySelector("#pets-client .table__body");
-  const btnAtras = document.querySelector("#back-profile-personal");
-  const btnRegisterPets = document.querySelector("#register-pets-client");
   const esModal = !location.hash.includes("personal/perfil");
   const btnActivar = document.querySelector("#activar-personal");
   const btnEliminar = document.querySelector("#delete-personal");
@@ -68,6 +65,11 @@ export const profilePersonalController = async (parametros = null) => {
   } else {
     btnEliminar.remove();
   }
+
+  if (response.data.rol.id == 1) {
+    btnEliminar?.remove();
+    btnActivar?.remove();
+  }
   asignarDatosCliente(response.data);
 
   const modal = document.querySelector("[data-modal='profile-personal']");
@@ -78,18 +80,21 @@ export const profilePersonalController = async (parametros = null) => {
     }
 
     if (e.target.id == "delete-personal") {
-      const eliminado = await del(`personal/${id}`);
-      // console.log(eliminado);
-      if (!eliminado.success) {
-        await error(eliminado.message);
+
+      if (response.data.rol.id != 1) {
+        const eliminado = await del(`personal/${id}`);
+        // console.log(eliminado);
+        if (!eliminado.success) {
+          await error(eliminado.message);
+          return;
+        }
+
+        await success(eliminado.message);
+        esModal
+          ? cerrarModal("profile-personal")
+          : cerrarModalYVolverAVistaBase();
         return;
       }
-
-      await success(eliminado.message);
-      esModal
-        ? cerrarModal("profile-personal")
-        : cerrarModalYVolverAVistaBase();
-      return;
     }
 
     if (e.target.id == "activar-personal") {

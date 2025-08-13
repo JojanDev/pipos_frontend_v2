@@ -68,9 +68,8 @@ export const ventasController = async () => {
 
     if (fila) {
       const idVenta = fila.getAttribute("data-id");
-
-      await cargarComponente(routes.ventas.editar, { id: idVenta });
-      // location.hash = `#/ventas/perfil/id=${idCliente}`;
+      // await cargarComponente(routes.ventas.perfil, { id: idVenta });
+      location.hash = `#/ventas/perfil/id=${idVenta}`;
 
       // Aquí puedes llamar a una función para ver más detalles, abrir modal, etc.
       // ejemplo: mostrarDetalleCliente(idCliente);

@@ -77,11 +77,11 @@ export function crearCartaMedicamento(medicamento) {
   card.appendChild(contDatos);
 
   // Botón editar
-  const btnEdit = document.createElement("button");
-  btnEdit.classList.add("btn", "btn--edit", "btn-servicio-edit");
-  btnEdit.id = "#editar-info-medicamento";
-  btnEdit.title = "Editar servicio";
-  btnEdit.innerHTML = `<i class="ri-edit-box-line"></i>`;
+  // const btnEdit = document.createElement("button");
+  // btnEdit.classList.add("btn", "btn--edit", "btn-servicio-edit");
+  // btnEdit.id = "#editar-info-medicamento";
+  // btnEdit.title = "Editar servicio";
+  // btnEdit.innerHTML = `<i class="ri-edit-box-line"></i>`;
 
   // Botón eliminar
   const btnDelete = document.createElement("button");
@@ -98,7 +98,7 @@ export function crearCartaMedicamento(medicamento) {
   const btns = document.createElement("div");
   btns.classList.add("card__btns");
   // Agregar botones al card
-  btns.appendChild(btnEdit);
+  // btns.appendChild(btnEdit);
   if (data.id_rol == 1) {
     btns.appendChild(btnDelete);
   }
@@ -116,14 +116,14 @@ export const medicamentsController = async () => {
     contenedor.appendChild(carta);
   });
 
-  const btnEditInfo = document.querySelector("#medicaments-info");
+  // const btnEditInfo = document.querySelector("#medicaments-info");
 
-  btnEditInfo.addEventListener("click", async (event) => {
-    const fila = event.target.closest(".card[data-id]");
+  // btnEditInfo.addEventListener("click", async (event) => {
+  //   const fila = event.target.closest(".card[data-id]");
 
-    if (fila) {
-      const id_info = fila.getAttribute("data-id");
-      await cargarComponente(routes.medicamentos_info.editar, { id: id_info });
-    }
-  });
+  //   if (fila) {
+  //     const id_info = fila.getAttribute("data-id");
+  //     await cargarComponente(routes.medicamentos_info.editar, { id: id_info });
+  //   }
+  // });
 };

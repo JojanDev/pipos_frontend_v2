@@ -12,8 +12,35 @@ import {
   put,
   get,
 } from "../../../helpers";
-import { asignarDatosCliente } from "../../personal/profile/profileController";
+// import { asignarDatosCliente } from "../../personal/profile/profileController";
 import { cargarTabla } from "../clientsController";
+
+const asignarDatosCliente = (data) => {
+  const spanNombre = document.querySelector("#profile-nombre");
+  const spanTipoDocumento = document.querySelector("#profile-tipoDocumento");
+  const spanNumeroDocumento = document.querySelector(
+    "#profile-numeroDocumento"
+  );
+  const spanDireccion = document.querySelector("#profile-direccion");
+  const spanTelefono = document.querySelector("#profile-telefono");
+  const spanCorreo = document.querySelector("#profile-correo");
+
+  const {
+    correo,
+    direccion,
+    nombre,
+    numeroDocumento,
+    telefono,
+    tipoDocumento,
+  } = data.info;
+
+  spanNombre.textContent = nombre;
+  spanTipoDocumento.textContent = tipoDocumento.nombre;
+  spanNumeroDocumento.textContent = numeroDocumento;
+  spanDireccion.textContent = direccion;
+  spanTelefono.textContent = telefono;
+  spanCorreo.textContent = correo;
+};
 
 export const editClientController = async (parametros = null) => {
   const { id } = parametros;

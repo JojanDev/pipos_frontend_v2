@@ -44,6 +44,7 @@ import {
   ventasController,
   editVentaController,
   editMedicamentInventoryController,
+  profileVentaController,
 } from "../views/index";
 
 export const routes = {
@@ -349,6 +350,12 @@ export const routes = {
     editar: {
       path: "ventas/edit/index.html",
       controller: editVentaController,
+      private: true,
+      addHtml: true,
+    },
+    perfil: {
+      path: "ventas/profile/index.html",
+      controller: profileVentaController,
       private: true,
       addHtml: true,
     },
