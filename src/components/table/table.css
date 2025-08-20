@@ -107,7 +107,7 @@
 
 #pet-antecedent-treatment .table__header,
 #pet-antecedent-treatment .table__row {
-  grid-template-columns: 50px 1fr 2.5fr 1fr 0.8fr 1.2fr 1fr 40px;
+  grid-template-columns: 50px 1fr 1.5fr 1fr 0.8fr 1.2fr 1fr 40px 40px;
 }
 
 #products .table__header,
@@ -156,8 +156,38 @@
   font-weight: 400;
   z-index: 1;
   cursor: pointer;
+  width: 30px;
+  height: 30px;
+  margin-left: -5px;
+}
+
+.edit-tabla {
+  border-radius: 10px;
+  width: 30px;
+  height: 30px;
+  /* background-color: rgb(165, 0, 0); */
+  color: #fff;
+  font-size: 20px;
+  padding: 5px;
+  font-weight: 400;
+  z-index: 1;
+  cursor: pointer;
+  margin-left: -5px;
 }
 
 .completada {
   background-color: #00ff0442;
+}
+
+.fila-roja {
+  background-color: #d3d3d3; /* gris claro */
+  color: #171717;
+}
+
+.fila-naranja {
+  background-color: #fbc12d9a;
+}
+
+.fila-alerta {
+  background-color: #ebbdc1;
 }

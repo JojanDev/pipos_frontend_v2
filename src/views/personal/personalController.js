@@ -35,6 +35,14 @@ export const cargarTablaEmpleados = async () => {
 
   personalInfo.forEach((personal) => {
     const row = crearFila(personal);
+
+    const encontrado = personales.data.find((p) => p.id === personal[0]);
+    console.log(encontrado);
+
+    const activo = encontrado ? encontrado.activo : null;
+
+    !activo ? row.classList.add("fila-alerta") : null;
+
     tbody.append(row);
   });
 };

@@ -7,16 +7,6 @@ import {
 } from "../../helpers";
 
 export const crearCardServicio = (id, nombre, descripcion, precio) => {
-  const dataJSON = localStorage.getItem("data");
-  const data = JSON.parse(dataJSON);
-
-  if (data.id_rol != 1) {
-    const opcionesAdmin = document.querySelectorAll(".admin");
-    [...opcionesAdmin].forEach((element) => {
-      element.remove();
-    });
-  }
-
   const card = document.createElement("div");
   card.classList.add("card");
   card.dataset.id = id;
@@ -46,7 +36,7 @@ export const crearCardServicio = (id, nombre, descripcion, precio) => {
 
   // Botón editar
   const btnEdit = document.createElement("button");
-  btnEdit.classList.add("btn", "btn--edit", "btn-servicio-edit");
+  btnEdit.classList.add("btn", "btn--edit", "btn-servicio-edit", "admin");
   btnEdit.title = "Editar servicio";
 
   const iconEdit = document.createElement("i");
@@ -59,7 +49,8 @@ export const crearCardServicio = (id, nombre, descripcion, precio) => {
     "btn",
     "btn--edit",
     "btn--red",
-    "btn-servicio-delete"
+    "btn-servicio-delete",
+    "admin"
   );
   btnDelete.title = "Eliminar servicio";
 
@@ -71,9 +62,9 @@ export const crearCardServicio = (id, nombre, descripcion, precio) => {
   card.appendChild(contenido);
   card.appendChild(precioP);
   card.appendChild(btnEdit);
-  if (data.id_rol == 1) {
-    card.appendChild(btnDelete);
-  }
+  // if (data.id_rol == 1) {
+  card.appendChild(btnDelete);
+  // }
 
   return card;
 };
@@ -109,9 +100,19 @@ const listarServicios = async (contenedor) => {
   });
 };
 
-export const servicesController = () => {
+export const servicesController = async () => {
   const contenedorCards = document.getElementById("services");
-  listarServicios(contenedorCards);
+  await listarServicios(contenedorCards);
+
+  const dataJSON = localStorage.getItem("data");
+  const data = JSON.parse(dataJSON);
+
+  if (data.id_rol != 1) {
+    const opcionesAdmin = document.querySelectorAll(".admin");
+    [...opcionesAdmin].forEach((element) => {
+      element.remove();
+    });
+  }
 
   const esModal = !location.hash.includes("servicios/editar");
 

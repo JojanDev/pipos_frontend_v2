@@ -25,10 +25,6 @@ function formatoCorto(localDateTime) {
   return new Intl.DateTimeFormat("es-ES", opciones).format(fecha);
 }
 
-// Ejemplo
-
-// 👉 "09/08/2025 15:45"
-
 export const cargarTablaVentas = async () => {
   const ventas = await get("ventas");
 
@@ -54,6 +50,11 @@ export const cargarTablaVentas = async () => {
 
   ventasInfo.forEach((venta) => {
     const row = crearFila(venta);
+    console.log(venta[venta.length - 1]);
+    venta[venta.length - 1] == "Pendiente"
+      ? row.classList.add("fila-naranja")
+      : null;
+
     tbody.append(row);
   });
 };

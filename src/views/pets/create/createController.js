@@ -118,8 +118,11 @@ export const createPetController = async (idDueno) => {
 
     await success(response.message);
 
+    console.log(response);
+
     if (tbody_perfilCliente) {
-      const { id, nombre, sexo, raza, edadFormateada } = response.data;
+      const { id, nombre, sexo, raza, edadFormateada, estado_vital } =
+        response.data;
 
       const row = crearFila([
         id,
@@ -129,6 +132,8 @@ export const createPetController = async (idDueno) => {
         edadFormateada,
         capitalizarPrimeraLetra(sexo),
       ]);
+
+      !estado_vital ? row.classList.add("fila-roja") : null;
 
       tbody_perfilCliente.insertAdjacentElement("afterbegin", row);
     } else if (tbody_Mascotas) {

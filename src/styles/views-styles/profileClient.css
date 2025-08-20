@@ -70,7 +70,7 @@
   text-overflow: ellipsis;
 }
 
-#resumen-venta .perfil__nombre{
+#resumen-venta .perfil__nombre {
   width: 450px;
 }
 
@@ -234,6 +234,18 @@
   font-weight: 400;
 }
 
+.edit-antecedent {
+  position: absolute;
+  right: 50px;
+  top: 10px;
+  border-radius: 5px;
+  /* background-color: rgb(165, 0, 0); */
+  color: #fff;
+  font-size: 22px;
+  padding: 4px;
+  font-weight: 500;
+}
+
 .antecedente-header:hover {
   background-color: #e0eefc;
 }
@@ -323,7 +335,13 @@
 .perfil__editar-pet {
   position: absolute;
   top: 40px;
-  right: 10px;
+  right: 180px;
+}
+
+.perfil__desactivar-pet {
+  position: absolute;
+  top: 40px;
+  right: 20px;
 }
 
 .perfil__valor--scroll {
@@ -348,4 +366,8 @@
 
 .w {
   width: auto;
+}
+
+.w-1200 {
+  width: 1200px;
 }

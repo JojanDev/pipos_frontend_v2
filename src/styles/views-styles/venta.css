@@ -18,9 +18,8 @@
   min-height: 0;
 }
 
-#profile-venta-cuerpo.venta-cuerpo{
+#profile-venta-cuerpo.venta-cuerpo {
   grid-template-rows: auto auto auto minmax(0, 1fr);
-
 }
 
 .contenedor-venta {
@@ -56,7 +55,7 @@
   justify-content: space-between;
 }
 
-#venta .perfil__separador.profile{
+#venta .perfil__separador.profile {
   grid-template-columns: 1fr;
 }
 
@@ -75,7 +74,7 @@
 ========================= */
 .producto {
   display: grid;
-  grid-template-columns: 1fr 150px 150px 150px 150px 30px;
+  grid-template-columns: 1fr 150px 150px 150px 150px 150px 30px;
   padding: 5px;
   background-color: #cdcdcd;
   color: #000;
@@ -85,7 +84,7 @@
   padding-left: 10px;
 }
 
-.m-r-12{
+.m-r-12 {
   margin-right: 10px;
   background-color: #9bc3ee;
   box-shadow: 0 0 5px 0 #c0c0c0;
@@ -155,9 +154,6 @@
   flex-grow: initial;
 }
 
-.valorAgregado-label {
-}
-
 #resumen-venta .perfil__separador {
   display: flex;
   justify-content: space-between;
@@ -167,19 +163,21 @@
   margin-top: 10px;
 }
 
-
-.venta-profile.contenedor-perfil#venta{
+.venta-profile.contenedor-perfil#venta {
   grid-template-rows: 60px 50px 1fr;
 }
 
-.d-flex{
+.d-flex {
   display: flex;
   /* font-size: 16px; */
   justify-content: space-around;
 }
 
-
-#datos-venta .perfil__campo{
+#datos-venta .perfil__campo {
   /* display: flex; */
   font-size: 18px;
+}
+
+.w-750 {
+  width: 750px;
 }

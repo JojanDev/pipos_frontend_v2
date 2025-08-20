@@ -28,7 +28,6 @@ import {
   editServiceController,
   createMedicamentInventoryController,
   createMedicamentInfoController,
-  profileMedicamentController,
   editMedicamentInfoController,
   medicamentsController,
   personalController,
@@ -45,6 +44,12 @@ import {
   editVentaController,
   editMedicamentInventoryController,
   profileVentaController,
+  editPetController,
+  editAntecedentController,
+  editTreatmentController,
+  editMedicamentTreatmentController,
+  editProductController,
+  profileMedicamentInfoController,
 } from "../views/index";
 
 export const routes = {
@@ -102,12 +107,12 @@ export const routes = {
       private: true,
       addHtml: true,
     },
-    // editar: {
-    //   path: "pets/edit/index.html",
-    //   controller: editPetController,
-    //   private: true,
-    //   addHtml: true,
-    // },
+    editar: {
+      path: "pets/edit/index.html",
+      controller: editPetController,
+      private: true,
+      addHtml: true,
+    },
     perfil: {
       path: "pets/profile/index.html",
       controller: profilePetController,
@@ -123,6 +128,12 @@ export const routes = {
       private: true,
       addHtml: true,
     },
+    editar: {
+      path: "antecedent/edit/index.html",
+      controller: editAntecedentController,
+      private: true,
+      addHtml: true,
+    },
     tratamiento: {
       path: "antecedent/treatment/index.html",
       controller: treatmentController,
@@ -135,9 +146,21 @@ export const routes = {
       private: true,
       addHtml: true,
     },
+    tratamientoEditar: {
+      path: "antecedent/treatment/edit/index.html",
+      controller: editTreatmentController,
+      private: true,
+      addHtml: true,
+    },
     medicamento: {
       path: "antecedent/treatment/medicament/create/index.html",
       controller: createMedicamentController,
+      private: true,
+      addHtml: true,
+    },
+    medicamentoEditar: {
+      path: "antecedent/treatment/medicament/edit/index.html",
+      controller: editMedicamentTreatmentController,
       private: true,
       addHtml: true,
     },
@@ -240,6 +263,12 @@ export const routes = {
       private: true,
       addHtml: true,
     },
+    productosEditar: {
+      path: "inventory/products/edit/index.html",
+      controller: editProductController,
+      private: true,
+      addHtml: true,
+    },
     productosPerfil: {
       path: "inventory/products/profile/index.html",
       controller: () => {},
@@ -281,7 +310,7 @@ export const routes = {
     },
     perfil: {
       path: "medicaments/profile/index.html",
-      controller: () => {},
+      controller: profileMedicamentInfoController,
       private: true,
       addHtml: true,
     },

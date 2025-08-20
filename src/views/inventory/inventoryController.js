@@ -8,7 +8,7 @@ import {
 } from "../../helpers";
 import { routes } from "../../router/routes";
 
-const listarProductos = async () => {
+export const listarProductos = async () => {
   const responseProductos = await get("productos");
 
   if (!responseProductos.success) {
@@ -18,6 +18,7 @@ const listarProductos = async () => {
   }
 
   const tbody = document.querySelector("#products .table__body");
+  tbody.innerHTML = "";
 
   const productosFilas = responseProductos.data.map(
     ({ id, nombre, tipoProducto, precio, stock, fecha_caducidad }) => {
@@ -34,6 +35,11 @@ const listarProductos = async () => {
 
   productosFilas.forEach((producto) => {
     const row = crearFila(producto);
+
+    producto[producto.length - 2] == 0
+      ? row.classList.add("fila-alerta")
+      : null;
+
     tbody.append(row);
   });
 };
@@ -67,11 +73,26 @@ export const listarMedicamentos = async () => {
 
   medicamentosFilas.forEach((medicamento) => {
     const row = crearFila(medicamento);
+
+    medicamento[medicamento.length - 1] == 0
+      ? row.classList.add("fila-alerta")
+      : null;
+
     tbody.append(row);
   });
 };
 
 export const inventoryController = () => {
+  const dataJSON = localStorage.getItem("data");
+  const data = JSON.parse(dataJSON);
+
+  if (data.id_rol != 1) {
+    const opcionesAdmin = document.querySelectorAll(".admin");
+    [...opcionesAdmin].forEach((element) => {
+      element.remove();
+    });
+  }
+
   listarProductos();
   listarMedicamentos();
 
@@ -79,20 +100,26 @@ export const inventoryController = () => {
 
   vistaInventory.addEventListener("click", (e) => {});
 
-  // const tablaProductos = document.querySelector("#products");
+  const tablaProductos = document.querySelector("#products");
 
-  // tablaProductos.addEventListener("click", (event) => {
-  //   const fila = event.target.closest("tr[data-id]");
+  tablaProductos.addEventListener("click", async (event) => {
+    const fila = event.target.closest("tr[data-id]");
 
-  //   if (fila) {
-  //     const idProducto = fila.getAttribute("data-id");
-  //
-  //     location.hash = `#/inventario/productosPerfil/id=${idProducto}`;
+    if (fila) {
+      const idProducto = fila.getAttribute("data-id");
 
-  //     // Aquí puedes llamar a una función para ver más detalles, abrir modal, etc.
-  //     // ejemplo: mostrarDetalleCliente(idCliente);
-  //   }
-  // });
+      // location.hash = `#/inventario/productosPerfil/id=${idProducto}`;
+
+      if (data.id_rol == 1) {
+        await cargarComponente(routes.inventario.productosEditar, {
+          id: idProducto,
+        });
+      }
+
+      // Aquí puedes llamar a una función para ver más detalles, abrir modal, etc.
+      // ejemplo: mostrarDetalleCliente(idCliente);
+    }
+  });
 
   const tablaMedicamentos = document.querySelector("#medicaments");
 
@@ -102,7 +129,9 @@ export const inventoryController = () => {
     if (fila) {
       const id = fila.getAttribute("data-id");
 
-      location.hash = `#/inventario/medicamentosEditar/id=${id}`;
+      if (data.id_rol == 1) {
+        location.hash = `#/inventario/medicamentosEditar/id=${id}`;
+      }
       // await cargarComponente(routes);
 
       // Aquí puedes llamar a una función para ver más detalles, abrir modal, etc.

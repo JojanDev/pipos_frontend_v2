@@ -1,3 +1,4 @@
+import Swal from "sweetalert2";
 import {
   crearBloqueAntecedenteCompleto,
   get,
@@ -6,8 +7,37 @@ import {
   error,
   success,
   cargarComponente,
+  put,
 } from "../../../helpers";
 import { routes } from "../../../router/routes";
+
+/**
+ * Desactiva los botones principales del perfil de la mascota
+ * cuando la mascota está desactivada.
+ */
+const desactivarBotonesPerfilMascota = () => {
+  // Botones principales del perfil
+  const botones = [
+    "#edit-pet", // Editar mascota
+    "#desactivar-pet", // Desactivar mascota
+    "#register-antecedent", // Crear antecedente
+    "#register-treatment-antecedent",
+  ];
+
+  botones.forEach((selector) => {
+    const boton = document.querySelector(selector);
+    if (boton) boton.remove();
+  });
+
+  // Botones de eliminar antecedentes
+  const botonesEliminarAntecedente =
+    document.querySelectorAll(".delete-antecedent");
+  botonesEliminarAntecedente.forEach((btn) => btn.remove());
+
+  const botonesEditarAntecedente =
+    document.querySelectorAll(".edit-antecedent");
+  botonesEditarAntecedente.forEach((btn) => btn.remove());
+};
 
 // ===============================
 function toggleBody(headerElement) {
@@ -18,7 +48,7 @@ function toggleBody(headerElement) {
   body.classList.toggle("open");
 }
 
-const asignarDatosCliente = (data) => {
+export const asignarDatosCliente = (data) => {
   const spanNombre = document.querySelector("#profile-nombre");
   const spanTipoDocumento = document.querySelector("#profile-tipoDocumento");
   const spanNumeroDocumento = document.querySelector(
@@ -45,7 +75,7 @@ const asignarDatosCliente = (data) => {
   spanCorreo.textContent = correo;
 };
 
-const asignarDatosMascota = (data) => {
+export const asignarDatosMascota = (data) => {
   const spanNombre = document.querySelector("#profile-nombrePet");
   const spanEspecie = document.querySelector("#profile-especie");
   const spanRaza = document.querySelector("#profile-raza");
@@ -63,6 +93,7 @@ const asignarDatosMascota = (data) => {
 };
 
 export const profilePetController = async (parametros = null) => {
+  let estado_vital = true;
   const dataJSON = localStorage.getItem("data");
   const data = JSON.parse(dataJSON);
 
@@ -105,6 +136,11 @@ export const profilePetController = async (parametros = null) => {
     // return;
   }
 
+  if (!responseMascota.data.estado_vital) {
+    desactivarBotonesPerfilMascota();
+    estado_vital = false;
+  }
+
   const contenedorPerfil = document.querySelector(".contenedor-perfil--pet");
 
   contenedorPerfil.addEventListener("click", async (e) => {
@@ -122,13 +158,32 @@ export const profilePetController = async (parametros = null) => {
       return;
     }
 
+    if (e.target.closest(".edit-antecedent")) {
+      // toggleBody(e.target.closest(".antecedente-header"));
+      const contenedorId = e.target.closest("[data-idAntecendente]");
+      const idAntecedente = contenedorId.getAttribute("data-idAntecendente");
+
+      await cargarComponente(routes.antecedente.editar, { id: idAntecedente });
+      // const responseDelete = await del("antecedentes/" + idAntecedente);
+      // if (!responseDelete.success) {
+      //   await error(responseDelete.message);
+      //   return;
+      // }
+      // contenedorId.remove();
+      // await success(responseDelete.message);
+      // return;
+    }
+
     if (e.target.closest(".antecedente-header")) {
       toggleBody(e.target.closest(".antecedente-header"));
     }
 
     if (e.target.id == "register-antecedent") {
       await cargarComponente(routes.antecedente.crear, { id, id });
-      // location.hash = `#/antecedente/crear/id=${id}`;
+    }
+
+    if (e.target.id == "edit-pet") {
+      await cargarComponente(routes.mascotas.editar, { id, id });
     }
 
     if (e.target.classList.contains("tratamiento")) {
@@ -141,11 +196,45 @@ export const profilePetController = async (parametros = null) => {
         ".antecedente-titulo"
       );
       const tituloAntecedente = tituloElemento?.textContent || "Sin título";
+      console.log(estado_vital);
 
       await cargarComponente(routes.antecedente.tratamiento, {
         id: idTratamiento,
         tituloAntecedente: tituloAntecedente,
+        estado_vital,
       });
+    }
+
+    if (e.target.id == "desactivar-pet") {
+      const result = await Swal.fire({
+        title: "Confirmacion de accion",
+        text:
+          "Al desactivar esta mascota, se marcara como fallecida.\n\n" +
+          "No podras editar sus datos ni agregar informacion nueva.\n\n" +
+          "Solo podras visualizarla.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Continuar",
+        cancelButtonText: "Cancelar",
+        confirmButtonColor: "#3085d6", // azul para confirmar
+        cancelButtonColor: "#d33", // rojo para cancelar
+      });
+
+      if (!result.isConfirmed) {
+        return;
+      }
+
+      const eliminado = await put("mascotas/desactivar/" + id);
+
+      if (!eliminado.success) {
+        await error(eliminado.message);
+        return;
+      }
+
+      desactivarBotonesPerfilMascota();
+      estado_vital = false;
+      await success(eliminado.message);
+      return;
     }
 
     if (e.target.id == "register-treatment-antecedent") {

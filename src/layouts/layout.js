@@ -1,13 +1,7 @@
 import { capitalizarPrimeraLetra } from "../helpers/diseño";
 import { get } from "../helpers/api";
 
-let layoutEjecutado = false;
 export const layoutController = async () => {
-  if (layoutEjecutado) {
-    return;
-  }
-  layoutEjecutado = true;
-
   const dataJSON = localStorage.getItem("data");
   const data = JSON.parse(dataJSON);
 
@@ -20,14 +14,14 @@ export const layoutController = async () => {
 
   if (data.id_rol != 1) {
     const opcionesAdmin = document.querySelectorAll(".admin");
-    [...opcionesAdmin].forEach((element) => {
-      element.remove();
-    });
+    [...opcionesAdmin].forEach((element) => element.remove());
   }
 
   const btnCuenta = document.querySelector("#cuenta");
 
   btnCuenta?.addEventListener("click", (e) => {
+    console.log("Si");
+
     const btnOpciones = document.querySelector(".cuenta-opciones");
 
     if (btnOpciones.classList.contains("cuenta-hidden"))

@@ -2,7 +2,9 @@ import {
   agregarError,
   convertirADiaMesAño,
   formatearPrecioConPuntos,
+  get,
   llenarSelect,
+  put,
   quitarError,
 } from "../../../../helpers";
 import {
@@ -17,6 +19,8 @@ import {
   datos,
   validarCampos,
 } from "../../../../helpers";
+import { listarProductos } from "../../inventoryController";
+import { validarFechaEdicion } from "../../medicaments/edit/editController";
 
 export function validarFechaCaducidad(valorFecha) {
   if (!valorFecha) {
@@ -39,23 +43,41 @@ export function validarFechaCaducidad(valorFecha) {
   return { valid: true };
 }
 
-export const createProductController = async () => {
+export const editProductController = async (parametros = null) => {
+  const { id } = parametros;
+
+  const responseProducto = await get("productos/" + id);
+  console.log(responseProducto);
+
+  document.querySelector("#nombre").value = responseProducto.data.nombre;
+  document.querySelector("#fecha_caducidad").value =
+    responseProducto.data.fecha_caducidad;
+  document.querySelector("#precio").value = responseProducto.data.precio;
+  document.querySelector("#stock").value = responseProducto.data.stock;
+  document.querySelector("#descripcion").value =
+    responseProducto.data.descripcion || "";
+
   const form = document.querySelector("#form-register-product");
-  const selectTipoDocumento = document.querySelector("#tipos-documento");
   const tbodyProducts = document.querySelector("#products .table__body");
   const esModal = !location.hash.includes("inventario/productosCrear");
 
-  llenarSelect({
+  await llenarSelect({
     endpoint: "tipos-productos",
     selector: "#tipos-productos",
     optionMapper: ({ id, nombre }) => ({ id: id, text: nombre }),
   });
 
+  document.querySelector("#tipos-productos").value =
+    responseProducto.data.tipoProducto.id;
+
   configurarEventosValidaciones(form);
   const inputFecha = document.querySelector("[name='fecha_caducidad']");
 
   inputFecha.addEventListener("blur", (e) => {
-    const resultado = validarFechaCaducidad(inputFecha.value);
+    const resultado = validarFechaEdicion(
+      responseProducto.data.fecha_caducidad,
+      inputFecha.value
+    );
 
     if (!resultado.valid) {
       agregarError(inputFecha.parentElement, resultado.message);
@@ -65,7 +87,10 @@ export const createProductController = async () => {
   });
 
   inputFecha.addEventListener("input", (e) => {
-    const resultado = validarFechaCaducidad(inputFecha.value);
+    const resultado = validarFechaEdicion(
+      responseProducto.data.fecha_caducidad,
+      inputFecha.value
+    );
 
     if (!resultado.valid) {
       agregarError(inputFecha.parentElement, resultado.message);
@@ -79,43 +104,49 @@ export const createProductController = async () => {
 
     if (!validarCampos(e)) return;
 
-    const resultado = validarFechaCaducidad(inputFecha.value);
+    const resultado = validarFechaEdicion(
+      responseProducto.data.fecha_caducidad,
+      inputFecha.value
+    );
 
     if (!resultado.valid) return;
 
-    const response = await post("productos", datos);
+    const response = await put("productos/" + id, datos);
 
     if (!response.success) {
       await error(response.message);
       return;
     }
 
+    console.log(response);
+
+    listarProductos();
     await successTemporal(response.message);
 
-    if (tbodyProducts) {
-      const { id, nombre, tipoProducto, precio, stock, fecha_caducidad } =
-        response.data;
+    // if (tbodyProducts) {
+    //   const { id, nombre, tipoProducto, precio, stock, fecha_caducidad } =
+    //     response.data;
 
-      //
+    //   //
 
-      const row = crearFila([
-        id,
-        nombre,
-        tipoProducto.nombre,
-        formatearPrecioConPuntos(precio),
-        stock,
-        convertirADiaMesAño(fecha_caducidad),
-      ]);
-      tbodyProducts.insertAdjacentElement("afterbegin", row);
-    }
+    //   const row = crearFila([
+    //     id,
+    //     nombre,
+    //     tipoProducto.nombre,
+    //     formatearPrecioConPuntos(precio),
+    //     stock,
+    //     convertirADiaMesAño(fecha_caducidad),
+    //   ]);
+    //   tbodyProducts.insertAdjacentElement("afterbegin", row);
+    // }
 
-    esModal ? cerrarModal("create-product") : cerrarModalYVolverAVistaBase();
+    esModal ? cerrarModal("edit-product") : cerrarModalYVolverAVistaBase();
   });
 
   document.addEventListener("click", (event) => {
-    const arrow = event.target.closest("#back-register-client");
+    const arrow = event.target.closest("#back-edit-product");
     if (arrow) {
-      esModal ? cerrarModal("create-product") : cerrarModalYVolverAVistaBase();
+      esModal ? cerrarModal("edit-product") : cerrarModalYVolverAVistaBase();
     }
   });
 };

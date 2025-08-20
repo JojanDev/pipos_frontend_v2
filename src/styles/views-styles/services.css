@@ -32,6 +32,7 @@
 #medicaments-info .card {
   grid-template-columns: 100px 1fr;
   grid-template-rows: 1fr 2fr 30px;
+  cursor: pointer;
 }
 
 #medicaments-info .card__title {

@@ -2,15 +2,6 @@ import { capitalizarPrimeraLetra, cargarComponente, get } from "../../helpers";
 import { routes } from "../../router/routes";
 
 export function crearCartaMedicamento(medicamento) {
-  const dataJSON = localStorage.getItem("data");
-  const data = JSON.parse(dataJSON);
-
-  if (data.id_rol != 1) {
-    const opcionesAdmin = document.querySelectorAll(".admin");
-    [...opcionesAdmin].forEach((element) => {
-      element.remove();
-    });
-  }
   // Contenedor principal
   const card = document.createElement("div");
   card.classList.add("card");
@@ -76,33 +67,6 @@ export function crearCartaMedicamento(medicamento) {
   // Agregar contenedor al card
   card.appendChild(contDatos);
 
-  // Botón editar
-  // const btnEdit = document.createElement("button");
-  // btnEdit.classList.add("btn", "btn--edit", "btn-servicio-edit");
-  // btnEdit.id = "#editar-info-medicamento";
-  // btnEdit.title = "Editar servicio";
-  // btnEdit.innerHTML = `<i class="ri-edit-box-line"></i>`;
-
-  // Botón eliminar
-  const btnDelete = document.createElement("button");
-  btnDelete.classList.add(
-    "btn",
-    "btn--edit",
-    "btn--red",
-    "btn-servicio-delete",
-    "admin"
-  );
-  btnDelete.title = "Eliminar servicio";
-  btnDelete.innerHTML = `<i class="ri-delete-bin-line"></i>`;
-
-  const btns = document.createElement("div");
-  btns.classList.add("card__btns");
-  // Agregar botones al card
-  // btns.appendChild(btnEdit);
-  if (data.id_rol == 1) {
-    btns.appendChild(btnDelete);
-  }
-  card.appendChild(btns);
   return card;
 }
 
@@ -116,14 +80,14 @@ export const medicamentsController = async () => {
     contenedor.appendChild(carta);
   });
 
-  // const btnEditInfo = document.querySelector("#medicaments-info");
+  const contenedorMedicaments = document.querySelector("#medicaments-info");
 
-  // btnEditInfo.addEventListener("click", async (event) => {
-  //   const fila = event.target.closest(".card[data-id]");
+  contenedorMedicaments.addEventListener("click", async (event) => {
+    const fila = event.target.closest(".card[data-id]");
 
-  //   if (fila) {
-  //     const id_info = fila.getAttribute("data-id");
-  //     await cargarComponente(routes.medicamentos_info.editar, { id: id_info });
-  //   }
-  // });
+    if (fila) {
+      const id_info = fila.getAttribute("data-id");
+      await cargarComponente(routes.medicamentos_info.perfil, { id: id_info });
+    }
+  });
 };

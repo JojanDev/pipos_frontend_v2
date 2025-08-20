@@ -22,6 +22,29 @@ import { routes } from "../../../../router/routes"; // Rutas del sistema
 import { listarMedicamentos } from "../../inventoryController";
 import { validarFechaCaducidad } from "../../products/create/createController"; // Función para validar fechas de caducidad
 
+export function validarFechaEdicion(fechaOriginal, fechaNueva) {
+  // Si la fecha no cambió → no validar
+  if (fechaOriginal === fechaNueva) {
+    return { valid: true };
+  }
+
+  const hoy = new Date();
+  const fechaIngresada = new Date(fechaNueva);
+
+  // Fecha mínima: hoy + 7 días
+  const fechaMinima = new Date();
+  fechaMinima.setDate(hoy.getDate() + 7);
+
+  if (fechaIngresada < fechaMinima) {
+    return {
+      valid: false,
+      message: "Debe tener al menos 7 días de vigencia.",
+    };
+  }
+
+  return { valid: true };
+}
+
 /**
  * Controlador para crear registros de inventario de medicamentos.
  * Maneja la carga inicial del formulario, validaciones, envío y actualización de la tabla.
@@ -58,7 +81,10 @@ export const editMedicamentInventoryController = async (parametros = null) => {
 
   // Validar fecha al salir del input (blur)
   inputFecha.addEventListener("blur", (e) => {
-    const resultado = validarFechaCaducidad(inputFecha.value);
+    const resultado = validarFechaEdicion(
+      responseMedi.data.fecha_caducidad,
+      inputFecha.value
+    );
     if (!resultado.valid) {
       agregarError(inputFecha.parentElement, resultado.message);
     } else {
@@ -68,7 +94,10 @@ export const editMedicamentInventoryController = async (parametros = null) => {
 
   // Validar fecha mientras el usuario escribe (input)
   inputFecha.addEventListener("input", (e) => {
-    const resultado = validarFechaCaducidad(inputFecha.value);
+    const resultado = validarFechaEdicion(
+      responseMedi.data.fecha_caducidad,
+      inputFecha.value
+    );
     if (!resultado.valid) {
       agregarError(inputFecha.parentElement, resultado.message);
     } else {
@@ -84,7 +113,10 @@ export const editMedicamentInventoryController = async (parametros = null) => {
     if (!validarCampos(e)) return;
 
     // Verifica específicamente la fecha de caducidad
-    const resultado = validarFechaCaducidad(inputFecha.value);
+    const resultado = validarFechaEdicion(
+      responseMedi.data.fecha_caducidad,
+      inputFecha.value
+    );
     if (!resultado.valid) return;
 
     datos["id_medicamento_info"] = responseMedi.data.info.id;

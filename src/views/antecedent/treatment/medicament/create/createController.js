@@ -75,6 +75,8 @@ export const createMedicamentController = async (parametros = null) => {
       }
     );
 
+    console.log(responseMedicamentoTratamiento);
+
     if (!responseMedicamentoTratamiento.success) {
       await error(responseMedicamentoTratamiento.message);
       return;
@@ -85,8 +87,13 @@ export const createMedicamentController = async (parametros = null) => {
     );
 
     if (tbody) {
-      const { medicamento, dosis, frecuencia_aplicacion, duracionFormateada } =
-        responseMedicamentoTratamiento.data;
+      const {
+        id,
+        medicamento,
+        dosis,
+        frecuencia_aplicacion,
+        duracionFormateada,
+      } = responseMedicamentoTratamiento.data;
 
       const iconDelete = document.createElement("i");
       // spanTitulo.textContent = titulo;
@@ -97,8 +104,17 @@ export const createMedicamentController = async (parametros = null) => {
         "admin"
       );
 
+      const iconEdit = document.createElement("i");
+
+      iconEdit.classList.add(
+        "ri-edit-box-line",
+        "edit-tabla",
+        "btn--orange",
+        "admin"
+      );
+
       const row = crearFila([
-        medicamento.id,
+        id,
         medicamento.nombre,
         medicamento.uso_general,
         capitalizarPrimeraLetra(medicamento.via_administracion),
@@ -106,6 +122,7 @@ export const createMedicamentController = async (parametros = null) => {
         frecuencia_aplicacion,
         duracionFormateada[1],
         iconDelete,
+        iconEdit,
       ]);
 
       tbody.insertAdjacentElement("afterbegin", row);

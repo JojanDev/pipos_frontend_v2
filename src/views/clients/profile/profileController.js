@@ -56,6 +56,8 @@ export const profileClientController = async (parametros = null) => {
 
   const responseMascotas = await get(`mascotas/cliente/${id}`);
 
+  console.log(responseMascotas);
+
   if (responseMascotas.code == 500) {
     await error(responseMascotas.message);
     esModal ? cerrarModal("profile-client") : cerrarModalYVolverAVistaBase();
@@ -65,7 +67,7 @@ export const profileClientController = async (parametros = null) => {
   if (responseMascotas.success) {
     if (tbody) {
       responseMascotas.data.forEach(
-        ({ id, edadFormateada, nombre, raza, sexo }) => {
+        ({ id, edadFormateada, nombre, raza, sexo, estado_vital }) => {
           const row = crearFila([
             id,
             nombre,
@@ -74,6 +76,9 @@ export const profileClientController = async (parametros = null) => {
             edadFormateada,
             capitalizarPrimeraLetra(sexo),
           ]);
+
+          !estado_vital ? row.classList.add("fila-roja") : null;
+
           tbody.insertAdjacentElement("afterbegin", row);
         }
       );

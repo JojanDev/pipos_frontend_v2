@@ -65,8 +65,6 @@ export const editPersonalController = async (parametros = null) => {
 
     if (!validarCampos(e)) return;
 
-    datos["numero_documento"] = "122311";
-
     const responsePut = await put(`personal/${response.data.info.id}`, datos);
 
     if (!responsePut.success) {
@@ -77,6 +75,7 @@ export const editPersonalController = async (parametros = null) => {
     await successTemporal(responsePut.message);
 
     const responseP = await get(`personal/${id}`);
+
     asignarDatosCliente(responseP.data);
     cargarTablaEmpleados();
 

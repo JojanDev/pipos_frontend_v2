@@ -43,8 +43,18 @@ export const crearBloqueAntecedenteCompleto = ({
     "admin"
   );
 
+  const iconEdit = document.createElement("i");
+  // spanTitulo.textContent = titulo;
+  iconEdit.classList.add(
+    "ri-edit-box-line",
+    "edit-antecedent",
+    "btn--orange"
+    // "admin"
+  );
+
   divHeader.appendChild(spanFecha);
   divHeader.appendChild(spanTitulo);
+  divHeader.appendChild(iconEdit);
 
   if (data.id_rol == 1) {
     divHeader.appendChild(iconDelete);
@@ -55,6 +65,7 @@ export const crearBloqueAntecedenteCompleto = ({
   divBody.classList.add("antecedente-body");
 
   const pDiagnostico = document.createElement("p");
+  pDiagnostico.classList.add("antecedente-diagnostico");
   pDiagnostico.innerHTML = `<strong>Diagnóstico:</strong> ${diagnostico}`;
   divBody.appendChild(pDiagnostico);
 
@@ -113,6 +124,13 @@ export const convertirADiaMesAño = (fechaCompleta) => {
     .toString()
     .padStart(2, "0")}/${fecha.getFullYear()}`;
   return fechaFormateada;
+};
+
+export const convertirFechaLocalDate = (fechaString) => {
+  if (!fechaString) return "";
+  // Se espera formato yyyy-MM-dd
+  const [anio, mes, dia] = fechaString.split("-");
+  return `${dia.padStart(2, "0")}/${mes.padStart(2, "0")}/${anio}`;
 };
 
 export function mostrarMensajeSiNoHayTratamientos(idAntecedente) {

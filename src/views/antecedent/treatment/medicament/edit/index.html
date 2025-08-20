@@ -1,0 +1,99 @@
+<div
+  class="modal__backdrop"
+  data-modal="edit-pet-antecedent-treatment-medicament"
+>
+  <section
+    class="section-form modal__container section-form--register-antecedent"
+  >
+    <i
+      class="ri-arrow-left-line arrow-left arrow-left--bottom"
+      id="back-edit-pet-antecedent-treatment-medicament"
+    ></i>
+
+    <h1 class="section-form__title">Editar Medicamento</h1>
+    <hr class="section-form__line section-form__line--margin-bottom" />
+
+    <form
+      action="#"
+      id="form-register-pet-antecedent-treatment-medicament"
+      novalidate
+    >
+      <div class="form form--w-800">
+        <div class="form__container-field">
+          <label for="" class="form__label">Medicamento</label>
+          <select
+            class="form__input form__input--select"
+            required
+            id="select-medicamentos-info"
+            name="id_medicamento_info"
+            disabled
+          >
+            <!-- Opciones -->
+            <option disabled selected value="">
+              Seleccione un medicamento
+            </option>
+          </select>
+        </div>
+        <div class="form__container-fields">
+          <div class="form__container-field form__container-field--span">
+            <label for="" class="form__label">Dosis</label>
+            <input
+              type="text"
+              class="form__input"
+              required
+              data-validate=""
+              name="dosis"
+              id="dosis"
+            />
+          </div>
+          <div class="form__container-field form__container-field--span">
+            <label for="" class="form__label">Frecuencia de aplicado</label>
+            <input
+              type="text"
+              class="form__input"
+              required
+              data-validate=""
+              name="frecuencia_aplicacion"
+              id="frecuencia_aplicacion"
+            />
+          </div>
+        </div>
+        <div class="form__container-fields form__container-fields--3-col">
+          <p for="" class="form__label form__label--col-span">Duracion</p>
+          <div class="form__container-field">
+            <input
+              type="text"
+              class="form__input"
+              data-validate="numero,limite:2"
+              name="meses"
+              id="meses"
+            />
+          </div>
+          <div class="form__container-field">
+            <input
+              type="text"
+              class="form__input"
+              data-validate="numero"
+              name="semanas"
+              id="semanas"
+            />
+          </div>
+          <div class="form__container-field">
+            <input
+              type="text"
+              class="form__input"
+              data-validate="numero"
+              name="dias"
+              id="dias"
+            />
+          </div>
+        </div>
+        <div class="form__container-btns">
+          <button type="submit" class="btn btn--lower-height">
+            Actualizar
+          </button>
+        </div>
+      </div>
+    </form>
+  </section>
+</div>

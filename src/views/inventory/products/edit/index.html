@@ -1,11 +1,11 @@
-<div class="modal__backdrop" data-modal="create-product">
+<div class="modal__backdrop" data-modal="edit-product">
   <section class="section-form modal__container">
     <i
       class="ri-arrow-left-line arrow-left arrow-left--bottom"
-      id="back-register-client"
+      id="back-edit-product"
     ></i>
 
-    <h1 class="section-form__title">Editar de Producto</h1>
+    <h1 class="section-form__title">Editar Producto</h1>
     <hr class="section-form__line section-form__line--margin-bottom" />
 
     <form action="#" id="form-register-product" novalidate>
@@ -19,8 +19,9 @@
               type="text"
               class="form__input"
               required
-              data-validate="textoNumeros"
+              data-validate=""
               name="nombre"
+              id="nombre"
             />
           </div>
           <div class="form__container-field">
@@ -44,6 +45,7 @@
             required
             data-validate=""
             name="fecha_caducidad"
+            id="fecha_caducidad"
           />
         </div>
         <div class="form__container-fields">
@@ -55,6 +57,7 @@
               required
               data-validate="numero"
               name="precio"
+              id="precio"
             />
           </div>
           <div class="form__container-field form__container-field--span">
@@ -65,6 +68,7 @@
               required
               data-validate="numero"
               name="stock"
+              id="stock"
             />
           </div>
         </div>
@@ -72,11 +76,14 @@
           <label for="" class="form__label">Descripcion</label>
           <textarea
             name="descripcion"
+            id="descripcion"
             class="form__input form__input--textarea"
           ></textarea>
         </div>
         <div class="form__container-btns">
-          <button type="submit" class="btn btn--lower-height">Editar</button>
+          <button type="submit" class="btn btn--lower-height">
+            Actualizar
+          </button>
         </div>
       </div>
     </form>

@@ -14,7 +14,8 @@ import {
   put,
 } from "../../../helpers";
 import { listarMedicamentos } from "../../inventory/inventoryController";
-import { asignarDatosMedicamentoInfo } from "../../inventory/medicaments/profile/profileController";
+import { crearCartaMedicamento } from "../medicamentsController";
+import { asignarDatosMedicamentoInfo } from "../profile/profileController";
 
 const asignarDatosMedicamentoInfoEditar = (data) => {
   const inputNombre = document.querySelector('[name="nombre"]');
@@ -48,17 +49,17 @@ export const editMedicamentInfoController = async (parametros = null) => {
 
   // await cargarTiposDocumento(selectTipoDocumento);
 
-  const { idInfo, idMedicamento } = parametros;
+  const { id } = parametros;
 
-  const info = await get("medicamentos/info/" + idInfo);
+  console.log(id);
 
-  const contenedorPerfilMedicamento = document.querySelector(
-    "[data-modal='profile-medicament']"
+  const info = await get("medicamentos/info/" + id);
+
+  const contPerfil = document.querySelector(
+    "[data-modal='profile-medicament-info']"
   );
 
   asignarDatosMedicamentoInfoEditar(info.data);
-
-  const contenedorTablaMedicamentos = document.querySelector("#medicaments");
 
   configurarEventosValidaciones(form);
 
@@ -67,21 +68,28 @@ export const editMedicamentInfoController = async (parametros = null) => {
 
     if (!validarCampos(e)) return;
 
-    const response = await put("medicamentos/info/" + idInfo, datos);
+    const response = await put("medicamentos/info/" + id, datos);
 
     if (!response.success) {
       await error(response.message);
       return;
     }
 
+    const contenedor = document.querySelector("#medicaments-info");
+    contenedor.innerHTML = "";
+
+    const responseAll = await get("medicamentos/info");
+
+    responseAll.data.forEach((medicamento) => {
+      const carta = crearCartaMedicamento(medicamento);
+      contenedor.appendChild(carta);
+    });
+
     await successTemporal(response.message);
 
-    const responseMedi = await get(`medicamentos/${idMedicamento}`);
+    const responseMedi = await get(`medicamentos/info/${response.data.id}`);
 
-    if (contenedorPerfilMedicamento)
-      asignarDatosMedicamentoInfo(responseMedi.data.info);
-
-    if (contenedorTablaMedicamentos) listarMedicamentos();
+    if (contPerfil) asignarDatosMedicamentoInfo(responseMedi.data);
 
     esModal
       ? cerrarModal("edit-medicament-info")

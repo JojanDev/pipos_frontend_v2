@@ -11,6 +11,7 @@ import {
   success,
   put,
 } from "../../../helpers";
+import { cargarTablaEmpleados } from "../personalController";
 
 export const asignarDatosCliente = (data) => {
   const spanNombre = document.querySelector("#profile-nombre");
@@ -80,7 +81,6 @@ export const profilePersonalController = async (parametros = null) => {
     }
 
     if (e.target.id == "delete-personal") {
-
       if (response.data.rol.id != 1) {
         const eliminado = await del(`personal/${id}`);
         // console.log(eliminado);
@@ -88,6 +88,8 @@ export const profilePersonalController = async (parametros = null) => {
           await error(eliminado.message);
           return;
         }
+
+        cargarTablaEmpleados();
 
         await success(eliminado.message);
         esModal
@@ -105,6 +107,7 @@ export const profilePersonalController = async (parametros = null) => {
         return;
       }
 
+      cargarTablaEmpleados();
       await success(activado.message);
       esModal
         ? cerrarModal("profile-personal")

@@ -50,6 +50,11 @@ export const editVentaController = async (parametros = null) => {
       //   return;
       // }
       // else
+      if (valorAgregar.value == 0) {
+        await error("El monto a agregar no puede ser cero");
+        return;
+      }
+
       const precioFalMax = venta.total - venta.monto;
       if (nuevoMonto > precioFalMax) {
         await error(

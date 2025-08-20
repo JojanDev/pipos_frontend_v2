@@ -46,6 +46,16 @@ export const createServiceController = (parametros = null) => {
       if (placeholderAnterior) placeholderAnterior.remove();
     }
 
+    const dataJSON = localStorage.getItem("data");
+    const data = JSON.parse(dataJSON);
+
+    if (data.id_rol != 1) {
+      const opcionesAdmin = document.querySelectorAll(".admin");
+      [...opcionesAdmin].forEach((element) => {
+        element.remove();
+      });
+    }
+
     await success(responseServicios.message);
 
     esModal ? cerrarModal("create-service") : cerrarModalYVolverAVistaBase();

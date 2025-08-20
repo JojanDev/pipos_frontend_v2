@@ -1,7 +1,12 @@
+import { layoutController } from "../layouts/layout";
+
 export const renderLayout = async (container, layout) => {
   const response = await fetch(`./src/layouts/${layout}`);
   const html = await response.text();
   container.innerHTML = html;
+  console.log("SI");
+
+  await layoutController();
 };
 
 export const cargarComponente = async ({ path, controller }, param = null) => {

@@ -23,6 +23,27 @@ function eliminarTratamiento(idTratamiento, idAntecedente) {
   }
 }
 
+const desactivarBotonesPerfilTratamiento = () => {
+  // Botones fijos del perfil de tratamiento
+  const botones = [
+    "#register-antecedent-treatment-medicament", // Agregar medicamento
+    "#delete-treatment", // Eliminar tratamiento
+    "#edit-treatment",
+  ];
+
+  botones.forEach((selector) => {
+    const boton = document.querySelector(selector);
+    if (boton) boton.remove();
+  });
+
+  // Botones de eliminar medicamento dentro de la tabla
+  const botonesEliminarMedicamento = document.querySelectorAll(".delete-tabla");
+  botonesEliminarMedicamento.forEach((btn) => btn.remove());
+
+  const botonesEditMedicamento = document.querySelectorAll(".edit-tabla");
+  botonesEditMedicamento.forEach((btn) => btn.remove());
+};
+
 export const treatmentController = async (parametros = null) => {
   const dataJSON = localStorage.getItem("data");
   const data = JSON.parse(dataJSON);
@@ -33,7 +54,7 @@ export const treatmentController = async (parametros = null) => {
       element.remove();
     });
   }
-  const { id, tituloAntecedente } = parametros;
+  const { id, tituloAntecedente, estado_vital } = parametros;
 
   const modal = document.querySelector('[data-modal="pet-treatment"]');
   const esModal = !location.hash.includes("antecedente/tratamiento");
@@ -95,6 +116,15 @@ export const treatmentController = async (parametros = null) => {
           "admin"
         );
 
+        const iconEdit = document.createElement("i");
+
+        iconEdit.classList.add(
+          "ri-edit-box-line",
+          "edit-tabla",
+          "btn--orange",
+          "admin"
+        );
+
         const row = crearFila([
           id,
           medicamento.nombre,
@@ -104,11 +134,17 @@ export const treatmentController = async (parametros = null) => {
           frecuencia_aplicacion,
           duracionFormateada[1],
           data.id_rol == 1 ? iconDelete : "",
+          iconEdit,
         ]);
 
         tbody.append(row);
       });
     }
+  }
+  console.log(estado_vital);
+
+  if (!estado_vital) {
+    desactivarBotonesPerfilTratamiento();
   }
 
   modal.addEventListener("click", async (e) => {
@@ -144,6 +180,15 @@ export const treatmentController = async (parametros = null) => {
       // esModal ? cerrarModal("pet-treatment") : cerrarModalYVolverAVistaBase();
     }
 
+    if (e.target.classList.contains("edit-tabla")) {
+      const medicament = e.target.closest(`[data-id]`);
+      const idMedicament = medicament.getAttribute("data-id");
+
+      await cargarComponente(routes.antecedente.medicamentoEditar, {
+        id: idMedicament,
+      });
+    }
+
     if (e.target.id == "delete-treatment") {
       const responseDelete = await del("tratamientos/" + id);
 
@@ -158,6 +203,10 @@ export const treatmentController = async (parametros = null) => {
       esModal ? cerrarModal("pet-treatment") : cerrarModalYVolverAVistaBase();
       // history.replaceState(null, "", `#/mascotas/perfil`);
       await success(responseDelete.message);
+    }
+
+    if (e.target.id == "edit-treatment") {
+      await cargarComponente(routes.antecedente.tratamientoEditar, { id });
     }
   });
 };

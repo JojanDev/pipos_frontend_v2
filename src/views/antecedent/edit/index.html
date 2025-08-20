@@ -1,0 +1,62 @@
+<div class="modal__backdrop" data-modal="edit-pet-antecedent">
+  <section
+    class="section-form modal__container section-form--register-antecedent"
+  >
+    <i
+      class="ri-arrow-left-line arrow-left arrow-left--bottom"
+      id="back-edit-pet-antecedent"
+    ></i>
+
+    <h1 class="section-form__title">Editar Antecedente</h1>
+    <hr class="section-form__line section-form__line--margin-bottom" />
+
+    <form action="#" id="form-register-pet-antecedent" novalidate>
+      <div class="form form--w-800">
+        <div class="form__container-field" id="container-select-pets">
+          <label for="" class="form__label">Mascota</label>
+          <select
+            class="form__input form__input--select"
+            required
+            name="id_cliente"
+            id="select-pets"
+          >
+            <!-- Opciones -->
+            <option disabled selected value="">Seleccione una mascota</option>
+          </select>
+        </div>
+        <div class="form__container-field form__container-field--span">
+          <label for="" class="form__label">Titulo</label>
+          <input
+            type="text"
+            class="form__input"
+            required
+            data-validate=""
+            name="titulo"
+            id="titulo-antecedente-edit"
+          />
+        </div>
+        <div class="form__container-field form__container-field--span">
+          <label for="" class="form__label">Diagnostico</label>
+          <textarea
+            name="diagnostico"
+            required
+            class="form__input form__input--textarea"
+            id="diagnostico-antecedente-edit"
+          ></textarea>
+          <!-- <input
+            type="text"
+            class="form__input"
+            required
+            data-validate="texto"
+            name="nombre"
+          /> -->
+        </div>
+        <div class="form__container-btns">
+          <button type="submit" class="btn btn--lower-height">
+            Actualizar
+          </button>
+        </div>
+      </div>
+    </form>
+  </section>
+</div>

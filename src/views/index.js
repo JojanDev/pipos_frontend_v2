@@ -23,16 +23,20 @@ export * from "./clients/createExist/createExistController.js";
 export * from "./pets/petsController.js";
 export * from "./pets/create/createController.js";
 export * from "./pets/profile/profileController.js";
+export * from "./pets/edit/editController.js";
 
 // =========================
 // ANTECEDENTES
 // =========================
 export * from "./antecedent/create/createController.js";
+export * from "./antecedent/edit/editController.js";
 
 // ----- Tratamientos -----
 export * from "./antecedent/treatment/treatmentController.js";
 export * from "./antecedent/treatment/create/createController.js";
 export * from "./antecedent/treatment/medicament/create/createController.js";
+export * from "./antecedent/treatment/medicament/edit/editController.js";
+export * from "./antecedent/treatment/edit/editController.js";
 
 // =========================
 // INVENTARIO
@@ -41,10 +45,10 @@ export * from "./inventory/inventoryController.js";
 
 // ----- Productos -----
 export * from "./inventory/products/create/createController.js";
+export * from "./inventory/products/edit/editController.js";
 
 // ----- Medicamentos -----
 export * from "./inventory/medicaments/create/createController.js";
-export * from "./inventory/medicaments/profile/profileController.js";
 export * from "./inventory/medicaments/edit/editController.js";
 
 // =========================
@@ -52,6 +56,7 @@ export * from "./inventory/medicaments/edit/editController.js";
 // =========================
 export * from "./medicaments/create/createController.js";
 export * from "./medicaments/edit/editController.js";
+export * from "./medicaments/profile/profileController.js";
 export * from "./medicaments/medicamentsController.js";
 
 // =========================

@@ -1,4 +1,4 @@
-import { routes } from "../../../../router/routes";
+import { routes } from "../../../router/routes";
 import {
   error,
   get,
@@ -9,9 +9,12 @@ import {
   cargarComponente,
   convertirADiaMesAño,
   formatearPrecioConPuntos,
-} from "../../../../helpers";
+  del,
+  successTemporal,
+} from "../../../helpers";
+import { crearCartaMedicamento } from "../medicamentsController";
 
-const asignarDatosMedicamentoInfo = (data) => {
+export const asignarDatosMedicamentoInfo = (data) => {
   const spanNombre = document.querySelector("#profile-medicament-info-nombre");
   const spanUsoGeneral = document.querySelector(
     "#profile-medicament-info-usoGeneral"
@@ -39,7 +42,17 @@ const asignarDatosMedicamentoInfo = (data) => {
   spanAdicional.textContent = informacion_adicional;
 };
 
-export const profileMedicamentController = async (parametros = null) => {
+export const profileMedicamentInfoController = async (parametros = null) => {
+  const dataJSON = localStorage.getItem("data");
+  const data = JSON.parse(dataJSON);
+
+  if (data.id_rol != 1) {
+    const opcionesAdmin = document.querySelectorAll(".admin");
+    [...opcionesAdmin].forEach((element) => {
+      element.remove();
+    });
+  }
+
   const tbody = document.querySelector("#pets-client .table__body");
   const btnAtras = document.querySelector("#back-profile-medicament-info");
   const esModal = !location.hash.includes("medicamentos_info/perfil");
@@ -47,6 +60,8 @@ export const profileMedicamentController = async (parametros = null) => {
   const { id } = parametros;
 
   const response = await get(`medicamentos/info/${id}`);
+
+  console.log(response);
 
   if (!response.success) {
     await error(response.message);
@@ -68,9 +83,36 @@ export const profileMedicamentController = async (parametros = null) => {
   const btnEdit = document.querySelector("#edit-medicament-info");
 
   btnEdit.addEventListener("click", async () => {
-    await cargarComponente(
-      routes.medicamentos_info.editar,
-      response.data.info.id
-    );
+    await cargarComponente(routes.medicamentos_info.editar, {
+      id: response.data.id,
+    });
+  });
+
+  const btnDelete = document.querySelector("#delete-medicament-info");
+
+  btnDelete?.addEventListener("click", async () => {
+    const eliminado = await del("medicamentos/info/" + id);
+
+    console.log(eliminado);
+    if (!eliminado.success) {
+      await error(eliminado.message);
+      return;
+    }
+
+    const contenedor = document.querySelector("#medicaments-info");
+    contenedor.innerHTML = "";
+
+    const responseAll = await get("medicamentos/info");
+
+    responseAll.data.forEach((medicamento) => {
+      const carta = crearCartaMedicamento(medicamento);
+      contenedor.appendChild(carta);
+    });
+
+    await successTemporal(eliminado.message);
+
+    esModal
+      ? cerrarModal("profile-medicament-info")
+      : cerrarModalYVolverAVistaBase();
   });
 };
