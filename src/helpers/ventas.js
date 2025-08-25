@@ -8,19 +8,29 @@ import { capitalizarPrimeraLetra, formatearPrecioConPuntos } from "./diseño";
 export function renderizarCarrito() {
   const contenedor = document.querySelector(".venta-productos");
 
-  contenedor.innerHTML = `<p class="venta-productos-placeholder">Agregue elementos</p>`;
-  const placeholder = document.querySelector(".venta-productos-placeholder");
+  // Siempre iniciamos con el placeholder
+  let html = `<p class="venta-productos-placeholder">Agregue elementos</p>`;
 
   if (venta.detalles_venta.length === 0) {
-    placeholder.style.display = "initial";
-    // También reseteamos el total a 0 cuando no hay productos
+    contenedor.innerHTML = html;
+
+    // Mostramos el placeholder
+    contenedor.querySelector(".venta-productos-placeholder").style.display =
+      "initial";
+
+    // Reseteamos el total a 0
     document.getElementById("venta-total").textContent = "$0";
   } else {
-    placeholder.style.display = "none";
+    // Ocultamos el placeholder
+    html = `<p class="venta-productos-placeholder" style="display: none;">Agregue elementos</p>`;
 
+    // Construimos todo el HTML de los productos de una sola vez
     venta.detalles_venta.forEach((detalle, index) => {
-      contenedor.innerHTML += crearProductoHTML(detalle, index);
+      html += crearProductoHTML(detalle, index);
     });
+
+    // Reemplazamos el contenido del contenedor solo una vez
+    contenedor.innerHTML = html;
 
     // Calcular total sumando todos los subtotales
     const totalVenta = venta.detalles_venta.reduce(

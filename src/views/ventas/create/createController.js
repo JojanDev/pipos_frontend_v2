@@ -7,9 +7,33 @@ import {
 } from "../../../helpers";
 import { routes } from "../../../router/routes";
 
+function handleEliminarClick(e) {
+  const btn = e.target.closest(".delete-producto");
+  if (!btn) return;
+
+  const index = Number(btn.dataset.index);
+  if (Number.isNaN(index)) return;
+
+  venta.detalles_venta.splice(index, 1);
+  renderizarCarrito();
+  console.count("delete click");
+}
+
+export function initCarritoEvents() {
+  const contenedor = document.querySelector(".venta-productos");
+  // Opción A: flag para no volver a enlazar
+  if (contenedor.dataset.bound === "true") return;
+  contenedor.addEventListener("click", handleEliminarClick);
+  contenedor.dataset.bound = "true";
+
+  // Opción B (alternativa simple): evita duplicados por sobreescritura
+  // contenedor.onclick = handleEliminarClick;
+}
+
 export let venta = {};
 export let ventaInformacion = {};
 export const createVentaController = (parametros = null) => {
+  initCarritoEvents();
   venta = { detalles_venta: [] };
   ventaInformacion = { detalles_venta: [] };
   const contenedor = document.querySelector("#venta");
@@ -65,16 +89,19 @@ export const createVentaController = (parametros = null) => {
       window.location.hash = "#/ventas/";
     }
 
-    document
-      .querySelector(".venta-productos")
-      .addEventListener("click", (e) => {
-        if (e.target.classList.contains("delete-producto")) {
-          const index = parseInt(e.target.dataset.index);
-          if (!isNaN(index)) {
-            venta.detalles_venta.splice(index, 1);
-            renderizarCarrito();
-          }
-        }
-      });
+    // document
+    //   .querySelector(".venta-productos")
+    //   .addEventListener("click", (e) => {
+    //     if (e.target.classList.contains("delete-producto")) {
+    //       const index = parseInt(e.target.dataset.index);
+    //       if (!isNaN(index)) {
+    //         console.log(venta.detalles_venta);
+    //         venta.detalles_venta.splice(index, 1);
+    //         console.log(venta.detalles_venta);
+
+    //         renderizarCarrito();
+    //       }
+    //     }
+    //   });
   });
 };

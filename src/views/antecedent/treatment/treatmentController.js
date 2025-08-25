@@ -118,12 +118,7 @@ export const treatmentController = async (parametros = null) => {
 
         const iconEdit = document.createElement("i");
 
-        iconEdit.classList.add(
-          "ri-edit-box-line",
-          "edit-tabla",
-          "btn--orange",
-          "admin"
-        );
+        iconEdit.classList.add("ri-edit-box-line", "edit-tabla", "btn--orange");
 
         const row = crearFila([
           id,
