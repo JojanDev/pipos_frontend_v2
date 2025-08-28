@@ -1,4 +1,4 @@
-const url = "http://localhost:3000/api/";
+const url = "http://localhost:3000/pipos_api/";
 
 export const get = async (endpoint) => {
   const respuesta = await fetch(url + endpoint);
