@@ -2,20 +2,20 @@ import { capitalizarPrimeraLetra } from "../helpers/diseño";
 import { get } from "../helpers/api";
 
 export const layoutController = async () => {
-  const dataJSON = localStorage.getItem("data");
-  const data = JSON.parse(dataJSON);
+  // const dataJSON = localStorage.getItem("data");
+  // const data = JSON.parse(dataJSON);
 
-  const getPer = await get("personal/" + data.id);
+  // const getPer = await get("personal/" + data.id);
 
-  const nombreEmpleado = document.querySelector("#empleado-nombre-header");
-  const rolEmpleado = document.querySelector("#empleado-rol-header");
-  nombreEmpleado.textContent = getPer.data.info.nombre;
-  rolEmpleado.textContent = capitalizarPrimeraLetra(getPer.data.rol.nombre);
+  // const nombreEmpleado = document.querySelector("#empleado-nombre-header");
+  // const rolEmpleado = document.querySelector("#empleado-rol-header");
+  // nombreEmpleado.textContent = getPer.data.info.nombre;
+  // rolEmpleado.textContent = capitalizarPrimeraLetra(getPer.data.rol.nombre);
 
-  if (data.id_rol != 1) {
-    const opcionesAdmin = document.querySelectorAll(".admin");
-    [...opcionesAdmin].forEach((element) => element.remove());
-  }
+  // if (data.id_rol != 1) {
+  //   const opcionesAdmin = document.querySelectorAll(".admin");
+  //   [...opcionesAdmin].forEach((element) => element.remove());
+  // }
 
   const btnCuenta = document.querySelector("#cuenta");
 

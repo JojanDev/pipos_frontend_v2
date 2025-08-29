@@ -1,9 +1,6 @@
 <div class="modal__backdrop" data-modal="create-client">
   <section class="section-form modal__container">
-    <i
-      class="ri-arrow-left-line arrow-left arrow-left--bottom"
-      id="back-register-client"
-    ></i>
+    <i class="ri-arrow-left-line arrow-left arrow-left--bottom" id="back-register-client"></i>
 
     <h1 class="section-form__title">Registro de Cliente</h1>
     <hr class="section-form__line section-form__line--margin-bottom" />
@@ -12,59 +9,28 @@
       <div class="form">
         <div class="form__container-field form__container-field--span">
           <label for="" class="form__label">Nombre Completo</label>
-          <input
-            type="text"
-            class="form__input"
-            required
-            data-validate="texto"
-            name="nombre"
-          />
+          <input type="text" class="form__input" required data-validate="texto" name="nombre" />
         </div>
-        <div
-          class="form__container-fields form__container-fields--grid-variant"
-        >
+        <div class="form__container-fields form__container-fields--grid-variant">
           <div class="form__container-field">
             <label for="" class="form__label">Tipo de Documento</label>
-            <select
-              class="form__input form__input--select"
-              required
-              id="tipos-documento"
-              name="id_tipo_documento"
-            >
+            <select class="form__input form__input--select" required id="tipos-documento" name="tipo_documento_id">
               <!-- Opciones -->
               <option disabled selected value="">Seleccione una opcion</option>
             </select>
           </div>
           <div class="form__container-field">
             <label for="" class="form__label">Número</label>
-            <input
-              type="text"
-              class="form__input"
-              required
-              data-validate="numero"
-              name="numero_documento"
-            />
+            <input type="text" class="form__input" required data-validate="numero" name="numero_documento" />
           </div>
         </div>
         <div class="form__container-field form__container-field--span">
           <label for="" class="form__label">Teléfono</label>
-          <input
-            type="text"
-            class="form__input"
-            required
-            data-validate="numero"
-            name="telefono"
-          />
+          <input type="text" class="form__input" required data-validate="numero" name="telefono" />
         </div>
         <div class="form__container-field form__container-field--span">
           <label for="" class="form__label">Correo</label>
-          <input
-            type="text"
-            class="form__input"
-            required
-            data-validate="correo"
-            name="correo"
-          />
+          <input type="text" class="form__input" required data-validate="correo" name="correo" />
         </div>
         <div class="form__container-field form__container-field--span">
           <label for="" class="form__label">Dirección / Barrio</label>

@@ -44,7 +44,7 @@ export const profileClientController = async (parametros = null) => {
 
   const { id } = parametros;
 
-  const response = await get(`clientes/${id}`);
+  const response = await get(`usuarios/${id}`);
 
   if (!response.success) {
     await error(response.message);

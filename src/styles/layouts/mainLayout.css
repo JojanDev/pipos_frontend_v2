@@ -60,6 +60,7 @@
   height: 100%;
   grid-area: nav;
   position: relative;
+  transition: 1s;
 }
 
 .sidebar__title {
@@ -189,4 +190,17 @@
   font-size: 24px;
   font-weight: bold;
   color: #404040;
+}
+
+@media (width <= 900px) {
+  .sidebar{
+    max-width: 0;
+  }
+
+  .layout{
+    grid-template-columns: 1fr;
+    grid-template-areas:
+        "header header"
+        "main main";
+  }
 }

@@ -26,7 +26,10 @@ export const createClientController = async () => {
 
     if (!validarCampos(e)) return;
 
-    const response = await post("clientes", datos);
+    const response = await post("usuarios", datos);
+
+    console.log(response);
+
 
     if (!response.success) {
       await error(response.message);

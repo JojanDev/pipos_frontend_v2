@@ -1,7 +1,7 @@
 import { get, cargarTiposDocumento, crearFila } from "../../helpers";
 
 export const cargarTabla = async () => {
-  const clientes = await get("clientes");
+  const clientes = await get("usuarios/clientes");
 
   if (!clientes.success) {
     await error(response.message);
@@ -12,16 +12,17 @@ export const cargarTabla = async () => {
 
   const clientesInfo = clientes.data.map((cliente) => {
     //
+    console.log(cliente);
 
     const info = cliente.info;
     //
 
     return [
       cliente.id,
-      info.nombre,
-      info.telefono,
-      info.numeroDocumento,
-      info.direccion,
+      cliente.nombre,
+      cliente.telefono,
+      cliente.numero_documento,
+      cliente.direccion,
     ];
   });
 

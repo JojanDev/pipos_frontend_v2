@@ -12,10 +12,12 @@ import {
 //Funcion para validar los datos de inicio de sesion
 const validarSesion = async ({ usuario, contrasena }) => {
   //Se realiza la peticion
-  const response = await post("personal/login", {
+  const response = await post("auth/login", {
     usuario,
     contrasena,
   });
+
+  console.log(response);
 
   //Se valida el inicio exitoso
   if (response.code == 200) {
@@ -43,6 +45,8 @@ export const loginController = async () => {
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
+    console.log("hoal");
+    // localStorage.setItem("isAuthenticated", true);
 
     if (!validarCampos(e)) return;
 
