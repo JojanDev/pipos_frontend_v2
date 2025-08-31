@@ -4,10 +4,10 @@ export const capitalizarPrimeraLetra = (palabra) => {
 };
 
 export const formatearPrecioConPuntos = (precio) => {
-     const formatter = new Intl.NumberFormat('es-CO', {
-      style: 'currency',
-      currency: 'COP',
-      minimumFractionDigits: 0
+  const formatter = new Intl.NumberFormat("es-CO", {
+    style: "currency",
+    currency: "COP",
+    minimumFractionDigits: 0,
   });
   return formatter.format(precio);
 };

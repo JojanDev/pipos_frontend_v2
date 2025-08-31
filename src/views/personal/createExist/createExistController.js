@@ -1,10 +1,7 @@
 import {
   error,
-  loginSuccess,
   success,
-  get,
   post,
-  cargarTiposDocumento,
   configurarEventosValidaciones,
   datos,
   validarCampos,
@@ -16,8 +13,6 @@ import {
 
 export const createPersonalExistController = async () => {
   const form = document.querySelector("#form-register-personalExist");
-  // const selectTipoDocumento = document.querySelector("#tipos-documento");
-  // await cargarTiposDocumento(selectTipoDocumento);
   const esModal = !location.hash.includes("personal/crearExistente");
 
   llenarSelect({

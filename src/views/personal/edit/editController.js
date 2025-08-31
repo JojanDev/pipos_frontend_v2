@@ -1,9 +1,6 @@
 import {
   error,
   successTemporal,
-  post,
-  cargarTiposDocumento,
-  crearFila,
   cerrarModal,
   cerrarModalYVolverAVistaBase,
   configurarEventosValidaciones,
@@ -23,8 +20,6 @@ export const editPersonalController = async (parametros = null) => {
   const selectTipoDocumento = document.querySelector("#tipos-documento");
   const tbody = document.querySelector("#clients .table__body");
   const esModal = !location.hash.includes("clientes/crear");
-
-  await cargarTiposDocumento(selectTipoDocumento);
 
   configurarEventosValidaciones(form);
 

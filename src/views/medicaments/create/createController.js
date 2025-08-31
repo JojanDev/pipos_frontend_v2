@@ -2,8 +2,6 @@ import {
   error,
   successTemporal,
   post,
-  cargarTiposDocumento,
-  crearFila,
   cerrarModal,
   cerrarModalYVolverAVistaBase,
   configurarEventosValidaciones,
@@ -36,8 +34,6 @@ export const createMedicamentInfoController = async () => {
   const selectMedicamentosInfo = document.querySelector(
     "#form-register-medicament-inventory #select-medicamentos-info"
   );
-
-  // await cargarTiposDocumento(selectTipoDocumento);
 
   configurarEventosValidaciones(form);
 

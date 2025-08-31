@@ -1,22 +1,20 @@
 import {
   success,
-  crearElementoTratamiento,
   post,
   cerrarModalYVolverAVistaBase,
   configurarEventosValidaciones,
   datos,
   validarCampos,
-  crearFila,
   error,
   cerrarModal,
+  DOMSelector,
+  configurarBotonCerrar,
+  DOMSelectorAll,
 } from "../../../helpers";
 import { crearCardServicio } from "../servicesController";
-// import { listarServices } from "../../administrationController";
 
 export const createServiceController = (parametros = null) => {
-  // const { idAntecedente } = parametros;
-
-  const form = document.querySelector("#form-register-service");
+  const form = DOMSelector("#form-register-service");
   const esModal = !location.hash.includes("servicios/crear");
 
   configurarEventosValidaciones(form);
@@ -26,8 +24,6 @@ export const createServiceController = (parametros = null) => {
 
     if (!validarCampos(e)) return;
 
-    // datos["id_antecedente"] = idAntecedente;
-
     const responseServicios = await post("servicios", datos);
 
     if (!responseServicios.success) {
@@ -35,14 +31,14 @@ export const createServiceController = (parametros = null) => {
       return;
     }
 
-    const containerCards = document.querySelector("#services");
+    const containerCards = DOMSelector("#services");
 
     if (containerCards) {
       const { id, nombre, descripcion, precio } = responseServicios.data;
 
       const card = crearCardServicio(id, nombre, descripcion, precio);
       containerCards.insertAdjacentElement("afterbegin", card);
-      const placeholderAnterior = document.querySelector(".placeholder");
+      const placeholderAnterior = DOMSelector(".placeholder");
       if (placeholderAnterior) placeholderAnterior.remove();
     }
 
@@ -50,7 +46,7 @@ export const createServiceController = (parametros = null) => {
     const data = JSON.parse(dataJSON);
 
     if (data.id_rol != 1) {
-      const opcionesAdmin = document.querySelectorAll(".admin");
+      const opcionesAdmin = DOMSelectorAll(".admin");
       [...opcionesAdmin].forEach((element) => {
         element.remove();
       });
@@ -61,9 +57,5 @@ export const createServiceController = (parametros = null) => {
     esModal ? cerrarModal("create-service") : cerrarModalYVolverAVistaBase();
   });
 
-  const btnAtras = document.querySelector("#back-register-service");
-
-  btnAtras.addEventListener("click", () => {
-    esModal ? cerrarModal("create-service") : cerrarModalYVolverAVistaBase();
-  });
+  configurarBotonCerrar("back-register-service", esModal);
 };

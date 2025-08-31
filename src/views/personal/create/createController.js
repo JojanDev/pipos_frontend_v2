@@ -4,7 +4,6 @@ import {
   success,
   get,
   post,
-  cargarTiposDocumento,
   configurarEventosValidaciones,
   datos,
   validarCampos,
@@ -15,7 +14,6 @@ import {
 export const createPersonalController = async () => {
   const form = document.querySelector("#form-register");
   const selectTipoDocumento = document.querySelector("#tipos-documento");
-  await cargarTiposDocumento(selectTipoDocumento);
 
   llenarSelect({
     endpoint: "roles",

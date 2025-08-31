@@ -1,13 +1,9 @@
 import {
   get,
-  cargarTiposDocumento,
   crearFila,
-  convertirADiaMesAño,
   capitalizarPrimeraLetra,
-  cargarComponente,
   formatearPrecioConPuntos,
 } from "../../helpers";
-import { routes } from "../../router/routes";
 
 function formatoCorto(localDateTime) {
   const fecha = new Date(localDateTime);

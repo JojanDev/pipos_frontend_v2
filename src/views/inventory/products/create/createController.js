@@ -9,7 +9,6 @@ import {
   error,
   successTemporal,
   post,
-  cargarTiposDocumento,
   crearFila,
   cerrarModal,
   cerrarModalYVolverAVistaBase,

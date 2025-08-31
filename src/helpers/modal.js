@@ -28,3 +28,13 @@ export const cerrarModal = (modalKey) => {
 
   modal.remove();
 };
+
+export const configurarBotonCerrar = (buttonId, esModal) => {
+  const button = document.querySelector(`#${buttonId}`);
+  if (!button) return;
+
+  button.addEventListener("click", () => {
+    const modalId = button.dataset.modal;
+    esModal ? cerrarModal(modalId) : cerrarModalYVolverAVistaBase();
+  });
+};

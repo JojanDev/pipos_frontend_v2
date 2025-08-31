@@ -4,7 +4,6 @@ import {
   success,
   get,
   post,
-  cargarTiposDocumento,
   configurarEventosValidaciones,
   datos,
   validarCampos,
@@ -16,8 +15,7 @@ import {
 
 export const createClienteExistController = async () => {
   const form = document.querySelector("#form-register-clienteExist");
-  // const selectTipoDocumento = document.querySelector("#tipos-documento");
-  // await cargarTiposDocumento(selectTipoDocumento);
+
   const esModal = !location.hash.includes("clientes/crearExistente");
 
   llenarSelect({

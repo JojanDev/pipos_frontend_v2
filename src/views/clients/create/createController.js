@@ -1,59 +1,72 @@
 import {
-  error,
-  successTemporal,
-  post,
-  cargarTiposDocumento,
-  crearFila,
   cerrarModal,
   cerrarModalYVolverAVistaBase,
   configurarEventosValidaciones,
+  crearFila,
   datos,
+  error,
+  llenarSelect,
+  post,
+  successTemporal,
   validarCampos,
 } from "../../../helpers";
 
 export const createClientController = async () => {
   const form = document.querySelector("#form-register-client");
-  const selectTipoDocumento = document.querySelector("#tipos-documento");
   const tbody = document.querySelector("#clients .table__body");
   const esModal = !location.hash.includes("clientes/crear");
 
-  await cargarTiposDocumento(selectTipoDocumento);
+  //Inicializacion
+  llenarSelect({
+    endpoint: "tipos-documentos",
+    selector: "#tipos-documento",
+    optionMapper: ({ id, nombre }) => ({ id, text: nombre }),
+  });
 
   configurarEventosValidaciones(form);
 
+  //Evento
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     if (!validarCampos(e)) return;
 
-    const response = await post("usuarios", datos);
+    const createUserResponse = await post("usuarios", datos);
 
-    console.log(response);
+    console.log(createUserResponse);
 
+    if (!createUserResponse.success)
+      return await error(createUserResponse.message);
 
-    if (!response.success) {
-      await error(response.message);
-      return;
-    }
+    const clientRoleResponse = await post("roles-usuarios", {
+      usuario_id: createUserResponse.data.id,
+      rol_id: 5, //Rol cliente
+    });
 
-    await successTemporal(response.message);
+    await successTemporal(createUserResponse.message);
 
     if (tbody) {
-      const {
-        id,
-        info: { nombre, telefono, numeroDocumento, direccion },
-      } = response.data;
+      const { id, nombre, telefono, numero_documento, direccion } =
+        createUserResponse.data;
 
-      const row = crearFila([id, nombre, telefono, numeroDocumento, direccion]);
+      const row = crearFila([
+        id,
+        nombre,
+        telefono,
+        numero_documento,
+        direccion,
+      ]);
+
       tbody.insertAdjacentElement("afterbegin", row);
     }
 
     esModal ? cerrarModal("create-client") : cerrarModalYVolverAVistaBase();
   });
 
+  //Evento de cierre del modal
   document.addEventListener("click", (event) => {
-    const arrow = event.target.closest("#back-register-client");
-    if (arrow) {
+    const target = event.target;
+    if (target.closest("#back-register-client")) {
       esModal ? cerrarModal("create-client") : cerrarModalYVolverAVistaBase();
     }
   });

@@ -10,13 +10,50 @@ export const success = (message) => {
 };
 
 export const successTemporal = (message) => {
-  return Swal.fire({
-    icon: "success",
-    title: "Exito!",
-    text: message,
+  // return Swal.fire({
+  //   icon: "success",
+  //   title: "Exito!",
+  //   text: message,
+  //   showConfirmButton: false,
+  //   timer: 2000,
+  //   timerProgressBar: true,
+  // });
+
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
     showConfirmButton: false,
-    timer: 2000,
+    timer: 4000,
+    width: "auto",
+    color: "#0161b5",
     timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.onmouseenter = Swal.stopTimer;
+      toast.onmouseleave = Swal.resumeTimer;
+    },
+  });
+  return Toast.fire({
+    icon: "success",
+    title: message,
+  });
+};
+
+export const errorTemporal = (message) => {
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 4000,
+    width: "auto",
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.onmouseenter = Swal.stopTimer;
+      toast.onmouseleave = Swal.resumeTimer;
+    },
+  });
+  return Toast.fire({
+    icon: "warning",
+    title: message,
   });
 };
 

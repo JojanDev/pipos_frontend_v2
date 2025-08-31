@@ -1,9 +1,4 @@
-import {
-  get,
-  cargarTiposDocumento,
-  crearFila,
-  capitalizarPrimeraLetra,
-} from "../../helpers";
+import { get, crearFila, capitalizarPrimeraLetra } from "../../helpers";
 
 export const cargarTablaEmpleados = async () => {
   const personales = await get("personal");

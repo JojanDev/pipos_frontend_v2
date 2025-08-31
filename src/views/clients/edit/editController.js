@@ -1,9 +1,6 @@
 import {
   error,
   successTemporal,
-  post,
-  cargarTiposDocumento,
-  crearFila,
   cerrarModal,
   cerrarModalYVolverAVistaBase,
   configurarEventosValidaciones,
@@ -48,8 +45,6 @@ export const editClientController = async (parametros = null) => {
   const selectTipoDocumento = document.querySelector("#tipos-documento");
   const tbody = document.querySelector("#clients .table__body");
   const esModal = !location.hash.includes("clientes/editar");
-
-  await cargarTiposDocumento(selectTipoDocumento);
 
   // Obtenemos el formulario
   // Obtenemos todos los inputs dentro del formulario que tengan atributo name

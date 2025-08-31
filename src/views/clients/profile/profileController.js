@@ -7,66 +7,45 @@ import {
   cerrarModal,
   cerrarModalYVolverAVistaBase,
   cargarComponente,
+  mapearDatosEnContenedor,
+  DOMSelector,
+  configurarBotonCerrar,
+  errorTemporal,
 } from "../../../helpers";
 
-const asignarDatosCliente = (data) => {
-  const spanNombre = document.querySelector("#profile-nombre");
-  const spanTipoDocumento = document.querySelector("#profile-tipoDocumento");
-  const spanNumeroDocumento = document.querySelector(
-    "#profile-numeroDocumento"
-  );
-  const spanDireccion = document.querySelector("#profile-direccion");
-  const spanTelefono = document.querySelector("#profile-telefono");
-  const spanCorreo = document.querySelector("#profile-correo");
-
-  const {
-    correo,
-    direccion,
-    nombre,
-    numeroDocumento,
-    telefono,
-    tipoDocumento,
-  } = data.info;
-
-  spanNombre.textContent = nombre;
-  spanTipoDocumento.textContent = tipoDocumento.nombre;
-  spanNumeroDocumento.textContent = numeroDocumento;
-  spanDireccion.textContent = direccion;
-  spanTelefono.textContent = telefono;
-  spanCorreo.textContent = correo;
-};
-
 export const profileClientController = async (parametros = null) => {
-  const tbody = document.querySelector("#pets-client .table__body");
-  const btnAtras = document.querySelector("#back-perfil");
-  const btnRegisterPets = document.querySelector("#register-pets-client");
+  const tbody = DOMSelector("#pets-client .table__body");
   const esModal = !location.hash.includes("clientes/perfil");
+  const profileClient = DOMSelector(`[data-modal="profile-client"]`);
 
   const { id } = parametros;
 
-  const response = await get(`usuarios/${id}`);
+  const userResponse = await get(`usuarios/${id}`);
 
-  if (!response.success) {
-    await error(response.message);
+  if (!userResponse.success) {
+    await error(userResponse.message);
     cerrarModalYVolverAVistaBase();
     return;
   }
 
-  asignarDatosCliente(response.data);
+  const typeDocumentResponse = await get(
+    "tipos-documentos/" + userResponse.data.tipo_documento_id
+  );
+  userResponse.data["tipo_documento"] = typeDocumentResponse.data.nombre;
+  userResponse.data["cliente"] = userResponse.data.nombre;
 
-  const responseMascotas = await get(`mascotas/cliente/${id}`);
+  mapearDatosEnContenedor(userResponse.data, profileClient);
 
-  console.log(responseMascotas);
+  const userResponseMascotas = await get(`mascotas/cliente/${id}`);
 
-  if (responseMascotas.code == 500) {
-    await error(responseMascotas.message);
-    esModal ? cerrarModal("profile-client") : cerrarModalYVolverAVistaBase();
-    return;
-  }
+  console.log(userResponseMascotas);
 
-  if (responseMascotas.success) {
+  if (!userResponseMascotas.success)
+    errorTemporal(userResponseMascotas.message);
+
+  if (userResponseMascotas.success) {
     if (tbody) {
-      responseMascotas.data.forEach(
+      userResponseMascotas.data.forEach(
         ({ id, edadFormateada, nombre, raza, sexo, estado_vital }) => {
           const row = crearFila([
             id,
@@ -85,24 +64,18 @@ export const profileClientController = async (parametros = null) => {
     }
   }
 
-  btnAtras.addEventListener("click", () => {
-    esModal ? cerrarModal("profile-client") : cerrarModalYVolverAVistaBase();
-  });
+  profileClient.addEventListener("click", async (e) => {
+    if (e.target.id == "back-perfil")
+      configurarBotonCerrar("back-perfil", esModal);
 
-  btnRegisterPets.addEventListener("click", async () => {
-    await cargarComponente(routes.mascotas.crear, id);
-    const selectCliente = document.querySelector("#select-clients");
-    const contenedor = selectCliente?.closest(".form__container-field");
-    contenedor.classList.add("hidden");
-  });
+    if (e.target.id == "register-pets-client") {
+      await cargarComponente(routes.mascotas.crear, id);
+      const selectCliente = DOMSelector("#select-clients");
+      const contenedor = selectCliente?.closest(".form__container-field");
+      contenedor.classList.add("hidden");
+    }
 
-  const btnEditProfile = document.querySelector("#edit-client");
-
-  btnEditProfile.addEventListener("click", async () => {
-    await cargarComponente(routes.clientes.editar, { id });
-    // const selectCliente = document.querySelector("#select-clients");
-    // const contenedor = selectCliente?.closest(".form__container-field");
-    // contenedor.classList.add("hidden");
-    //
+    if (e.target.id == "edit-client")
+      await cargarComponente(routes.clientes.editar, { id });
   });
 };

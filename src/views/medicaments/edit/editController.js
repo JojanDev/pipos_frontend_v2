@@ -1,19 +1,14 @@
 import {
   error,
   successTemporal,
-  post,
-  cargarTiposDocumento,
-  crearFila,
   cerrarModal,
   cerrarModalYVolverAVistaBase,
   configurarEventosValidaciones,
   datos,
   validarCampos,
-  capitalizarPrimeraLetra,
   get,
   put,
 } from "../../../helpers";
-import { listarMedicamentos } from "../../inventory/inventoryController";
 import { crearCartaMedicamento } from "../medicamentsController";
 import { asignarDatosMedicamentoInfo } from "../profile/profileController";
 
@@ -46,8 +41,6 @@ export const editMedicamentInfoController = async (parametros = null) => {
   // const selectTipoDocumento = document.querySelector("#tipos-documento");
   const tbody = document.querySelector("#medicament-infos .table__body");
   const esModal = !location.hash.includes("medicamentos_info/editar");
-
-  // await cargarTiposDocumento(selectTipoDocumento);
 
   const { id } = parametros;
 

@@ -114,8 +114,6 @@ export const servicesController = async () => {
     });
   }
 
-  const esModal = !location.hash.includes("servicios/editar");
-
   const contenedorServicios = document.querySelector("#services");
 
   contenedorServicios.addEventListener("click", async (event) => {

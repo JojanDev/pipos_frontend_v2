@@ -10,6 +10,7 @@ import {
   put,
 } from "../../../helpers";
 import { routes } from "../../../router/routes";
+import { mapearDatosEnContenedor } from "../../../helpers/domMapper";
 
 /**
  * Desactiva los botones principales del perfil de la mascota
@@ -94,6 +95,8 @@ export const asignarDatosMascota = (data) => {
 
 export const profilePetController = async (parametros = null) => {
   let estado_vital = true;
+  const profilePet = document.querySelector("#pet-profile");
+
   const dataJSON = localStorage.getItem("data");
   const data = JSON.parse(dataJSON);
 
@@ -107,11 +110,26 @@ export const profilePetController = async (parametros = null) => {
   const { id } = parametros;
 
   //Peticion para obtener la informacion de la mascota
-  const responseMascota = await get(`mascotas/${id}`);
+  const petResponse = await get(`mascotas/${id}`);
+  const clientResponse = await get(`usuarios/${petResponse.data.usuario_id}`);
+  const typeDocumentResponse = await get(
+    `tipos-documentos/${clientResponse.data.tipo_documento_id}`
+  );
+
   const responseAntecedentesMascota = await get(`antecedentes/mascota/${id}`);
 
-  asignarDatosCliente(responseMascota.data);
-  asignarDatosMascota(responseMascota.data);
+  petResponse.data.mascota = petResponse.data.nombre;
+  petResponse.data.especie = petResponse.data.raza.especie.nombre;
+  petResponse.data.raza = petResponse.data.raza.nombre;
+  petResponse.data.edad = petResponse.data.edad_semanas;
+
+  console.log(petResponse);
+  clientResponse.data["tipo_documento"] = typeDocumentResponse.data.nombre;
+  clientResponse.data["dueño"] = clientResponse.data.nombre;
+
+  const dataProfile = { ...clientResponse.data, ...petResponse.data };
+
+  mapearDatosEnContenedor(dataProfile, profilePet);
 
   const contenedorAntecedente = document.querySelector(
     "#profile-pet-antecedent"
@@ -136,7 +154,7 @@ export const profilePetController = async (parametros = null) => {
     // return;
   }
 
-  if (!responseMascota.data.estado_vital) {
+  if (!petResponse.data.estado_vital) {
     desactivarBotonesPerfilMascota();
     estado_vital = false;
   }

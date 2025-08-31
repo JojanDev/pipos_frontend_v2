@@ -1,32 +1,33 @@
-import {
-  get,
-  cargarTiposDocumento,
-  crearFila,
-  convertirADiaMesAño,
-  convertirFechaLocalDate,
-  error,
-} from "../../helpers";
+import { get, crearFila, convertirFechaLocalDate, error } from "../../helpers";
 
 export const petsController = async () => {
-  const response = await get("mascotas");
+  const tbody = document.querySelector("#pets .table__body");
+  const petsResponse = await get("mascotas");
 
-  console.log(response);
+  console.log(petsResponse);
 
-  if (!response.success) {
-    await error(response.message);
+  if (!petsResponse.success) {
+    await error(petsResponse.message);
   }
 
-  const tbody = document.querySelector("#pets .table__body");
-
-  response.data.forEach(
-    ({ id, nombre, raza, cliente, ultimo_registro, estado_vital }) => {
+  petsResponse.data.forEach(
+    ({
+      id,
+      nombre,
+      raza,
+      cliente,
+      especie,
+      telefono,
+      ultimo_registro,
+      estado_vital,
+    }) => {
       const row = crearFila([
         id,
         nombre,
-        raza.especie.nombre,
-        raza.nombre,
-        cliente.info.nombre,
-        cliente.info.telefono,
+        especie,
+        raza,
+        cliente,
+        telefono,
         ultimo_registro
           ? convertirFechaLocalDate(ultimo_registro)
           : "Sin registros", //PENDIENTE HACER OBTENER LA FECHA DEL ULTIMO ANTECEDENTE
@@ -38,17 +39,11 @@ export const petsController = async () => {
     }
   );
 
-  const tablePets = document.querySelector("#pets");
-  tablePets.addEventListener("click", (event) => {
-    const fila = event.target.closest("tr[data-id]");
-
+  document.addEventListener("click", (e) => {
+    const fila = e.target.closest("tr[data-id]");
     if (fila) {
       const idPet = fila.getAttribute("data-id");
-
       location.hash = `#/mascotas/perfil/id=${idPet}`;
-
-      // Aquí puedes llamar a una función para ver más detalles, abrir modal, etc.
-      // ejemplo: mostrarDetalleCliente(idCliente);
     }
   });
 };
