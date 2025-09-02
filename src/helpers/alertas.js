@@ -23,9 +23,8 @@ export const successTemporal = (message) => {
     toast: true,
     position: "top-end",
     showConfirmButton: false,
-    timer: 4000,
+    timer: 3000,
     width: "auto",
-    color: "#0161b5",
     timerProgressBar: true,
     didOpen: (toast) => {
       toast.onmouseenter = Swal.stopTimer;
@@ -43,7 +42,7 @@ export const errorTemporal = (message) => {
     toast: true,
     position: "top-end",
     showConfirmButton: false,
-    timer: 4000,
+    timer: 3000,
     width: "auto",
     timerProgressBar: true,
     didOpen: (toast) => {

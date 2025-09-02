@@ -1,14 +1,18 @@
 import {
   capitalizarPrimeraLetra,
   cerrarModal,
+  configurarBotonCerrar,
   configurarEventosValidaciones,
   crearElementoTratamiento,
   crearFila,
   datos,
+  DOMSelector,
   error,
+  get,
   llenarSelect,
   post,
   success,
+  successTemporal,
   validarCampos,
 } from "../../../../../helpers";
 
@@ -26,7 +30,7 @@ export const createMedicamentController = async (parametros = null) => {
   const { idTratamiento } = parametros;
 
   llenarSelect({
-    endpoint: "medicamentos/info/",
+    endpoint: "info-medicamentos/",
     selector: "#select-medicamentos-info",
     optionMapper: ({ id, nombre, presentacion, via_administracion }) => ({
       id: id,
@@ -36,7 +40,7 @@ export const createMedicamentController = async (parametros = null) => {
     }),
   });
 
-  const form = document.querySelector(
+  const form = DOMSelector(
     "#form-register-pet-antecedent-treatment-medicament"
   );
 
@@ -47,9 +51,9 @@ export const createMedicamentController = async (parametros = null) => {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const inputMeses = document.querySelector('[name="meses"]');
-    const inputSemanas = document.querySelector('[name="semanas"]');
-    const inputDias = document.querySelector('[name="dias"]');
+    const inputMeses = DOMSelector('[name="meses"]');
+    const inputSemanas = DOMSelector('[name="semanas"]');
+    const inputDias = DOMSelector('[name="dias"]');
     if (!validarCampos(e)) return;
 
     if (
@@ -61,14 +65,14 @@ export const createMedicamentController = async (parametros = null) => {
       return;
     }
 
-    const { id_medicamento_info, frecuencia_aplicacion, dosis } = datos;
+    const { info_medicamento_id, frecuencia_aplicacion, dosis } = datos;
     const duracion = calcularDiasTotales(datos);
 
     const responseMedicamentoTratamiento = await post(
-      "medicamentos/tratamiento",
+      "medicamentos-tratamientos/",
       {
-        id_tratamiento: idTratamiento,
-        id_medicamento_info,
+        tratamiento_id: idTratamiento,
+        info_medicamento_id,
         frecuencia_aplicacion,
         duracion,
         dosis,
@@ -82,18 +86,20 @@ export const createMedicamentController = async (parametros = null) => {
       return;
     }
 
-    const tbody = document.querySelector(
-      "#pet-antecedent-treatment .table__body"
-    );
+    const tbody = DOMSelector("#pet-antecedent-treatment .table__body");
 
     if (tbody) {
       const {
         id,
-        medicamento,
+        info_medicamento_id,
         dosis,
         frecuencia_aplicacion,
-        duracionFormateada,
+        duracion,
       } = responseMedicamentoTratamiento.data;
+
+      const { data: infoMedicamento } = await get(
+        `info-medicamentos/${info_medicamento_id}`
+      );
 
       const iconDelete = document.createElement("i");
       // spanTitulo.textContent = titulo;
@@ -115,12 +121,12 @@ export const createMedicamentController = async (parametros = null) => {
 
       const row = crearFila([
         id,
-        medicamento.nombre,
-        medicamento.uso_general,
-        capitalizarPrimeraLetra(medicamento.via_administracion),
+        infoMedicamento.nombre,
+        infoMedicamento.uso_general,
+        capitalizarPrimeraLetra(infoMedicamento.via_administracion),
         dosis,
         frecuencia_aplicacion,
-        duracionFormateada[1],
+        duracion,
         iconDelete,
         iconEdit,
       ]);
@@ -128,20 +134,15 @@ export const createMedicamentController = async (parametros = null) => {
       tbody.insertAdjacentElement("afterbegin", row);
     }
 
-    await success(responseMedicamentoTratamiento.message);
+    successTemporal(responseMedicamentoTratamiento.message);
 
     esModal
       ? cerrarModal("create-pet-antecedent-treatment-medicament")
       : cerrarModalYVolverAVistaBase();
   });
 
-  const btnAtras = document.querySelector(
-    "#back-register-pet-antecedent-treatment-medicament"
+  configurarBotonCerrar(
+    "back-register-pet-antecedent-treatment-medicament",
+    esModal
   );
-
-  btnAtras.addEventListener("click", () => {
-    esModal
-      ? cerrarModal("create-pet-antecedent-treatment-medicament")
-      : cerrarModalYVolverAVistaBase();
-  });
 };

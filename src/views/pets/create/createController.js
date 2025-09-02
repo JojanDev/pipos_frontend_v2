@@ -17,6 +17,7 @@ import {
   inicializarFormularioMascota,
   calcularSemanasTotales,
   actualizarTablas,
+  successTemporal,
 } from "../../../helpers";
 
 export const createPetController = async (idDueno) => {
@@ -45,20 +46,20 @@ export const createPetController = async (idDueno) => {
     if (!validarCampos(e)) return;
 
     const edad_semanas = calcularSemanasTotales(datos);
-    const { nombre, sexo, id_raza, id_cliente } = datos;
+    const { nombre, sexo, raza_id, usuario_id } = datos;
 
-    const response = await post("mascotas", {
+    const petResponse = await post("mascotas", {
       nombre,
       sexo,
-      id_raza,
+      raza_id,
       edad_semanas,
-      id_cliente: requiredSelectClient ? id_cliente : idDueno,
+      usuario_id: requiredSelectClient ? usuario_id : idDueno,
     });
 
-    if (!response.success) return await error(response.message);
-    await success(response.message);
+    if (!petResponse.success) return await error(petResponse.message);
+    successTemporal(petResponse.message);
 
-    actualizarTablas(response.data, tbody_perfilCliente, tbody_Mascotas);
+    actualizarTablas(petResponse.data, tbody_perfilCliente, tbody_Mascotas);
 
     esModal ? cerrarModal("create-pet") : cerrarModalYVolverAVistaBase();
   });

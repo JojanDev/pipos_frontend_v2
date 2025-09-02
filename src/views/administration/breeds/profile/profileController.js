@@ -37,7 +37,7 @@ export const profileBreedController = async (parametros = null) => {
       await cargarComponente(routes.administrar_datos.razasEditar, {
         id: id,
         nombre: response.data.nombre,
-        id_especie: response.data.especie.id,
+        especie_id: response.data.especie_id,
       });
     }
 

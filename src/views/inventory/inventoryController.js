@@ -3,6 +3,8 @@ import {
   cargarComponente,
   convertirADiaMesAño,
   crearFila,
+  DOMSelector,
+  errorTemporal,
   formatearPrecioConPuntos,
   get,
 } from "../../helpers";
@@ -10,27 +12,36 @@ import { routes } from "../../router/routes";
 
 export const listarProductos = async () => {
   const responseProductos = await get("productos");
+  // console.log(responseProductos);
 
-  if (!responseProductos.success) {
-    // await error(response.message);
-    //MESSAGE DE NO HAY MEDICAMENTOS REGISTRADOS
-    return;
-  }
+  if (!responseProductos.success) return errorTemporal(response.message);
 
-  const tbody = document.querySelector("#products .table__body");
+  const tbody = DOMSelector("#products .table__body");
   tbody.innerHTML = "";
 
-  const productosFilas = responseProductos.data.map(
-    ({ id, nombre, tipoProducto, precio, stock, fecha_caducidad }) => {
-      return [
+  const productosFilas = await Promise.all(
+    responseProductos.data.map(
+      async ({
         id,
         nombre,
-        tipoProducto.nombre,
-        formatearPrecioConPuntos(precio),
+        tipo_producto_id,
+        precio,
         stock,
-        convertirADiaMesAño(fecha_caducidad),
-      ];
-    }
+        fecha_caducidad,
+      }) => {
+        const { data: tipoProducto } = await get(
+          `tipos-productos/${tipo_producto_id}`
+        );
+        return [
+          id,
+          nombre,
+          tipoProducto.nombre,
+          formatearPrecioConPuntos(precio),
+          stock,
+          convertirADiaMesAño(fecha_caducidad),
+        ];
+      }
+    )
   );
 
   productosFilas.forEach((producto) => {
@@ -53,22 +64,27 @@ export const listarMedicamentos = async () => {
     return;
   }
 
-  const tbody = document.querySelector("#medicaments .table__body");
+  const tbody = DOMSelector("#medicaments .table__body");
   tbody.innerHTML = "";
 
-  const medicamentosFilas = responseMedicamentos.data.map(
-    ({ id, info, precio, cantidad, numero_lote }) => {
-      return [
-        id,
-        numero_lote,
-        info.nombre,
-        info.uso_general,
-        capitalizarPrimeraLetra(info.via_administracion),
-        capitalizarPrimeraLetra(info.presentacion),
-        formatearPrecioConPuntos(precio),
-        cantidad,
-      ];
-    }
+  const medicamentosFilas = await Promise.all(
+    responseMedicamentos.data.map(
+      async ({ id, info_medicamento_id, precio, cantidad, numero_lote }) => {
+        const { data: info } = await get(
+          `info-medicamentos/${info_medicamento_id}`
+        );
+        return [
+          id,
+          numero_lote,
+          info.nombre,
+          info.uso_general,
+          capitalizarPrimeraLetra(info.via_administracion),
+          capitalizarPrimeraLetra(info.presentacion),
+          formatearPrecioConPuntos(precio),
+          cantidad,
+        ];
+      }
+    )
   );
 
   medicamentosFilas.forEach((medicamento) => {
@@ -83,24 +99,24 @@ export const listarMedicamentos = async () => {
 };
 
 export const inventoryController = () => {
-  const dataJSON = localStorage.getItem("data");
-  const data = JSON.parse(dataJSON);
+  // const dataJSON = localStorage.getItem("data");
+  // const data = JSON.parse(dataJSON);
 
-  if (data.id_rol != 1) {
-    const opcionesAdmin = document.querySelectorAll(".admin");
-    [...opcionesAdmin].forEach((element) => {
-      element.remove();
-    });
-  }
+  // if (data.id_rol != 1) {
+  //   const opcionesAdmin = DOMSelectorAll(".admin");
+  //   [...opcionesAdmin].forEach((element) => {
+  //     element.remove();
+  //   });
+  // }
 
   listarProductos();
   listarMedicamentos();
 
-  const vistaInventory = document.querySelector("#inventory");
+  const vistaInventory = DOMSelector("#inventory");
 
   vistaInventory.addEventListener("click", (e) => {});
 
-  const tablaProductos = document.querySelector("#products");
+  const tablaProductos = DOMSelector("#products");
 
   tablaProductos.addEventListener("click", async (event) => {
     const fila = event.target.closest("tr[data-id]");
@@ -110,18 +126,18 @@ export const inventoryController = () => {
 
       // location.hash = `#/inventario/productosPerfil/id=${idProducto}`;
 
-      if (data.id_rol == 1) {
-        await cargarComponente(routes.inventario.productosEditar, {
-          id: idProducto,
-        });
-      }
+      // if (data.id_rol == 1) {
+      await cargarComponente(routes.inventario.productosEditar, {
+        id: idProducto,
+      });
+      // }
 
       // Aquí puedes llamar a una función para ver más detalles, abrir modal, etc.
       // ejemplo: mostrarDetalleCliente(idCliente);
     }
   });
 
-  const tablaMedicamentos = document.querySelector("#medicaments");
+  const tablaMedicamentos = DOMSelector("#medicaments");
 
   tablaMedicamentos.addEventListener("click", async (event) => {
     const fila = event.target.closest("tr[data-id]");
@@ -129,9 +145,9 @@ export const inventoryController = () => {
     if (fila) {
       const id = fila.getAttribute("data-id");
 
-      if (data.id_rol == 1) {
-        location.hash = `#/inventario/medicamentosEditar/id=${id}`;
-      }
+      // if (data.id_rol == 1) {
+      location.hash = `#/inventario/medicamentosEditar/id=${id}`;
+      // }
       // await cargarComponente(routes);
 
       // Aquí puedes llamar a una función para ver más detalles, abrir modal, etc.

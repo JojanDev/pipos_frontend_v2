@@ -43,7 +43,7 @@ export const createClientController = async () => {
       rol_id: 5, //Rol cliente
     });
 
-    await successTemporal(createUserResponse.message);
+    successTemporal(createUserResponse.message);
 
     if (tbody) {
       const { id, nombre, telefono, numero_documento, direccion } =

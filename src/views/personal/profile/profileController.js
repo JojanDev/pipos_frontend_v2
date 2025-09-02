@@ -10,20 +10,21 @@ import {
   del,
   success,
   put,
+  DOMSelector,
+  mapearDatosEnContenedor,
+  configurarBotonCerrar,
 } from "../../../helpers";
 import { cargarTablaEmpleados } from "../personalController";
 
 export const asignarDatosCliente = (data) => {
-  const spanNombre = document.querySelector("#profile-nombre");
-  const spanRol = document.querySelector("#profile-rol");
-  const spanTipoDocumento = document.querySelector("#profile-tipoDocumento");
-  const spanNumeroDocumento = document.querySelector(
-    "#profile-numeroDocumento"
-  );
-  const spanDireccion = document.querySelector("#profile-direccion");
-  const spanTelefono = document.querySelector("#profile-telefono");
-  const spanCorreo = document.querySelector("#profile-correo");
-  const spanUsuario = document.querySelector("#profile-usuario");
+  const spanNombre = DOMSelector("#profile-nombre");
+  const spanRol = DOMSelector("#profile-rol");
+  const spanTipoDocumento = DOMSelector("#profile-tipoDocumento");
+  const spanNumeroDocumento = DOMSelector("#profile-numeroDocumento");
+  const spanDireccion = DOMSelector("#profile-direccion");
+  const spanTelefono = DOMSelector("#profile-telefono");
+  const spanCorreo = DOMSelector("#profile-correo");
+  const spanUsuario = DOMSelector("#profile-usuario");
 
   const {
     correo,
@@ -46,12 +47,13 @@ export const asignarDatosCliente = (data) => {
 
 export const profilePersonalController = async (parametros = null) => {
   const esModal = !location.hash.includes("personal/perfil");
-  const btnActivar = document.querySelector("#activar-personal");
-  const btnEliminar = document.querySelector("#delete-personal");
+  const btnActivar = DOMSelector("#activar-personal");
+  const btnEliminar = DOMSelector("#delete-personal");
+  const perfilUsuario = DOMSelector("[data-modal='profile-personal']");
 
   const { id } = parametros;
 
-  const response = await get(`personal/${id}`);
+  const response = await get(`usuarios/${id}`);
 
   console.log(response);
 
@@ -61,19 +63,26 @@ export const profilePersonalController = async (parametros = null) => {
     return;
   }
 
-  if (response.data.activo) {
-    btnActivar.remove();
-  } else {
-    btnEliminar.remove();
-  }
+  // if (response.data.activo) {
+  //   btnActivar.remove();
+  // } else {
+  //   btnEliminar.remove();
+  // }
 
-  if (response.data.rol.id == 1) {
-    btnEliminar?.remove();
-    btnActivar?.remove();
-  }
-  asignarDatosCliente(response.data);
+  // if (response.data.rol.id == 1) {
+  //   btnEliminar?.remove();
+  //   btnActivar?.remove();
+  // }
+  const { data: tipoDocumento } = await get(
+    `tipos-documentos/${response.data.tipo_documento_id}`
+  );
+  // asignarDatosCliente(response.data);
+  mapearDatosEnContenedor(
+    { ...response.data, tipo_documento: tipoDocumento.nombre },
+    perfilUsuario
+  );
 
-  const modal = document.querySelector("[data-modal='profile-personal']");
+  const modal = DOMSelector("[data-modal='profile-personal']");
 
   modal.addEventListener("click", async (e) => {
     if (e.target.id == "edit-personal") {
@@ -114,11 +123,7 @@ export const profilePersonalController = async (parametros = null) => {
         : cerrarModalYVolverAVistaBase();
       return;
     }
-
-    if (e.target.id == "back-profile-personal") {
-      esModal
-        ? cerrarModal("profile-personal")
-        : cerrarModalYVolverAVistaBase();
-    }
   });
+
+  configurarBotonCerrar("back-profile-personal", esModal);
 };

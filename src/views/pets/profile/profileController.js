@@ -8,6 +8,9 @@ import {
   success,
   cargarComponente,
   put,
+  DOMSelector,
+  DOMSelectorAll,
+  convertirEdadCorta,
 } from "../../../helpers";
 import { routes } from "../../../router/routes";
 import { mapearDatosEnContenedor } from "../../../helpers/domMapper";
@@ -26,17 +29,15 @@ const desactivarBotonesPerfilMascota = () => {
   ];
 
   botones.forEach((selector) => {
-    const boton = document.querySelector(selector);
+    const boton = DOMSelector(selector);
     if (boton) boton.remove();
   });
 
   // Botones de eliminar antecedentes
-  const botonesEliminarAntecedente =
-    document.querySelectorAll(".delete-antecedent");
+  const botonesEliminarAntecedente = DOMSelectorAll(".delete-antecedent");
   botonesEliminarAntecedente.forEach((btn) => btn.remove());
 
-  const botonesEditarAntecedente =
-    document.querySelectorAll(".edit-antecedent");
+  const botonesEditarAntecedente = DOMSelectorAll(".edit-antecedent");
   botonesEditarAntecedente.forEach((btn) => btn.remove());
 };
 
@@ -49,79 +50,37 @@ function toggleBody(headerElement) {
   body.classList.toggle("open");
 }
 
-export const asignarDatosCliente = (data) => {
-  const spanNombre = document.querySelector("#profile-nombre");
-  const spanTipoDocumento = document.querySelector("#profile-tipoDocumento");
-  const spanNumeroDocumento = document.querySelector(
-    "#profile-numeroDocumento"
-  );
-  const spanDireccion = document.querySelector("#profile-direccion");
-  const spanTelefono = document.querySelector("#profile-telefono");
-  const spanCorreo = document.querySelector("#profile-correo");
-
-  const {
-    correo,
-    direccion,
-    nombre,
-    numeroDocumento,
-    telefono,
-    tipoDocumento,
-  } = data.cliente.info;
-
-  spanNombre.textContent = nombre;
-  spanTipoDocumento.textContent = tipoDocumento.nombre;
-  spanNumeroDocumento.textContent = numeroDocumento;
-  spanDireccion.textContent = direccion;
-  spanTelefono.textContent = telefono;
-  spanCorreo.textContent = correo;
-};
-
-export const asignarDatosMascota = (data) => {
-  const spanNombre = document.querySelector("#profile-nombrePet");
-  const spanEspecie = document.querySelector("#profile-especie");
-  const spanRaza = document.querySelector("#profile-raza");
-  const spanSexo = document.querySelector("#profile-sexo");
-  const spanEdad = document.querySelector("#profile-edad");
-  // const spanCorreo = document.querySelector("#profile-correo");
-
-  const { nombre, raza, edadFormateada, sexo } = data;
-
-  spanNombre.textContent = nombre;
-  spanEspecie.textContent = raza.especie.nombre;
-  spanRaza.textContent = raza.nombre;
-  spanSexo.textContent = capitalizarPrimeraLetra(sexo);
-  spanEdad.textContent = edadFormateada;
-};
-
 export const profilePetController = async (parametros = null) => {
   let estado_vital = true;
-  const profilePet = document.querySelector("#pet-profile");
+  const profilePet = DOMSelector("#pet-profile");
 
-  const dataJSON = localStorage.getItem("data");
-  const data = JSON.parse(dataJSON);
+  // const dataJSON = localStorage.getItem("data");
+  // const data = JSON.parse(dataJSON);
 
-  if (data.id_rol != 1) {
-    const opcionesAdmin = document.querySelectorAll(".admin");
-    [...opcionesAdmin].forEach((element) => {
-      element.remove();
-    });
-  }
+  // if (data.id_rol != 1) {
+  //   const opcionesAdmin = DOMSelectorAll(".admin");
+  //   [...opcionesAdmin].forEach((element) => {
+  //     element.remove();
+  //   });
+  // }
   // ID de la mascota
-  const { id } = parametros;
+  const { id: mascota_id } = parametros;
 
   //Peticion para obtener la informacion de la mascota
-  const petResponse = await get(`mascotas/${id}`);
+  const petResponse = await get(`mascotas/${mascota_id}`);
   const clientResponse = await get(`usuarios/${petResponse.data.usuario_id}`);
   const typeDocumentResponse = await get(
     `tipos-documentos/${clientResponse.data.tipo_documento_id}`
   );
 
-  const responseAntecedentesMascota = await get(`antecedentes/mascota/${id}`);
+  const responseAntecedentesMascota = await get(
+    `antecedentes/mascota/${mascota_id}`
+  );
 
   petResponse.data.mascota = petResponse.data.nombre;
   petResponse.data.especie = petResponse.data.raza.especie.nombre;
   petResponse.data.raza = petResponse.data.raza.nombre;
-  petResponse.data.edad = petResponse.data.edad_semanas;
+  petResponse.data.edad = convertirEdadCorta(petResponse.data.edad_semanas);
 
   console.log(petResponse);
   clientResponse.data["tipo_documento"] = typeDocumentResponse.data.nombre;
@@ -131,18 +90,15 @@ export const profilePetController = async (parametros = null) => {
 
   mapearDatosEnContenedor(dataProfile, profilePet);
 
-  const contenedorAntecedente = document.querySelector(
-    "#profile-pet-antecedent"
-  );
+  const contenedorAntecedente = DOMSelector("#profile-pet-antecedent");
   if (responseAntecedentesMascota.success) {
-    const placeholderAnterior = document.querySelector(
-      ".placeholder-antecedentes"
-    );
+    const placeholderAnterior = DOMSelector(".placeholder-antecedentes");
     if (placeholderAnterior) placeholderAnterior.remove();
     if (contenedorAntecedente) {
-      responseAntecedentesMascota.data.forEach((antecedente) => {
-        const bloqueAntecedenteCreado =
-          crearBloqueAntecedenteCompleto(antecedente);
+      responseAntecedentesMascota.data.forEach(async (antecedente) => {
+        const bloqueAntecedenteCreado = await crearBloqueAntecedenteCompleto(
+          antecedente
+        );
         contenedorAntecedente.append(bloqueAntecedenteCreado);
       });
     }
@@ -159,7 +115,7 @@ export const profilePetController = async (parametros = null) => {
     estado_vital = false;
   }
 
-  const contenedorPerfil = document.querySelector(".contenedor-perfil--pet");
+  const contenedorPerfil = DOMSelector("#pet-profile");
 
   contenedorPerfil.addEventListener("click", async (e) => {
     if (e.target.closest(".delete-antecedent")) {
@@ -181,7 +137,10 @@ export const profilePetController = async (parametros = null) => {
       const contenedorId = e.target.closest("[data-idAntecendente]");
       const idAntecedente = contenedorId.getAttribute("data-idAntecendente");
 
-      await cargarComponente(routes.antecedente.editar, { id: idAntecedente });
+      await cargarComponente(routes.antecedente.editar, {
+        antecedente_id: idAntecedente,
+        mascota_id,
+      });
       // const responseDelete = await del("antecedentes/" + idAntecedente);
       // if (!responseDelete.success) {
       //   await error(responseDelete.message);
@@ -242,7 +201,7 @@ export const profilePetController = async (parametros = null) => {
         return;
       }
 
-      const eliminado = await put("mascotas/desactivar/" + id);
+      const eliminado = await put("mascotas/desactivar/" + mascota_id);
 
       if (!eliminado.success) {
         await error(eliminado.message);

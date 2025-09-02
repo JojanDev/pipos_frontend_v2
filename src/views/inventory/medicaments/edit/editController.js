@@ -16,6 +16,9 @@ import {
   formatearPrecioConPuntos,
   get,
   put,
+  mapearDatosEnContenedor,
+  toInputDate,
+  configurarBotonCerrar,
 } from "../../../../helpers"; // Utilidades y funciones auxiliares
 
 import { routes } from "../../../../router/routes"; // Rutas del sistema
@@ -53,20 +56,19 @@ export const editMedicamentInventoryController = async (parametros = null) => {
   const { id } = parametros;
 
   const responseMedi = await get("medicamentos/" + id);
-
   console.log(responseMedi);
-  const fecha = document.querySelector("#fecha");
-  const lote = document.querySelector("#lote");
-  const precio = document.querySelector("#precio");
-  const cantidad = document.querySelector("#cantidad");
 
-  fecha.value = responseMedi.data.fecha_caducidad;
-  lote.value = responseMedi.data.numero_lote;
-  precio.value = responseMedi.data.precio;
-  cantidad.value = responseMedi.data.cantidad;
+  const { data: infoMedicamento } = await get(
+    `info-medicamentos/${responseMedi.data.info_medicamento_id}`
+  );
+
+  responseMedi.data.fecha_caducidad = toInputDate(
+    responseMedi.data.fecha_caducidad
+  );
+  const form = document.querySelector("#form-register-medicament-inventory");
+  mapearDatosEnContenedor({ ...responseMedi.data, infoMedicamento }, form);
 
   // Referencias a elementos del DOM
-  const form = document.querySelector("#form-register-medicament-inventory");
   const selectTipoDocumento = document.querySelector("#tipos-documento");
   const tbody = document.querySelector("#medicament-inventorys .table__body");
 
@@ -119,36 +121,17 @@ export const editMedicamentInventoryController = async (parametros = null) => {
     );
     if (!resultado.valid) return;
 
-    datos["id_medicamento_info"] = responseMedi.data.info.id;
     // Envío de datos al backend
-    const response = await put("medicamentos/" + id, datos);
+    const response = await put(`medicamentos/${id}`, {
+      ...datos,
+      info_medicamento_id: infoMedicamento.id,
+    });
 
-    if (!response.success) {
-      await error(response.message); // Muestra error si la respuesta no es exitosa
-      return;
-    }
+    if (!response.success) return await error(response.message); // Muestra error si la respuesta no es exitosa
 
     listarMedicamentos();
     // Mensaje de éxito temporal
-    await successTemporal(response.message);
-
-    // Si hay tabla visible, insertar la nueva fila en la parte superior
-    // const tbody = document.querySelector("#medicaments .table__body");
-    // if (tbody) {
-    //   const { id, info, precio, cantidad, numero_lote } = response.data;
-    //   const filaNueva = [
-    //     id,
-    //     numero_lote,
-    //     info.nombre,
-    //     info.uso_general,
-    //     capitalizarPrimeraLetra(info.via_administracion),
-    //     capitalizarPrimeraLetra(info.presentacion),
-    //     formatearPrecioConPuntos(precio), // Formatea precio con puntos
-    //     cantidad,
-    //   ];
-    //   const row = crearFila(filaNueva);
-    //   tbody.insertAdjacentElement("afterbegin", row);
-    // }
+    successTemporal(response.message);
 
     // Cierra modal o vuelve a vista base según el contexto
     esModal
@@ -156,14 +139,5 @@ export const editMedicamentInventoryController = async (parametros = null) => {
       : cerrarModalYVolverAVistaBase();
   });
 
-  // Escucha eventos de click generales en el documento
-  document.addEventListener("click", async (event) => {
-    // Botón de retroceso
-    const arrow = event.target.closest("#back-edit-medicament-inventory");
-    if (arrow) {
-      esModal
-        ? cerrarModal("edit-medicament-inventory")
-        : cerrarModalYVolverAVistaBase();
-    }
-  });
+  configurarBotonCerrar("back-edit-medicament-inventory", esModal);
 };

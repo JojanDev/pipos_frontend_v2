@@ -8,9 +8,12 @@ import {
   validarCampos,
   llenarSelect,
   error,
+  llenarSelectVeterinarios,
+  errorTemporal,
+  successTemporal,
 } from "../../../../helpers";
 
-export const createTreatmentController = (parametros = null) => {
+export const createTreatmentController = async (parametros = null) => {
   const { idAntecedente } = parametros;
 
   const form = document.querySelector(
@@ -18,14 +21,7 @@ export const createTreatmentController = (parametros = null) => {
   );
   const esModal = !location.hash.includes("antecedente/tratamientoCrear");
 
-  llenarSelect({
-    endpoint: "personal/veterinarios/",
-    selector: "#select-veterinarios",
-    optionMapper: (veterinario) => ({
-      id: veterinario.id,
-      text: veterinario.info.nombre,
-    }),
-  });
+  await llenarSelectVeterinarios();
 
   configurarEventosValidaciones(form);
 
@@ -34,14 +30,12 @@ export const createTreatmentController = (parametros = null) => {
 
     if (!validarCampos(e)) return;
 
-    datos["id_antecedente"] = idAntecedente;
+    datos["antecedente_id"] = idAntecedente;
 
     const responseTratamiento = await post("tratamientos", datos);
 
-    if (!responseTratamiento.success) {
-      await error(responseTratamiento.message);
-      return;
-    }
+    if (!responseTratamiento.success)
+      return errorTemporal(responseTratamiento.message);
 
     const divTratamiento = crearElementoTratamiento(responseTratamiento.data);
 
@@ -62,7 +56,7 @@ export const createTreatmentController = (parametros = null) => {
       separador.insertAdjacentElement("afterend", divTratamiento);
     }
 
-    await success(responseTratamiento.message);
+    successTemporal(responseTratamiento.message);
 
     esModal
       ? cerrarModal("create-pet-antecedent-treatment")

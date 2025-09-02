@@ -38,6 +38,7 @@ export const prepararDatosMascota = (pet) => {
   const { anios, meses, semanas } = calcularEdadPorSemanas(pet.edad_semanas);
   return {
     ...pet,
+    "select-clients": pet.usuario_id,
     anios,
     meses,
     semanas,
@@ -53,15 +54,26 @@ export const inicializarFormularioMascota = async (
   petData = null
 ) => {
   if (containerSelectClient) await llenarSelectClientes();
-  await renderizarSelectEspecies(selectEspecie, selectRazas);
+
+  // 1. renderizar select de especies devuelve la función actualizarRazas
+  const actualizarRazas = await renderizarSelectEspecies(
+    selectEspecie,
+    selectRazas
+  );
   configurarEventosValidaciones(form);
 
   if (petData) {
     mapearDatosEnContenedor(petData, form);
-    selectEspecie.dispatchEvent(new Event("change"));
-    selectRazas.value = petData.raza_id;
+
+    // 2. preseleccionar especie
+    selectEspecie.value = petData.raza.especie_id;
+
+    // 3. esperar a que razas se carguen
+    await actualizarRazas();
+
+    // 4. asignar raza
+    selectRazas.value = petData.raza.id;
   } else {
-    // Colocar placeholder inicial en select de razas
     selectRazas.innerHTML =
       '<option disabled selected value="">Seleccione una especie</option>';
   }
@@ -69,27 +81,55 @@ export const inicializarFormularioMascota = async (
 
 export const actualizarTablas = (pet, tbody_perfilCliente, tbody_Mascotas) => {
   if (tbody_perfilCliente) {
-    const { id, nombre, sexo, raza, edadFormateada } = pet;
+    const { id, nombre, raza, especie, sexo, edad_semanas } = pet;
     const row = crearFila([
       id,
       nombre,
-      raza.especie.nombre,
-      raza.nombre,
-      edadFormateada,
+      especie,
+      raza,
+      convertirEdadCorta(edad_semanas),
       capitalizarPrimeraLetra(sexo),
     ]);
     tbody_perfilCliente.insertAdjacentElement("afterbegin", row);
   } else if (tbody_Mascotas) {
-    const { id, nombre, raza, cliente, ultimo_antecedente } = pet;
+    const { id, nombre, raza, especie, cliente, telefono, ultimo_antecedente } =
+      pet;
     const row = crearFila([
       id,
       nombre,
-      raza.especie.nombre,
-      raza.nombre,
-      cliente.info.nombre,
-      cliente.info.telefono,
+      raza,
+      especie,
+      cliente,
+      telefono,
       ultimo_antecedente ?? "Sin registros",
     ]);
     tbody_Mascotas.insertAdjacentElement("afterbegin", row);
   }
+};
+
+export const convertirEdadCorta = (semanasTotales) => {
+  const semanasPorAno = 52;
+  const semanasPorMes = 4;
+
+  const anos = Math.floor(semanasTotales / semanasPorAno);
+  const restoDespuesAnos = semanasTotales % semanasPorAno;
+
+  const meses = Math.floor(restoDespuesAnos / semanasPorMes);
+  const semanas = restoDespuesAnos % semanasPorMes;
+
+  const partes = [];
+
+  if (anos > 0) partes.push(`${anos} año${anos > 1 ? "s" : ""}`);
+  if (meses > 0) partes.push(`${meses} mes${meses > 1 ? "es" : ""}`);
+
+  if (semanas > 0) {
+    // Si hay años y meses al mismo tiempo
+    if (anos > 0 && meses > 0) {
+      partes.push(`${semanas} sem`);
+    } else {
+      partes.push(`${semanas} semana${semanas > 1 ? "s" : ""}`);
+    }
+  }
+
+  return partes.join(" ");
 };

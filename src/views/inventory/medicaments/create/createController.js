@@ -14,6 +14,7 @@ import {
   agregarError,
   quitarError,
   formatearPrecioConPuntos,
+  get,
 } from "../../../../helpers"; // Utilidades y funciones auxiliares
 
 import { routes } from "../../../../router/routes"; // Rutas del sistema
@@ -26,7 +27,7 @@ import { validarFechaCaducidad } from "../../products/create/createController"; 
 export const createMedicamentInventoryController = async () => {
   // Llenar el select con la lista de medicamentos disponibles desde el backend
   llenarSelect({
-    endpoint: "medicamentos/info/",
+    endpoint: "info-medicamentos/",
     selector: "#select-medicamentos-info",
     optionMapper: ({ id, nombre, presentacion, via_administracion }) => ({
       id: id,
@@ -84,18 +85,19 @@ export const createMedicamentInventoryController = async () => {
     // Envío de datos al backend
     const response = await post("medicamentos", datos);
 
-    if (!response.success) {
-      await error(response.message); // Muestra error si la respuesta no es exitosa
-      return;
-    }
+    if (!response.success) return await error(response.message); // Muestra error si la respuesta no es exitosa
 
     // Mensaje de éxito temporal
-    await successTemporal(response.message);
+    successTemporal(response.message);
 
     // Si hay tabla visible, insertar la nueva fila en la parte superior
     const tbody = document.querySelector("#medicaments .table__body");
     if (tbody) {
-      const { id, info, precio, cantidad, numero_lote } = response.data;
+      const { id, info_medicamento_id, precio, cantidad, numero_lote } =
+        response.data;
+      const { data: info } = await get(
+        `info-medicamentos/${info_medicamento_id}`
+      );
       const filaNueva = [
         id,
         numero_lote,

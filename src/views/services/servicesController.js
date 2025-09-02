@@ -1,5 +1,6 @@
 import {
   del,
+  DOMSelector,
   error,
   formatearPrecioConPuntos,
   get,
@@ -101,20 +102,18 @@ const listarServicios = async (contenedor) => {
 };
 
 export const servicesController = async () => {
-  const contenedorCards = document.getElementById("services");
-  await listarServicios(contenedorCards);
+  const contenedorServicios = DOMSelector("#services");
+  await listarServicios(contenedorServicios);
 
-  const dataJSON = localStorage.getItem("data");
-  const data = JSON.parse(dataJSON);
+  // const dataJSON = localStorage.getItem("data");
+  // const data = JSON.parse(dataJSON);
 
-  if (data.id_rol != 1) {
-    const opcionesAdmin = document.querySelectorAll(".admin");
-    [...opcionesAdmin].forEach((element) => {
-      element.remove();
-    });
-  }
-
-  const contenedorServicios = document.querySelector("#services");
+  // if (data.id_rol != 1) {
+  //   const opcionesAdmin = DOMSelectorAll(".admin");
+  //   [...opcionesAdmin].forEach((element) => {
+  //     element.remove();
+  //   });
+  // }
 
   contenedorServicios.addEventListener("click", async (event) => {
     const card = event.target.closest(".card");
@@ -133,9 +132,7 @@ export const servicesController = async () => {
         await success(response.message);
 
         // Eliminar la card del DOM
-        const cardEliminada = document.querySelector(
-          `.card[data-id="${idServicio}"]`
-        );
+        const cardEliminada = DOMSelector(`.card[data-id="${idServicio}"]`);
         if (cardEliminada) cardEliminada.remove();
 
         // Si ya no quedan cards, mostrar el placeholder

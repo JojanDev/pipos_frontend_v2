@@ -9,14 +9,15 @@ import {
   crearFila,
   error,
   cerrarModal,
+  DOMSelector,
+  successTemporal,
 } from "../../../../helpers";
 import { listarEspecies } from "../../administrationController";
 
 export const createSpecieController = (parametros = null) => {
-  // const { idAntecedente } = parametros;
-
   const form = document.querySelector("#form-register-specie");
   const esModal = !location.hash.includes("especiesCrear");
+  const tbody = DOMSelector("#species .table__body");
 
   configurarEventosValidaciones(form);
 
@@ -25,8 +26,6 @@ export const createSpecieController = (parametros = null) => {
 
     if (!validarCampos(e)) return;
 
-    // datos["id_antecedente"] = idAntecedente;
-
     const responseEspecie = await post("especies", datos);
 
     if (!responseEspecie.success) {
@@ -34,9 +33,22 @@ export const createSpecieController = (parametros = null) => {
       return;
     }
 
-    await success(responseEspecie.message);
+    successTemporal(responseEspecie.message);
 
-    listarEspecies();
+    // listarEspecies();
+    const btn = document.createElement("button");
+    const i = document.createElement("i");
+    btn.append(i);
+    i.classList.add("ri-edit-box-line");
+    btn.classList.add("btn", "btn--edit");
+
+    const row = crearFila([
+      responseEspecie.data.id,
+      responseEspecie.data.nombre,
+      btn,
+    ]);
+
+    tbody.insertAdjacentElement("afterbegin", row);
 
     esModal ? cerrarModal("create-specie") : cerrarModalYVolverAVistaBase();
   });

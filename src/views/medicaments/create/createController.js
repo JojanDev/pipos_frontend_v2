@@ -8,6 +8,9 @@ import {
   datos,
   validarCampos,
   capitalizarPrimeraLetra,
+  configurarBotonCerrar,
+  DOMSelectorAll,
+  DOMSelector,
 } from "../../../helpers";
 import { crearCartaMedicamento } from "../medicamentsController";
 
@@ -16,22 +19,22 @@ export const createMedicamentInfoController = async () => {
   const data = JSON.parse(dataJSON);
 
   if (data.id_rol != 1) {
-    const opcionesAdmin = document.querySelectorAll(".admin");
+    const opcionesAdmin = DOMSelectorAll(".admin");
     [...opcionesAdmin].forEach((element) => {
       element.remove();
     });
   }
 
-  const form = document.querySelector("#form-register-medicament-info");
-  // const selectTipoDocumento = document.querySelector("#tipos-documento");
-  const tbody = document.querySelector("#medicament-infos .table__body");
+  const form = DOMSelector("#form-register-medicament-info");
+  // const selectTipoDocumento = DOMSelector("#tipos-documento");
+  const tbody = DOMSelector("#medicament-infos .table__body");
   const esModal = !location.hash.includes("medicamentos_info/crear");
 
-  const optionMedicamentosInfo = document.querySelector(
+  const optionMedicamentosInfo = DOMSelector(
     "#form-register-medicament-inventory #select-medicamentos-info #option-placeholder"
   );
 
-  const selectMedicamentosInfo = document.querySelector(
+  const selectMedicamentosInfo = DOMSelector(
     "#form-register-medicament-inventory #select-medicamentos-info"
   );
 
@@ -42,32 +45,22 @@ export const createMedicamentInfoController = async () => {
 
     if (!validarCampos(e)) return;
 
-    const response = await post("medicamentos/info", datos);
+    const response = await post("info-medicamentos", datos);
 
     if (!response.success) {
       await error(response.message);
       return;
     }
 
-    await successTemporal(response.message);
+    successTemporal(response.message);
 
-    const contenedor = document.querySelector("#medicaments-info");
+    const contenedor = DOMSelector("#medicaments-info");
 
     if (contenedor) {
       const carta = crearCartaMedicamento(response.data);
       contenedor.insertAdjacentElement("afterbegin", carta);
     }
 
-    // const {
-    //   id,
-    //   info: { nombre, telefono, numeroDocumento, direccion },
-    // } = response.data;
-
-    // if (tbody) {
-
-    //   const row = crearFila([id, nombre, telefono, numeroDocumento, direccion]);
-    //   tbody.insertAdjacentElement("afterbegin", row);
-    // }
     if (optionMedicamentosInfo) {
       const option = document.createElement("option");
       option.value = response.data.id;
@@ -83,12 +76,5 @@ export const createMedicamentInfoController = async () => {
       : cerrarModalYVolverAVistaBase();
   });
 
-  document.addEventListener("click", (event) => {
-    const arrow = event.target.closest("#back-register-medicament-info");
-    if (arrow) {
-      esModal
-        ? cerrarModal("create-medicament-info")
-        : cerrarModalYVolverAVistaBase();
-    }
-  });
+  configurarBotonCerrar("back-register-medicament-info", esModal);
 };

@@ -1,25 +1,25 @@
 import {
   success,
-  crearElementoTratamiento,
-  post,
   cerrarModalYVolverAVistaBase,
   configurarEventosValidaciones,
   datos,
   validarCampos,
-  crearFila,
   error,
   cerrarModal,
   put,
+  DOMSelector,
+  successTemporal,
+  configurarBotonCerrar,
 } from "../../../../helpers";
 
 export const editProductTypeController = (parametros = null) => {
   // Id de la especie
   const { id, nombre } = parametros;
 
-  const form = document.querySelector("#form-edit-productType");
+  const form = DOMSelector("#form-edit-productType");
   const esModal = !location.hash.includes("tipos_productosEditar");
 
-  const titulo = document.querySelector("#nombreTipo");
+  const titulo = DOMSelector("#nombreTipo");
 
   titulo.value = nombre;
 
@@ -47,13 +47,13 @@ export const editProductTypeController = (parametros = null) => {
       return;
     }
 
-    await success(responseTipo.message);
+    successTemporal(responseTipo.message);
     // Justo después de insertar la nueva fila:
-    const nombreTipoFila = document.querySelector(
+    const nombreTipoFila = DOMSelector(
       `#productsTypes [data-id="${id}"] td:nth-child(2)`
     );
 
-    const titulo = document.querySelector("#productType-title");
+    const titulo = DOMSelector("#productType-title");
 
     titulo.textContent = responseTipo.data.nombre;
 
@@ -64,9 +64,5 @@ export const editProductTypeController = (parametros = null) => {
     esModal ? cerrarModal("edit-productType") : cerrarModalYVolverAVistaBase();
   });
 
-  const btnAtras = document.querySelector("#back-edit-productType");
-
-  btnAtras.addEventListener("click", () => {
-    esModal ? cerrarModal("edit-productType") : cerrarModalYVolverAVistaBase();
-  });
+  configurarBotonCerrar("back-edit-productType", esModal);
 };

@@ -1,4 +1,6 @@
-export const crearBloqueAntecedenteCompleto = ({
+import { get } from "./api";
+
+export const crearBloqueAntecedenteCompleto = async ({
   id,
   titulo,
   diagnostico,
@@ -6,16 +8,16 @@ export const crearBloqueAntecedenteCompleto = ({
   tratamientos = [],
   message = "No hay tratamientos registrados",
 }) => {
-  const dataJSON = localStorage.getItem("data");
-  const data = JSON.parse(dataJSON);
-  console.log(data);
+  // const dataJSON = localStorage.getItem("data");
+  // const data = JSON.parse(dataJSON);
+  // console.log(data);
 
-  if (data.id_rol != 1) {
-    const opcionesAdmin = document.querySelectorAll(".admin");
-    [...opcionesAdmin].forEach((element) => {
-      element.remove();
-    });
-  }
+  // if (data.id_rol != 1) {
+  //   const opcionesAdmin = document.querySelectorAll(".admin");
+  //   [...opcionesAdmin].forEach((element) => {
+  //     element.remove();
+  //   });
+  // }
   const fechaFormateada = convertirADiaMesAño(fecha_creado);
 
   // 📦 Contenedor principal
@@ -55,10 +57,7 @@ export const crearBloqueAntecedenteCompleto = ({
   divHeader.appendChild(spanFecha);
   divHeader.appendChild(spanTitulo);
   divHeader.appendChild(iconEdit);
-
-  if (data.id_rol == 1) {
-    divHeader.appendChild(iconDelete);
-  }
+  divHeader.appendChild(iconDelete);
 
   // 📄 Cuerpo
   const divBody = document.createElement("div");
@@ -75,9 +74,11 @@ export const crearBloqueAntecedenteCompleto = ({
   pSeparador.textContent = "Tratamientos";
   divBody.appendChild(pSeparador);
 
+  const tratamientosResponse = await get(`tratamientos/antecedente/${id}`);
+
   // 🔽 Tratamientos o mensaje si no hay
-  if (tratamientos.length > 0) {
-    tratamientos.forEach((tratamiento) => {
+  if (tratamientosResponse.success) {
+    tratamientosResponse.data.forEach((tratamiento) => {
       const divTratamiento = crearElementoTratamiento(tratamiento);
       divBody.appendChild(divTratamiento);
     });

@@ -10,13 +10,15 @@ import {
   del,
   success,
   mostrarMensajeSiNoHayTratamientos,
+  DOMSelector,
+  DOMSelectorAll,
+  errorTemporal,
+  mapearDatosEnContenedor,
 } from "../../../helpers";
 import { routes } from "../../../router/routes";
 
 function eliminarTratamiento(idTratamiento, idAntecedente) {
-  const tratamiento = document.querySelector(
-    `[data-idTratamiento='${idTratamiento}']`
-  );
+  const tratamiento = DOMSelector(`[data-idTratamiento='${idTratamiento}']`);
   if (tratamiento) {
     tratamiento.remove();
     mostrarMensajeSiNoHayTratamientos(idAntecedente);
@@ -32,15 +34,15 @@ const desactivarBotonesPerfilTratamiento = () => {
   ];
 
   botones.forEach((selector) => {
-    const boton = document.querySelector(selector);
+    const boton = DOMSelectorAll(selector);
     if (boton) boton.remove();
   });
 
   // Botones de eliminar medicamento dentro de la tabla
-  const botonesEliminarMedicamento = document.querySelectorAll(".delete-tabla");
+  const botonesEliminarMedicamento = DOMSelectorAll(".delete-tabla");
   botonesEliminarMedicamento.forEach((btn) => btn.remove());
 
-  const botonesEditMedicamento = document.querySelectorAll(".edit-tabla");
+  const botonesEditMedicamento = DOMSelectorAll(".edit-tabla");
   botonesEditMedicamento.forEach((btn) => btn.remove());
 };
 
@@ -49,64 +51,53 @@ export const treatmentController = async (parametros = null) => {
   const data = JSON.parse(dataJSON);
 
   if (data.id_rol != 1) {
-    const opcionesAdmin = document.querySelectorAll(".admin");
+    const opcionesAdmin = DOMSelectorAll(".admin");
     [...opcionesAdmin].forEach((element) => {
       element.remove();
     });
   }
   const { id, tituloAntecedente, estado_vital } = parametros;
 
-  const modal = document.querySelector('[data-modal="pet-treatment"]');
+  const modal = DOMSelector('[data-modal="pet-treatment"]');
   const esModal = !location.hash.includes("antecedente/tratamiento");
-  const tbody = document.querySelector(
-    "#pet-antecedent-treatment .table__body"
+  const tbody = DOMSelector("#pet-antecedent-treatment .table__body");
+
+  const tratamientoResponse = await get(`tratamientos/${id}`);
+  const { data: veterinario } = await get(
+    `usuarios/${tratamientoResponse.data.usuario_id}`
   );
 
-  const tituloTratamiento = document.querySelector("#treatment-title");
-  const fechaTratamiento = document.querySelector("#treatment-date");
-  const vetTratamiento = document.querySelector("#treatment-veterinario");
-  const descripcionTratamiento = document.querySelector(
-    "#treatment-description"
-  );
-
-  const titleAntecedent = document.querySelector("#treatment-title-antecedent");
-
-  titleAntecedent.textContent = "Tratamiento para: " + tituloAntecedente;
-
-  const responseTratamiento = await get(`tratamientos/${id}`);
-  const veterinario = await get(
-    "personal/" + responseTratamiento.data.id_personal
-  );
-
-  vetTratamiento.textContent =
-    "Veterinario asociado: " + veterinario.data.info.nombre;
-
-  if (!responseTratamiento.success) {
-    await error(responseTratamiento.message);
+  if (!tratamientoResponse.success) {
+    await error(tratamientoResponse.message);
     esModal ? cerrarModal("create-client") : cerrarModalYVolverAVistaBase();
   }
 
-  const { titulo, descripcion, fecha_creado } = responseTratamiento.data;
+  // tituloTratamiento.textContent = titulo;
+  // fechaTratamiento.textContent = convertirADiaMesAño(fecha_creado);
+  // descripcionTratamiento.textContent = descripcion;
 
-  tituloTratamiento.textContent = titulo;
-  fechaTratamiento.textContent = convertirADiaMesAño(fecha_creado);
-  descripcionTratamiento.textContent = descripcion;
+  mapearDatosEnContenedor(
+    {
+      ...tratamientoResponse.data,
+      veterinario: veterinario.nombre,
+      "titulo-antecedente": tituloAntecedente,
+    },
+    modal
+  );
 
-  if (tbody) {
-    const responseMedicamentos = await get(
-      `medicamentos/tratamiento/${responseTratamiento.data.id}`
-    );
+  const responseMedicamentos = await get(
+    `medicamentos-tratamientos/tratamiento/${tratamientoResponse.data.id}`
+  );
 
-    if (responseMedicamentos.success) {
-      responseMedicamentos.data.forEach((medicamentoTratamiento) => {
-        const {
-          id,
-          medicamento,
-          dosis,
-          duracionFormateada,
-          frecuencia_aplicacion,
-        } = medicamentoTratamiento;
-
+  if (responseMedicamentos.success) {
+    responseMedicamentos.data.forEach(
+      async ({
+        id,
+        info_medicamento_id,
+        dosis,
+        duracion,
+        frecuencia_aplicacion,
+      }) => {
         const iconDelete = document.createElement("i");
 
         iconDelete.classList.add(
@@ -120,22 +111,29 @@ export const treatmentController = async (parametros = null) => {
 
         iconEdit.classList.add("ri-edit-box-line", "edit-tabla", "btn--orange");
 
+        const { data: infoMedicamento } = await get(
+          `info-medicamentos/${info_medicamento_id}`
+        );
+
         const row = crearFila([
           id,
-          medicamento.nombre,
-          medicamento.uso_general,
-          capitalizarPrimeraLetra(medicamento.via_administracion),
+          infoMedicamento.nombre,
+          infoMedicamento.uso_general,
+          capitalizarPrimeraLetra(infoMedicamento.via_administracion),
           dosis,
           frecuencia_aplicacion,
-          duracionFormateada[1],
+          duracion,
           data.id_rol == 1 ? iconDelete : "",
           iconEdit,
         ]);
 
         tbody.append(row);
-      });
-    }
+      }
+    );
+  } else {
+    errorTemporal(responseMedicamentos.message);
   }
+
   console.log(estado_vital);
 
   if (!estado_vital) {
@@ -193,7 +191,7 @@ export const treatmentController = async (parametros = null) => {
       }
 
       // const idAntecedente = fila.getAttribute("data-id");
-      eliminarTratamiento(id, responseTratamiento.data.id_antecedente);
+      eliminarTratamiento(id, tratamientoResponse.data.id_antecedente);
 
       esModal ? cerrarModal("pet-treatment") : cerrarModalYVolverAVistaBase();
       // history.replaceState(null, "", `#/mascotas/perfil`);
@@ -201,7 +199,9 @@ export const treatmentController = async (parametros = null) => {
     }
 
     if (e.target.id == "edit-treatment") {
-      await cargarComponente(routes.antecedente.tratamientoEditar, { id });
+      await cargarComponente(routes.antecedente.tratamientoEditar, {
+        tratamiento_id: id,
+      });
     }
   });
 };

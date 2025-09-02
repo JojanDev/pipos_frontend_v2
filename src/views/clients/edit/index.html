@@ -18,6 +18,7 @@
             required
             data-validate="texto"
             name="nombre"
+            id="nombre"
           />
         </div>
         <div
@@ -28,8 +29,8 @@
             <select
               class="form__input form__input--select"
               required
-              id="tipos-documento"
-              name="id_tipo_documento"
+              id="select-tipos-documentos"
+              name="tipo_documento_id"
             >
               <!-- Opciones -->
               <option disabled selected value="">Seleccione una opcion</option>
@@ -43,6 +44,7 @@
               required
               data-validate="numero"
               name="numero_documento"
+              id="numero_documento"
             />
           </div>
         </div>
@@ -54,6 +56,7 @@
             required
             data-validate="numero"
             name="telefono"
+            id="telefono"
           />
         </div>
         <div class="form__container-field form__container-field--span">
@@ -64,11 +67,18 @@
             required
             data-validate="correo"
             name="correo"
+            id="correo"
           />
         </div>
         <div class="form__container-field form__container-field--span">
           <label for="" class="form__label">Dirección / Barrio</label>
-          <input type="text" class="form__input" required name="direccion" />
+          <input
+            type="text"
+            class="form__input"
+            required
+            name="direccion"
+            id="direccion"
+          />
         </div>
         <div class="form__container-btns">
           <button type="submit" class="btn btn--lower-height">

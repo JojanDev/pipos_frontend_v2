@@ -9,13 +9,15 @@ import {
   cargarComponente,
   del,
   success,
+  configurarBotonCerrar,
+  DOMSelector,
 } from "../../../../helpers";
 import { listarTiposProductos } from "../../administrationController";
 
 export const profileProductTypeController = async (parametros = null) => {
   const { id } = parametros;
 
-  const modal = document.querySelector('[data-modal="productType-profile"]');
+  const modal = DOMSelector('[data-modal="productType-profile"]');
   const esModal = !location.hash.includes(
     "administrar_datos/tipos_productosPerfil"
   );
@@ -30,7 +32,7 @@ export const profileProductTypeController = async (parametros = null) => {
     return;
   }
 
-  const titulo = document.querySelector("#productType-title");
+  const titulo = DOMSelector("#productType-title");
 
   titulo.textContent = response.data.nombre;
 
@@ -56,11 +58,7 @@ export const profileProductTypeController = async (parametros = null) => {
         return;
       }
     }
-
-    if (e.target.id == "back-productType-profile") {
-      esModal
-        ? cerrarModal("productType-profile")
-        : cerrarModalYVolverAVistaBase();
-    }
   });
+
+  configurarBotonCerrar("back-productType-profile", esModal);
 };

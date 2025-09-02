@@ -1,4 +1,9 @@
-import { capitalizarPrimeraLetra, cargarComponente, get } from "../../helpers";
+import {
+  capitalizarPrimeraLetra,
+  cargarComponente,
+  DOMSelector,
+  get,
+} from "../../helpers";
 import { routes } from "../../router/routes";
 
 export function crearCartaMedicamento(medicamento) {
@@ -71,16 +76,16 @@ export function crearCartaMedicamento(medicamento) {
 }
 
 export const medicamentsController = async () => {
-  const contenedor = document.querySelector("#medicaments-info");
+  const contenedor = DOMSelector("#medicaments-info");
 
-  const response = await get("medicamentos/info");
+  const response = await get("info-medicamentos");
 
   response.data.forEach((medicamento) => {
     const carta = crearCartaMedicamento(medicamento);
     contenedor.appendChild(carta);
   });
 
-  const contenedorMedicaments = document.querySelector("#medicaments-info");
+  const contenedorMedicaments = DOMSelector("#medicaments-info");
 
   contenedorMedicaments.addEventListener("click", async (event) => {
     const fila = event.target.closest(".card[data-id]");

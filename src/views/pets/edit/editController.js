@@ -13,11 +13,9 @@ import {
   actualizarTablas,
   prepararDatosMascota,
   inicializarFormularioMascota,
+  successTemporal,
+  mapearDatosEnContenedor,
 } from "../../../helpers";
-import {
-  asignarDatosCliente,
-  asignarDatosMascota,
-} from "../profile/profileController";
 
 const manejarSubmit = (
   form,
@@ -29,6 +27,7 @@ const manejarSubmit = (
 ) => {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
+    const profilePet = DOMSelector("#pet-profile");
 
     if (!validarCampos(e)) return;
 
@@ -44,16 +43,35 @@ const manejarSubmit = (
       usuario_id,
     });
 
+    console.log(petResponse);
+
     if (!petResponse.success) return await error(petResponse.message);
 
-    if (DOMSelector("#pet-profile")) {
-      asignarDatosCliente(pet);
-      asignarDatosMascota(pet);
+    if (profilePet) {
+      const clientResponse = await get(
+        `usuarios/${petResponse.data.usuario_id}`
+      );
+      const typeDocumentResponse = await get(
+        `tipos-documentos/${clientResponse.data.tipo_documento_id}`
+      );
+
+      petResponse.data.mascota = petResponse.data.nombre;
+      petResponse.data.especie = petResponse.data.raza.especie.nombre;
+      petResponse.data.raza = petResponse.data.raza.nombre;
+      petResponse.data.edad = petResponse.data.edad_semanas;
+
+      console.log(petResponse);
+      clientResponse.data["tipo_documento"] = typeDocumentResponse.data.nombre;
+      clientResponse.data["dueño"] = clientResponse.data.nombre;
+
+      const dataProfile = { ...clientResponse.data, ...petResponse.data };
+
+      mapearDatosEnContenedor(dataProfile, profilePet);
     }
 
-    await success(petResponse.message);
+    successTemporal(petResponse.message);
 
-    actualizarTablas(pet, tbody_perfilCliente, tbody_Mascotas);
+    // actualizarTablas(pet, tbody_perfilCliente, tbody_Mascotas);
     esModal ? cerrarModal("edit-pet") : cerrarModalYVolverAVistaBase();
   });
 };

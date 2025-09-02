@@ -1,7 +1,15 @@
-import { get, crearFila, convertirFechaLocalDate, error } from "../../helpers";
+import {
+  get,
+  crearFila,
+  convertirFechaLocalDate,
+  error,
+  DOMSelector,
+} from "../../helpers";
 
 export const petsController = async () => {
-  const tbody = document.querySelector("#pets .table__body");
+  const tbody = DOMSelector("#pets .table__body");
+  const tablePets = DOMSelector("#pets");
+
   const petsResponse = await get("mascotas");
 
   console.log(petsResponse);
@@ -39,7 +47,7 @@ export const petsController = async () => {
     }
   );
 
-  document.addEventListener("click", (e) => {
+  tablePets.addEventListener("click", (e) => {
     const fila = e.target.closest("tr[data-id]");
     if (fila) {
       const idPet = fila.getAttribute("data-id");

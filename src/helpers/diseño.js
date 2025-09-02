@@ -11,3 +11,6 @@ export const formatearPrecioConPuntos = (precio) => {
   });
   return formatter.format(precio);
 };
+
+export const toInputDate = (fecha) =>
+  new Date(fecha).toISOString().split("T")[0];

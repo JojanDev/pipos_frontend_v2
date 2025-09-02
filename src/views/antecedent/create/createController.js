@@ -9,16 +9,17 @@ import {
   datos,
   validarCampos,
   cerrarModal,
+  DOMSelector,
+  successTemporal,
+  configurarBotonCerrar,
 } from "../../../helpers";
 
 export const createAntecedentController = (parametros = null) => {
   const { id } = parametros;
 
-  const containerPerfilMascota = document.querySelector(
-    ".contenedor-perfil--pet"
-  );
+  const containerPerfilMascota = DOMSelector(".contenedor-perfil--pet");
 
-  const selectPets = document.querySelector("#select-pets");
+  const selectPets = DOMSelector("#select-pets");
 
   if (!containerPerfilMascota) {
     if (selectPets) {
@@ -36,7 +37,7 @@ export const createAntecedentController = (parametros = null) => {
     contenedor?.classList.add("hidden");
   }
 
-  const form = document.querySelector("#form-register-pet-antecedent");
+  const form = DOMSelector("#form-register-pet-antecedent");
   const esModal = !location.hash.includes("antecedente/crear");
 
   configurarEventosValidaciones(form);
@@ -44,53 +45,36 @@ export const createAntecedentController = (parametros = null) => {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const containerSelectPet = document
-      .querySelector("#container-select-pets")
-      .classList.contains("hidden")
-      ? false
-      : true;
-
     if (!validarCampos(e)) return;
 
-    datos["id_mascota"] = id;
+    const antecedentResponse = await post("antecedentes", {
+      ...datos,
+      mascota_id: id,
+    });
 
-    const responseAntecedente = await post("antecedentes", datos);
+    if (!antecedentResponse.success)
+      return await error(antecedentResponse.message);
 
-    if (!responseAntecedente.success) {
-      await error(responseAntecedente.message);
-      return;
-    }
-
-    const contenedorAntecedente = document.querySelector(
-      "#profile-pet-antecedent"
-    );
+    const contenedorAntecedente = DOMSelector("#profile-pet-antecedent");
 
     if (contenedorAntecedente) {
       const bloqueAntecedenteCreado = crearBloqueAntecedenteCompleto(
-        responseAntecedente.data
+        antecedentResponse.data
       );
       contenedorAntecedente.insertAdjacentElement(
         "afterbegin",
         bloqueAntecedenteCreado
       );
-      const placeholderAnterior = document.querySelector(
-        ".placeholder-antecedentes"
-      );
+      const placeholderAnterior = DOMSelector(".placeholder-antecedentes");
       if (placeholderAnterior) placeholderAnterior.remove();
     }
 
-    await success(responseAntecedente.message);
+    successTemporal(antecedentResponse.message);
 
     esModal
       ? cerrarModal("create-pet-antecedent")
       : cerrarModalYVolverAVistaBase();
   });
 
-  const btnAtras = document.querySelector("#back-register-pet-antecedent");
-
-  btnAtras.addEventListener("click", () => {
-    esModal
-      ? cerrarModal("create-pet-antecedent")
-      : cerrarModalYVolverAVistaBase();
-  });
+  configurarBotonCerrar("back-register-pet-antecedent", esModal);
 };

@@ -1,42 +1,57 @@
-import { get, crearFila, capitalizarPrimeraLetra } from "../../helpers";
+import { get, crearFila, capitalizarPrimeraLetra, error } from "../../helpers";
 
 export const cargarTablaEmpleados = async () => {
-  const personales = await get("personal");
-  console.log(personales);
+  const usuarios = await get("usuarios");
+  console.log(usuarios);
 
-  if (!personales.success) {
-    await error(response.message);
+  if (!usuarios.success) {
+    await error(usuarios.message);
   }
 
   const tbody = document.querySelector("#personal .table__body");
   tbody.innerHTML = "";
 
-  const personalInfo = personales.data.map((personal) => {
-    //
+  const personalInfo = await Promise.all(
+    usuarios.data.map(async (usuario) => {
+      const rolesUsuario = await get(`roles-usuarios/usuario/${usuario.id}`);
+      // console.log(rolesUsuario);
+      let nombreRoles;
+      if (!rolesUsuario.success) {
+        nombreRoles = ["No aplica"];
+      } else {
+        nombreRoles = await Promise.all(
+          rolesUsuario.data.map(async (roleUsuario) => {
+            const { data: rol } = await get(`roles/${roleUsuario.rol_id}`);
+            return capitalizarPrimeraLetra(rol.nombre);
+          })
+        );
+      }
 
-    const info = personal.info;
-    //
+      console.log(nombreRoles);
 
-    return [
-      personal.id,
-      personal.usuario,
-      capitalizarPrimeraLetra(personal.rol.nombre),
-      info.nombre,
-      info.telefono,
-      info.numeroDocumento,
-      info.direccion,
-    ];
-  });
+      return [
+        usuario.id,
+        // personal.usuario,
+        // "JJIJI",
+        // capitalizarPrimeraLetra(personal.rol.nombre)
+        nombreRoles.join(", ") ?? "No aplica",
+        usuario.nombre,
+        usuario.telefono,
+        usuario.numero_documento,
+        usuario.direccion,
+      ];
+    })
+  );
 
   personalInfo.forEach((personal) => {
     const row = crearFila(personal);
 
-    const encontrado = personales.data.find((p) => p.id === personal[0]);
-    console.log(encontrado);
+    // const encontrado = usuarios.data.find((p) => p.id === personal[0]);
+    // console.log(encontrado);
 
-    const activo = encontrado ? encontrado.activo : null;
+    // const activo = encontrado ? encontrado.activo : null;
 
-    !activo ? row.classList.add("fila-alerta") : null;
+    // !activo ? row.classList.add("fila-alerta") : null;
 
     tbody.append(row);
   });

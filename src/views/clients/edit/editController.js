@@ -8,19 +8,21 @@ import {
   validarCampos,
   put,
   get,
+  mapearDatosEnContenedor,
+  llenarSelectTiposDocumentos,
+  DOMSelector,
+  crearFila,
 } from "../../../helpers";
 // import { asignarDatosCliente } from "../../personal/profile/profileController";
 import { cargarTabla } from "../clientsController";
 
 const asignarDatosCliente = (data) => {
-  const spanNombre = document.querySelector("#profile-nombre");
-  const spanTipoDocumento = document.querySelector("#profile-tipoDocumento");
-  const spanNumeroDocumento = document.querySelector(
-    "#profile-numeroDocumento"
-  );
-  const spanDireccion = document.querySelector("#profile-direccion");
-  const spanTelefono = document.querySelector("#profile-telefono");
-  const spanCorreo = document.querySelector("#profile-correo");
+  const spanNombre = DOMSelector("#profile-nombre");
+  const spanTipoDocumento = DOMSelector("#profile-tipoDocumento");
+  const spanNumeroDocumento = DOMSelector("#profile-numeroDocumento");
+  const spanDireccion = DOMSelector("#profile-direccion");
+  const spanTelefono = DOMSelector("#profile-telefono");
+  const spanCorreo = DOMSelector("#profile-correo");
 
   const {
     correo,
@@ -41,40 +43,49 @@ const asignarDatosCliente = (data) => {
 
 export const editClientController = async (parametros = null) => {
   const { id } = parametros;
-  const form = document.querySelector("#form-edit-client");
-  const selectTipoDocumento = document.querySelector("#tipos-documento");
-  const tbody = document.querySelector("#clients .table__body");
+  const form = DOMSelector("#form-edit-client");
+  const selectTipoDocumento = DOMSelector("#tipos-documento");
+  const tbody = DOMSelector("#clients .table__body");
   const esModal = !location.hash.includes("clientes/editar");
+  const profileClient = DOMSelector(`[data-modal="profile-client"]`);
 
   // Obtenemos el formulario
   // Obtenemos todos los inputs dentro del formulario que tengan atributo name
-  const inputsConNombre = form.querySelectorAll("[name]");
+  // const inputsConNombre = form.querySelectorAll("[name]");
 
   // Creamos un objeto donde guardamos las referencias a los inputs usando su atributo name como clave
-  const campos = {};
-  inputsConNombre.forEach((input) => {
-    const nombreCampo = input.name;
-    campos[nombreCampo] = input;
-  });
+  // const campos = {};
+  // inputsConNombre.forEach((input) => {
+  //   const nombreCampo = input.name;
+  //   campos[nombreCampo] = input;
+  // });
 
-  const cliente = await get(`clientes/${id}`);
+  const clientResponse = await get(`usuarios/${id}`);
+  console.log(clientResponse);
+
+  clientResponse.data["select-tipos-documentos"] =
+    clientResponse.data.tipo_documento_id;
 
   // Aquí puedes definir los datos que quieres precargar en los inputs
-  const datosCliente = {
-    nombre: cliente.data.info.nombre,
-    id_tipo_documento: cliente.data.info.tipoDocumento.id, // Asegúrate de que el value del option coincida
-    numero_documento: cliente.data.info.numeroDocumento,
-    telefono: cliente.data.info.telefono,
-    correo: cliente.data.info.correo,
-    direccion: cliente.data.info.direccion,
-  };
+  // const datosCliente = {
+  //   nombre: cliente.data.info.nombre,
+  //   id_tipo_documento: cliente.data.info.tipoDocumento.id, // Asegúrate de que el value del option coincida
+  //   numero_documento: cliente.data.info.numeroDocumento,
+  //   telefono: cliente.data.info.telefono,
+  //   correo: cliente.data.info.correo,
+  //   direccion: cliente.data.info.direccion,
+  // };
 
-  // Asignamos los valores del objeto a los inputs
-  for (const campo in datosCliente) {
-    if (campos[campo]) {
-      campos[campo].value = datosCliente[campo];
-    }
-  }
+  // // Asignamos los valores del objeto a los inputs
+  // for (const campo in datosCliente) {
+  //   if (campos[campo]) {
+  //     campos[campo].value = datosCliente[campo];
+  //   }
+  // }
+
+  await llenarSelectTiposDocumentos();
+
+  mapearDatosEnContenedor(clientResponse.data, form);
 
   ///////////////////////////////////////////////////////////
 
@@ -85,30 +96,33 @@ export const editClientController = async (parametros = null) => {
 
     if (!validarCampos(e)) return;
 
-    const response = await put(`clientes/${cliente.data.info.id}`, datos);
+    const putClientResponse = await put(`usuarios/${id}`, datos);
+    console.log(putClientResponse);
 
-    if (!response.success) {
-      await error(response.message);
-      return;
-    }
+    if (!putClientResponse.success)
+      return await error(putClientResponse.message);
 
-    const clienteActualizado = await get(`clientes/${id}`);
+    const typeDocumentResponse = await get(
+      "tipos-documentos/" + putClientResponse.data.tipo_documento_id
+    );
+    putClientResponse.data["tipo_documento"] = typeDocumentResponse.data.nombre;
+    putClientResponse.data["cliente"] = putClientResponse.data.nombre;
 
-    asignarDatosCliente(clienteActualizado.data);
-    cargarTabla();
+    mapearDatosEnContenedor(putClientResponse.data, profileClient);
 
-    await successTemporal(response.message);
-    //
+    const oldRow = tbody.querySelector(`tr[data-id='${id}']`);
 
-    // if (tbody) {
-    //   const {
-    //     id,
-    //     info: { nombre, telefono, numeroDocumento, direccion },
-    //   } = response.data;
+    const updatedRow = crearFila([
+      putClientResponse.data.id,
+      putClientResponse.data.cliente,
+      putClientResponse.data.telefono,
+      putClientResponse.data.numero_documento,
+      putClientResponse.data.direccion,
+    ]);
 
-    //   const row = crearFila([id, nombre, telefono, numeroDocumento, direccion]);
-    //   tbody.insertAdjacentElement("afterbegin", row);
-    // }
+    tbody.replaceChild(updatedRow, oldRow);
+
+    successTemporal(putClientResponse.message);
 
     esModal ? cerrarModal("edit-client") : cerrarModalYVolverAVistaBase();
   });

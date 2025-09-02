@@ -10,6 +10,8 @@ import {
   error,
   cerrarModal,
   put,
+  configurarBotonCerrar,
+  successTemporal,
 } from "../../../../helpers";
 
 export const editSpecieController = (parametros = null) => {
@@ -45,7 +47,7 @@ export const editSpecieController = (parametros = null) => {
       return;
     }
 
-    await success(responseEspecie.message);
+    successTemporal(responseEspecie.message);
     // Justo después de insertar la nueva fila:
     const nombreEspecieFila = document.querySelector(
       `#species [data-id="${id}"] td:nth-child(2)`
@@ -62,9 +64,5 @@ export const editSpecieController = (parametros = null) => {
     esModal ? cerrarModal("edit-specie") : cerrarModalYVolverAVistaBase();
   });
 
-  const btnAtras = document.querySelector("#back-edit-specie");
-
-  btnAtras.addEventListener("click", () => {
-    esModal ? cerrarModal("edit-specie") : cerrarModalYVolverAVistaBase();
-  });
+  configurarBotonCerrar("back-edit-specie", esModal);
 };

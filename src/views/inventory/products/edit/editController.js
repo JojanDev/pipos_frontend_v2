@@ -1,11 +1,15 @@
 import {
   agregarError,
+  configurarBotonCerrar,
   convertirADiaMesAño,
+  crearFila,
   formatearPrecioConPuntos,
   get,
   llenarSelect,
+  mapearDatosEnContenedor,
   put,
   quitarError,
+  toInputDate,
 } from "../../../../helpers";
 import {
   error,
@@ -46,14 +50,6 @@ export const editProductController = async (parametros = null) => {
   const responseProducto = await get("productos/" + id);
   console.log(responseProducto);
 
-  document.querySelector("#nombre").value = responseProducto.data.nombre;
-  document.querySelector("#fecha_caducidad").value =
-    responseProducto.data.fecha_caducidad;
-  document.querySelector("#precio").value = responseProducto.data.precio;
-  document.querySelector("#stock").value = responseProducto.data.stock;
-  document.querySelector("#descripcion").value =
-    responseProducto.data.descripcion || "";
-
   const form = document.querySelector("#form-register-product");
   const tbodyProducts = document.querySelector("#products .table__body");
   const esModal = !location.hash.includes("inventario/productosCrear");
@@ -64,8 +60,12 @@ export const editProductController = async (parametros = null) => {
     optionMapper: ({ id, nombre }) => ({ id: id, text: nombre }),
   });
 
-  document.querySelector("#tipos-productos").value =
-    responseProducto.data.tipoProducto.id;
+  responseProducto.data.fecha_caducidad = toInputDate(
+    responseProducto.data.fecha_caducidad
+  );
+  responseProducto.data["tipos-productos"] =
+    responseProducto.data.tipo_producto_id;
+  mapearDatosEnContenedor(responseProducto.data, form);
 
   configurarEventosValidaciones(form);
   const inputFecha = document.querySelector("[name='fecha_caducidad']");
@@ -108,42 +108,35 @@ export const editProductController = async (parametros = null) => {
 
     if (!resultado.valid) return;
 
-    const response = await put("productos/" + id, datos);
+    const response = await put(`productos/${id}`, datos);
 
-    if (!response.success) {
-      await error(response.message);
-      return;
-    }
+    if (!response.success) return await error(response.message);
 
     console.log(response);
 
-    listarProductos();
-    await successTemporal(response.message);
+    successTemporal(response.message);
+    {
+      const { id, nombre, tipo_producto_id, precio, stock, fecha_caducidad } =
+        response.data;
+      const { data: tipoProducto } = await get(
+        `tipos-productos/${tipo_producto_id}`
+      );
+      const updatedRow = crearFila([
+        id,
+        nombre,
+        tipoProducto.nombre,
+        formatearPrecioConPuntos(precio),
+        stock,
+        convertirADiaMesAño(fecha_caducidad),
+      ]);
 
-    // if (tbodyProducts) {
-    //   const { id, nombre, tipoProducto, precio, stock, fecha_caducidad } =
-    //     response.data;
+      const oldRow = tbodyProducts.querySelector(`[data-id='${id}']`);
 
-    //   //
-
-    //   const row = crearFila([
-    //     id,
-    //     nombre,
-    //     tipoProducto.nombre,
-    //     formatearPrecioConPuntos(precio),
-    //     stock,
-    //     convertirADiaMesAño(fecha_caducidad),
-    //   ]);
-    //   tbodyProducts.insertAdjacentElement("afterbegin", row);
-    // }
+      tbodyProducts.replaceChild(updatedRow, oldRow);
+    }
 
     esModal ? cerrarModal("edit-product") : cerrarModalYVolverAVistaBase();
   });
 
-  document.addEventListener("click", (event) => {
-    const arrow = event.target.closest("#back-edit-product");
-    if (arrow) {
-      esModal ? cerrarModal("edit-product") : cerrarModalYVolverAVistaBase();
-    }
-  });
+  configurarBotonCerrar("back-edit-product", esModal);
 };

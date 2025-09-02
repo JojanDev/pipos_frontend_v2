@@ -11,25 +11,25 @@ import {
   cerrarModal,
   get,
   put,
+  configurarBotonCerrar,
+  DOMSelector,
+  successTemporal,
 } from "../../../helpers";
 
 export const editAntecedentController = async (parametros = null) => {
-  const { id } = parametros;
+  const { antecedente_id, mascota_id } = parametros;
 
-  const containerPerfilMascota = document.querySelector(
-    ".contenedor-perfil--pet"
-  );
+  const containerPerfilMascota = DOMSelector(".contenedor-perfil--pet");
 
-  const antecedente = await get("antecedentes/" + id);
+  const antecedente = await get("antecedentes/" + antecedente_id);
 
   console.log(antecedente.data.titulo);
 
-  document.querySelector("#titulo-antecedente-edit").value =
-    antecedente.data.titulo;
-  document.querySelector("#diagnostico-antecedente-edit").textContent =
+  DOMSelector("#titulo-antecedente-edit").value = antecedente.data.titulo;
+  DOMSelector("#diagnostico-antecedente-edit").textContent =
     antecedente.data.diagnostico;
 
-  const selectPets = document.querySelector("#select-pets");
+  const selectPets = DOMSelector("#select-pets");
 
   if (!containerPerfilMascota) {
     if (selectPets) {
@@ -47,7 +47,7 @@ export const editAntecedentController = async (parametros = null) => {
     contenedor?.classList.add("hidden");
   }
 
-  const form = document.querySelector("#form-register-pet-antecedent");
+  const form = DOMSelector("#form-register-pet-antecedent");
   const esModal = !location.hash.includes("antecedente/editar");
 
   configurarEventosValidaciones(form);
@@ -63,56 +63,30 @@ export const editAntecedentController = async (parametros = null) => {
 
     if (!validarCampos(e)) return;
 
-    datos["id_mascota"] = id;
+    datos["mascota_id"] = mascota_id;
     console.log(datos);
 
-    const responseAntecedente = await put("antecedentes/" + id, {
-      titulo: datos.titulo,
-      diagnostico: datos.diagnostico,
-    });
+    const responseAntecedente = await put(
+      "antecedentes/" + antecedente_id,
+      datos
+    );
 
-    if (!responseAntecedente.success) {
-      await error(responseAntecedente.message);
-      return;
-    }
+    if (!responseAntecedente.success)
+      return await error(responseAntecedente.message);
 
-    // const contenedorAntecedente = document.querySelector(
-    //   "#profile-pet-antecedent"
-    // );
-
-    // if (contenedorAntecedente) {
-    //   const bloqueAntecedenteCreado = crearBloqueAntecedenteCompleto(
-    //     responseAntecedente.data
-    //   );
-    //   contenedorAntecedente.insertAdjacentElement(
-    //     "afterbegin",
-    //     bloqueAntecedenteCreado
-    //   );
-    //   const placeholderAnterior = document.querySelector(
-    //     ".placeholder-antecedentes"
-    //   );
-    //   if (placeholderAnterior) placeholderAnterior.remove();
-    // }
-
-    document.querySelector(
-      `[data-idAntecendente="${id}"] .antecedente-titulo`
+    DOMSelector(
+      `[data-idAntecendente="${antecedente_id}"] .antecedente-titulo`
     ).textContent = responseAntecedente.data.titulo;
-    document.querySelector(
-      `[data-idAntecendente="${id}"] .antecedente-diagnostico`
+    DOMSelector(
+      `[data-idAntecendente="${antecedente_id}"] .antecedente-diagnostico`
     ).innerHTML = `<strong>Diagnóstico:</strong> ${responseAntecedente.data.diagnostico}`;
 
-    await success(responseAntecedente.message);
+    successTemporal(responseAntecedente.message);
 
     esModal
       ? cerrarModal("edit-pet-antecedent")
       : cerrarModalYVolverAVistaBase();
   });
 
-  const btnAtras = document.querySelector("#back-edit-pet-antecedent");
-
-  btnAtras.addEventListener("click", () => {
-    esModal
-      ? cerrarModal("edit-pet-antecedent")
-      : cerrarModalYVolverAVistaBase();
-  });
+  configurarBotonCerrar("back-edit-pet-antecedent", esModal);
 };

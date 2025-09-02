@@ -7,6 +7,9 @@ import {
   datos,
   validarCampos,
   crearFila,
+  successTemporal,
+  error,
+  configurarBotonCerrar,
 } from "../../../../helpers";
 
 export const createProductTypeController = (parametros = null) => {
@@ -24,12 +27,10 @@ export const createProductTypeController = (parametros = null) => {
 
     const responseTipoProducto = await post("tipos-productos", datos);
 
-    if (!responseTipoProducto.success) {
-      await error(responseTipoProducto.message);
-      return;
-    }
+    if (!responseTipoProducto.success)
+      return await error(responseTipoProducto.message);
 
-    await success(responseTipoProducto.message);
+    successTemporal(responseTipoProducto.message);
 
     // Justo después de insertar la nueva fila:
     const tbody = document.querySelector("#productsTypes .table__body");
@@ -50,11 +51,5 @@ export const createProductTypeController = (parametros = null) => {
       : cerrarModalYVolverAVistaBase();
   });
 
-  const btnAtras = document.querySelector("#back-register-productType");
-
-  btnAtras.addEventListener("click", () => {
-    esModal
-      ? cerrarModal("create-productType")
-      : cerrarModalYVolverAVistaBase();
-  });
+  configurarBotonCerrar("back-register-productType", esModal);
 };

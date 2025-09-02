@@ -11,6 +11,7 @@ import {
   DOMSelector,
   configurarBotonCerrar,
   errorTemporal,
+  convertirEdadCorta,
 } from "../../../helpers";
 
 export const profileClientController = async (parametros = null) => {
@@ -36,23 +37,22 @@ export const profileClientController = async (parametros = null) => {
 
   mapearDatosEnContenedor(userResponse.data, profileClient);
 
-  const userResponseMascotas = await get(`mascotas/cliente/${id}`);
+  const petsUserResponse = await get(`mascotas/usuario/${id}`);
 
-  console.log(userResponseMascotas);
+  console.log(petsUserResponse);
 
-  if (!userResponseMascotas.success)
-    errorTemporal(userResponseMascotas.message);
+  if (!petsUserResponse.success) errorTemporal(petsUserResponse.message);
 
-  if (userResponseMascotas.success) {
+  if (petsUserResponse.success) {
     if (tbody) {
-      userResponseMascotas.data.forEach(
-        ({ id, edadFormateada, nombre, raza, sexo, estado_vital }) => {
+      petsUserResponse.data.forEach(
+        ({ id, edad_semanas, nombre, raza, especie, sexo, estado_vital }) => {
           const row = crearFila([
             id,
             nombre,
-            raza.especie.nombre,
-            raza.nombre,
-            edadFormateada,
+            especie,
+            raza,
+            convertirEdadCorta(edad_semanas),
             capitalizarPrimeraLetra(sexo),
           ]);
 
@@ -65,9 +65,6 @@ export const profileClientController = async (parametros = null) => {
   }
 
   profileClient.addEventListener("click", async (e) => {
-    if (e.target.id == "back-perfil")
-      configurarBotonCerrar("back-perfil", esModal);
-
     if (e.target.id == "register-pets-client") {
       await cargarComponente(routes.mascotas.crear, id);
       const selectCliente = DOMSelector("#select-clients");
@@ -78,4 +75,6 @@ export const profileClientController = async (parametros = null) => {
     if (e.target.id == "edit-client")
       await cargarComponente(routes.clientes.editar, { id });
   });
+
+  configurarBotonCerrar("back-perfil", esModal);
 };

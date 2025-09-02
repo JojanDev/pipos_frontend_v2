@@ -9,13 +9,32 @@ import {
   crearFila,
   cerrarModal,
   error,
+  successTemporal,
+  configurarBotonCerrar,
+  DOMSelector,
 } from "../../../../helpers";
-import { listarEspecies } from "../../administrationController";
+import { especiesConRazas } from "../../administrationController.js";
+
+const addRaza = (idEspecie, nuevaRaza) => {
+  const especie = especiesConRazas.find((e) => e.id == idEspecie);
+  if (!especie) return;
+
+  // 1. actualizar array
+  especie.razas.push(nuevaRaza);
+
+  // 2. si está seleccionada en el DOM, actualizar la tabla
+  const especieSeleccionada = DOMSelector(".table__row--selected");
+  if (especieSeleccionada?.children[0]?.textContent.trim() == idEspecie) {
+    const razasTbody = DOMSelector("#breeds .table__body");
+    const row = crearFila([nuevaRaza.id, nuevaRaza.nombre]);
+    razasTbody.append(row);
+  }
+};
 
 export const createBreedController = (parametros = null) => {
-  const { id_especie } = parametros;
+  const { id: especie_id } = parametros;
 
-  const form = document.querySelector("#form-register-breed");
+  const form = DOMSelector("#form-register-breed");
   const esModal = !location.hash.includes("razasCrear");
 
   configurarEventosValidaciones(form);
@@ -25,25 +44,19 @@ export const createBreedController = (parametros = null) => {
 
     if (!validarCampos(e)) return;
 
-    datos["id_especie"] = id_especie;
-
-    const responseRaza = await post("razas", datos);
+    const responseRaza = await post("razas", { ...datos, especie_id });
 
     if (!responseRaza.success) {
       await error(responseRaza.message);
       return;
     }
 
-    await success(responseRaza.message);
+    successTemporal(responseRaza.message);
 
-    listarEspecies();
+    addRaza(especie_id, responseRaza.data);
 
     esModal ? cerrarModal("create-breed") : cerrarModalYVolverAVistaBase();
   });
 
-  const btnAtras = document.querySelector("#back-register-breed");
-
-  btnAtras.addEventListener("click", () => {
-    esModal ? cerrarModal("create-breed") : cerrarModalYVolverAVistaBase();
-  });
+  configurarBotonCerrar("back-register-breed", esModal);
 };

@@ -1,7 +1,10 @@
 import {
   agregarError,
+  configurarBotonCerrar,
   convertirADiaMesAño,
+  DOMSelector,
   formatearPrecioConPuntos,
+  get,
   llenarSelect,
   quitarError,
 } from "../../../../helpers";
@@ -39,9 +42,8 @@ export function validarFechaCaducidad(valorFecha) {
 }
 
 export const createProductController = async () => {
-  const form = document.querySelector("#form-register-product");
-  const selectTipoDocumento = document.querySelector("#tipos-documento");
-  const tbodyProducts = document.querySelector("#products .table__body");
+  const form = DOMSelector("#form-register-product");
+  const tbodyProducts = DOMSelector("#products .table__body");
   const esModal = !location.hash.includes("inventario/productosCrear");
 
   llenarSelect({
@@ -51,7 +53,7 @@ export const createProductController = async () => {
   });
 
   configurarEventosValidaciones(form);
-  const inputFecha = document.querySelector("[name='fecha_caducidad']");
+  const inputFecha = DOMSelector("[name='fecha_caducidad']");
 
   inputFecha.addEventListener("blur", (e) => {
     const resultado = validarFechaCaducidad(inputFecha.value);
@@ -80,22 +82,21 @@ export const createProductController = async () => {
 
     const resultado = validarFechaCaducidad(inputFecha.value);
 
-    if (!resultado.valid) return;
+    if (!resultado.valid);
 
     const response = await post("productos", datos);
 
-    if (!response.success) {
-      await error(response.message);
-      return;
-    }
+    if (!response.success) return await error(response.message);
 
-    await successTemporal(response.message);
+    successTemporal(response.message);
 
     if (tbodyProducts) {
-      const { id, nombre, tipoProducto, precio, stock, fecha_caducidad } =
+      const { id, nombre, tipo_producto_id, precio, stock, fecha_caducidad } =
         response.data;
 
-      //
+      const { data: tipoProducto } = await get(
+        `tipos-productos/${tipo_producto_id}`
+      );
 
       const row = crearFila([
         id,
@@ -111,10 +112,5 @@ export const createProductController = async () => {
     esModal ? cerrarModal("create-product") : cerrarModalYVolverAVistaBase();
   });
 
-  document.addEventListener("click", (event) => {
-    const arrow = event.target.closest("#back-register-client");
-    if (arrow) {
-      esModal ? cerrarModal("create-product") : cerrarModalYVolverAVistaBase();
-    }
-  });
+  configurarBotonCerrar("back-register-product", esModal);
 };

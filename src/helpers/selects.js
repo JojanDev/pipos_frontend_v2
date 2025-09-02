@@ -38,17 +38,39 @@ export const llenarSelectClientes = async () => {
   });
 };
 
-export const renderizarSelectEspecies = async (selectEspecie, selectRazas) => {
-  const especiesResponse = await get("especies");
-  if (!especiesResponse.success) return;
+export const llenarSelectTiposDocumentos = async () => {
+  return await llenarSelect({
+    endpoint: "tipos-documentos",
+    selector: "#select-tipos-documentos",
+    optionMapper: (t) => ({
+      id: t.id,
+      text: t.nombre,
+    }),
+  });
+};
 
-  // Mantener la opción placeholder
+export const llenarSelectVeterinarios = async () => {
+  return await llenarSelect({
+    endpoint: "usuarios/veterinarios/",
+    selector: "#select-veterinarios",
+    optionMapper: (veterinario) => ({
+      id: veterinario.id,
+      text: veterinario.nombre,
+    }),
+  });
+};
+
+export const renderizarSelectEspecies = async (selectEspecie, selectRazas) => {
+  const especiesResp = await get("especies");
+  if (!especiesResp.success) return;
+
   selectEspecie.innerHTML =
-    `<option disabled selected value="">Seleccione una especie</option>` +
-    especiesResponse.data
+    '<option disabled selected value="">Seleccione una especie</option>' +
+    especiesResp.data
       .map((e) => `<option value="${e.id}">${e.nombre}</option>`)
       .join("");
 
+  // función reutilizable para cargar razas
   const actualizarRazas = async () => {
     const especieId = selectEspecie.value;
     if (!especieId) {
@@ -57,17 +79,22 @@ export const renderizarSelectEspecies = async (selectEspecie, selectRazas) => {
       return;
     }
 
-    const razasResponse = await get(`razas/especie/${especieId}`);
-    if (!razasResponse.success) return;
+    const razasResp = await get(`razas/especie/${especieId}`);
+    if (!razasResp.success) return;
 
-    // Mantener placeholder en razas
     selectRazas.innerHTML =
       '<option disabled selected value="">Seleccione una raza</option>' +
-      razasResponse.data
+      razasResp.data
         .map((r) => `<option value="${r.id}">${r.nombre}</option>`)
         .join("");
   };
 
+  // 4. bind del change (no await aquí)
   selectEspecie.addEventListener("change", actualizarRazas);
+
+  // 5. carga inicial de razas
   await actualizarRazas();
+
+  // Devolvemos la función para usarla en el init
+  return actualizarRazas;
 };

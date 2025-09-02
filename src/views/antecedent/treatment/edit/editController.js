@@ -11,35 +11,32 @@ import {
   get,
   put,
   cerrarModal,
+  llenarSelectVeterinarios,
+  DOMSelector,
+  mapearDatosEnContenedor,
+  successTemporal,
 } from "../../../../helpers";
 
 export const editTreatmentController = async (parametros = null) => {
-  const { id } = parametros;
+  const { tratamiento_id } = parametros;
+  const contenedorTratamiento = DOMSelector('[data-modal="pet-treatment"]');
+  console.log(contenedorTratamiento);
 
-  const responseTratamiento = await get("tratamientos/" + id);
-  console.log(responseTratamiento);
+  const tratamientoResponse = await get("tratamientos/" + tratamiento_id);
+  console.log(tratamientoResponse);
 
-  document.querySelector("#titulo-tratamiento-edit").value =
-    responseTratamiento.data.titulo;
-  document.querySelector("#descripcion-tratamiento-edit").textContent =
-    responseTratamiento.data.descripcion;
-
-  const form = document.querySelector(
-    "#form-register-pet-antecedent-treatment"
-  );
+  const form = DOMSelector("#form-register-pet-antecedent-treatment");
   const esModal = !location.hash.includes("antecedente/tratamientoEditar");
 
-  await llenarSelect({
-    endpoint: "personal/veterinarios/",
-    selector: "#select-veterinarios",
-    optionMapper: (veterinario) => ({
-      id: veterinario.id,
-      text: veterinario.info.nombre,
-    }),
-  });
+  await llenarSelectVeterinarios();
 
-  document.querySelector("#select-veterinarios").value =
-    responseTratamiento.data.id_personal;
+  mapearDatosEnContenedor(
+    {
+      ...tratamientoResponse.data,
+      "select-veterinarios": tratamientoResponse.data.usuario_id,
+    },
+    form
+  );
 
   configurarEventosValidaciones(form);
 
@@ -50,37 +47,48 @@ export const editTreatmentController = async (parametros = null) => {
 
     // datos["id_antecedente"] = idAntecedente;
 
-    const responseActualizado = await put("tratamientos/" + id, datos);
-
-    if (!responseActualizado.success) {
-      await error(responseTratamiento.message);
-      return;
-    }
-
-    const divTratamiento = crearElementoTratamiento(responseActualizado.data);
-
-    document.querySelector("#treatment-title").textContent =
-      responseActualizado.data.titulo;
-    document.querySelector("#treatment-description").textContent =
-      responseActualizado.data.descripcion;
-
-    const veterinario = await get(
-      "personal/" + responseActualizado.data.id_personal
+    const tratamientoUpdatedResponse = await put(
+      `tratamientos/${tratamiento_id}`,
+      { ...datos, antecedente_id: tratamientoResponse.data.antecedente_id }
     );
 
-    document.querySelector("#treatment-veterinario").textContent =
-      "Veterinario asociado: " + veterinario.data.info.nombre;
+    console.log(tratamientoUpdatedResponse);
 
-    await success(responseActualizado.message);
+    if (!tratamientoUpdatedResponse.success)
+      return await error(tratamientoUpdatedResponse.message);
+
+    const divTratamiento = crearElementoTratamiento(
+      tratamientoUpdatedResponse.data
+    );
+
+    // DOMSelector("#treatment-title").textContent =
+    //   tratamientoUpdatedResponse.data.titulo;
+    // DOMSelector("#treatment-description").textContent =
+    //   tratamientoUpdatedResponse.data.descripcion;
+
+    const veterinarioResponse = await get(
+      `usuarios/${tratamientoUpdatedResponse.data.usuario_id}`
+    );
+
+    // DOMSelector("#treatment-veterinario").textContent =
+    //   "Veterinario asociado: " + veterinarioResponse.data.nombre;
+
+    mapearDatosEnContenedor(
+      {
+        ...tratamientoUpdatedResponse.data,
+        veterinario: veterinarioResponse.data.nombre,
+      },
+      contenedorTratamiento
+    );
+
+    successTemporal(tratamientoUpdatedResponse.message);
 
     esModal
       ? cerrarModal("edit-pet-antecedent-treatment")
       : cerrarModalYVolverAVistaBase();
   });
 
-  const btnAtras = document.querySelector(
-    "#back-edit-pet-antecedent-treatment"
-  );
+  const btnAtras = DOMSelector("#back-edit-pet-antecedent-treatment");
 
   btnAtras.addEventListener("click", () => {
     esModal

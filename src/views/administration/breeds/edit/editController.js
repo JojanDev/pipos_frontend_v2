@@ -10,17 +10,43 @@ import {
   error,
   cerrarModal,
   put,
+  DOMSelector,
+  configurarBotonCerrar,
+  successTemporal,
 } from "../../../../helpers";
-import { listarEspecies } from "../../administrationController";
+import {
+  especiesConRazas,
+  listarEspecies,
+} from "../../administrationController";
+
+const updateRaza = (idEspecie, razaActualizada) => {
+  const especie = especiesConRazas.find((e) => e.id == idEspecie);
+  if (!especie) return;
+
+  const raza = especie.razas.find((r) => r.id == razaActualizada.id);
+  raza.nombre = razaActualizada.nombre;
+
+  // 2. si está seleccionada en el DOM, actualizar la tabla
+  const especieSeleccionada = DOMSelector(".table__row--selected");
+  if (especieSeleccionada?.children[0]?.textContent.trim() == idEspecie) {
+    const razasTbody = DOMSelector("#breeds .table__body");
+
+    const oldRow = razasTbody.querySelector(
+      `[data-id='${razaActualizada.id}']`
+    );
+    const nombreRaza = oldRow.children[1];
+    nombreRaza.textContent = razaActualizada.nombre;
+  }
+};
 
 export const editBreedController = (parametros = null) => {
   // Id de la especie
-  const { id, nombre, id_especie } = parametros;
+  const { id, nombre, especie_id } = parametros;
 
-  const form = document.querySelector("#form-edit-breed");
+  const form = DOMSelector("#form-edit-breed");
   const esModal = !location.hash.includes("razasEditar");
 
-  const titulo = document.querySelector("#nombreRaza");
+  const titulo = DOMSelector("#nombreRaza");
 
   titulo.value = nombre;
 
@@ -38,28 +64,20 @@ export const editBreedController = (parametros = null) => {
       return;
     }
 
-    datos["id_especie"] = id_especie;
+    const responseEspecie = await put(`razas/${id}`, { ...datos, especie_id });
 
-    const responseEspecie = await put(`razas/${id}`, datos);
+    if (!responseEspecie.success) return await error(responseEspecie.message);
 
-    if (!responseEspecie.success) {
-      await error(responseEspecie.message);
-      return;
-    }
+    successTemporal(responseEspecie.message);
 
-    await success(responseEspecie.message);
-    listarEspecies();
+    updateRaza(especie_id, responseEspecie.data);
 
-    const titulo = document.querySelector("#breed-title");
+    const titulo = DOMSelector("#breed-title");
 
     titulo.textContent = responseEspecie.data.nombre;
 
     esModal ? cerrarModal("edit-breed") : cerrarModalYVolverAVistaBase();
   });
 
-  const btnAtras = document.querySelector("#back-edit-breed");
-
-  btnAtras.addEventListener("click", () => {
-    esModal ? cerrarModal("edit-breed") : cerrarModalYVolverAVistaBase();
-  });
+  configurarBotonCerrar("back-edit-breed", esModal);
 };

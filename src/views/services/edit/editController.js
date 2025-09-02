@@ -10,31 +10,24 @@ import {
   get,
   datos,
   formatearPrecioConPuntos,
+  mapearDatosEnContenedor,
+  configurarBotonCerrar,
+  DOMSelector,
+  successTemporal,
 } from "../../../helpers";
 
 export const editServiceController = async (parametros = null) => {
   const { id } = parametros;
 
-  const form = document.querySelector("#form-edit-service");
+  const form = DOMSelector("#form-edit-service");
   const esModal = !location.hash.includes("servicios/editar");
 
   // 1. Obtener datos del servicio desde la API
   const response = await get(`servicios/${id}`);
-  if (!response.success) {
-    await error("No se pudo obtener la información del servicio.");
-    return;
-  }
+  if (!response.success)
+    return await error("No se pudo obtener la información del servicio.");
 
-  const { nombre, descripcion, precio } = response.data;
-
-  // 2. Asignar los valores a los inputs
-  const inputNombre = document.querySelector("#nombreServicio");
-  const inputDescripcion = document.querySelector("#descripcionServicio");
-  const inputPrecio = document.querySelector("#precioServicio");
-
-  inputNombre.value = nombre;
-  inputDescripcion.value = descripcion;
-  inputPrecio.value = precio;
+  mapearDatosEnContenedor(response.data, form);
 
   configurarEventosValidaciones(form);
 
@@ -55,15 +48,13 @@ export const editServiceController = async (parametros = null) => {
 
     const responseUpdate = await put(`servicios/${id}`, datos);
 
-    if (!responseUpdate.success) {
-      await error(responseUpdate.message);
-      return;
-    }
+    if (!responseUpdate.success) return await error(responseUpdate.message);
 
-    await success(responseUpdate.message);
+    successTemporal(responseUpdate.message);
 
     // Actualizar la card directamente (opcional)
-    const card = document.querySelector(`.card[data-id="${id}"]`);
+    const card = DOMSelector(`.card[data-id="${id}"]`);
+
     if (card) {
       card.querySelector(".card__title").textContent =
         responseUpdate.data.nombre;
@@ -76,8 +67,5 @@ export const editServiceController = async (parametros = null) => {
     esModal ? cerrarModal("edit-service") : cerrarModalYVolverAVistaBase();
   });
 
-  const btnAtras = document.querySelector("#back-edit-service");
-  btnAtras.addEventListener("click", () => {
-    esModal ? cerrarModal("edit-service") : cerrarModalYVolverAVistaBase();
-  });
+  configurarBotonCerrar("back-edit-service", esModal);
 };

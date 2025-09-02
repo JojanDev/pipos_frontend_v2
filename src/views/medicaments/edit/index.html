@@ -3,6 +3,7 @@
     <i
       class="ri-arrow-left-line arrow-left arrow-left--bottom"
       id="back-edit-medicament-info"
+      data-modal="edit-medicament-info"
     ></i>
 
     <h1 class="section-form__title section-form__title--w-450">
@@ -20,6 +21,7 @@
             required
             data-validate="textoNumeros"
             name="nombre"
+            id="nombre"
           />
         </div>
         <div class="form__container-field form__container-field--span">
@@ -30,6 +32,7 @@
             required
             data-validate="texto"
             name="uso_general"
+            id="uso_general"
           />
         </div>
         <div class="form__container-field form__container-field--span">
@@ -40,6 +43,7 @@
             required
             data-validate=""
             name="via_administracion"
+            id="via_administracion"
           />
         </div>
         <div class="form__container-field form__container-field--span">
@@ -50,12 +54,14 @@
             required
             data-validate=""
             name="presentacion"
+            id="presentacion"
           />
         </div>
         <div class="form__container-field form__container-field--span">
           <label for="" class="form__label">Informacion adicional</label>
           <textarea
             name="informacion_adicional"
+            id="informacion_adicional"
             required
             class="form__input form__input--textarea"
           ></textarea>

@@ -2,15 +2,16 @@ import {
   capitalizarPrimeraLetra,
   convertirADiaMesAño,
   crearFila,
+  DOMSelector,
   formatearPrecioConPuntos,
   get,
 } from "../../helpers";
 
-let especiesConRazas = [];
+export let especiesConRazas = [];
 
 export const listarTiposProductos = async () => {
   const response = await get("tipos-productos");
-  const tbody = document.querySelector("#productsTypes .table__body");
+  const tbody = DOMSelector("#productsTypes .table__body");
   tbody.innerHTML = ""; // Limpia por si se vuelve a cargar
 
   if (!response.success) {
@@ -29,11 +30,11 @@ export const listarTiposProductos = async () => {
 
 export const listarEspecies = async () => {
   const response = await get("especies");
-  const tbody = document.querySelector("#species .table__body");
+  const tbody = DOMSelector("#species .table__body");
   tbody.innerHTML = "";
 
-  const razasTbody = document.querySelector("#breeds .table__body");
-  const btnRegistrarRaza = document.querySelector("#btn-registro-raza");
+  const razasTbody = DOMSelector("#breeds .table__body");
+  const btnRegistrarRaza = DOMSelector("#btn-registro-raza");
   razasTbody.innerHTML = "";
 
   if (!response.success) {
@@ -46,7 +47,12 @@ export const listarEspecies = async () => {
     return;
   }
 
-  especiesConRazas = response.data;
+  especiesConRazas = await Promise.all(
+    response.data.map(async (especie) => {
+      const razasEspecie = await get(`razas/especie/${especie.id}`);
+      return { ...especie, razas: razasEspecie.data };
+    })
+  );
 
   especiesConRazas.forEach((especie) => {
     // cont;
@@ -74,11 +80,11 @@ export const listarEspecies = async () => {
 
   // 👇 Aquí va el evento del botón registrar raza
   btnRegistrarRaza.addEventListener("click", () => {
-    const especieSeleccionada = document.querySelector(".table__row--selected");
+    const especieSeleccionada = DOMSelector(".table__row--selected");
     const idEspecie = especieSeleccionada?.children[0]?.textContent?.trim();
 
     if (idEspecie) {
-      window.location.hash = `#/administrar_datos/razasCrear/id_especie=${idEspecie}`;
+      window.location.hash = `#/administrar_datos/razasCrear/id=${idEspecie}`;
     }
   });
 
@@ -88,7 +94,7 @@ export const listarEspecies = async () => {
 };
 
 const cargarRazasDeEspecie = (especie) => {
-  const razasTbody = document.querySelector("#breeds .table__body");
+  const razasTbody = DOMSelector("#breeds .table__body");
   razasTbody.innerHTML = "";
 
   if (!especie.razas || especie.razas.length === 0) {
@@ -105,7 +111,7 @@ const cargarRazasDeEspecie = (especie) => {
 };
 
 const mostrarMensajePlaceholderRazas = (mensaje) => {
-  const razasTbody = document.querySelector("#breeds .table__body");
+  const razasTbody = DOMSelector("#breeds .table__body");
   razasTbody.innerHTML = "";
   const placeholder = document.createElement("p");
   placeholder.classList.add("placeholder");
@@ -117,7 +123,7 @@ export const administrationController = () => {
   listarTiposProductos();
   listarEspecies();
 
-  const tablaRazas = document.querySelector("#breeds");
+  const tablaRazas = DOMSelector("#breeds");
 
   tablaRazas.addEventListener("click", (event) => {
     const fila = event.target.closest("tr[data-id]");
@@ -131,7 +137,7 @@ export const administrationController = () => {
     }
   });
 
-  const tablaEspecies = document.querySelector("#species");
+  const tablaEspecies = DOMSelector("#species");
 
   tablaEspecies.addEventListener("click", (event) => {
     const fila = event.target.closest("tr[data-id]");
@@ -144,7 +150,7 @@ export const administrationController = () => {
     }
   });
 
-  const tablaTipoProducto = document.querySelector("#productsTypes");
+  const tablaTipoProducto = DOMSelector("#productsTypes");
 
   tablaTipoProducto.addEventListener("click", (event) => {
     const fila = event.target.closest("tr[data-id]");

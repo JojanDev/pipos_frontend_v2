@@ -1,16 +1,21 @@
 import {
   capitalizarPrimeraLetra,
   cerrarModal,
+  configurarBotonCerrar,
   configurarEventosValidaciones,
   crearElementoTratamiento,
   crearFila,
   datos,
+  DOMSelector,
+  DOMSelectorAll,
   error,
   get,
   llenarSelect,
+  mapearDatosEnContenedor,
   post,
   put,
   success,
+  successTemporal,
   validarCampos,
 } from "../../../../../helpers";
 
@@ -40,22 +45,24 @@ function convertirDias(diasTotales) {
 
 export const editMedicamentTreatmentController = async (parametros = null) => {
   const { id } = parametros;
-  const dataJSON = localStorage.getItem("data");
-  const data = JSON.parse(dataJSON);
+  // const dataJSON = localStorage.getItem("data");
+  // const data = JSON.parse(dataJSON);
 
-  if (data.id_rol != 1) {
-    const opcionesAdmin = document.querySelectorAll(".admin");
-    [...opcionesAdmin].forEach((element) => {
-      element.remove();
-    });
-  }
+  // if (data.id_rol != 1) {
+  //   const opcionesAdmin = DOMSelectorAll(".admin");
+  //   [...opcionesAdmin].forEach((element) => {
+  //     element.remove();
+  //   });
+  // }
 
-  const responseMediTrat = await get("medicamentos/tratamiento/item/" + id);
+  const responseMediTrat = await get(`medicamentos-tratamientos/${id}`);
+  const a = await get(`info-medicamentos/`);
+  console.log(a);
 
   console.log(responseMediTrat);
 
   await llenarSelect({
-    endpoint: "medicamentos/info/",
+    endpoint: "info-medicamentos/",
     selector: "#select-medicamentos-info",
     optionMapper: ({ id, nombre, presentacion, via_administracion }) => ({
       id: id,
@@ -65,22 +72,23 @@ export const editMedicamentTreatmentController = async (parametros = null) => {
     }),
   });
 
-  document.querySelector("#select-medicamentos-info").value =
-    responseMediTrat.data.id_medicamento_info;
-  document.querySelector("#dosis").value = responseMediTrat.data.dosis;
-  document.querySelector("#frecuencia_aplicacion").value =
-    responseMediTrat.data.frecuencia_aplicacion;
-
   const { meses, semanas, dias } = convertirDias(
     responseMediTrat.data.duracion
   );
 
-  document.querySelector("#meses").value = meses;
-  document.querySelector("#semanas").value = semanas;
-  document.querySelector("#dias").value = dias;
-
-  const form = document.querySelector(
+  const form = DOMSelector(
     "#form-register-pet-antecedent-treatment-medicament"
+  );
+
+  mapearDatosEnContenedor(
+    {
+      ...responseMediTrat.data,
+      "select-medicamentos-info": responseMediTrat.data.info_medicamento_id,
+      meses,
+      semanas,
+      dias,
+    },
+    form
   );
 
   const esModal = !location.hash.includes("antecedente/tratamientoCrear");
@@ -90,9 +98,9 @@ export const editMedicamentTreatmentController = async (parametros = null) => {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const inputMeses = document.querySelector('[name="meses"]');
-    const inputSemanas = document.querySelector('[name="semanas"]');
-    const inputDias = document.querySelector('[name="dias"]');
+    const inputMeses = DOMSelector('[name="meses"]');
+    const inputSemanas = DOMSelector('[name="semanas"]');
+    const inputDias = DOMSelector('[name="dias"]');
     if (!validarCampos(e)) return;
 
     if (
@@ -104,95 +112,81 @@ export const editMedicamentTreatmentController = async (parametros = null) => {
       return;
     }
 
-    const { id_medicamento_info, frecuencia_aplicacion, dosis } = datos;
+    const { info_medicamento_id, frecuencia_aplicacion, dosis } = datos;
     const duracion = calcularDiasTotales(datos);
 
     const responseMedicamentoTratamiento = await put(
-      "medicamentos/tratamiento/" + id,
+      `medicamentos-tratamientos/${id}`,
       {
-        id_medicamento_info,
+        info_medicamento_id,
         frecuencia_aplicacion,
         duracion,
         dosis,
+        tratamiento_id: responseMediTrat.data.tratamiento_id,
       }
     );
 
     console.log(responseMedicamentoTratamiento);
 
-    if (!responseMedicamentoTratamiento.success) {
-      await error(responseMedicamentoTratamiento.message);
-      return;
-    }
+    if (!responseMedicamentoTratamiento.success)
+      return await error(responseMedicamentoTratamiento.message);
 
-    const tbody = document.querySelector(
-      "#pet-antecedent-treatment .table__body"
-    );
+    const tbody = DOMSelector("#pet-antecedent-treatment .table__body");
+
+    const oldRow = DOMSelector(`#pet-antecedent-treatment [data-id='${id}'`);
+    console.log(oldRow);
 
     if (tbody) {
-      const responseMedicamentos = await get(
-        `medicamentos/tratamiento/${responseMedicamentoTratamiento.data.id_tratamiento}`
+      // tbody.innerHTML = "";
+      const { id, dosis, duracion, frecuencia_aplicacion } =
+        responseMedicamentoTratamiento.data;
+
+      const iconDelete = document.createElement("i");
+
+      iconDelete.classList.add(
+        "ri-delete-bin-line",
+        "delete-tabla",
+        "btn--red",
+        "admin"
       );
 
-      if (responseMedicamentos.success) {
-        tbody.innerHTML = "";
-        responseMedicamentos.data.forEach((medicamentoTratamiento) => {
-          const {
-            id,
-            medicamento,
-            dosis,
-            duracionFormateada,
-            frecuencia_aplicacion,
-          } = medicamentoTratamiento;
+      const iconEdit = document.createElement("i");
 
-          const iconDelete = document.createElement("i");
+      iconEdit.classList.add(
+        "ri-edit-box-line",
+        "edit-tabla",
+        "btn--orange",
+        "admin"
+      );
 
-          iconDelete.classList.add(
-            "ri-delete-bin-line",
-            "delete-tabla",
-            "btn--red",
-            "admin"
-          );
+      const { data: infoMedicamento } = await get(
+        `info-medicamentos/${info_medicamento_id}`
+      );
 
-          const iconEdit = document.createElement("i");
+      const updatedRow = crearFila([
+        id,
+        infoMedicamento.nombre,
+        infoMedicamento.uso_general,
+        capitalizarPrimeraLetra(infoMedicamento.via_administracion),
+        dosis,
+        frecuencia_aplicacion,
+        duracion,
+        iconDelete,
+        iconEdit,
+      ]);
 
-          iconEdit.classList.add(
-            "ri-edit-box-line",
-            "edit-tabla",
-            "btn--orange",
-            "admin"
-          );
-
-          const row = crearFila([
-            id,
-            medicamento.nombre,
-            medicamento.uso_general,
-            capitalizarPrimeraLetra(medicamento.via_administracion),
-            dosis,
-            frecuencia_aplicacion,
-            duracionFormateada[1],
-            data.id_rol == 1 ? iconDelete : "",
-            iconEdit,
-          ]);
-
-          tbody.append(row);
-        });
-      }
+      tbody.replaceChild(updatedRow, oldRow);
     }
 
-    await success(responseMedicamentoTratamiento.message);
+    successTemporal(responseMedicamentoTratamiento.message);
 
     esModal
       ? cerrarModal("edit-pet-antecedent-treatment-medicament")
       : cerrarModalYVolverAVistaBase();
   });
 
-  const btnAtras = document.querySelector(
-    "#back-edit-pet-antecedent-treatment-medicament"
+  configurarBotonCerrar(
+    "back-edit-pet-antecedent-treatment-medicament",
+    esModal
   );
-
-  btnAtras.addEventListener("click", () => {
-    esModal
-      ? cerrarModal("edit-pet-antecedent-treatment-medicament")
-      : cerrarModalYVolverAVistaBase();
-  });
 };
