@@ -24,6 +24,9 @@ function formatoCorto(localDateTime) {
 export const cargarTablaVentas = async () => {
   const ventas = await get("ventas");
 
+  console.log(ventas);
+
+
   if (!ventas.success) {
     // await error(response.message);
     return;
@@ -32,17 +35,18 @@ export const cargarTablaVentas = async () => {
   const tbody = document.querySelector("#ventas .table__body");
   tbody.innerHTML = "";
 
-  const ventasInfo = ventas.data.map((venta) => {
+  const ventasInfo = await Promise.all(ventas.data.map(async (venta) => {
+    const { data: usuarioVenta } = await get(`usuarios/${venta.comprador_id}`);
     return [
       venta.id,
-      formatoCorto(venta.fecha),
-      venta.cliente.info.nombre,
+      formatoCorto(venta.fecha_creado),
+      usuarioVenta.nombre,
       formatearPrecioConPuntos(venta.monto),
       formatearPrecioConPuntos(venta.total - venta.monto),
       formatearPrecioConPuntos(venta.total),
       capitalizarPrimeraLetra(venta.estado),
     ];
-  });
+  }));
 
   ventasInfo.forEach((venta) => {
     const row = crearFila(venta);

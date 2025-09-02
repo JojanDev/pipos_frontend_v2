@@ -170,6 +170,10 @@
 .d-flex {
   display: flex;
   /* font-size: 16px; */
+  /* justify-content: space-around; */
+}
+
+.jc-sa{
   justify-content: space-around;
 }
 

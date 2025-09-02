@@ -1,13 +1,36 @@
 import {
   cargarComponente,
   cerrarModal,
+  convertirADiaMesAño,
+  DOMSelector,
   error,
   get,
   llenarSelect,
+  mapearDatosEnContenedor,
   renderizarCarrito,
   renderizarPerfilVenta,
 } from "../../../helpers";
 import { routes } from "../../../router/routes";
+
+function formatoCorto(fechaIsoUtc) {
+  if (!fechaIsoUtc) return "Fecha inválida";
+
+  const fecha = new Date(fechaIsoUtc);
+  if (isNaN(fecha)) return "Fecha inválida";
+
+  const opciones = {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  };
+
+  // Devuelve algo como "02/09/2025 11:18"
+  return new Intl.DateTimeFormat("es-ES", opciones).format(fecha);
+}
+
 
 export let venta = {};
 export let ventaInformacion = {};
@@ -15,8 +38,9 @@ export const profileVentaController = async (parametros = null) => {
 
   const { id } = parametros;
   // Supongamos que traes la venta completa desde backend
-  const ventaDesdeBackend = await get(`ventas/perfil/${id}`);
+  const ventaDesdeBackend = await get(`ventas/${id}`);
   console.log(ventaDesdeBackend);
+  const contenedorVenta = DOMSelector("#venta");
 
   venta = ventaDesdeBackend.data;
 
@@ -24,7 +48,11 @@ export const profileVentaController = async (parametros = null) => {
     document.querySelector("#venta-finalizar").remove();
   }
 
-  renderizarPerfilVenta(venta);
+  ventaDesdeBackend.data.fecha_creado = formatoCorto(ventaDesdeBackend.data.fecha_creado)
+  const { data: vendedor } = await get(`usuarios/${ventaDesdeBackend.data.vendedor_id}`)
+  const { data: comprador } = await get(`usuarios/${ventaDesdeBackend.data.comprador_id}`)
+  mapearDatosEnContenedor({ ...ventaDesdeBackend.data, vendedor: "Vendedor: " + vendedor.nombre, comprador: "Cliente: " + comprador.nombre }, contenedorVenta)
+  // renderizarPerfilVenta(venta);
 
   const contenedor = document.querySelector("#venta");
 

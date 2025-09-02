@@ -1,15 +1,16 @@
 <div class="modal__backdrop" data-modal="profile-personal">
   <div class="contenedor-perfil w-800 h modal__container">
     <div class="perfil__rol-contenedor">
-      <div>
+      <div style="width: 100%;">
         <h3 class="perfil__nombre" id="nombre"></h3>
-        <p class="perfil__rol" id="profile-rol">Empleado</p>
+        <div class="contenedor-roles">
+          <!-- <p class="roles">Cliente</p>
+          <p class="roles">Veterinario</p>
+          <p class="roles">Administrador</p> -->
+        </div>
+        <!-- <p class="perfil__rol" id="profile-rol">Empleado</p> -->
       </div>
-      <i
-        class="ri-close-line btn-atras"
-        id="back-profile-personal"
-        data-modal="profile-personal"
-      ></i>
+      <i class="ri-close-line btn-atras" id="back-profile-personal" data-modal="profile-personal"></i>
     </div>
     <p class="perfil__separador">Datos</p>
     <div class="perfil__contenedor-datos-personales">
@@ -36,32 +37,24 @@
         <span class="perfil__valor" id="direccion"></span>
       </p>
     </div>
-    <p class="perfil__separador">Datos de inicio</p>
+    <div id="credenciales">
+      <p class="perfil__separador">Credenciales</p>
 
-    <div
-      class="perfil__contenedor-datos-personales perfil__contenedor-datos-personales--col-1"
-    >
-      <p class="perfil__campo">
-        Usuario:
-        <span class="perfil__valor" id="profile-usuario"></span>
-      </p>
+      <div class="perfil__contenedor-datos-personales perfil__contenedor-datos-personales--col-1">
+        <p class="perfil__campo">
+          Usuario:
+          <span class="perfil__valor" id="usuario"></span>
+        </p>
+      </div>
     </div>
     <div class="form__container-btns">
-      <button
-        type="submit"
-        class="btn btn--lower-height btn--orange"
-        id="edit-personal"
-      >
+      <button type="submit" class="btn btn--lower-height btn--orange" id="edit-personal">
         Editar empleado
       </button>
       <!-- <button class="btn perfil__boton" id="register-pets-client">
         Registrar mascota
       </button> -->
-      <button
-        type="submit"
-        class="btn btn--lower-height btn--red"
-        id="delete-personal"
-      >
+      <button type="submit" class="btn btn--lower-height btn--red" id="delete-personal">
         Desactivar
       </button>
       <button type="submit" class="btn btn--lower-height" id="activar-personal">

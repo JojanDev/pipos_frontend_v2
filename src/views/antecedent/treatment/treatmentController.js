@@ -47,15 +47,15 @@ const desactivarBotonesPerfilTratamiento = () => {
 };
 
 export const treatmentController = async (parametros = null) => {
-  const dataJSON = localStorage.getItem("data");
-  const data = JSON.parse(dataJSON);
+  // const dataJSON = localStorage.getItem("data");
+  // const data = JSON.parse(dataJSON);
 
-  if (data.id_rol != 1) {
-    const opcionesAdmin = DOMSelectorAll(".admin");
-    [...opcionesAdmin].forEach((element) => {
-      element.remove();
-    });
-  }
+  // if (data.id_rol != 1) {
+  //   const opcionesAdmin = DOMSelectorAll(".admin");
+  //   [...opcionesAdmin].forEach((element) => {
+  //     element.remove();
+  //   });
+  // }
   const { id, tituloAntecedente, estado_vital } = parametros;
 
   const modal = DOMSelector('[data-modal="pet-treatment"]');
@@ -123,7 +123,7 @@ export const treatmentController = async (parametros = null) => {
           dosis,
           frecuencia_aplicacion,
           duracion,
-          data.id_rol == 1 ? iconDelete : "",
+          iconDelete,
           iconEdit,
         ]);
 

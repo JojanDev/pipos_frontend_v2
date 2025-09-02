@@ -27,13 +27,10 @@ export const cargarTablaEmpleados = async () => {
         );
       }
 
-      console.log(nombreRoles);
+      // console.log(nombreRoles);
 
       return [
         usuario.id,
-        // personal.usuario,
-        // "JJIJI",
-        // capitalizarPrimeraLetra(personal.rol.nombre)
         nombreRoles.join(", ") ?? "No aplica",
         usuario.nombre,
         usuario.telefono,

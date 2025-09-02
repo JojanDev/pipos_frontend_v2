@@ -10,6 +10,7 @@ import {
   llenarSelect,
   capitalizarPrimeraLetra,
   llenarSelectTiposDocumentos,
+  successTemporal,
 } from "../../../helpers";
 
 export const createPersonalController = async () => {
@@ -64,14 +65,7 @@ export const createPersonalController = async () => {
 
     console.log(credenciales);
 
-    // //Se valida el inicio exitoso
-    // if (response.success) {
-    //   //Se muestra un mensaje
-    //   await success(response.message);
-    //   window.location.hash = "#/personal";
-    // } else {
-    //   //Se muestra un mensaje
-    //   await error(response.message);
-    // }
+    successTemporal(response.message);
+    window.location.hash = "#/personal";
   });
 };

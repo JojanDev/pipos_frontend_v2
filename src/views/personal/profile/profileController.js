@@ -16,35 +16,6 @@ import {
 } from "../../../helpers";
 import { cargarTablaEmpleados } from "../personalController";
 
-export const asignarDatosCliente = (data) => {
-  const spanNombre = DOMSelector("#profile-nombre");
-  const spanRol = DOMSelector("#profile-rol");
-  const spanTipoDocumento = DOMSelector("#profile-tipoDocumento");
-  const spanNumeroDocumento = DOMSelector("#profile-numeroDocumento");
-  const spanDireccion = DOMSelector("#profile-direccion");
-  const spanTelefono = DOMSelector("#profile-telefono");
-  const spanCorreo = DOMSelector("#profile-correo");
-  const spanUsuario = DOMSelector("#profile-usuario");
-
-  const {
-    correo,
-    direccion,
-    nombre,
-    numeroDocumento,
-    telefono,
-    tipoDocumento,
-  } = data.info;
-
-  spanNombre.textContent = nombre;
-  spanTipoDocumento.textContent = tipoDocumento.nombre;
-  spanNumeroDocumento.textContent = numeroDocumento;
-  spanDireccion.textContent = direccion;
-  spanTelefono.textContent = telefono;
-  spanCorreo.textContent = correo;
-  spanRol.textContent = capitalizarPrimeraLetra(data.rol.nombre);
-  if (spanUsuario) spanUsuario.textContent = data.usuario;
-};
-
 export const profilePersonalController = async (parametros = null) => {
   const esModal = !location.hash.includes("personal/perfil");
   const btnActivar = DOMSelector("#activar-personal");
@@ -76,7 +47,33 @@ export const profilePersonalController = async (parametros = null) => {
   const { data: tipoDocumento } = await get(
     `tipos-documentos/${response.data.tipo_documento_id}`
   );
-  // asignarDatosCliente(response.data);
+
+  const rolesUsuario = await get(`roles-usuarios/usuario/${response.data.id}`);
+  const contenedorRoles = DOMSelector(".contenedor-roles")
+
+  console.log(rolesUsuario);
+
+  if (rolesUsuario.success) {
+    rolesUsuario.data.forEach(async (rolUsuario) => {
+      const pRol = document.createElement("p");
+      pRol.classList.add("roles");
+      const { data: rol } = await get(`roles/${rolUsuario.rol_id}`);
+      console.log(rol);
+
+      pRol.textContent = capitalizarPrimeraLetra(rol.nombre);
+      contenedorRoles.append(pRol);
+    });
+  }
+
+  const credencial = await get(`credenciales/usuario/${response.data.id}`);
+  const contenedorCredenciales = DOMSelector(`#credenciales`);
+
+  if (credencial.success) {
+    DOMSelector("#usuario").textContent = credencial.data.usuario;
+  } else {
+    contenedorCredenciales.remove();
+  }
+
   mapearDatosEnContenedor(
     { ...response.data, tipo_documento: tipoDocumento.nombre },
     perfilUsuario
