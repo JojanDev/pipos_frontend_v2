@@ -17,17 +17,21 @@ import {
 } from "../../../helpers";
 
 export const editAntecedentController = async (parametros = null) => {
-  const { antecedente_id, mascota_id } = parametros;
+  console.log(parametros);
+
+  const { perfil: mascota, antecedente } = parametros;
+  // const { antecedente_id, mascota_id } = parametros;
 
   const containerPerfilMascota = DOMSelector(".contenedor-perfil--pet");
+  const contenedorVista = DOMSelector('[data-modal="edit-pet-antecedent"]');
 
-  const antecedente = await get("antecedentes/" + antecedente_id);
+  const antecedenteResponse = await get("antecedentes/" + antecedente.id);
 
-  console.log(antecedente.data.titulo);
+  console.log(antecedenteResponse.data.titulo);
 
-  DOMSelector("#titulo-antecedente-edit").value = antecedente.data.titulo;
+  DOMSelector("#titulo-antecedente-edit").value = antecedenteResponse.data.titulo;
   DOMSelector("#diagnostico-antecedente-edit").textContent =
-    antecedente.data.diagnostico;
+    antecedenteResponse.data.diagnostico;
 
   const selectPets = DOMSelector("#select-pets");
 
@@ -63,11 +67,11 @@ export const editAntecedentController = async (parametros = null) => {
 
     if (!validarCampos(e)) return;
 
-    datos["mascota_id"] = mascota_id;
+    datos["mascota_id"] = mascota.id;
     console.log(datos);
 
     const responseAntecedente = await put(
-      "antecedentes/" + antecedente_id,
+      "antecedentes/" + antecedente.id,
       datos
     );
 
@@ -75,10 +79,10 @@ export const editAntecedentController = async (parametros = null) => {
       return await error(responseAntecedente.message);
 
     DOMSelector(
-      `[data-idAntecendente="${antecedente_id}"] .antecedente-titulo`
+      `[data-idAntecendente="${antecedente.id}"] .antecedente-titulo`
     ).textContent = responseAntecedente.data.titulo;
     DOMSelector(
-      `[data-idAntecendente="${antecedente_id}"] .antecedente-diagnostico`
+      `[data-idAntecendente="${antecedente.id}"] .antecedente-diagnostico`
     ).innerHTML = `<strong>Diagnóstico:</strong> ${responseAntecedente.data.diagnostico}`;
 
     successTemporal(responseAntecedente.message);
@@ -88,5 +92,11 @@ export const editAntecedentController = async (parametros = null) => {
       : cerrarModalYVolverAVistaBase();
   });
 
-  configurarBotonCerrar("back-edit-pet-antecedent", esModal);
+  contenedorVista.addEventListener('click', (e) => {
+    if (e.target.id == "back-edit-pet-antecedent") {
+      cerrarModal("edit-pet-antecedent");
+      history.back();
+    }
+  });
+  // configurarBotonCerrar("back-edit-pet-antecedent", esModal);
 };

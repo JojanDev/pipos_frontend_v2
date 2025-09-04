@@ -141,10 +141,11 @@ export const profilePetController = async (parametros = null) => {
       const contenedorId = e.target.closest("[data-idAntecendente]");
       const idAntecedente = contenedorId.getAttribute("data-idAntecendente");
 
-      await cargarComponente(routes.antecedente.editar, {
-        antecedente_id: idAntecedente,
-        mascota_id,
-      });
+      // await cargarComponente(routes.antecedente.editar, {
+      //   antecedente_id: idAntecedente,
+      //   mascota_id,
+      // });
+      location.hash = `#/mascotas/perfil/id=${mascota_id}/antecedente/id=${idAntecedente}/editar`;
       // const responseDelete = await del("antecedentes/" + idAntecedente);
       // if (!responseDelete.success) {
       //   await error(responseDelete.message);
@@ -182,11 +183,15 @@ export const profilePetController = async (parametros = null) => {
       const tituloAntecedente = tituloElemento?.textContent || "Sin título";
       console.log(estado_vital);
 
-      await cargarComponente(routes.antecedente.tratamiento, {
-        id: idTratamiento,
-        tituloAntecedente: tituloAntecedente,
-        estado_vital,
-      });
+      // await cargarComponente(routes.antecedente.tratamiento, {
+      //   id: idTratamiento,
+      //   tituloAntecedente: tituloAntecedente,
+      //   estado_vital,
+      // });
+      const contenedorId = e.target.closest("[data-idAntecendente]");
+      const idAntecedente = contenedorId.getAttribute("data-idAntecendente");
+      location.hash = `#/mascotas/perfil/id=${mascota.id}/antecedente/id=${idAntecedente}/tratamiento/perfil/id=${idTratamiento}`;
+
     }
 
     if (e.target.id == "desactivar-pet") {
@@ -225,7 +230,9 @@ export const profilePetController = async (parametros = null) => {
       const contenedorId = e.target.closest("[data-idAntecendente]");
       const idAntecedente = contenedorId.getAttribute("data-idAntecendente");
 
-      location.hash = `#/antecedente/tratamientoCrear/idAntecedente=${idAntecedente}`;
+      // location.hash = `#/antecedente/tratamientoCrear/idAntecedente=${idAntecedente}`;
+      location.hash = `#/mascotas/perfil/id=${mascota_id}/antecedente/id=${idAntecedente}/tratamiento/crear`;
+
     }
   });
 };

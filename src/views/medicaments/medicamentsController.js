@@ -92,7 +92,7 @@ export const medicamentsController = async () => {
 
     if (fila) {
       const id_info = fila.getAttribute("data-id");
-      await cargarComponente(routes.medicamentos_info.perfil, { id: id_info });
+      location.hash = (location.hash + (location.hash[location.hash.length - 1] == "/" ? `perfil/id=${id_info}` : `/perfil/id=${id_info}`));
     }
   });
 };

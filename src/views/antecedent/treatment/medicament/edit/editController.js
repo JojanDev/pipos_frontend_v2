@@ -44,7 +44,10 @@ function convertirDias(diasTotales) {
 }
 
 export const editMedicamentTreatmentController = async (parametros = null) => {
-  const { id } = parametros;
+  console.log(parametros);
+
+  // const { id } = parametros;
+  const { editar: medicamentoTratamiento } = parametros;
   // const dataJSON = localStorage.getItem("data");
   // const data = JSON.parse(dataJSON);
 
@@ -55,7 +58,7 @@ export const editMedicamentTreatmentController = async (parametros = null) => {
   //   });
   // }
 
-  const responseMediTrat = await get(`medicamentos-tratamientos/${id}`);
+  const responseMediTrat = await get(`medicamentos-tratamientos/${medicamentoTratamiento.id}`);
   const a = await get(`info-medicamentos/`);
   console.log(a);
 
@@ -116,7 +119,7 @@ export const editMedicamentTreatmentController = async (parametros = null) => {
     const duracion = calcularDiasTotales(datos);
 
     const responseMedicamentoTratamiento = await put(
-      `medicamentos-tratamientos/${id}`,
+      `medicamentos-tratamientos/${medicamentoTratamiento.id}`,
       {
         info_medicamento_id,
         frecuencia_aplicacion,
@@ -133,7 +136,7 @@ export const editMedicamentTreatmentController = async (parametros = null) => {
 
     const tbody = DOMSelector("#pet-antecedent-treatment .table__body");
 
-    const oldRow = DOMSelector(`#pet-antecedent-treatment [data-id='${id}'`);
+    const oldRow = DOMSelector(`#pet-antecedent-treatment [data-id='${medicamentoTratamiento.id}'`);
     console.log(oldRow);
 
     if (tbody) {
@@ -185,8 +188,14 @@ export const editMedicamentTreatmentController = async (parametros = null) => {
       : cerrarModalYVolverAVistaBase();
   });
 
-  configurarBotonCerrar(
-    "back-edit-pet-antecedent-treatment-medicament",
-    esModal
-  );
+
+  const contenedorVista = DOMSelector(`[data-modal="edit-pet-antecedent-treatment-medicament"]`);
+
+  contenedorVista.addEventListener('click', (e) => {
+    if (e.target.id == "back-edit-pet-antecedent-treatment-medicament") {
+      cerrarModal("edit-pet-antecedent-treatment-medicament")
+      history.back();
+    }
+  })
+
 };

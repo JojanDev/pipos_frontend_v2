@@ -57,5 +57,12 @@ export const createServiceController = (parametros = null) => {
     esModal ? cerrarModal("create-service") : cerrarModalYVolverAVistaBase();
   });
 
-  configurarBotonCerrar("back-register-service", esModal);
+  const contenedorVista = DOMSelector(`[data-modal="create-service"]`);
+
+  contenedorVista.addEventListener('click', (e) => {
+    if (e.target.id == "back-register-service") {
+      cerrarModal("create-service");
+      history.back();
+    }
+  });
 };

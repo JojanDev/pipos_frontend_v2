@@ -18,11 +18,14 @@ import {
 } from "../../../../helpers";
 
 export const editTreatmentController = async (parametros = null) => {
-  const { tratamiento_id } = parametros;
+  console.log(parametros);
+  const { perfil: tratamiento } = parametros;
+
+  // const { tratamiento_id } = parametros;
   const contenedorTratamiento = DOMSelector('[data-modal="pet-treatment"]');
   console.log(contenedorTratamiento);
 
-  const tratamientoResponse = await get("tratamientos/" + tratamiento_id);
+  const tratamientoResponse = await get(`tratamientos/${tratamiento.id}`);
   console.log(tratamientoResponse);
 
   const form = DOMSelector("#form-register-pet-antecedent-treatment");
@@ -48,7 +51,7 @@ export const editTreatmentController = async (parametros = null) => {
     // datos["id_antecedente"] = idAntecedente;
 
     const tratamientoUpdatedResponse = await put(
-      `tratamientos/${tratamiento_id}`,
+      `tratamientos/${tratamiento.id}`,
       { ...datos, antecedente_id: tratamientoResponse.data.antecedente_id }
     );
 
@@ -83,16 +86,14 @@ export const editTreatmentController = async (parametros = null) => {
 
     successTemporal(tratamientoUpdatedResponse.message);
 
-    esModal
-      ? cerrarModal("edit-pet-antecedent-treatment")
-      : cerrarModalYVolverAVistaBase();
+    cerrarModal("edit-pet-antecedent-treatment")
+    history.back();
   });
 
   const btnAtras = DOMSelector("#back-edit-pet-antecedent-treatment");
 
-  btnAtras.addEventListener("click", () => {
-    esModal
-      ? cerrarModal("edit-pet-antecedent-treatment")
-      : cerrarModalYVolverAVistaBase();
+  btnAtras.addEventListener("click", (e) => {
+    cerrarModal("edit-pet-antecedent-treatment");
+    history.back();
   });
 };

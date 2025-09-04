@@ -16,6 +16,8 @@ import {
 
 export const createTreatmentController = async (parametros = null) => {
   console.log(parametros);
+  const { antecedente } = parametros;
+
   // const { idAntecedente } = parametros;
 
   const form = document.querySelector(
@@ -32,7 +34,7 @@ export const createTreatmentController = async (parametros = null) => {
 
     if (!validarCampos(e)) return;
 
-    datos["antecedente_id"] = idAntecedente;
+    datos["antecedente_id"] = antecedente.id;
 
     const responseTratamiento = await post("tratamientos", datos);
 
@@ -43,7 +45,7 @@ export const createTreatmentController = async (parametros = null) => {
 
     // Busca el antecedente donde insertar el tratamiento
     const antecedenteContainer = document.querySelector(
-      `[data-idAntecendente="${idAntecedente}"]`
+      `[data-idAntecendente="${antecedente.id}"]`
     );
 
     const body = antecedenteContainer?.querySelector(".antecedente-body");
@@ -70,8 +72,9 @@ export const createTreatmentController = async (parametros = null) => {
   );
 
   btnAtras.addEventListener("click", () => {
-    esModal
-      ? cerrarModal("create-pet-antecedent-treatment")
-      : cerrarModalYVolverAVistaBase();
+    // esModal
+    cerrarModal("create-pet-antecedent-treatment");
+    history.back();
+    //   : cerrarModalYVolverAVistaBase();
   });
 };

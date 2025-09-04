@@ -146,7 +146,9 @@ export const administrationController = () => {
     if (btn) {
       const idEspecie = fila.getAttribute("data-id");
 
-      location.hash = `#/administrar_datos/especiesPerfil/id=${idEspecie}`;
+      // location.hash = `#/administrar_datos/especies/perfil/id=${idEspecie}`;
+      location.hash = (location.hash + (location.hash[location.hash.length - 1] == "/" ? `especies/perfil/id=${idEspecie}` : `/especies/perfil/id=${idEspecie}`));
+
     }
   });
 

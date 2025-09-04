@@ -67,8 +67,10 @@ export const createClienteExistController = async () => {
   const btnAtras = document.querySelector("#back-create-clienteExist");
 
   btnAtras.addEventListener("click", () => {
-    esModal
-      ? cerrarModal("create-clienteExist")
-      : cerrarModalYVolverAVistaBase();
+    // esModal
+    cerrarModal("create-clienteExist");
+    history.back();
+
+    // : cerrarModalYVolverAVistaBase();
   });
 };

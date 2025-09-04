@@ -69,7 +69,9 @@ export const createClientController = async () => {
     if (target.closest("#back-register-client")) {
       // esModal ? cerrarModal("create-client") : cerrarModalYVolverAVistaBase();
       cerrarModal("create-client");
-      location.hash = "#/clientes";
+      // location.hash = "#/clientes";
+      history.back();
+
     }
   });
 };

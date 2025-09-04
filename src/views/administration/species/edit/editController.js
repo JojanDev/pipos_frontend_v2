@@ -15,6 +15,8 @@ import {
 } from "../../../../helpers";
 
 export const editSpecieController = (parametros = null) => {
+  console.log(parametros);
+
   // Id de la especie
   const { id, nombre } = parametros;
 

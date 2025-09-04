@@ -122,7 +122,8 @@ export const servicesController = async () => {
     const idServicio = card.dataset.id;
 
     if (event.target.closest(".btn-servicio-edit")) {
-      location.hash = `#/servicios/editar/id=${idServicio}`;
+      // location.hash = `#/servicios/editar/id=${idServicio}`;
+      location.hash = location.hash + (location.hash[location.hash.length - 1] == "/" ? + `editar/id=${idServicio}` : `/editar/id=${idServicio}`);
     }
 
     if (event.target.closest(".btn-servicio-delete")) {

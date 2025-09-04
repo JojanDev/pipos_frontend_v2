@@ -14,6 +14,7 @@ import {
   DOMSelectorAll,
   errorTemporal,
   mapearDatosEnContenedor,
+  successTemporal,
 } from "../../../helpers";
 import { routes } from "../../../router/routes";
 
@@ -56,31 +57,33 @@ export const treatmentController = async (parametros = null) => {
   //     element.remove();
   //   });
   // }
-  const { id, tituloAntecedente, estado_vital } = parametros;
+  console.log(parametros);
+  const { perfil: tratamiento, antecedente } = parametros;
+
+  // const { id, tituloAntecedente, estado_vital } = parametros;
 
   const modal = DOMSelector('[data-modal="pet-treatment"]');
   const esModal = !location.hash.includes("antecedente/tratamiento");
   const tbody = DOMSelector("#pet-antecedent-treatment .table__body");
 
-  const tratamientoResponse = await get(`tratamientos/${id}`);
+  const tratamientoResponse = await get(`tratamientos/${tratamiento.id}`);
   const { data: veterinario } = await get(
     `usuarios/${tratamientoResponse.data.usuario_id}`
   );
 
   if (!tratamientoResponse.success) {
     await error(tratamientoResponse.message);
-    esModal ? cerrarModal("create-client") : cerrarModalYVolverAVistaBase();
+    cerrarModal("create-client");
+    history.back();
   }
 
-  // tituloTratamiento.textContent = titulo;
-  // fechaTratamiento.textContent = convertirADiaMesAño(fecha_creado);
-  // descripcionTratamiento.textContent = descripcion;
+  const antecedenteResponse = await get(`antecedentes/${antecedente.id}`);
 
   mapearDatosEnContenedor(
     {
       ...tratamientoResponse.data,
       veterinario: veterinario.nombre,
-      "titulo-antecedente": tituloAntecedente,
+      "titulo-antecedente": antecedenteResponse.data.titulo,
     },
     modal
   );
@@ -134,21 +137,28 @@ export const treatmentController = async (parametros = null) => {
     errorTemporal(responseMedicamentos.message);
   }
 
-  console.log(estado_vital);
 
-  if (!estado_vital) {
-    desactivarBotonesPerfilTratamiento();
-  }
+  // if (!estado_vital) {
+  //   desactivarBotonesPerfilTratamiento();
+  // }
 
   modal.addEventListener("click", async (e) => {
     if (e.target.id == "register-antecedent-treatment-medicament") {
-      await cargarComponente(routes.antecedente.medicamento, {
-        idTratamiento: id,
-      });
+      console.log("location.hash", location.hash);
+
+      location.hash = location.hash + (location.hash[location.hash.length - 1] == "/" ? + "medicamento/crear" : "/medicamento/crear");
+      console.log("location.hash", location.hash);
+
+      // await cargarComponente(routes.antecedente.medicamento, {
+      //   idTratamiento: id,
+      // });
     }
 
     if (e.target.id == "back-treatment") {
-      esModal ? cerrarModal("pet-treatment") : cerrarModalYVolverAVistaBase();
+      // esModal ?
+      cerrarModal("pet-treatment");
+      // : cerrarModalYVolverAVistaBase();
+      history.back();
     }
 
     if (e.target.classList.contains("delete-tabla")) {
@@ -177,31 +187,34 @@ export const treatmentController = async (parametros = null) => {
       const medicament = e.target.closest(`[data-id]`);
       const idMedicament = medicament.getAttribute("data-id");
 
-      await cargarComponente(routes.antecedente.medicamentoEditar, {
-        id: idMedicament,
-      });
+      location.hash = location.hash + (location.hash[location.hash.length - 1] == "/" ? + `medicamento/editar/id=${idMedicament}` : `/medicamento/editar/id=${idMedicament}`);
+      // await cargarComponente(routes.antecedente.medicamentoEditar, {
+      //   id: idMedicament,
+      // });
     }
 
     if (e.target.id == "delete-treatment") {
       const responseDelete = await del("tratamientos/" + id);
 
-      if (!responseDelete.success) {
-        await error(responseDelete.message);
-        return;
-      }
+      if (!responseDelete.success)
+        return await error(responseDelete.message);
+
 
       // const idAntecedente = fila.getAttribute("data-id");
       eliminarTratamiento(id, tratamientoResponse.data.id_antecedente);
 
-      esModal ? cerrarModal("pet-treatment") : cerrarModalYVolverAVistaBase();
+      successTemporal(responseDelete.message);
+      cerrarModal("pet-treatment")
+      history.back();
       // history.replaceState(null, "", `#/mascotas/perfil`);
-      await success(responseDelete.message);
     }
 
     if (e.target.id == "edit-treatment") {
-      await cargarComponente(routes.antecedente.tratamientoEditar, {
-        tratamiento_id: id,
-      });
+      location.hash = location.hash + (location.hash[location.hash.length - 1] == "/" ? + "editar" : "/editar");
+
+      // await cargarComponente(routes.antecedente.tratamientoEditar, {
+      //   tratamiento_id: id,
+      // });
     }
   });
 };

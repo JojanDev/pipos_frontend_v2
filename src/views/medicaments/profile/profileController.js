@@ -13,7 +13,12 @@ import {
 import { crearCartaMedicamento } from "../medicamentsController";
 
 export const profileMedicamentInfoController = async (parametros = null) => {
-  const contenedorPerfil = DOMSelector(
+  console.log(parametros);
+
+  // const { id } = parametros;
+  const { perfil: infoMedicamento } = parametros;
+
+  const contenedorVista = DOMSelector(
     `[data-modal="profile-medicament-info"]`
   );
   // const dataJSON = localStorage.getItem("data");
@@ -30,62 +35,59 @@ export const profileMedicamentInfoController = async (parametros = null) => {
   const btnAtras = DOMSelector("#back-profile-medicament-info");
   const esModal = !location.hash.includes("medicamentos_info/perfil");
 
-  const { id } = parametros;
-
-  const response = await get(`info-medicamentos/${id}`);
+  const response = await get(`info-medicamentos/${infoMedicamento.id}`);
 
   console.log(response);
 
   if (!response.success) {
     await error(response.message);
-    esModal
-      ? cerrarModal("profile-medicament-info")
-      : cerrarModalYVolverAVistaBase();
+    cerrarModal("profile-medicament-info")
+    history.back();
+
 
     return;
   }
 
-  mapearDatosEnContenedor(response.data, contenedorPerfil);
+  mapearDatosEnContenedor(response.data, contenedorVista);
 
-  btnAtras.addEventListener("click", () => {
-    esModal
-      ? cerrarModal("profile-medicament-info")
-      : cerrarModalYVolverAVistaBase();
-  });
-
-  const btnEdit = DOMSelector("#edit-medicament-info");
-
-  btnEdit.addEventListener("click", async () => {
-    await cargarComponente(routes.medicamentos_info.editar, {
-      id: response.data.id,
-    });
-  });
-
-  const btnDelete = DOMSelector("#delete-medicament-info");
-
-  btnDelete?.addEventListener("click", async () => {
-    const eliminado = await del("medicamentos/info/" + id);
-
-    console.log(eliminado);
-    if (!eliminado.success) {
-      await error(eliminado.message);
-      return;
+  contenedorVista.addEventListener('click', async (e) => {
+    if (e.target.id == "back-profile-medicament-info") {
+      cerrarModal("profile-medicament-info")
+      history.back();
     }
 
-    const contenedor = DOMSelector("#medicaments-info");
-    contenedor.innerHTML = "";
+    if (e.target.id == "edit-medicament-info") {
+      // await cargarComponente(routes.medicamentos_info.editar, {
+      //   id: response.data.id,
+      // });
 
-    const responseAll = await get("medicamentos/info");
+      location.hash = (location.hash + (location.hash[location.hash.length - 1] == "/" ? `editar` : `/editar`));
 
-    responseAll.data.forEach((medicamento) => {
-      const carta = crearCartaMedicamento(medicamento);
-      contenedor.appendChild(carta);
-    });
+    }
 
-    await successTemporal(eliminado.message);
+    if (e.target.id == "delete-medicament-info") {
+      const eliminado = await del("medicamentos/info/" + infoMedicamento.id);
 
-    esModal
-      ? cerrarModal("profile-medicament-info")
-      : cerrarModalYVolverAVistaBase();
-  });
+      console.log(eliminado);
+      if (!eliminado.success) {
+        await error(eliminado.message);
+        return;
+      }
+
+      const contenedor = DOMSelector("#medicaments-info");
+      contenedor.innerHTML = "";
+
+      const responseAll = await get("medicamentos/info");
+
+      responseAll.data.forEach((medicamento) => {
+        const carta = crearCartaMedicamento(medicamento);
+        contenedor.appendChild(carta);
+      });
+
+      successTemporal(eliminado.message);
+
+      cerrarModal("profile-medicament-info")
+      history.back();
+    }
+  })
 };

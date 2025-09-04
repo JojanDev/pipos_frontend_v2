@@ -93,6 +93,14 @@ export const routes = {
         private: true,
         addHtml: true,
       },
+      mascotas: {
+        crear: {
+          path: "pets/create/index.html",
+          controller: createPetController,
+          private: true,
+          addHtml: true,
+        },
+      },
     },
   },
   mascotas: {
@@ -176,7 +184,7 @@ export const routes = {
     },
   },
 
-  administrar_datos: {
+  "administrar-datos": {
     "/": {
       path: "administration/index.html",
       controller: administrationController,
@@ -228,7 +236,7 @@ export const routes = {
         },
       },
     },
-    tipos_productos: {
+    "tipos-productos": {
       crear: {
         path: "administration/productsTypes/create/index.html",
         controller: createProductTypeController,
@@ -309,7 +317,7 @@ export const routes = {
       },
     },
   },
-  info_medicamentos: {
+  "info-medicamentos": {
     "/": {
       path: "medicaments/index.html",
       controller: medicamentsController,
@@ -426,4 +434,4 @@ export const routes = {
       },
     },
   },
-};
+}

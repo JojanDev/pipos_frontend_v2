@@ -13,12 +13,15 @@ import {
 import { listarEspecies } from "../../administrationController";
 
 export const profileSpecieController = async (parametros = null) => {
-  const { id } = parametros;
+  console.log(parametros);
+
+  const { perfil: especie } = parametros;
+  // const { id } = parametros;
 
   const modal = document.querySelector('[data-modal="specie-profile"]');
   const esModal = !location.hash.includes("administrar_datos/especiesPerfil");
 
-  const response = await get(`especies/${id}`);
+  const response = await get(`especies/${especie.id}`);
 
   if (!response.success) {
     await error(response.message);
@@ -32,21 +35,23 @@ export const profileSpecieController = async (parametros = null) => {
 
   modal.addEventListener("click", async (e) => {
     if (e.target.id == "edit-specie") {
-      await cargarComponente(routes.administrar_datos.especiesEditar, {
-        id: id,
-        nombre: response.data.nombre,
-      });
+      // await cargarComponente(routes.administrar_datos.especiesEditar, {
+      //   id: especie.id,
+      //   nombre: response.data.nombre,
+      // });
+      location.hash = (location.hash + (location.hash[location.hash.length - 1] == "/" ? `editar` : `/editar`));
+
     }
 
     if (e.target.id == "delete-specie") {
-      const response = await del(`especies/${id}`);
+      const response = await del(`especies/${especie.id}`);
 
       if (response.success) {
         await success(response.message);
         listarEspecies();
-        esModal
-          ? cerrarModal("specie-profile")
-          : cerrarModalYVolverAVistaBase();
+        cerrarModal("specie-profile")
+        history.back();
+
       } else {
         await error(response.message);
         return;
@@ -54,7 +59,8 @@ export const profileSpecieController = async (parametros = null) => {
     }
 
     if (e.target.id == "back-specie-profile") {
-      esModal ? cerrarModal("specie-profile") : cerrarModalYVolverAVistaBase();
+      cerrarModal("specie-profile");
+      history.back();
     }
   });
 };

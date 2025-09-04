@@ -24,31 +24,32 @@ export const router = async () => {
     return (location.hash = "#/inicio" || "#/login");
   }
   // mascotas/perfil/1/antecedente/1/tratamiento/crear
-  console.log("arrayHash:", arrayHash);
+  // console.log("arrayHash:", arrayHash);
 
   const hashBase = arrayHash.slice(0, indexSegBase + 1);
-  console.log("hashBase:", hashBase);
+  // console.log("hashBase:", hashBase);
   arrayHash.splice(0, indexSegBase + 1, hashBase);
   // [[mascotas, perfil],id =  1, antecedente, 1, tratamiento, crear]
   // console.log("hashUtil:", hashUtil);
-  console.log("arrayHash:", arrayHash);
+  // console.log("arrayHash:", arrayHash);
 
   let parametros = {};
   for (let index = 1; index <= arrayHash.length; index++) {
-    console.log("hashBase:", hashBase);
+    // console.log("hashBase:", hashBase);
     const ruta = obtenerRuta(hashBase);
 
-    console.log("ruta:", ruta);
+    // console.log("ruta:", ruta);
 
-    console.log(
-      "hashBase[hashBase.length - 1]:",
-      hashBase[hashBase.length - 1]
-    );
+    // console.log(
+    //   "hashBase[hashBase.length - 1]:",
+    //   hashBase[hashBase.length - 1]
+    // );
 
-    console.log("arrayHash:", arrayHash);
-    console.log("index:", index);
+    // console.log("arrayHash:", arrayHash);
+    // console.log("index:", index);
 
-    console.log("arrayHash[index]:", arrayHash[index]);
+    // console.log("arrayHash[index]:", arrayHash[index]);
+
 
     if (arrayHash[index] && arrayHash[index].includes("=")) {
       const parametrosSeparados = arrayHash[index].split("&");
@@ -57,11 +58,15 @@ export const router = async () => {
         const [clave, valor] = param.split("=");
         objetoParametros[clave] = valor ? decodeURIComponent(valor) : "";
       });
+      console.log("index:", index);
       console.log("arrayHash[index]:", arrayHash[index]);
 
       console.log(arrayHash);
+      console.log("objetoParametros:", objetoParametros);
 
       parametros[`${hashBase[hashBase.length - 1]}`] = objetoParametros;
+      console.log("parametros:", parametros);
+
     }
 
     const hashSinParams = hashBase.filter((item) => !item.includes("="));

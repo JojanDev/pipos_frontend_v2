@@ -15,15 +15,16 @@ import {
 import { crearCartaMedicamento } from "../medicamentsController";
 
 export const createMedicamentInfoController = async () => {
-  const dataJSON = localStorage.getItem("data");
-  const data = JSON.parse(dataJSON);
+  const contenedorVista = DOMSelector(`[data-modal="create-medicament-info"]`);
+  // const dataJSON = localStorage.getItem("data");
+  // const data = JSON.parse(dataJSON);
 
-  if (data.id_rol != 1) {
-    const opcionesAdmin = DOMSelectorAll(".admin");
-    [...opcionesAdmin].forEach((element) => {
-      element.remove();
-    });
-  }
+  // if (data.id_rol != 1) {
+  //   const opcionesAdmin = DOMSelectorAll(".admin");
+  //   [...opcionesAdmin].forEach((element) => {
+  //     element.remove();
+  //   });
+  // }
 
   const form = DOMSelector("#form-register-medicament-info");
   // const selectTipoDocumento = DOMSelector("#tipos-documento");
@@ -71,10 +72,14 @@ export const createMedicamentInfoController = async () => {
       selectMedicamentosInfo.value = response.data.id;
     }
 
-    esModal
-      ? cerrarModal("create-medicament-info")
-      : cerrarModalYVolverAVistaBase();
+    cerrarModal("create-medicament-info");
+    history.back();
   });
 
-  configurarBotonCerrar("back-register-medicament-info", esModal);
+  contenedorVista.addEventListener('click', (e) => {
+    if (e.target.id == "back-register-medicament-info") {
+      cerrarModal("create-medicament-info");
+      history.back();
+    }
+  })
 };

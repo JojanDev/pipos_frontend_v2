@@ -26,8 +26,15 @@ export const createPetController = async (idDueno) => {
   const selectRazas = DOMSelector("#select-razas");
   const tbody_perfilCliente = DOMSelector("#pets-client .table__body");
   const tbody_Mascotas = DOMSelector("#pets .table__body");
-  const containerSelectClient = DOMSelector("#container-select-clients");
   const esModal = !location.hash.includes("mascotas/crear");
+
+  let containerSelectClient = true;
+  if (location.hash.includes("clientes/perfil")) {
+    const selectCliente = DOMSelector("#select-clients");
+    const contenedor = selectCliente?.closest(".form__container-field");
+    contenedor.remove();
+    containerSelectClient = false;
+  }
 
   // Inicializar formulario (sin petData, porque es creación)
   await inicializarFormularioMascota(
@@ -67,9 +74,11 @@ export const createPetController = async (idDueno) => {
   DOMSelector("[data-modal='create-pet'").addEventListener("click", (e) => {
     if (e.target.id == "back-register-pet-client") {
       cerrarModal("create-pet");
-      location.hash = "#/mascotas";
+
+      // location.hash = "#/mascotas";
+      history.back();
     }
   });
 
-  configurarBotonCerrar("back-register-pet-client", esModal);
+  // configurarBotonCerrar("back-register-pet-client", esModal);
 };

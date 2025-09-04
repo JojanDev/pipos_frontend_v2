@@ -27,7 +27,9 @@ const calcularDiasTotales = ({ meses = 0, semanas = 0, dias = 0 }) => {
 };
 
 export const createMedicamentController = async (parametros = null) => {
-  const { idTratamiento } = parametros;
+  console.log(parametros);
+  const { perfil: tratamiento } = parametros;
+  // const { idTratamiento } = parametros;
 
   llenarSelect({
     endpoint: "info-medicamentos/",
@@ -71,7 +73,7 @@ export const createMedicamentController = async (parametros = null) => {
     const responseMedicamentoTratamiento = await post(
       "medicamentos-tratamientos/",
       {
-        tratamiento_id: idTratamiento,
+        tratamiento_id: tratamiento.id,
         info_medicamento_id,
         frecuencia_aplicacion,
         duracion,
@@ -136,13 +138,21 @@ export const createMedicamentController = async (parametros = null) => {
 
     successTemporal(responseMedicamentoTratamiento.message);
 
-    esModal
-      ? cerrarModal("create-pet-antecedent-treatment-medicament")
-      : cerrarModalYVolverAVistaBase();
+    cerrarModal("create-pet-antecedent-treatment-medicament")
+    history.back();
+
   });
 
   configurarBotonCerrar(
     "back-register-pet-antecedent-treatment-medicament",
     esModal
   );
+  const contenedorVista = DOMSelector(`[data-modal="create-pet-antecedent-treatment-medicament"]`);
+
+  contenedorVista.addEventListener('click', (e) => {
+    if (e.target.id == "back-register-pet-antecedent-treatment-medicament") {
+      cerrarModal("create-pet-antecedent-treatment-medicament");
+      history.back();
+    }
+  })
 };

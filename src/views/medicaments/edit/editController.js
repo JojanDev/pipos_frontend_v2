@@ -16,14 +16,16 @@ import { crearCartaMedicamento } from "../medicamentsController";
 
 export const editMedicamentInfoController = async (parametros = null) => {
   const form = DOMSelector("#form-edit-medicament-info");
+  const contenedorVista = DOMSelector(`[data-modal="edit-medicament-info"]`);
 
   const esModal = !location.hash.includes("medicamentos_info/editar");
 
-  const { id } = parametros;
+  const { perfil: infoMedicamento } = parametros;
+  // const { id } = parametros;
 
-  console.log(id);
+  // console.log(id);
 
-  const info = await get(`info-medicamentos/${id}`);
+  const info = await get(`info-medicamentos/${infoMedicamento.id}`);
 
   const contPerfil = DOMSelector("[data-modal='profile-medicament-info']");
 
@@ -36,7 +38,7 @@ export const editMedicamentInfoController = async (parametros = null) => {
 
     if (!validarCampos(e)) return;
 
-    const response = await put(`info-medicamentos/${id}`, datos);
+    const response = await put(`info-medicamentos/${infoMedicamento.id}`, datos);
 
     if (!response.success) {
       await error(response.message);
@@ -45,7 +47,7 @@ export const editMedicamentInfoController = async (parametros = null) => {
 
     const contenedor = DOMSelector("#medicaments-info");
 
-    const oldRow = contenedor.querySelector(`[data-id='${id}']`);
+    const oldRow = contenedor.querySelector(`[data-id='${infoMedicamento.id}']`);
 
     const updatedRow = crearCartaMedicamento(response.data);
 
@@ -55,10 +57,14 @@ export const editMedicamentInfoController = async (parametros = null) => {
 
     successTemporal(response.message);
 
-    esModal
-      ? cerrarModal("edit-medicament-info")
-      : cerrarModalYVolverAVistaBase();
+    cerrarModal("edit-medicament-info")
+    history.back();
   });
 
-  configurarBotonCerrar("back-edit-medicament-info", esModal);
+  contenedorVista.addEventListener('click', (e) => {
+    if (e.target.id == "back-edit-medicament-info") {
+      cerrarModal("edit-medicament-info")
+      history.back();
+    }
+  })
 };

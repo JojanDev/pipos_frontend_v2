@@ -117,7 +117,8 @@ export const editPetController = async (parametros = null) => {
   DOMSelector("[data-modal='edit-pet'").addEventListener("click", (e) => {
     if (e.target.id == "back-edit-pet-client") {
       cerrarModal("edit-pet");
-      location.hash = `#/mascotas/perfil/id=${mascota.id}`;
+      history.back();
+      // location.hash = `#/mascotas/perfil/id=${mascota.id}`;
     }
   });
 
