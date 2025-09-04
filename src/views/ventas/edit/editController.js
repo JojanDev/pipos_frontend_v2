@@ -1,5 +1,6 @@
 import {
   cerrarModal,
+  configurarBotonCerrar,
   error,
   formatearPrecioConPuntos,
   get,
@@ -26,12 +27,22 @@ export const editVentaController = async (parametros = null) => {
 
   const venta = response.data;
 
-  cliente.textContent = venta.cliente.info.nombre;
-  empleado.textContent = "Empleado: " + venta.personal.info.nombre;
+  const { data: clienteVenta } = await get(
+    `usuarios/${response.data.comprador_id}`
+  );
+
+  const { data: vendedorVenta } = await get(
+    `usuarios/${response.data.comprador_id}`
+  );
+
+  cliente.textContent = clienteVenta.nombre;
+  empleado.textContent = "Empleado: " + vendedorVenta.nombre;
   total.textContent = venta.total;
 
   // Setear el monto actual
   valorAgregar.value = venta.total - venta.monto;
+
+  console.log(venta);
 
   // Si la venta ya está completada → ocultar el botón
   if (venta.estado === "completada") {
@@ -43,13 +54,6 @@ export const editVentaController = async (parametros = null) => {
       const nuevoMonto = parseFloat(valorAgregar.value) || 0;
       const montoAnterior = venta.monto;
 
-      // if (nuevoMonto < montoAnterior) {
-      //   await error(
-      //     `No puedes ingresar un monto menor a ${montoAnterior.toLocaleString()}`
-      //   );
-      //   return;
-      // }
-      // else
       if (valorAgregar.value == 0) {
         await error("El monto a agregar no puede ser cero");
         return;
@@ -90,4 +94,6 @@ export const editVentaController = async (parametros = null) => {
       cerrarModal("venta-edit");
     }
   });
+
+  // configurarBotonCerrar("back-perfil-venta", em);
 };

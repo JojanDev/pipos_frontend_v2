@@ -1,17 +1,19 @@
 // Importa funciones y variables auxiliares desde módulos externos
 import {
   cerrarModal, // Función para cerrar un modal
-  configurarEventosValidaciones, // Configura validaciones de formulario
+  configurarEventosValidaciones,
+  DOMSelector, // Configura validaciones de formulario
   error, // Muestra mensajes de error
   post, // Hace peticiones POST al servidor
-  success, // Muestra mensajes de éxito
+  success,
+  successTemporal, // Muestra mensajes de éxito
   validarCampos, // Valida que todos los campos requeridos estén correctos
 } from "../../../helpers";
 import { venta } from "../create/createController"; // Objeto que contiene la información de la venta actual
 
 // Controlador principal que gestiona la vista de resumen de la venta
 export const resumeController = () => {
-  const contenedor = document.querySelector("#resumen-venta");
+  const contenedor = DOMSelector("#resumen-venta");
 
   // Calcula el precio total sumando los subtotales de cada detalle de venta
   const precioTotal = venta.detalles_venta.reduce(
@@ -20,13 +22,13 @@ export const resumeController = () => {
   );
 
   // Obtiene elementos del DOM donde se mostrará información
-  const totalVenta = document.querySelector("#resume-total");
-  const personalNombre = document.querySelector("#venta-empleado");
+  const totalVenta = DOMSelector("#resume-total");
+  const personalNombre = DOMSelector("#venta-empleado");
 
   // Muestra el precio total en el elemento correspondiente
   totalVenta.textContent = `$${precioTotal}`;
 
-  const cliente = document.querySelector("#resume-cliente");
+  const cliente = DOMSelector("#resume-cliente");
 
   // Muestra el nombre del cliente (separa el ID del nombre con split)
   cliente.textContent = venta.cliente.split("-")[1].slice(1);
@@ -35,9 +37,9 @@ export const resumeController = () => {
   personalNombre.textContent = "Empleado: " + venta.nombrePersonal;
 
   // Elementos del formulario de resumen
-  const form = document.querySelector("#form-resume-venta");
-  // const valorAgregado = document.querySelector("#resume-valor-agregado");
-  const valorCancelado = document.querySelector("#valor_cancelado");
+  const form = DOMSelector("#form-resume-venta");
+  // const valorAgregado = DOMSelector("#resume-valor-agregado");
+  const valorCancelado = DOMSelector("#valor_cancelado");
 
   // Aplica validaciones al formulario
   configurarEventosValidaciones(form);
@@ -63,10 +65,7 @@ export const resumeController = () => {
         : 0;
 
       // Validación: monto a cancelar no puede ser cero ni mayor al total
-      if (
-        valorCancValid == 0 ||
-        valorCancValid > precioTotal
-      ) {
+      if (valorCancValid == 0 || valorCancValid > precioTotal) {
         await error(
           "El monto a cancelar no puede superar el total, ni ser cero"
         );
@@ -85,40 +84,53 @@ export const resumeController = () => {
 
       // Crea el objeto que se enviará al backend
       const objeto = {
-        id_cliente: parseInt(venta.id_cliente),
-        id_personal: venta.id_personal,
+        comprador_id: parseInt(venta.comprador_id),
+        vendedor_id: venta.vendedor_id,
         total: parseFloat(precioTotal).toFixed(2), // Total formateado como string con dos decimales
         monto: parseFloat(valorCancelado.value).toFixed(2), // Monto cancelado formateado como string con dos decimales
         detalles_venta,
       };
 
       console.log(objeto);
-      
 
       // Envío de datos al servidor
-      const response = await post("ventas/detalles", objeto);
+      const ventaResponse = await post("ventas/", {
+        comprador_id: venta.comprador_id,
+        vendedor_id: venta.vendedor_id,
+        total: parseFloat(precioTotal), // Total formateado como string con dos decimales
+        monto: parseFloat(valorCancelado.value),
+      });
 
+      console.log(ventaResponse);
+      if (!ventaResponse.success) return await error(ventaResponse.message);
 
-      // Si la respuesta no es exitosa, mostrar error y salir
-      if (!response.success) {
-        await error(response.message);
-        return;
-      }
+      await Promise.all(
+        detalles_venta.map(async (elemento) => {
+          if (elemento.medicamento_id) {
+            const medicamentoVenta = await post(`medicamentos-ventas`, {
+              ...elemento,
+              venta_id: ventaResponse.data.id,
+            });
+            console.log(medicamentoVenta);
+          } else if (elemento.producto_id) {
+            const productoVenta = await post(`productos-ventas`, {
+              ...elemento,
+              venta_id: ventaResponse.data.id,
+            });
+            console.log(productoVenta);
+          } else if (elemento.servicio_id) {
+            const servicioVenta = await post(`servicios-ventas`, {
+              ...elemento,
+              venta_id: ventaResponse.data.id,
+            });
+            console.log(servicioVenta);
+          }
+        })
+      );
 
-      // Si todo sale bien, mostrar mensaje de éxito
-      await success(response.message);
+      successTemporal(ventaResponse.message);
 
-      // Redirigir a la lista de ventas
       window.location.hash = "#/ventas";
-
-      // cerrarModal("venta-resume"); // Posible cierre de modal (comentado por ahora)
     }
   });
-
-  // Listener para recalcular el total cuando cambia el "valor agregado"
-  // valorAgregado.addEventListener("input", () => {
-  //   const valor =
-  //     parseInt(valorAgregado.value) > 0 ? parseInt(valorAgregado.value) : 0;
-  //   totalVenta.textContent = precioTotal + valor;
-  // });
 };

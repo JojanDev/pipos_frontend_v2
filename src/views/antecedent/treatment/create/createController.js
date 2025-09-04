@@ -14,7 +14,8 @@ import {
 } from "../../../../helpers";
 
 export const createTreatmentController = async (parametros = null) => {
-  const { idAntecedente } = parametros;
+  console.log(parametros);
+  // const { idAntecedente } = parametros;
 
   const form = document.querySelector(
     "#form-register-pet-antecedent-treatment"

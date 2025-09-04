@@ -1,3 +1,4 @@
+// import { routes } from "../../../router/routes";
 import {
   cargarComponente,
   error,
@@ -5,7 +6,9 @@ import {
   llenarSelect,
   renderizarCarrito,
 } from "../../../helpers";
-import { routes } from "../../../router/routes";
+
+export let venta = {};
+export let ventaInformacion = {};
 
 function handleEliminarClick(e) {
   const btn = e.target.closest(".delete-producto");
@@ -30,9 +33,8 @@ export function initCarritoEvents() {
   // contenedor.onclick = handleEliminarClick;
 }
 
-export let venta = {};
-export let ventaInformacion = {};
-export const createVentaController = (parametros = null) => {
+export const createVentaController = async (parametros = null) => {
+  const { routes } = await import("../../../router/routes.js");
   initCarritoEvents();
   venta = { detalles_venta: [] };
   ventaInformacion = { detalles_venta: [] };
@@ -48,11 +50,11 @@ export const createVentaController = (parametros = null) => {
   //
 
   llenarSelect({
-    endpoint: "clientes",
+    endpoint: "usuarios/clientes",
     selector: "#select-clientes",
-    optionMapper: ({ id, info }) => ({
+    optionMapper: ({ id, numero_documento, nombre }) => ({
       id: id,
-      text: `${info.numeroDocumento} - ${info.nombre}`,
+      text: `${numero_documento} - ${nombre}`,
     }),
   });
 
@@ -75,11 +77,11 @@ export const createVentaController = (parametros = null) => {
       const dataJSON = localStorage.getItem("data");
       const data = JSON.parse(dataJSON);
       venta.cliente = selectClientes.options[selectClientes.selectedIndex].text;
-      venta.id_cliente = selectClientes.value;
-      const personal = await get("personal/" + data.id);
+      venta.comprador_id = selectClientes.value;
+      // const personal = await get("personal/" + data.id);
 
-      venta.id_personal = data.id;
-      venta.nombrePersonal = personal.data.info.nombre;
+      venta.vendedor_id = 1;
+      venta.nombrePersonal = "personal.data.info.nombre";
 
       await cargarComponente(routes.ventas.resumenVenta);
     }
@@ -88,20 +90,5 @@ export const createVentaController = (parametros = null) => {
       // await cargarComponente(routes.ventas.resumenVenta);
       window.location.hash = "#/ventas/";
     }
-
-    // document
-    //   .querySelector(".venta-productos")
-    //   .addEventListener("click", (e) => {
-    //     if (e.target.classList.contains("delete-producto")) {
-    //       const index = parseInt(e.target.dataset.index);
-    //       if (!isNaN(index)) {
-    //         console.log(venta.detalles_venta);
-    //         venta.detalles_venta.splice(index, 1);
-    //         console.log(venta.detalles_venta);
-
-    //         renderizarCarrito();
-    //       }
-    //     }
-    //   });
   });
 };

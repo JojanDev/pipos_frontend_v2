@@ -5,6 +5,8 @@ import {
   error,
   get,
   llenarSelect,
+  llenarSelectMedicamentos,
+  llenarSelectProductos,
   renderizarCarrito,
   success,
   validarCampos,
@@ -44,7 +46,7 @@ export const createDetailsController = () => {
    * Event listener para el cambio de tipo de elemento (producto/servicio/medicamento)
    * Limpia y reconfigura los campos según el tipo seleccionado
    */
-  selectTipo.addEventListener("change", () => {
+  selectTipo.addEventListener("change", async () => {
     // Resetear el select de elementos con opción por defecto
     selectElementos.innerHTML =
       '<option disabled selected value="">Seleccione un elemento</option>';
@@ -59,25 +61,11 @@ export const createDetailsController = () => {
     // Llenar el select según el tipo seleccionado
     if (selectTipo.value == "medicamento") {
       // Para medicamentos: mostrar número de lote y nombre
-      llenarSelect({
-        endpoint: "medicamentos",
-        selector: "#select-elementos",
-        optionMapper: (elemento) => ({
-          id: elemento.id,
-          text: `${elemento.numero_lote} - ${elemento.info.nombre}`,
-        }),
-      });
+      await llenarSelectMedicamentos();
       inputPrecio.placeholder = "Seleccione un elemento";
     } else if (selectTipo.value == "producto") {
       // Para productos: mostrar tipo de producto y nombre
-      llenarSelect({
-        endpoint: "productos",
-        selector: "#select-elementos",
-        optionMapper: (elemento) => ({
-          id: elemento.id,
-          text: `${elemento.tipoProducto.nombre} - ${elemento.nombre}`,
-        }),
-      });
+      await llenarSelectProductos();
       inputPrecio.placeholder = "Seleccione un elemento";
     } else if (selectTipo.value == "servicio") {
       // Para servicios: mostrar solo el nombre
@@ -111,7 +99,6 @@ export const createDetailsController = () => {
 
       // Establecer cantidad por defecto si está vacía
       if (inputCantidad.value == "") inputCantidad.value = 1;
-
     } else if (selectTipo.value == "producto") {
       // Obtener datos del producto seleccionado
       const productos = await get("productos/" + selectElementos.value);
@@ -124,7 +111,6 @@ export const createDetailsController = () => {
       cantidadElemento = productos.data.stock;
 
       if (inputCantidad.value == "") inputCantidad.value = 1;
-
     } else if (selectTipo.value == "servicio") {
       // Obtener datos del servicio seleccionado
       const servicio = await get("servicios/" + selectElementos.value);
@@ -176,10 +162,8 @@ export const createDetailsController = () => {
     let existente = venta.detalles_venta.find((det) => {
       if (tipo_elemento === "medicamento")
         return det.id_medicamento === elemento;
-      if (tipo_elemento === "producto")
-        return det.id_producto === elemento;
-      if (tipo_elemento === "servicio")
-        return det.id_servicio === elemento;
+      if (tipo_elemento === "producto") return det.id_producto === elemento;
+      if (tipo_elemento === "servicio") return det.id_servicio === elemento;
       return false;
     });
 
@@ -215,22 +199,19 @@ export const createDetailsController = () => {
         existente.cantidad += cantidad;
         existente.valor_adicional += valor_adicional;
         // Recalcular subtotal: (cantidad * precio_unitario) + valor_adicional
-        existente.subtotal = (existente.cantidad * precioElementos) + existente.valor_adicional;
+        existente.subtotal =
+          existente.cantidad * precioElementos + existente.valor_adicional;
       }
     } else {
       // Si no existe, crear nuevo objeto para el carrito
       const objeto = { precio: precioElementos };
 
-      if (tipo_elemento === "medicamento")
-        objeto.id_medicamento = elemento;
-      else if (tipo_elemento === "producto")
-        objeto.id_producto = elemento;
-      else if (tipo_elemento === "servicio")
-        objeto.id_servicio = elemento;
-
+      if (tipo_elemento === "medicamento") objeto.medicamento_id = elemento;
+      else if (tipo_elemento === "producto") objeto.producto_id = elemento;
+      else if (tipo_elemento === "servicio") objeto.servicio_id = elemento;
 
       objeto.cantidad = cantidad;
-      objeto.subtotal = (cantidad * precioElementos) + valor_adicional;
+      objeto.subtotal = cantidad * precioElementos + valor_adicional;
       objeto.valor_adicional = valor_adicional;
 
       // Agregar al carrito y obtener nombre para mostrar
@@ -240,7 +221,6 @@ export const createDetailsController = () => {
       objeto.nombre = nombreSeleccionado;
 
       console.log(venta);
-
     }
 
     // Actualizar la visualización del carrito

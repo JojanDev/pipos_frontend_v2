@@ -60,6 +60,28 @@ export const llenarSelectVeterinarios = async () => {
   });
 };
 
+export const llenarSelectMedicamentos = async () => {
+  return llenarSelect({
+    endpoint: "medicamentos",
+    selector: "#select-elementos",
+    optionMapper: (elemento) => ({
+      id: elemento.id,
+      text: `${elemento.numero_lote} - ${elemento.nombre}`,
+    }),
+  });
+};
+
+export const llenarSelectProductos = async () => {
+  return llenarSelect({
+    endpoint: "productos",
+    selector: "#select-elementos",
+    optionMapper: (elemento) => ({
+      id: elemento.id,
+      text: `${elemento.tipo_producto} - ${elemento.nombre}`,
+    }),
+  });
+};
+
 export const renderizarSelectEspecies = async (selectEspecie, selectRazas) => {
   const especiesResp = await get("especies");
   if (!especiesResp.success) return;

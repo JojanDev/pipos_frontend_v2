@@ -54,6 +54,8 @@ export const profilePetController = async (parametros = null) => {
   let estado_vital = true;
   const profilePet = DOMSelector("#pet-profile");
 
+  console.log(parametros);
+
   // const dataJSON = localStorage.getItem("data");
   // const data = JSON.parse(dataJSON);
 
@@ -64,7 +66,9 @@ export const profilePetController = async (parametros = null) => {
   //   });
   // }
   // ID de la mascota
-  const { id: mascota_id } = parametros;
+  const { perfil: mascota } = parametros;
+
+  const mascota_id = mascota.id;
 
   //Peticion para obtener la informacion de la mascota
   const petResponse = await get(`mascotas/${mascota_id}`);

@@ -1,9 +1,10 @@
 import { layoutController } from "../layouts/layout";
+import { DOMSelector } from "./dom";
 
-export const renderLayout = async (container, layout) => {
-  const response = await fetch(`./src/layouts/${layout}`);
+export const renderLayout = async () => {
+  const response = await fetch(`./src/layouts/mainLayout.html`);
   const html = await response.text();
-  container.innerHTML = html;
+  DOMSelector("#app").innerHTML = html;
   console.log("SI");
 
   await layoutController();
