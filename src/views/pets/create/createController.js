@@ -64,5 +64,12 @@ export const createPetController = async (idDueno) => {
     esModal ? cerrarModal("create-pet") : cerrarModalYVolverAVistaBase();
   });
 
+  DOMSelector("[data-modal='create-pet'").addEventListener("click", (e) => {
+    if (e.target.id == "back-register-pet-client") {
+      cerrarModal("create-pet");
+      location.hash = "#/mascotas";
+    }
+  });
+
   configurarBotonCerrar("back-register-pet-client", esModal);
 };

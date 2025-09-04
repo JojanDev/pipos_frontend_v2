@@ -160,11 +160,14 @@ export const profilePetController = async (parametros = null) => {
     }
 
     if (e.target.id == "register-antecedent") {
-      await cargarComponente(routes.antecedente.crear, { id, id });
+      // await cargarComponente(routes.antecedente.crear, { id, id });
+      location.hash = `#/mascotas/perfil/id=${mascota.id}/antecedente/crear`;
     }
 
     if (e.target.id == "edit-pet") {
-      await cargarComponente(routes.mascotas.editar, { id, id });
+      // await cargarComponente(routes.mascotas.editar, { id, id });
+
+      location.hash = `#/mascotas/perfil/id=${mascota.id}/editar`;
     }
 
     if (e.target.classList.contains("tratamiento")) {

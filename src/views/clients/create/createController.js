@@ -67,7 +67,9 @@ export const createClientController = async () => {
   document.addEventListener("click", (event) => {
     const target = event.target;
     if (target.closest("#back-register-client")) {
-      esModal ? cerrarModal("create-client") : cerrarModalYVolverAVistaBase();
+      // esModal ? cerrarModal("create-client") : cerrarModalYVolverAVistaBase();
+      cerrarModal("create-client");
+      location.hash = "#/clientes";
     }
   });
 };

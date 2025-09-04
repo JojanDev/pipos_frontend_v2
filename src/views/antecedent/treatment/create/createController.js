@@ -11,6 +11,7 @@ import {
   llenarSelectVeterinarios,
   errorTemporal,
   successTemporal,
+  cerrarModal,
 } from "../../../../helpers";
 
 export const createTreatmentController = async (parametros = null) => {

@@ -15,11 +15,14 @@ import {
 } from "../../../helpers";
 
 export const profileClientController = async (parametros = null) => {
+  console.log(parametros);
+
   const tbody = DOMSelector("#pets-client .table__body");
   const esModal = !location.hash.includes("clientes/perfil");
   const profileClient = DOMSelector(`[data-modal="profile-client"]`);
 
-  const { id } = parametros;
+  const { perfil: usuario } = parametros;
+  const id = usuario.id;
 
   const userResponse = await get(`usuarios/${id}`);
 
@@ -73,8 +76,14 @@ export const profileClientController = async (parametros = null) => {
     }
 
     if (e.target.id == "edit-client")
-      await cargarComponente(routes.clientes.editar, { id });
+      // await cargarComponente(routes.clientes.editar, { id });
+      location.hash = `#/clientes/perfil/id=${id}/editar`;
+
+    if (e.target.id == "back-perfil") {
+      cerrarModal("profile-client");
+      location.hash = `#/clientes`;
+    }
   });
 
-  configurarBotonCerrar("back-perfil", esModal);
+  // configurarBotonCerrar("back-perfil", esModal);
 };

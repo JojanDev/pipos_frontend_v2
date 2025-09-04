@@ -78,7 +78,9 @@ const manejarSubmit = (
 
 // --- Controlador Principal ---
 export const editPetController = async (parametros = null) => {
-  const { id } = parametros;
+  console.log(parametros);
+
+  const { perfil: mascota } = parametros;
 
   // Elementos del DOM
   const form = DOMSelector("#form-edit-pet");
@@ -90,7 +92,7 @@ export const editPetController = async (parametros = null) => {
   const esModal = !location.hash.includes("mascotas/crear");
 
   // Obtener mascota
-  const { data } = await get("mascotas/" + id);
+  const { data } = await get(`mascotas/${mascota.id}`);
   const pet = prepararDatosMascota(data);
 
   // Inicializar formulario
@@ -103,6 +105,21 @@ export const editPetController = async (parametros = null) => {
   );
 
   // Eventos
-  manejarSubmit(form, id, pet, esModal, tbody_perfilCliente, tbody_Mascotas);
-  configurarBotonCerrar("back-edit-pet-client", esModal);
+  manejarSubmit(
+    form,
+    mascota.id,
+    pet,
+    esModal,
+    tbody_perfilCliente,
+    tbody_Mascotas
+  );
+
+  DOMSelector("[data-modal='edit-pet'").addEventListener("click", (e) => {
+    if (e.target.id == "back-edit-pet-client") {
+      cerrarModal("edit-pet");
+      location.hash = `#/mascotas/perfil/id=${mascota.id}`;
+    }
+  });
+
+  // configurarBotonCerrar("back-edit-pet-client", esModal);
 };

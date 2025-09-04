@@ -15,7 +15,9 @@ import {
 } from "../../../helpers";
 
 export const createAntecedentController = (parametros = null) => {
-  const { id } = parametros;
+  console.log(parametros);
+
+  const { perfil: mascota } = parametros;
 
   const containerPerfilMascota = DOMSelector(".contenedor-perfil--pet");
 
@@ -49,7 +51,7 @@ export const createAntecedentController = (parametros = null) => {
 
     const antecedentResponse = await post("antecedentes", {
       ...datos,
-      mascota_id: id,
+      mascota_id: mascota.id,
     });
 
     if (!antecedentResponse.success)
@@ -77,4 +79,14 @@ export const createAntecedentController = (parametros = null) => {
   });
 
   configurarBotonCerrar("back-register-pet-antecedent", esModal);
+
+  DOMSelector("[data-modal='create-pet-antecedent'").addEventListener(
+    "click",
+    (e) => {
+      if (e.target.id == "back-register-pet-antecedent") {
+        cerrarModal("create-pet-antecedent");
+        location.hash = `#/mascotas/perfil/id=${mascota.id}`;
+      }
+    }
+  );
 };

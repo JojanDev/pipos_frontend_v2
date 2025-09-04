@@ -42,7 +42,9 @@ const asignarDatosCliente = (data) => {
 };
 
 export const editClientController = async (parametros = null) => {
-  const { id } = parametros;
+  console.log(parametros);
+  const { perfil: usuario } = parametros;
+  // const { id } = parametros;
   const form = DOMSelector("#form-edit-client");
   const selectTipoDocumento = DOMSelector("#tipos-documento");
   const tbody = DOMSelector("#clients .table__body");
@@ -60,7 +62,7 @@ export const editClientController = async (parametros = null) => {
   //   campos[nombreCampo] = input;
   // });
 
-  const clientResponse = await get(`usuarios/${id}`);
+  const clientResponse = await get(`usuarios/${usuario.id}`);
   console.log(clientResponse);
 
   clientResponse.data["select-tipos-documentos"] =
@@ -96,7 +98,7 @@ export const editClientController = async (parametros = null) => {
 
     if (!validarCampos(e)) return;
 
-    const putClientResponse = await put(`usuarios/${id}`, datos);
+    const putClientResponse = await put(`usuarios/${usuario.id}`, datos);
     console.log(putClientResponse);
 
     if (!putClientResponse.success)
@@ -110,7 +112,7 @@ export const editClientController = async (parametros = null) => {
 
     mapearDatosEnContenedor(putClientResponse.data, profileClient);
 
-    const oldRow = tbody.querySelector(`tr[data-id='${id}']`);
+    const oldRow = tbody.querySelector(`tr[data-id='${usuario.id}']`);
 
     const updatedRow = crearFila([
       putClientResponse.data.id,
@@ -130,7 +132,10 @@ export const editClientController = async (parametros = null) => {
   document.addEventListener("click", (event) => {
     const arrow = event.target.closest("#back-edit-client");
     if (arrow) {
-      esModal ? cerrarModal("edit-client") : cerrarModalYVolverAVistaBase();
+      // esModal ? cerrarModal("edit-client") : cerrarModalYVolverAVistaBase();
+      console.log("si");
+      cerrarModal("edit-client");
+      location.hash = `#/clientes/perfil/id=${usuario.id}`;
     }
   });
 };
