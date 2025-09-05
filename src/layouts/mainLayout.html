@@ -10,29 +10,36 @@
     <h2 class="sidebar__title">Opciones</h2>
     <nav class="sidebar__nav">
       <ul class="sidebar__list">
-        <li class="sidebar__item">
+        <li class="sidebar__item" data-permiso="usuario.view">
           <a href="#/clientes" class="sidebar__link">Clientes</a>
         </li>
-        <li class="sidebar__item">
+        <li class="sidebar__item" data-permiso="mascota.view">
           <a href="#/mascotas" class="sidebar__link">Mascotas</a>
         </li>
-        <li class="sidebar__item">
+        <li class="sidebar__item" data-permiso="venta.view">
           <a href="#/ventas/" class="sidebar__link">Ventas</a>
         </li>
-        <li class="sidebar__item">
+        <li class="sidebar__item" data-permiso="medicamento.view,producto.view">
           <a href="#/inventario" class="sidebar__link">Inventario</a>
         </li>
-        <li class="sidebar__item admin">
-          <a href="#/administrar-datos" class="sidebar__link">Administrar Datos</a>
+        <li
+          class="sidebar__item admin"
+          data-permiso="tipo-producto.view,especie.view,raza.view"
+        >
+          <a href="#/administrar-datos" class="sidebar__link"
+            >Administrar Datos</a
+          >
         </li>
-        <li class="sidebar__item">
-          <a href="#/info-medicamentos/" class="sidebar__link">Info. Medicamentos</a>
+        <li class="sidebar__item" data-permiso="info-medicamento.view">
+          <a href="#/info-medicamentos/" class="sidebar__link"
+            >Info. Medicamentos</a
+          >
         </li>
-        <li class="sidebar__item">
+        <li class="sidebar__item" data-permiso="servicio.view">
           <a href="#/servicios" class="sidebar__link">Servicios</a>
         </li>
-        <li class="sidebar__item admin">
-          <a href="#/personal" class="sidebar__link">Empleados</a>
+        <li class="sidebar__item admin" data-permiso="usuario.view">
+          <a href="#/usuarios" class="sidebar__link">Empleados</a>
         </li>
       </ul>
     </nav>

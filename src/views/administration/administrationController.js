@@ -84,7 +84,12 @@ export const listarEspecies = async () => {
     const idEspecie = especieSeleccionada?.children[0]?.textContent?.trim();
 
     if (idEspecie) {
-      window.location.hash = `#/administrar_datos/razasCrear/id=${idEspecie}`;
+      // window.location.hash = `#/administrar-datos/especies/id=${idEspecie}/razas/crear`;
+      location.hash =
+        location.hash +
+        (location.hash[location.hash.length - 1] == "/"
+          ? `especies/id=${idEspecie}/razas/crear`
+          : `/especies/id=${idEspecie}/razas/crear`);
     }
   });
 
@@ -93,7 +98,7 @@ export const listarEspecies = async () => {
   btnRegistrarRaza.disabled = true;
 };
 
-const cargarRazasDeEspecie = (especie) => {
+export const cargarRazasDeEspecie = (especie) => {
   const razasTbody = DOMSelector("#breeds .table__body");
   razasTbody.innerHTML = "";
 
@@ -103,8 +108,11 @@ const cargarRazasDeEspecie = (especie) => {
     );
     return;
   }
+  console.log(especie);
 
   especie.razas.forEach((raza) => {
+    console.log(raza);
+
     const row = crearFila([raza.id, raza.nombre]);
     razasTbody.append(row);
   });
@@ -130,10 +138,14 @@ export const administrationController = () => {
 
     if (fila) {
       const idRaza = fila.getAttribute("data-id");
-      location.hash = `#/administrar_datos/razasPerfil/id=${idRaza}`;
+      const especieSeleccionada = DOMSelector(".table__row--selected");
+      const idEspecie = especieSeleccionada?.children[0]?.textContent?.trim();
 
-      // Aquí puedes llamar a una función para ver más detalles, abrir modal, etc.
-      // ejemplo: mostrarDetalleCliente(idCliente);
+      location.hash =
+        location.hash +
+        (location.hash[location.hash.length - 1] == "/"
+          ? `especies/id=${idEspecie}/razas/perfil/id=${idRaza}`
+          : `/especies/id=${idEspecie}/razas/perfil/id=${idRaza}`);
     }
   });
 
@@ -147,8 +159,11 @@ export const administrationController = () => {
       const idEspecie = fila.getAttribute("data-id");
 
       // location.hash = `#/administrar_datos/especies/perfil/id=${idEspecie}`;
-      location.hash = (location.hash + (location.hash[location.hash.length - 1] == "/" ? `especies/perfil/id=${idEspecie}` : `/especies/perfil/id=${idEspecie}`));
-
+      location.hash =
+        location.hash +
+        (location.hash[location.hash.length - 1] == "/"
+          ? `especies/perfil/id=${idEspecie}`
+          : `/especies/perfil/id=${idEspecie}`);
     }
   });
 
@@ -160,7 +175,12 @@ export const administrationController = () => {
     if (fila) {
       const idTipo = fila.getAttribute("data-id");
 
-      location.hash = `#/administrar_datos/tipos_productosPerfil/id=${idTipo}`;
+      // location.hash = `#/administrar_datos/tipos_productosPerfil/id=${idTipo}`;
+      location.hash =
+        location.hash +
+        (location.hash[location.hash.length - 1] == "/"
+          ? `tipos-productos/perfil/id=${idTipo}`
+          : `/tipos-productos/perfil/id=${idTipo}`);
     }
   });
 };

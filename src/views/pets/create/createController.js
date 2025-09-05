@@ -20,7 +20,12 @@ import {
   successTemporal,
 } from "../../../helpers";
 
-export const createPetController = async (idDueno) => {
+export const createPetController = async (parametros = null) => {
+  console.log(parametros);
+
+  const { perfil: usuario } = parametros;
+  const contenedorVista = DOMSelector("[data-modal='create-pet']");
+
   const form = DOMSelector("#form-register-pet");
   const selectEspecie = DOMSelector("#select-especies");
   const selectRazas = DOMSelector("#select-razas");
@@ -60,7 +65,7 @@ export const createPetController = async (idDueno) => {
       sexo,
       raza_id,
       edad_semanas,
-      usuario_id: requiredSelectClient ? usuario_id : idDueno,
+      usuario_id: requiredSelectClient ? usuario_id : usuario.id,
     });
 
     if (!petResponse.success) return await error(petResponse.message);
@@ -68,10 +73,11 @@ export const createPetController = async (idDueno) => {
 
     actualizarTablas(petResponse.data, tbody_perfilCliente, tbody_Mascotas);
 
-    esModal ? cerrarModal("create-pet") : cerrarModalYVolverAVistaBase();
+    cerrarModal("create-pet");
+    history.back();
   });
 
-  DOMSelector("[data-modal='create-pet'").addEventListener("click", (e) => {
+  contenedorVista.addEventListener("click", (e) => {
     if (e.target.id == "back-register-pet-client") {
       cerrarModal("create-pet");
 

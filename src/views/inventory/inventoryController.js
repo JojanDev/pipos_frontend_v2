@@ -127,9 +127,14 @@ export const inventoryController = () => {
       // location.hash = `#/inventario/productosPerfil/id=${idProducto}`;
 
       // if (data.id_rol == 1) {
-      await cargarComponente(routes.inventario.productosEditar, {
-        id: idProducto,
-      });
+      // await cargarComponente(routes.inventario.productosEditar, {
+      //   id: idProducto,
+      // });
+      location.hash =
+        location.hash +
+        (location.hash[location.hash.length - 1] == "/"
+          ? `productos/editar/id=${idProducto}`
+          : `/productos/editar/id=${idProducto}`);
       // }
 
       // Aquí puedes llamar a una función para ver más detalles, abrir modal, etc.
@@ -146,7 +151,12 @@ export const inventoryController = () => {
       const id = fila.getAttribute("data-id");
 
       // if (data.id_rol == 1) {
-      location.hash = `#/inventario/medicamentosEditar/id=${id}`;
+      // location.hash = `#/inventario/medicamentosEditar/id=${id}`;
+      location.hash =
+        location.hash +
+        (location.hash[location.hash.length - 1] == "/"
+          ? `medicamentos/editar/id=${id}`
+          : `/medicamentos/editar/id=${id}`);
       // }
       // await cargarComponente(routes);
 

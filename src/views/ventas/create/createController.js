@@ -49,7 +49,7 @@ export const createVentaController = async (parametros = null) => {
 
   //
 
-  llenarSelect({
+  await llenarSelect({
     endpoint: "usuarios/clientes",
     selector: "#select-clientes",
     optionMapper: ({ id, numero_documento, nombre }) => ({
@@ -60,7 +60,12 @@ export const createVentaController = async (parametros = null) => {
 
   contenedor.addEventListener("click", async (e) => {
     if (e.target.id == "add-product") {
-      await cargarComponente(routes.ventas.agregarProducto);
+      // await cargarComponente(routes.ventas.agregarProducto);
+      location.hash =
+        location.hash +
+        (location.hash[location.hash.length - 1] == "/"
+          ? `agregar-elemento`
+          : `/agregar-elemento`);
     }
     const selectClientes = document.querySelector("#select-clientes");
 
@@ -83,12 +88,18 @@ export const createVentaController = async (parametros = null) => {
       venta.vendedor_id = 1;
       venta.nombrePersonal = "personal.data.info.nombre";
 
-      await cargarComponente(routes.ventas.resumenVenta);
+      // await cargarComponente(routes.ventas.resumenVenta);
+      location.hash =
+        location.hash +
+        (location.hash[location.hash.length - 1] == "/"
+          ? `finalizar`
+          : `/finalizar`);
     }
 
     if (e.target.id == "venta-cancelar") {
       // await cargarComponente(routes.ventas.resumenVenta);
-      window.location.hash = "#/ventas/";
+      // window.location.hash = "#/ventas/";
+      history.back();
     }
   });
 };

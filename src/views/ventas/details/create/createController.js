@@ -36,6 +36,7 @@ export const createDetailsController = () => {
   contenedor.addEventListener("click", (e) => {
     if (e.target.id == "back-venta-details") {
       cerrarModal("venta-details");
+      history.back();
     }
   });
 
@@ -229,5 +230,6 @@ export const createDetailsController = () => {
     // Mostrar mensaje de éxito y cerrar modal
     await success("Elemento agregado!");
     cerrarModal("venta-details");
+    history.back();
   });
 };

@@ -65,7 +65,12 @@ export const personalController = async () => {
     if (fila) {
       const id = fila.getAttribute("data-id");
 
-      location.hash = `#/personal/perfil/id=${id}`;
+      // location.hash = `#/personal/perfil/id=${id}`;
+      location.hash =
+        location.hash +
+        (location.hash[location.hash.length - 1] == "/"
+          ? `perfil/id=${id}`
+          : `/perfil/id=${id}`);
     }
   });
 };

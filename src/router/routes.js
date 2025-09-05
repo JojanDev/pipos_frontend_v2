@@ -193,6 +193,28 @@ export const routes = {
       slot: "main",
     },
     especies: {
+      razas: {
+        crear: {
+          path: "administration/breeds/create/index.html",
+          controller: createBreedController,
+          private: true,
+          addHtml: true,
+        },
+        perfil: {
+          "/": {
+            path: "administration/breeds/profile/index.html",
+            controller: profileBreedController,
+            private: true,
+            addHtml: true,
+          },
+          editar: {
+            path: "administration/breeds/edit/index.html",
+            controller: editBreedController,
+            private: true,
+            addHtml: true,
+          },
+        },
+      },
       crear: {
         path: "administration/species/create/index.html",
         controller: createSpecieController,
@@ -214,28 +236,22 @@ export const routes = {
         },
       },
     },
-    razas: {
-      crear: {
-        path: "administration/breeds/create/index.html",
-        controller: createBreedController,
-        private: true,
-        addHtml: true,
-      },
-      perfil: {
-        "/": {
-          path: "administration/breeds/profile/index.html",
-          controller: profileBreedController,
-          private: true,
-          addHtml: true,
-        },
-        editar: {
-          path: "administration/breeds/edit/index.html",
-          controller: editBreedController,
-          private: true,
-          addHtml: true,
-        },
-      },
-    },
+    // razas: {
+    //   perfil: {
+    //     "/": {
+    //       path: "administration/breeds/profile/index.html",
+    //       controller: profileBreedController,
+    //       private: true,
+    //       addHtml: true,
+    //     },
+    //     editar: {
+    //       path: "administration/breeds/edit/index.html",
+    //       controller: editBreedController,
+    //       private: true,
+    //       addHtml: true,
+    //     },
+    //   },
+    // },
     "tipos-productos": {
       crear: {
         path: "administration/productsTypes/create/index.html",
@@ -304,10 +320,20 @@ export const routes = {
     },
     medicamentos: {
       crear: {
-        path: "inventory/medicaments/create/index.html",
-        controller: createMedicamentInventoryController,
-        private: true,
-        addHtml: true,
+        "/": {
+          path: "inventory/medicaments/create/index.html",
+          controller: createMedicamentInventoryController,
+          private: true,
+          addHtml: true,
+        },
+        "info-medicamentos": {
+          crear: {
+            path: "medicaments/create/index.html",
+            controller: createMedicamentInfoController,
+            private: true,
+            addHtml: true,
+          },
+        },
       },
       editar: {
         path: "inventory/medicaments/edit/index.html",
@@ -351,7 +377,7 @@ export const routes = {
     controller: loginController,
     private: false,
   },
-  personal: {
+  usuarios: {
     "/": {
       path: "personal/index.html",
       controller: personalController,
@@ -404,7 +430,7 @@ export const routes = {
         needLayout: true,
         slot: "main",
       },
-      agregar_elemento: {
+      "agregar-elemento": {
         path: "ventas/details/create/index.html",
         controller: createDetailsController,
         private: false,
@@ -412,7 +438,7 @@ export const routes = {
         // slot: "main",
         addHtml: true,
       },
-      resumenVenta: {
+      finalizar: {
         path: "ventas/resume/index.html",
         controller: resumeController,
         private: true,
@@ -434,4 +460,4 @@ export const routes = {
       },
     },
   },
-}
+};

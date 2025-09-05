@@ -21,7 +21,14 @@ export const router = async () => {
 
   if (indexSegBase == null) {
     console.log("redireccionado a inicio");
-    return (location.hash = "#/inicio" || "#/login");
+    const login = obtenerRuta(["login"]);
+    const response = await fetch(`./src/views/${login.path}`);
+    const html = await response.text();
+    DOMSelector("#app").innerHTML = html;
+    login.controller();
+    return;
+    // const ruta = obtenerRuta(hashBase);
+    // return (location.hash = "#/inicio" || "#/login");
   }
   // mascotas/perfil/1/antecedente/1/tratamiento/crear
   // console.log("arrayHash:", arrayHash);
@@ -50,7 +57,6 @@ export const router = async () => {
 
     // console.log("arrayHash[index]:", arrayHash[index]);
 
-
     if (arrayHash[index] && arrayHash[index].includes("=")) {
       const parametrosSeparados = arrayHash[index].split("&");
       let objetoParametros = {};
@@ -66,7 +72,6 @@ export const router = async () => {
 
       parametros[`${hashBase[hashBase.length - 1]}`] = objetoParametros;
       console.log("parametros:", parametros);
-
     }
 
     const hashSinParams = hashBase.filter((item) => !item.includes("="));

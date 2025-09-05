@@ -3,6 +3,7 @@ import {
   configurarBotonCerrar,
   convertirADiaMesAño,
   crearFila,
+  DOMSelector,
   formatearPrecioConPuntos,
   get,
   llenarSelect,
@@ -45,13 +46,16 @@ export function validarFechaCaducidad(valorFecha) {
 }
 
 export const editProductController = async (parametros = null) => {
-  const { id } = parametros;
+  console.log(parametros);
+  const contenedorVista = DOMSelector(`[data-modal="edit-product"]`);
+  // const { id } = parametros;
+  const { editar: producto } = parametros;
 
-  const responseProducto = await get("productos/" + id);
+  const responseProducto = await get(`productos/${producto.id}`);
   console.log(responseProducto);
 
-  const form = document.querySelector("#form-register-product");
-  const tbodyProducts = document.querySelector("#products .table__body");
+  const form = DOMSelector("#form-register-product");
+  const tbodyProducts = DOMSelector("#products .table__body");
   const esModal = !location.hash.includes("inventario/productosCrear");
 
   await llenarSelect({
@@ -68,7 +72,7 @@ export const editProductController = async (parametros = null) => {
   mapearDatosEnContenedor(responseProducto.data, form);
 
   configurarEventosValidaciones(form);
-  const inputFecha = document.querySelector("[name='fecha_caducidad']");
+  const inputFecha = DOMSelector("[name='fecha_caducidad']");
 
   inputFecha.addEventListener("blur", (e) => {
     const resultado = validarFechaEdicion(
@@ -108,7 +112,7 @@ export const editProductController = async (parametros = null) => {
 
     if (!resultado.valid) return;
 
-    const response = await put(`productos/${id}`, datos);
+    const response = await put(`productos/${producto.id}`, datos);
 
     if (!response.success) return await error(response.message);
 
@@ -135,8 +139,15 @@ export const editProductController = async (parametros = null) => {
       tbodyProducts.replaceChild(updatedRow, oldRow);
     }
 
-    esModal ? cerrarModal("edit-product") : cerrarModalYVolverAVistaBase();
+    cerrarModal("edit-product");
+    history.back();
   });
 
-  configurarBotonCerrar("back-edit-product", esModal);
+  // configurarBotonCerrar("back-edit-product", esModal);
+  contenedorVista.addEventListener("click", async (e) => {
+    if (e.target.id == "back-edit-product") {
+      cerrarModal("edit-product");
+      history.back();
+    }
+  });
 };

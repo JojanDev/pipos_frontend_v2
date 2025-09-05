@@ -70,17 +70,25 @@ export const profileClientController = async (parametros = null) => {
   profileClient.addEventListener("click", async (e) => {
     if (e.target.id == "register-pets-client") {
       // await cargarComponente(routes.mascotas.crear, id);
-      location.hash = `#/clientes/perfil/id=${id}/mascotas/crear`;
+      // location.hash = `#/clientes/perfil/id=${id}/mascotas/crear`;
+      location.hash =
+        location.hash +
+        (location.hash[location.hash.length - 1] == "/"
+          ? `mascotas/crear`
+          : `/mascotas/crear`);
       // const selectCliente = DOMSelector("#select-clients");
       // const contenedor = selectCliente?.closest(".form__container-field");
       // // contenedor.classList.add("hidden");
       // contenedor.remove();
-
     }
 
-    if (e.target.id == "edit-client")
+    if (e.target.id == "edit-client") {
       // await cargarComponente(routes.clientes.editar, { id });
-      location.hash = `#/clientes/perfil/id=${id}/editar`;
+      // location.hash = `#/clientes/perfil/id=${id}/editar`;
+      location.hash =
+        location.hash +
+        (location.hash[location.hash.length - 1] == "/" ? `editar` : `/editar`);
+    }
 
     if (e.target.id == "back-perfil") {
       cerrarModal("profile-client");

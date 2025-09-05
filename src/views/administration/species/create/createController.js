@@ -12,7 +12,11 @@ import {
   DOMSelector,
   successTemporal,
 } from "../../../../helpers";
-import { listarEspecies } from "../../administrationController";
+import {
+  cargarRazasDeEspecie,
+  especiesConRazas,
+  listarEspecies,
+} from "../../administrationController";
 
 export const createSpecieController = (parametros = null) => {
   const form = document.querySelector("#form-register-specie");
@@ -47,10 +51,27 @@ export const createSpecieController = (parametros = null) => {
       responseEspecie.data.nombre,
       btn,
     ]);
+    const btnRegistrarRaza = DOMSelector("#btn-registro-raza");
+
+    const especieNueva = { ...responseEspecie.data, razas: [] };
+    especiesConRazas.push(especieNueva);
+
+    row.addEventListener("click", () => {
+      tbody
+        .querySelectorAll(".table__row")
+        .forEach((fila) => fila.classList.remove("table__row--selected"));
+      row.classList.add("table__row--selected");
+
+      cargarRazasDeEspecie(especieNueva); // 👈 usar el mismo que vive en especiesConRazas
+      btnRegistrarRaza.disabled = false;
+    });
 
     tbody.insertAdjacentElement("afterbegin", row);
 
-    esModal ? cerrarModal("create-specie") : cerrarModalYVolverAVistaBase();
+    row.click();
+
+    cerrarModal("create-specie");
+    history.back();
   });
 
   const btnAtras = document.querySelector("#back-register-specie");

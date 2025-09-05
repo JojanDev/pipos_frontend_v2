@@ -17,6 +17,8 @@ import { especiesConRazas } from "../../administrationController.js";
 
 const addRaza = (idEspecie, nuevaRaza) => {
   const especie = especiesConRazas.find((e) => e.id == idEspecie);
+  console.log(especie);
+
   if (!especie) return;
 
   // 1. actualizar array
@@ -32,7 +34,10 @@ const addRaza = (idEspecie, nuevaRaza) => {
 };
 
 export const createBreedController = (parametros = null) => {
-  const { id: especie_id } = parametros;
+  console.log(parametros);
+  const contenedorVista = DOMSelector(`[data-modal="create-breed"]`);
+
+  const { especies } = parametros;
 
   const form = DOMSelector("#form-register-breed");
   const esModal = !location.hash.includes("razasCrear");
@@ -44,19 +49,28 @@ export const createBreedController = (parametros = null) => {
 
     if (!validarCampos(e)) return;
 
-    const responseRaza = await post("razas", { ...datos, especie_id });
+    const responseRaza = await post("razas", {
+      ...datos,
+      especie_id: especies.id,
+    });
 
-    if (!responseRaza.success) {
-      await error(responseRaza.message);
-      return;
-    }
+    if (!responseRaza.success) return await error(responseRaza.message);
 
     successTemporal(responseRaza.message);
 
-    addRaza(especie_id, responseRaza.data);
+    addRaza(especies.id, responseRaza.data);
 
-    esModal ? cerrarModal("create-breed") : cerrarModalYVolverAVistaBase();
+    cerrarModal("create-breed");
+    history.back();
   });
 
-  configurarBotonCerrar("back-register-breed", esModal);
+  // configurarBotonCerrar("back-register-breed", esModal);
+
+  contenedorVista.addEventListener("click", (e) => {
+    if (e.target.id == "back-register-breed") {
+      cerrarModal("create-breed");
+
+      history.back();
+    }
+  });
 };

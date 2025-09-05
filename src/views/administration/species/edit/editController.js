@@ -12,20 +12,24 @@ import {
   put,
   configurarBotonCerrar,
   successTemporal,
+  DOMSelector,
+  get,
 } from "../../../../helpers";
 
-export const editSpecieController = (parametros = null) => {
+export const editSpecieController = async (parametros = null) => {
   console.log(parametros);
-
+  const contenedorVista = DOMSelector(`[data-modal="edit-specie"]`);
   // Id de la especie
-  const { id, nombre } = parametros;
+  const { perfil: especie } = parametros;
+  // const { id, nombre } = parametros;
 
   const form = document.querySelector("#form-edit-specie");
   const esModal = !location.hash.includes("especiesEditar");
 
+  const especieResponse = await get(`especies/${especie.id}`);
   const titulo = document.querySelector("#nombreSpecie");
 
-  titulo.value = nombre;
+  titulo.value = especieResponse.data.nombre;
 
   configurarEventosValidaciones(form);
 
@@ -36,23 +40,20 @@ export const editSpecieController = (parametros = null) => {
 
     // datos["id_antecedente"] = idAntecedente;
 
-    if (nombre == datos.nombre) {
-      esModal ? cerrarModal("edit-specie") : cerrarModalYVolverAVistaBase();
-
+    if (especieResponse.data.nombre == datos.nombre) {
+      cerrarModal("edit-specie");
+      history.back();
       return;
     }
 
-    const responseEspecie = await put(`especies/${id}`, datos);
+    const responseEspecie = await put(`especies/${especie.id}`, datos);
 
-    if (!responseEspecie.success) {
-      await error(responseEspecie.message);
-      return;
-    }
+    if (!responseEspecie.success) return await error(responseEspecie.message);
 
     successTemporal(responseEspecie.message);
     // Justo después de insertar la nueva fila:
     const nombreEspecieFila = document.querySelector(
-      `#species [data-id="${id}"] td:nth-child(2)`
+      `#species [data-id="${especie.id}"] td:nth-child(2)`
     );
 
     const titulo = document.querySelector("#specie-title");
@@ -63,8 +64,16 @@ export const editSpecieController = (parametros = null) => {
       nombreEspecieFila.textContent = responseEspecie.data.nombre;
     }
 
-    esModal ? cerrarModal("edit-specie") : cerrarModalYVolverAVistaBase();
+    cerrarModal("edit-specie");
+    history.back();
   });
 
-  configurarBotonCerrar("back-edit-specie", esModal);
+  contenedorVista.addEventListener("click", (e) => {
+    if (e.target.id == "back-edit-specie") {
+      cerrarModal("edit-specie");
+
+      // location.hash = "#/mascotas";
+      history.back();
+    }
+  });
 };

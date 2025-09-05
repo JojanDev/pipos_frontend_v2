@@ -20,17 +20,17 @@ const validarSesion = async ({ usuario, contrasena }) => {
   console.log(response);
 
   //Se valida el inicio exitoso
-  if (response.code == 200) {
+  if (response.success) {
     //Se muestra un mensaje
     // localStorage.clear();
-    localStorage.setItem("isAuthenticated", true);
-    localStorage.setItem("data", JSON.stringify(response.data));
+    // localStorage.setItem("isAuthenticated", true);
+    // localStorage.setItem("data", JSON.stringify(response.data));
     await loginSuccess(response.message);
     return true;
   }
 
   //Se valida si ocurrio un error
-  if (response.code > 200) {
+  if (!response.success) {
     //Se muestra un mensaje
     await error(response.message);
     return false;
@@ -38,7 +38,7 @@ const validarSesion = async ({ usuario, contrasena }) => {
 };
 
 export const loginController = async () => {
-  localStorage.clear();
+  // localStorage.clear();
   const form = document.querySelector("#form");
 
   configurarEventosValidaciones(form);

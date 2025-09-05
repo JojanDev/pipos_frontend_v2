@@ -11,10 +11,12 @@ import {
   capitalizarPrimeraLetra,
   llenarSelectTiposDocumentos,
   successTemporal,
+  DOMSelector,
 } from "../../../helpers";
 
 export const createPersonalController = async () => {
   const form = document.querySelector("#form-register");
+  const contenedorVista = DOMSelector(`#register-user`);
   const selectTipoDocumento = document.querySelector("#tipos-documento");
 
   await llenarSelect({
@@ -66,6 +68,13 @@ export const createPersonalController = async () => {
     console.log(credenciales);
 
     successTemporal(response.message);
-    window.location.hash = "#/personal";
+    // window.location.hash = "#/personal";
+    history.back();
+  });
+
+  contenedorVista.addEventListener("click", async (e) => {
+    if (e.target.id == "back-register-user") {
+      history.back();
+    }
   });
 };

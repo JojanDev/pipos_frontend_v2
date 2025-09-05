@@ -10,10 +10,13 @@ import {
   successTemporal,
   error,
   configurarBotonCerrar,
+  DOMSelector,
+  cerrarModal,
 } from "../../../../helpers";
 
 export const createProductTypeController = (parametros = null) => {
   // const { idAntecedente } = parametros;
+  const contenedorVista = DOMSelector(`[data-modal="create-productType"]`);
 
   const form = document.querySelector("#form-register-productType");
   const esModal = !location.hash.includes("tipos_productosCrear");
@@ -46,10 +49,14 @@ export const createProductTypeController = (parametros = null) => {
       tbody.insertAdjacentElement("afterbegin", row);
     }
 
-    esModal
-      ? cerrarModal("create-productType")
-      : cerrarModalYVolverAVistaBase();
+    cerrarModal("create-productType");
+    history.back();
   });
 
-  configurarBotonCerrar("back-register-productType", esModal);
+  contenedorVista.addEventListener("click", (e) => {
+    if (e.target.id == "back-register-productType") {
+      cerrarModal("create-productType");
+      history.back();
+    }
+  });
 };

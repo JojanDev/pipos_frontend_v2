@@ -26,7 +26,6 @@ export const cargarTablaVentas = async () => {
 
   console.log(ventas);
 
-
   if (!ventas.success) {
     // await error(response.message);
     return;
@@ -35,18 +34,22 @@ export const cargarTablaVentas = async () => {
   const tbody = document.querySelector("#ventas .table__body");
   tbody.innerHTML = "";
 
-  const ventasInfo = await Promise.all(ventas.data.map(async (venta) => {
-    const { data: usuarioVenta } = await get(`usuarios/${venta.comprador_id}`);
-    return [
-      venta.id,
-      formatoCorto(venta.fecha_creado),
-      usuarioVenta.nombre,
-      formatearPrecioConPuntos(venta.monto),
-      formatearPrecioConPuntos(venta.total - venta.monto),
-      formatearPrecioConPuntos(venta.total),
-      capitalizarPrimeraLetra(venta.estado),
-    ];
-  }));
+  const ventasInfo = await Promise.all(
+    ventas.data.map(async (venta) => {
+      const { data: usuarioVenta } = await get(
+        `usuarios/${venta.comprador_id}`
+      );
+      return [
+        venta.id,
+        formatoCorto(venta.fecha_creado),
+        usuarioVenta.nombre,
+        formatearPrecioConPuntos(venta.monto),
+        formatearPrecioConPuntos(venta.total - venta.monto),
+        formatearPrecioConPuntos(venta.total),
+        capitalizarPrimeraLetra(venta.estado),
+      ];
+    })
+  );
 
   ventasInfo.forEach((venta) => {
     const row = crearFila(venta);
@@ -70,7 +73,12 @@ export const ventasController = async () => {
     if (fila) {
       const idVenta = fila.getAttribute("data-id");
       // await cargarComponente(routes.ventas.perfil, { id: idVenta });
-      location.hash = `#/ventas/perfil/id=${idVenta}`;
+      // location.hash = `#/ventas/perfil/id=${idVenta}`;
+      location.hash =
+        location.hash +
+        (location.hash[location.hash.length - 1] == "/"
+          ? `perfil/id=${idVenta}`
+          : `/perfil/id=${idVenta}`);
 
       // Aquí puedes llamar a una función para ver más detalles, abrir modal, etc.
       // ejemplo: mostrarDetalleCliente(idCliente);

@@ -15,6 +15,7 @@ import {
   quitarError,
   formatearPrecioConPuntos,
   get,
+  DOMSelector,
 } from "../../../../helpers"; // Utilidades y funciones auxiliares
 
 import { routes } from "../../../../router/routes"; // Rutas del sistema
@@ -25,6 +26,9 @@ import { validarFechaCaducidad } from "../../products/create/createController"; 
  * Maneja la carga inicial del formulario, validaciones, envío y actualización de la tabla.
  */
 export const createMedicamentInventoryController = async () => {
+  const contenedorVista = DOMSelector(
+    `[data-modal="create-medicament-inventory"]`
+  );
   // Llenar el select con la lista de medicamentos disponibles desde el backend
   llenarSelect({
     endpoint: "info-medicamentos/",
@@ -113,24 +117,23 @@ export const createMedicamentInventoryController = async () => {
     }
 
     // Cierra modal o vuelve a vista base según el contexto
-    esModal
-      ? cerrarModal("create-medicament-inventory")
-      : cerrarModalYVolverAVistaBase();
+    cerrarModal("create-medicament-inventory");
+    history.back();
   });
 
-  // Escucha eventos de click generales en el documento
-  document.addEventListener("click", async (event) => {
-    // Botón de retroceso
-    const arrow = event.target.closest("#back-register-medicament-inventory");
-    if (arrow) {
-      esModal
-        ? cerrarModal("create-medicament-inventory")
-        : cerrarModalYVolverAVistaBase();
+  contenedorVista.addEventListener("click", async (e) => {
+    if (e.target.id == "back-register-medicament-inventory") {
+      cerrarModal("create-medicament-inventory");
+      history.back();
     }
 
-    // Botón para registrar información de medicamento adicional
-    if (event.target.id == "register-medicament-info") {
-      await cargarComponente(routes.medicamentos_info.crear);
+    if (e.target.id == "register-medicament-info") {
+      // await cargarComponente(routes.medicamentos_info.crear);
+      location.hash =
+        location.hash +
+        (location.hash[location.hash.length - 1] == "/"
+          ? `info-medicamentos/crear/`
+          : `/info-medicamentos/crear/`);
     }
   });
 };

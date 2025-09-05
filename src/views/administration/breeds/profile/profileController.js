@@ -13,16 +13,22 @@ import {
 import { listarEspecies } from "../../administrationController";
 
 export const profileBreedController = async (parametros = null) => {
-  const { id } = parametros;
+  console.log(parametros);
 
-  const modal = document.querySelector('[data-modal="breed-profile"]');
+  const { id } = parametros;
+  const { perfil: raza } = parametros;
+
+  const contenedorVista = document.querySelector(
+    '[data-modal="breed-profile"]'
+  );
   const esModal = !location.hash.includes("administrar_datos/razasPerfil");
 
-  const response = await get(`razas/${id}`);
+  const response = await get(`razas/${raza.id}`);
 
   if (!response.success) {
     await error(response.message);
-    esModal ? cerrarModal("breed-profile") : cerrarModalYVolverAVistaBase();
+    cerrarModal("breed-profile");
+    history.back();
     return;
   }
 
@@ -32,22 +38,26 @@ export const profileBreedController = async (parametros = null) => {
   titulo.textContent = response.data.nombre;
   especieNombre.textContent = `Raza de la especie ${response.data.especie.nombre}`;
 
-  modal.addEventListener("click", async (e) => {
+  contenedorVista.addEventListener("click", async (e) => {
     if (e.target.id == "edit-breed") {
-      await cargarComponente(routes.administrar_datos.razasEditar, {
-        id: id,
-        nombre: response.data.nombre,
-        especie_id: response.data.especie_id,
-      });
+      // await cargarComponente(routes.administrar_datos.razasEditar, {
+      //   id: raza.id,
+      //   nombre: response.data.nombre,
+      //   especie_id: response.data.especie_id,
+      // });
+      location.hash =
+        location.hash +
+        (location.hash[location.hash.length - 1] == "/" ? `editar` : `/editar`);
     }
 
     if (e.target.id == "delete-breed") {
-      const response = await del(`razas/${id}`);
+      const response = await del(`razas/${raza.id}`);
 
       if (response.success) {
         await success(response.message);
         listarEspecies();
-        esModal ? cerrarModal("breed-profile") : cerrarModalYVolverAVistaBase();
+        cerrarModal("breed-profile");
+        history.back();
       } else {
         await error(response.message);
         return;
@@ -55,7 +65,8 @@ export const profileBreedController = async (parametros = null) => {
     }
 
     if (e.target.id == "back-breed-profile") {
-      esModal ? cerrarModal("breed-profile") : cerrarModalYVolverAVistaBase();
+      cerrarModal("breed-profile");
+      history.back();
     }
   });
 };

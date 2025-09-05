@@ -15,20 +15,23 @@ import {
 import { listarTiposProductos } from "../../administrationController";
 
 export const profileProductTypeController = async (parametros = null) => {
-  const { id } = parametros;
+  console.log(parametros);
+  const contenedorVista = DOMSelector(`[data-modal="productType-profile"]`);
+
+  // const { id } = parametros;
+  const { perfil: tipoProducto } = parametros;
 
   const modal = DOMSelector('[data-modal="productType-profile"]');
   const esModal = !location.hash.includes(
     "administrar_datos/tipos_productosPerfil"
   );
 
-  const response = await get(`tipos-productos/${id}`);
+  const response = await get(`tipos-productos/${tipoProducto.id}`);
 
   if (!response.success) {
     await error(response.message);
-    esModal
-      ? cerrarModal("productType-profile")
-      : cerrarModalYVolverAVistaBase();
+    cerrarModal("productType-profile");
+    history.back();
     return;
   }
 
@@ -38,21 +41,23 @@ export const profileProductTypeController = async (parametros = null) => {
 
   modal.addEventListener("click", async (e) => {
     if (e.target.id == "edit-productType") {
-      await cargarComponente(routes.administrar_datos.tipos_productosEditar, {
-        id: id,
-        nombre: response.data.nombre,
-      });
+      // await cargarComponente(routes.administrar_datos.tipos_productosEditar, {
+      //   id: tipoProducto.id,
+      //   nombre: response.data.nombre,
+      // });
+      location.hash =
+        location.hash +
+        (location.hash[location.hash.length - 1] == "/" ? `editar` : `/editar`);
     }
 
     if (e.target.id == "delete-productType") {
-      const response = await del(`tipos-productos/${id}`);
+      const response = await del(`tipos-productos/${tipoProducto.id}`);
 
       if (response.success) {
         await success(response.message);
         listarTiposProductos();
-        esModal
-          ? cerrarModal("productType-profile")
-          : cerrarModalYVolverAVistaBase();
+        cerrarModal("productType-profile");
+        history.back();
       } else {
         await error(response.message);
         return;
@@ -60,5 +65,10 @@ export const profileProductTypeController = async (parametros = null) => {
     }
   });
 
-  configurarBotonCerrar("back-productType-profile", esModal);
+  contenedorVista.addEventListener("click", (e) => {
+    if (e.target.id == "back-productType-profile") {
+      cerrarModal("productType-profile");
+      history.back();
+    }
+  });
 };

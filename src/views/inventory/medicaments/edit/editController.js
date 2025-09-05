@@ -19,6 +19,7 @@ import {
   mapearDatosEnContenedor,
   toInputDate,
   configurarBotonCerrar,
+  DOMSelector,
 } from "../../../../helpers"; // Utilidades y funciones auxiliares
 
 import { routes } from "../../../../router/routes"; // Rutas del sistema
@@ -53,9 +54,15 @@ export function validarFechaEdicion(fechaOriginal, fechaNueva) {
  * Maneja la carga inicial del formulario, validaciones, envío y actualización de la tabla.
  */
 export const editMedicamentInventoryController = async (parametros = null) => {
-  const { id } = parametros;
+  console.log(parametros);
+  const contenedorVista = DOMSelector(
+    `[data-modal="edit-medicament-inventory"]`
+  );
 
-  const responseMedi = await get("medicamentos/" + id);
+  // const { id } = parametros;
+  const { editar: medicamento } = parametros;
+
+  const responseMedi = await get(`medicamentos/${medicamento.id}`);
   console.log(responseMedi);
 
   const { data: infoMedicamento } = await get(
@@ -122,7 +129,7 @@ export const editMedicamentInventoryController = async (parametros = null) => {
     if (!resultado.valid) return;
 
     // Envío de datos al backend
-    const response = await put(`medicamentos/${id}`, {
+    const response = await put(`medicamentos/${medicamento.id}`, {
       ...datos,
       info_medicamento_id: infoMedicamento.id,
     });
@@ -134,10 +141,15 @@ export const editMedicamentInventoryController = async (parametros = null) => {
     successTemporal(response.message);
 
     // Cierra modal o vuelve a vista base según el contexto
-    esModal
-      ? cerrarModal("create-medicament-inventory")
-      : cerrarModalYVolverAVistaBase();
+    cerrarModal("edit-medicament-inventory");
+    history.back();
   });
 
-  configurarBotonCerrar("back-edit-medicament-inventory", esModal);
+  // configurarBotonCerrar("back-edit-medicament-inventory", esModal);
+  contenedorVista.addEventListener("click", async (e) => {
+    if (e.target.id == "back-edit-medicament-inventory") {
+      cerrarModal("edit-medicament-inventory");
+      history.back();
+    }
+  });
 };

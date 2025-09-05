@@ -1,9 +1,11 @@
 import {
   cerrarModal,
   configurarBotonCerrar,
+  DOMSelector,
   error,
   formatearPrecioConPuntos,
   get,
+  patch,
   put,
   renderizarPerfilVenta,
   success,
@@ -11,14 +13,18 @@ import {
 import { cargarTablaVentas } from "../ventaController";
 
 export const editVentaController = async (parametros = null) => {
+  console.log(parametros);
+
+  const contenedorVista = DOMSelector(`[data-modal="venta-edit"]`);
   const { id } = parametros;
+  const { perfil: ventaParams } = parametros;
   const cliente = document.querySelector("#perfil-venta-cliente");
   const empleado = document.querySelector("#perfil-venta-empleado");
   const total = document.querySelector("#perfil-venta-total");
   const valorAgregar = document.querySelector("#valor-agregar");
   const botonAgregar = document.querySelector("#resume-finalizar-venta");
 
-  const response = await get("ventas/" + id);
+  const response = await get(`ventas/${ventaParams.id}`);
 
   if (!response.success) {
     await error(response.message);
@@ -68,30 +74,44 @@ export const editVentaController = async (parametros = null) => {
       }
 
       // Aquí iría tu lógica para enviar el nuevo monto
+      console.log(response);
 
-      const responseUpdate = await put(`ventas/${id}/monto`, nuevoMonto);
+      // response.data.monto = nuevoMonto;
+      const responseUpdate = await patch(`ventas/${ventaParams.id}/`, {
+        monto: nuevoMonto,
+      });
+      console.log(responseUpdate);
 
       if (!responseUpdate.success) {
         await error(responseUpdate.message);
       }
 
-      cargarTablaVentas();
+      // cargarTablaVentas();
 
-      const ventaDesdeBackend = await get(`ventas/perfil/${id}`);
+      // const ventaDesdeBackend = await get(`ventas/perfil/${ventaParams.id}`);
 
-      renderizarPerfilVenta(ventaDesdeBackend.data);
-      if (ventaDesdeBackend.data.estado == "completada") {
+      // renderizarPerfilVenta(ventaDesdeBackend.data);
+
+      if (responseUpdate.data.estado == "completada") {
         document.querySelector("#venta-finalizar").remove();
       }
       await success(responseUpdate.message);
       cerrarModal("venta-edit");
+      history.back();
     });
   }
 
-  document.addEventListener("click", (event) => {
-    const arrow = event.target.closest("#back-perfil-venta");
-    if (arrow) {
+  // document.addEventListener("click", (event) => {
+  //   const arrow = event.target.closest("#back-perfil-venta");
+  //   if (arrow) {
+  //     cerrarModal("venta-edit");
+  //   }
+  // });
+
+  contenedorVista.addEventListener("click", async (e) => {
+    if (e.target.id == "back-perfil-venta") {
       cerrarModal("venta-edit");
+      history.back();
     }
   });
 

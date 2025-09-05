@@ -27,10 +27,14 @@ function formatoCorto(fechaIsoUtc) {
 
 export let venta = {};
 export let ventaInformacion = {};
+
 export const profileVentaController = async (parametros = null) => {
-  const { id } = parametros;
+  console.log(parametros);
+
+  // const { id } = parametros;
+  const { perfil: ventaParams } = parametros;
   // Supongamos que traes la venta completa desde backend
-  const ventaDesdeBackend = await get(`ventas/${id}`);
+  const ventaDesdeBackend = await get(`ventas/${ventaParams.id}`);
   console.log(ventaDesdeBackend);
   const contenedorVenta = DOMSelector("#venta");
 
@@ -63,7 +67,7 @@ export const profileVentaController = async (parametros = null) => {
   let datosProductos = [];
   let datosMedicamentos = [];
   let datosServicios = [];
-  const productosVenta = await get(`productos-ventas/venta/${id}`);
+  const productosVenta = await get(`productos-ventas/venta/${ventaParams.id}`);
   console.log(productosVenta);
 
   if (productosVenta.success) {
@@ -86,7 +90,9 @@ export const profileVentaController = async (parametros = null) => {
     );
   }
 
-  const medicamentosVenta = await get(`medicamentos-ventas/venta/${id}`);
+  const medicamentosVenta = await get(
+    `medicamentos-ventas/venta/${ventaParams.id}`
+  );
 
   if (medicamentosVenta.success) {
     datosMedicamentos = await Promise.all(
@@ -108,7 +114,7 @@ export const profileVentaController = async (parametros = null) => {
     );
   }
 
-  const serviciosVenta = await get(`servicios-ventas/venta/${id}`);
+  const serviciosVenta = await get(`servicios-ventas/venta/${ventaParams.id}`);
 
   console.log(serviciosVenta);
 
@@ -173,12 +179,16 @@ export const profileVentaController = async (parametros = null) => {
 
   contenedor.addEventListener("click", async (event) => {
     if (event.target.id == "venta-finalizar") {
-      const idVenta = id;
-      await cargarComponente(routes.ventas.editar, { id: idVenta });
+      const idVenta = ventaParams.id;
+      // await cargarComponente(routes.ventas.editar, { id: idVenta });
+      location.hash =
+        location.hash +
+        (location.hash[location.hash.length - 1] == "/" ? `editar` : `/editar`);
     }
 
     if (event.target.id == "venta-cancelar") {
-      window.location.hash = "#/ventas";
+      // window.location.hash = "#/ventas";
+      history.back();
     }
   });
 };

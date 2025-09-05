@@ -51,7 +51,12 @@ export const petsController = async () => {
     const fila = e.target.closest("tr[data-id]");
     if (fila) {
       const idPet = fila.getAttribute("data-id");
-      location.hash = `#/mascotas/perfil/id=${idPet}`;
+      // location.hash = `#/mascotas/id=${idPet}/perfil`;
+      location.hash =
+        location.hash +
+        (location.hash[location.hash.length - 1] == "/"
+          ? `perfil/id=${idPet}`
+          : `/perfil/id=${idPet}`);
     }
   });
 };

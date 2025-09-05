@@ -11,3 +11,4 @@ export * from "./ventas";
 export * from "./dom";
 export * from "./domMapper";
 export * from "./mascotas";
+export * from "./getCookie";

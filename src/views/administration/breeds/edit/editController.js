@@ -13,6 +13,7 @@ import {
   DOMSelector,
   configurarBotonCerrar,
   successTemporal,
+  get,
 } from "../../../../helpers";
 import {
   especiesConRazas,
@@ -39,16 +40,20 @@ const updateRaza = (idEspecie, razaActualizada) => {
   }
 };
 
-export const editBreedController = (parametros = null) => {
+export const editBreedController = async (parametros = null) => {
+  console.log(parametros);
+  const contenedorVista = DOMSelector(`[data-modal="edit-breed"]`);
   // Id de la especie
-  const { id, nombre, especie_id } = parametros;
+  // const { id, nombre, especie_id } = parametros;
+  const { perfil: raza } = parametros;
 
   const form = DOMSelector("#form-edit-breed");
   const esModal = !location.hash.includes("razasEditar");
 
   const titulo = DOMSelector("#nombreRaza");
 
-  titulo.value = nombre;
+  const getRaza = await get(`razas/${raza.id}`);
+  titulo.value = getRaza.data.nombre;
 
   configurarEventosValidaciones(form);
 
@@ -58,26 +63,37 @@ export const editBreedController = (parametros = null) => {
     if (!validarCampos(e)) return;
 
     // datos["id_antecedente"] = idAntecedente;
-    if (nombre == datos.nombre) {
-      esModal ? cerrarModal("edit-breed") : cerrarModalYVolverAVistaBase();
-
+    if (getRaza.data.nombre == datos.nombre) {
+      cerrarModal("edit-breed");
+      history.back();
       return;
     }
 
-    const responseEspecie = await put(`razas/${id}`, { ...datos, especie_id });
+    const responseEspecie = await put(`razas/${raza.id}`, {
+      ...datos,
+      especie_id: getRaza.data.especie_id,
+    });
 
     if (!responseEspecie.success) return await error(responseEspecie.message);
 
     successTemporal(responseEspecie.message);
 
-    updateRaza(especie_id, responseEspecie.data);
+    updateRaza(getRaza.data.especie_id, responseEspecie.data);
 
     const titulo = DOMSelector("#breed-title");
 
     titulo.textContent = responseEspecie.data.nombre;
 
-    esModal ? cerrarModal("edit-breed") : cerrarModalYVolverAVistaBase();
+    cerrarModal("edit-breed");
+    history.back();
   });
 
-  configurarBotonCerrar("back-edit-breed", esModal);
+  // configurarBotonCerrar("back-edit-breed", esModal);
+
+  contenedorVista.addEventListener("click", (e) => {
+    if (e.target.id == "back-edit-breed") {
+      cerrarModal("edit-breed");
+      history.back();
+    }
+  });
 };

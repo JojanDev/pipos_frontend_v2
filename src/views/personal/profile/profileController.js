@@ -17,14 +17,17 @@ import {
 import { cargarTablaEmpleados } from "../personalController";
 
 export const profilePersonalController = async (parametros = null) => {
+  console.log(parametros);
+  const contenedorVista = DOMSelector(`[data-modal="profile-personal"]`);
+  const { perfil: usuario } = parametros;
+  // const { id } = parametros;
+
   const esModal = !location.hash.includes("personal/perfil");
   const btnActivar = DOMSelector("#activar-personal");
   const btnEliminar = DOMSelector("#delete-personal");
   const perfilUsuario = DOMSelector("[data-modal='profile-personal']");
 
-  const { id } = parametros;
-
-  const response = await get(`usuarios/${id}`);
+  const response = await get(`usuarios/${usuario.id}`);
 
   console.log(response);
 
@@ -49,7 +52,7 @@ export const profilePersonalController = async (parametros = null) => {
   );
 
   const rolesUsuario = await get(`roles-usuarios/usuario/${response.data.id}`);
-  const contenedorRoles = DOMSelector(".contenedor-roles")
+  const contenedorRoles = DOMSelector(".contenedor-roles");
 
   console.log(rolesUsuario);
 
@@ -83,12 +86,15 @@ export const profilePersonalController = async (parametros = null) => {
 
   modal.addEventListener("click", async (e) => {
     if (e.target.id == "edit-personal") {
-      await cargarComponente(routes.personal.editar, { id: id });
+      // await cargarComponente(routes.personal.editar, { id: usuario.id });
+      location.hash =
+        location.hash +
+        (location.hash[location.hash.length - 1] == "/" ? `editar` : `/editar`);
     }
 
     if (e.target.id == "delete-personal") {
       if (response.data.rol.id != 1) {
-        const eliminado = await del(`personal/${id}`);
+        const eliminado = await del(`usuarios/${usuario.id}`);
         // console.log(eliminado);
         if (!eliminado.success) {
           await error(eliminado.message);
@@ -98,15 +104,14 @@ export const profilePersonalController = async (parametros = null) => {
         cargarTablaEmpleados();
 
         await success(eliminado.message);
-        esModal
-          ? cerrarModal("profile-personal")
-          : cerrarModalYVolverAVistaBase();
+        cerrarModal("profile-personal");
+        history.back();
         return;
       }
     }
 
     if (e.target.id == "activar-personal") {
-      const activado = await put(`personal/activar/${id}`);
+      const activado = await put(`personal/activar/${usuario.id}`);
       // console.log(eliminado);
       if (!activado.success) {
         await error(activado.message);
@@ -115,12 +120,17 @@ export const profilePersonalController = async (parametros = null) => {
 
       cargarTablaEmpleados();
       await success(activado.message);
-      esModal
-        ? cerrarModal("profile-personal")
-        : cerrarModalYVolverAVistaBase();
+      cerrarModal("profile-personal");
+      history.back();
       return;
     }
   });
 
-  configurarBotonCerrar("back-profile-personal", esModal);
+  // configurarBotonCerrar("back-profile-personal", esModal);
+  contenedorVista.addEventListener("click", async (e) => {
+    if (e.target.id == "back-profile-personal") {
+      cerrarModal("profile-personal");
+      history.back();
+    }
+  });
 };

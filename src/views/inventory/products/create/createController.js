@@ -45,8 +45,9 @@ export const createProductController = async () => {
   const form = DOMSelector("#form-register-product");
   const tbodyProducts = DOMSelector("#products .table__body");
   const esModal = !location.hash.includes("inventario/productosCrear");
+  const contenedorVista = DOMSelector(`[data-modal="create-product"]`);
 
-  llenarSelect({
+  await llenarSelect({
     endpoint: "tipos-productos",
     selector: "#tipos-productos",
     optionMapper: ({ id, nombre }) => ({ id: id, text: nombre }),
@@ -109,8 +110,15 @@ export const createProductController = async () => {
       tbodyProducts.insertAdjacentElement("afterbegin", row);
     }
 
-    esModal ? cerrarModal("create-product") : cerrarModalYVolverAVistaBase();
+    cerrarModal("create-product");
+    history.back();
   });
 
-  configurarBotonCerrar("back-register-product", esModal);
+  // configurarBotonCerrar("back-register-product", esModal);
+  contenedorVista.addEventListener("click", (e) => {
+    if (e.target.id == "back-register-product") {
+      cerrarModal("create-product");
+      history.back();
+    }
+  });
 };

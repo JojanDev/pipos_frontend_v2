@@ -18,13 +18,14 @@ import { cargarTablaEmpleados } from "../personalController";
 
 export const editPersonalController = async (parametros = null) => {
   const { id } = parametros;
+  const contenedorVista = DOMSelector(`[data-modal="edit-personal"]`);
+  const { perfil: usuario } = parametros;
 
   const form = DOMSelector("#form-edit-personal");
   const selectTipoDocumento = DOMSelector("#tipos-documento");
   const tbody = DOMSelector("#clients .table__body");
   const esModal = !location.hash.includes("clientes/crear");
   const perfilUsuario = DOMSelector("[data-modal='profile-personal']");
-
 
   configurarEventosValidaciones(form);
 
@@ -43,10 +44,13 @@ export const editPersonalController = async (parametros = null) => {
     campos[nombreCampo] = input;
   });
 
-  const response = await get(`usuarios/${id}`);
+  const response = await get(`usuarios/${usuario.id}`);
 
   mapearDatosEnContenedor(
-    { ...response.data, "select-tipos-documentos": response.data.tipo_documento_id },
+    {
+      ...response.data,
+      "select-tipos-documentos": response.data.tipo_documento_id,
+    },
     form
   );
 
@@ -59,10 +63,7 @@ export const editPersonalController = async (parametros = null) => {
 
     console.log(responsePut);
 
-
-    if (!responsePut.success)
-      return await error(responsePut.message);
-
+    if (!responsePut.success) return await error(responsePut.message);
 
     successTemporal(responsePut.message);
 
@@ -70,7 +71,9 @@ export const editPersonalController = async (parametros = null) => {
 
     // asignarDatosCliente(responseP.data);
 
-    const { data: tipoDocumento } = await get(`tipos-documentos/${responsePut.data.tipo_documento_id}`);
+    const { data: tipoDocumento } = await get(
+      `tipos-documentos/${responsePut.data.tipo_documento_id}`
+    );
 
     mapearDatosEnContenedor(
       { ...responsePut.data, tipo_documento: tipoDocumento.nombre },
@@ -78,9 +81,13 @@ export const editPersonalController = async (parametros = null) => {
     );
 
     const tBodyUsuarios = DOMSelector(`#personal .table__body`);
-    const oldRow = tBodyUsuarios.querySelector(`[data-id='${responsePut.data.id}']`)
+    const oldRow = tBodyUsuarios.querySelector(
+      `[data-id='${responsePut.data.id}']`
+    );
 
-    const rolesUsuario = await get(`roles-usuarios/usuario/${responsePut.data.id}`);
+    const rolesUsuario = await get(
+      `roles-usuarios/usuario/${responsePut.data.id}`
+    );
     // console.log(rolesUsuario);
     let nombreRoles;
     if (!rolesUsuario.success) {
@@ -94,17 +101,25 @@ export const editPersonalController = async (parametros = null) => {
       );
     }
 
-    const updatesRow = crearFila([responsePut.data.id, nombreRoles, responsePut.data.nombre, responsePut.data.telefono, responsePut.data.numero_documento, responsePut.data.direccion]);
+    const updatesRow = crearFila([
+      responsePut.data.id,
+      nombreRoles,
+      responsePut.data.nombre,
+      responsePut.data.telefono,
+      responsePut.data.numero_documento,
+      responsePut.data.direccion,
+    ]);
 
     tBodyUsuarios.replaceChild(updatesRow, oldRow);
 
-    esModal ? cerrarModal("edit-personal") : cerrarModalYVolverAVistaBase();
+    cerrarModal("edit-personal");
+    history.back();
   });
 
-  document.addEventListener("click", (event) => {
-    const arrow = event.target.closest("#back-register-personal");
-    if (arrow) {
-      esModal ? cerrarModal("edit-personal") : cerrarModalYVolverAVistaBase();
+  contenedorVista.addEventListener("click", async (e) => {
+    if (e.target.id == "back-register-personal") {
+      cerrarModal("edit-personal");
+      history.back();
     }
   });
 };

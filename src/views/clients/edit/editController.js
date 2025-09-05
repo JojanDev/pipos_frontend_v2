@@ -42,6 +42,7 @@ const asignarDatosCliente = (data) => {
 };
 
 export const editClientController = async (parametros = null) => {
+  const contenedorVista = DOMSelector(`[data-modal="edit-client"]`);
   console.log(parametros);
   const { perfil: usuario } = parametros;
   // const { id } = parametros;
@@ -126,10 +127,11 @@ export const editClientController = async (parametros = null) => {
 
     successTemporal(putClientResponse.message);
 
-    esModal ? cerrarModal("edit-client") : cerrarModalYVolverAVistaBase();
+    cerrarModal("edit-client");
+    history.back();
   });
 
-  document.addEventListener("click", (event) => {
+  contenedorVista.addEventListener("click", (event) => {
     const arrow = event.target.closest("#back-edit-client");
     if (arrow) {
       // esModal ? cerrarModal("edit-client") : cerrarModalYVolverAVistaBase();
