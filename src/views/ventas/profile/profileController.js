@@ -147,35 +147,42 @@ export const profileVentaController = async (parametros = null) => {
   elementosVentas.forEach((elementoVenta) => {
     contenedorVentaProducto.innerHTML += `
         <div class="producto"">
-          <p class="producto__item producto-nombre">${
-            elementoVenta.elemento || ""
-          }</p>
-          <p class="producto__item producto-categoria">${
-            elementoVenta.categoria
-          }</p>
-          <p class="producto__item producto-precio">${
-            elementoVenta.precio
-              ? `$${elementoVenta.precio.toLocaleString()}`
-              : "$0"
-          }</p>
-          <p class="producto__item producto-cantidad">x${
-            elementoVenta.cantidad || 1
-          }</p>
-          <p class="producto__item producto-adicional">${
-            elementoVenta.valor_adicional
-              ? `$${elementoVenta.valor_adicional.toLocaleString()}`
-              : "$0"
-          }</p>
-          <p class="producto__item producto-subtotal">${
-            elementoVenta.subtotal
-              ? `$${elementoVenta.subtotal.toLocaleString()}`
-              : "$0"
-          }</p>
+          <p class="producto__item producto-nombre">${elementoVenta.elemento || ""
+      }</p>
+          <p class="producto__item producto-categoria">${elementoVenta.categoria
+      }</p>
+          <p class="producto__item producto-precio">${elementoVenta.precio
+        ? `$${elementoVenta.precio.toLocaleString()}`
+        : "$0"
+      }</p>
+          <p class="producto__item producto-cantidad">x${elementoVenta.cantidad || 1
+      }</p>
+          <p class="producto__item producto-adicional">${elementoVenta.valor_adicional
+        ? `$${elementoVenta.valor_adicional.toLocaleString()}`
+        : "$0"
+      }</p>
+          <p class="producto__item producto-subtotal">${elementoVenta.subtotal
+        ? `$${elementoVenta.subtotal.toLocaleString()}`
+        : "$0"
+      }</p>
         </div>
       `;
   });
 
   const contenedor = DOMSelector("#venta");
+
+  // const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
+
+  // console.log(acciones);
+
+
+  // for (const accion of acciones) {
+  //   console.log(accion.dataset.permiso.split(","));
+  //   console.log(hasPermission(accion.dataset.permiso.split(",")));
+  //   if (!hasPermission(accion.dataset.permiso.split(","))) {
+  //     accion.remove();
+  //   }
+  // }
 
   contenedor.addEventListener("click", async (event) => {
     if (event.target.id == "venta-finalizar") {

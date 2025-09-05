@@ -50,9 +50,9 @@ export const profilePersonalController = async (parametros = null) => {
   const { data: tipoDocumento } = await get(
     `tipos-documentos/${response.data.tipo_documento_id}`
   );
-
+  // const contenedorVista = DOMSelector(`[data-modal="profile-personal"]`);
   const rolesUsuario = await get(`roles-usuarios/usuario/${response.data.id}`);
-  const contenedorRoles = DOMSelector(".contenedor-roles");
+  const contenedorRoles = contenedorVista.querySelector(".contenedor-roles");
 
   console.log(rolesUsuario);
 

@@ -16,6 +16,7 @@ import {
   mapearDatosEnContenedor,
   successTemporal,
 } from "../../../helpers";
+import hasPermission from "../../../helpers/hasPermission";
 import { routes } from "../../../router/routes";
 
 function eliminarTratamiento(idTratamiento, idAntecedente) {
@@ -61,6 +62,8 @@ export const treatmentController = async (parametros = null) => {
   const { perfil: tratamiento, antecedente } = parametros;
 
   // const { id, tituloAntecedente, estado_vital } = parametros;
+  const contenedorVista = DOMSelector('[data-modal="pet-treatment"]');
+
 
   const modal = DOMSelector('[data-modal="pet-treatment"]');
   const esModal = !location.hash.includes("antecedente/tratamiento");
@@ -110,9 +113,14 @@ export const treatmentController = async (parametros = null) => {
           "admin"
         );
 
+        iconDelete.dataset.permiso = "medicamento-tratamiento.delete";
+
         const iconEdit = document.createElement("i");
 
         iconEdit.classList.add("ri-edit-box-line", "edit-tabla", "btn--orange");
+
+        iconEdit.dataset.permiso = "medicamento-tratamiento.update";
+
 
         const { data: infoMedicamento } = await get(
           `info-medicamentos/${info_medicamento_id}`
@@ -137,9 +145,23 @@ export const treatmentController = async (parametros = null) => {
     errorTemporal(responseMedicamentos.message);
   }
 
+  const getMascota = await get(`mascotas/${antecedenteResponse.data.mascota_id}`);
 
-  // if (!estado_vital) {
-  //   desactivarBotonesPerfilTratamiento();
+  if (!getMascota.data.estado_vital) {
+    desactivarBotonesPerfilTratamiento();
+  }
+
+  // const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
+
+  // console.log(acciones);
+
+
+  // for (const accion of acciones) {
+  //   console.log(accion.dataset.permiso.split(","));
+  //   console.log(hasPermission(accion.dataset.permiso.split(",")));
+  //   if (!hasPermission(accion.dataset.permiso.split(","))) {
+  //     accion.remove();
+  //   }
   // }
 
   modal.addEventListener("click", async (e) => {

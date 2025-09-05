@@ -1,8 +1,8 @@
-<section class="block-container">
+<section class="block-container" id="mascotas">
   <header class="block-header">
     <h3 class="block-header__title">Lista de Mascotas</h3>
     <div class="block-header__right">
-      <a href="#/mascotas/crear">
+      <a href="#/mascotas/crear" data-permiso="mascota.create">
         <button class="btn block-header__btn" id="btn-registro-cliente">
           Registrar mascota
         </button>
@@ -11,7 +11,7 @@
     </div>
   </header>
 
-  <div class="table-container" id="pets">
+  <div class="table-container" id="pets" data-permiso="mascota.view">
     <div class="table">
       <div class="table__header">
         <div class="table__cell">ID</div>

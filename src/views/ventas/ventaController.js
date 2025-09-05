@@ -67,6 +67,19 @@ export const ventasController = async () => {
 
   const tablaventas = document.querySelector("#ventas");
 
+  // const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
+
+  // console.log(acciones);
+
+
+  // for (const accion of acciones) {
+  //   console.log(accion.dataset.permiso.split(","));
+  //   console.log(hasPermission(accion.dataset.permiso.split(",")));
+  //   if (!hasPermission(accion.dataset.permiso.split(","))) {
+  //     accion.remove();
+  //   }
+  // }
+
   tablaventas.addEventListener("click", async (event) => {
     const fila = event.target.closest("tr[data-id]");
 

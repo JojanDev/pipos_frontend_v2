@@ -1,4 +1,5 @@
 import { get, crearFila, DOMSelector } from "../../helpers";
+import hasPermission from "../../helpers/hasPermission";
 
 export const cargarTabla = async () => {
   const clientes = await get("usuarios/clientes");
@@ -33,13 +34,31 @@ export const clientsController = async () => {
 
   const tablaClientes = DOMSelector("#clients");
 
+  // const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
+
+  // console.log(acciones);
+
+
+  // for (const accion of acciones) {
+  //   console.log(accion.dataset.permiso.split(","));
+  //   console.log(hasPermission(accion.dataset.permiso.split(",")));
+  //   if (!hasPermission(accion.dataset.permiso.split(","))) {
+  //     accion.remove();
+  //   }
+  // }
+
   tablaClientes.addEventListener("click", (event) => {
     const fila = event.target.closest("tr[data-id]");
 
     if (fila) {
       const idCliente = fila.getAttribute("data-id");
 
-      location.hash = `#/clientes/perfil/id=${idCliente}`;
+      // location.hash = `#/clientes/perfil/id=${idCliente}`;
+      location.hash =
+        location.hash +
+        (location.hash[location.hash.length - 1] == "/"
+          ? `perfil/id=${idCliente}`
+          : `/perfil/id=${idCliente}`);
     }
   });
 };

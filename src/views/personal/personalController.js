@@ -59,6 +59,19 @@ export const personalController = async () => {
 
   const tablapersonal = document.querySelector("#personal");
 
+  // const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
+
+  // console.log(acciones);
+
+
+  // for (const accion of acciones) {
+  //   console.log(accion.dataset.permiso.split(","));
+  //   console.log(hasPermission(accion.dataset.permiso.split(",")));
+  //   if (!hasPermission(accion.dataset.permiso.split(","))) {
+  //     accion.remove();
+  //   }
+  // }
+
   tablapersonal.addEventListener("click", (event) => {
     const fila = event.target.closest("tr[data-id]");
 

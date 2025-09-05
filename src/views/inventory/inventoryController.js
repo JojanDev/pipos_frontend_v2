@@ -8,6 +8,7 @@ import {
   formatearPrecioConPuntos,
   get,
 } from "../../helpers";
+import hasPermission from "../../helpers/hasPermission";
 import { routes } from "../../router/routes";
 
 export const listarProductos = async () => {
@@ -114,9 +115,22 @@ export const inventoryController = () => {
 
   const vistaInventory = DOMSelector("#inventory");
 
-  vistaInventory.addEventListener("click", (e) => {});
+  vistaInventory.addEventListener("click", (e) => { });
 
   const tablaProductos = DOMSelector("#products");
+
+  // const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
+
+  // console.log(acciones);
+
+
+  // for (const accion of acciones) {
+  //   console.log(accion.dataset.permiso.split(","));
+  //   console.log(hasPermission(accion.dataset.permiso.split(",")));
+  //   if (!hasPermission(accion.dataset.permiso.split(","))) {
+  //     accion.remove();
+  //   }
+  // }
 
   tablaProductos.addEventListener("click", async (event) => {
     const fila = event.target.closest("tr[data-id]");
@@ -130,6 +144,9 @@ export const inventoryController = () => {
       // await cargarComponente(routes.inventario.productosEditar, {
       //   id: idProducto,
       // });
+      if (!hasPermission(["producto.update"])) {
+        // return;
+      }
       location.hash =
         location.hash +
         (location.hash[location.hash.length - 1] == "/"
@@ -152,6 +169,11 @@ export const inventoryController = () => {
 
       // if (data.id_rol == 1) {
       // location.hash = `#/inventario/medicamentosEditar/id=${id}`;
+
+      if (!hasPermission(["medicamento.update"])) {
+        // return;
+      }
+
       location.hash =
         location.hash +
         (location.hash[location.hash.length - 1] == "/"

@@ -14,6 +14,7 @@ import {
 } from "../../../helpers";
 import { routes } from "../../../router/routes";
 import { mapearDatosEnContenedor } from "../../../helpers/domMapper";
+import hasPermission from "../../../helpers/hasPermission";
 
 /**
  * Desactiva los botones principales del perfil de la mascota
@@ -51,8 +52,10 @@ function toggleBody(headerElement) {
 }
 
 export const profilePetController = async (parametros = null) => {
+
+  const contenedorVista = DOMSelector("#pet-profile");
+
   let estado_vital = true;
-  const profilePet = DOMSelector("#pet-profile");
 
   console.log(parametros);
 
@@ -92,7 +95,7 @@ export const profilePetController = async (parametros = null) => {
 
   const dataProfile = { ...clientResponse.data, ...petResponse.data };
 
-  mapearDatosEnContenedor(dataProfile, profilePet);
+  mapearDatosEnContenedor(dataProfile, contenedorVista);
 
   const contenedorAntecedente = DOMSelector("#profile-pet-antecedent");
   if (responseAntecedentesMascota.success) {
@@ -119,9 +122,20 @@ export const profilePetController = async (parametros = null) => {
     estado_vital = false;
   }
 
-  const contenedorPerfil = DOMSelector("#pet-profile");
+  // const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
 
-  contenedorPerfil.addEventListener("click", async (e) => {
+  // console.log(acciones);
+
+
+  // for (const accion of acciones) {
+  //   console.log(accion.dataset.permiso.split(","));
+  //   console.log(hasPermission(accion.dataset.permiso.split(",")));
+  //   if (!hasPermission(accion.dataset.permiso.split(","))) {
+  //     accion.remove();
+  //   }
+  // }
+
+  contenedorVista.addEventListener("click", async (e) => {
     if (e.target.closest(".delete-antecedent")) {
       // toggleBody(e.target.closest(".antecedente-header"));
       const contenedorId = e.target.closest("[data-idAntecendente]");

@@ -11,6 +11,7 @@ import {
   crearFila,
   cerrarModalYVolverAVistaBase,
   cerrarModal,
+  successTemporal,
 } from "../../../helpers";
 
 export const createClienteExistController = async () => {
@@ -18,12 +19,12 @@ export const createClienteExistController = async () => {
 
   const esModal = !location.hash.includes("clientes/crearExistente");
 
-  llenarSelect({
-    endpoint: "personal/noClientes",
+  await llenarSelect({
+    endpoint: "usuarios/no-clientes",
     selector: "#select-info",
-    optionMapper: (info) => ({
-      id: info.id,
-      text: `${info.numero_documento} - ${info.nombre}`,
+    optionMapper: (usuario) => ({
+      id: usuario.id,
+      text: `${usuario.numero_documento} - ${usuario.nombre}`,
     }),
   });
 
@@ -34,7 +35,7 @@ export const createClienteExistController = async () => {
 
     if (!validarCampos(e)) return;
 
-    const response = await post("clientes/infoExistente", datos);
+    const response = await post("roles-usuarios/", { ...datos, rol_id: 3 });
 
     //Se valida el inicio exitoso
     if (!response.success) {
@@ -45,23 +46,25 @@ export const createClienteExistController = async () => {
 
     const tbody = document.querySelector("#clients .table__body");
     if (tbody) {
-      const info = response.data.info;
+      const { data: usuario } = await get(`usuarios/${response.data.usuario_id}`);
+      const { id, nombre, telefono, numero_documento, direccion } =
+        usuario;
 
       const row = crearFila([
-        response.data.id,
-        info.nombre,
-        info.telefono,
-        info.numeroDocumento,
-        info.direccion,
+        id,
+        nombre,
+        telefono,
+        numero_documento,
+        direccion,
       ]);
+
       tbody.insertAdjacentElement("afterbegin", row);
     }
 
-    await success(response.message);
+    successTemporal(response.message);
 
-    esModal
-      ? cerrarModal("create-clienteExist")
-      : cerrarModalYVolverAVistaBase();
+    cerrarModal("create-clienteExist")
+    history.back();
   });
 
   const btnAtras = document.querySelector("#back-create-clienteExist");

@@ -60,7 +60,8 @@ export const createClientController = async () => {
       tbody.insertAdjacentElement("afterbegin", row);
     }
 
-    esModal ? cerrarModal("create-client") : cerrarModalYVolverAVistaBase();
+    cerrarModal("create-client");
+    history.back();
   });
 
   //Evento de cierre del modal

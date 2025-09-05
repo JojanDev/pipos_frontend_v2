@@ -3,7 +3,7 @@
     <header class="block-header">
       <h3 class="block-header__title">Lista de Productos</h3>
       <div class="block-header__right">
-        <a href="#/inventario/productos/crear">
+        <a href="#/inventario/productos/crear" data-permiso="producto.create">
           <button class="btn block-header__btn admin" id="btn-register-product">
             Registrar producto
           </button>
@@ -12,7 +12,7 @@
       </div>
     </header>
 
-    <div class="table-container" id="products">
+    <div class="table-container" id="products" data-permiso="producto.view">
       <div class="table">
         <div class="table__header">
           <div class="table__cell">ID</div>
@@ -32,11 +32,8 @@
     <header class="block-header">
       <h3 class="block-header__title">Lista de Medicamentos</h3>
       <div class="block-header__right">
-        <a href="#/inventario/medicamentos/crear">
-          <button
-            class="btn block-header__btn admin"
-            id="btn-registro-medicament-lote"
-          >
+        <a href="#/inventario/medicamentos/crear" data-permiso="medicamento.create">
+          <button class="btn block-header__btn admin" id="btn-registro-medicament-lote">
             Registrar medicamento
           </button>
         </a>
@@ -44,7 +41,7 @@
       </div>
     </header>
 
-    <div class="table-container" id="medicaments">
+    <div class="table-container" id="medicaments" data-permiso="medicamento.view">
       <div class="table">
         <div class="table__header">
           <!-- <div class="table__cell">ID</div> -->

@@ -45,6 +45,8 @@ export const crearBloqueAntecedenteCompleto = async ({
     "admin"
   );
 
+  iconDelete.dataset.permiso = "antecedente.create";
+
   const iconEdit = document.createElement("i");
   // spanTitulo.textContent = titulo;
   iconEdit.classList.add(
@@ -53,6 +55,9 @@ export const crearBloqueAntecedenteCompleto = async ({
     "btn--orange"
     // "admin"
   );
+
+  iconEdit.dataset.permiso = "antecedente.update";
+
 
   divHeader.appendChild(spanFecha);
   divHeader.appendChild(spanTitulo);
@@ -93,6 +98,9 @@ export const crearBloqueAntecedenteCompleto = async ({
   const icono = document.createElement("i");
   icono.classList.add("ri-add-line", "plus-icon");
   icono.setAttribute("id", "register-treatment-antecedent");
+
+  icono.dataset.permiso = "tratamiento.create";
+
 
   divBody.appendChild(icono);
 

@@ -87,6 +87,19 @@ export const medicamentsController = async () => {
 
   const contenedorMedicaments = DOMSelector("#medicaments-info");
 
+  // const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
+
+  // console.log(acciones);
+
+
+  // for (const accion of acciones) {
+  //   console.log(accion.dataset.permiso.split(","));
+  //   console.log(hasPermission(accion.dataset.permiso.split(",")));
+  //   if (!hasPermission(accion.dataset.permiso.split(","))) {
+  //     accion.remove();
+  //   }
+  // }
+
   contenedorMedicaments.addEventListener("click", async (event) => {
     const fila = event.target.closest(".card[data-id]");
 

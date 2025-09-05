@@ -39,6 +39,19 @@ export const profileProductTypeController = async (parametros = null) => {
 
   titulo.textContent = response.data.nombre;
 
+  // const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
+
+  // console.log(acciones);
+
+
+  // for (const accion of acciones) {
+  //   console.log(accion.dataset.permiso.split(","));
+  //   console.log(hasPermission(accion.dataset.permiso.split(",")));
+  //   if (!hasPermission(accion.dataset.permiso.split(","))) {
+  //     accion.remove();
+  //   }
+  // }
+
   modal.addEventListener("click", async (e) => {
     if (e.target.id == "edit-productType") {
       // await cargarComponente(routes.administrar_datos.tipos_productosEditar, {

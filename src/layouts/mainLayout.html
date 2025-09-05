@@ -3,14 +3,19 @@
     <img src="./src/assets/logoSinFondo.png" alt="logo" class="logo" />
     <div class="header__info-container">
       <h3 class="header__user" id="empleado-nombre-header">Lady Mantilla</h3>
-      <p class="header__rol" id="empleado-rol-header">Usuario</p>
+      <div class="contenedor-roles">
+        <!-- <p class="roles">Cliente</p>
+        <p class="roles">Veterinario</p>
+        <p class="roles">Administrador</p> -->
+      </div>
+      <!-- <p class="header__rol roles" id="empleado-rol-header">Usuario</p> -->
     </div>
   </header>
   <aside class="sidebar">
     <h2 class="sidebar__title">Opciones</h2>
     <nav class="sidebar__nav">
       <ul class="sidebar__list">
-        <li class="sidebar__item" data-permiso="usuario.view">
+        <li class="sidebar__item" data-permiso="usuario.view-client,usuario.view">
           <a href="#/clientes" class="sidebar__link">Clientes</a>
         </li>
         <li class="sidebar__item" data-permiso="mascota.view">
@@ -22,18 +27,11 @@
         <li class="sidebar__item" data-permiso="medicamento.view,producto.view">
           <a href="#/inventario" class="sidebar__link">Inventario</a>
         </li>
-        <li
-          class="sidebar__item admin"
-          data-permiso="tipo-producto.view,especie.view,raza.view"
-        >
-          <a href="#/administrar-datos" class="sidebar__link"
-            >Administrar Datos</a
-          >
+        <li class="sidebar__item admin" data-permiso="tipo-producto.view,especie.view,raza.view">
+          <a href="#/administrar-datos" class="sidebar__link">Administrar Datos</a>
         </li>
         <li class="sidebar__item" data-permiso="info-medicamento.view">
-          <a href="#/info-medicamentos/" class="sidebar__link"
-            >Info. Medicamentos</a
-          >
+          <a href="#/info-medicamentos/" class="sidebar__link">Info. Medicamentos</a>
         </li>
         <li class="sidebar__item" data-permiso="servicio.view">
           <a href="#/servicios" class="sidebar__link">Servicios</a>

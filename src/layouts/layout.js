@@ -5,11 +5,6 @@ import { DOMSelector, DOMSelectorAll } from "../helpers";
 import hasPermission from "../helpers/hasPermission";
 
 export const layoutController = async () => {
-  // const dataJSON = localStorage.getItem("data");
-  // const data = JSON.parse(dataJSON);
-
-  // const getPer = await get("personal/" + data.id);
-
   const [...acciones] = DOMSelectorAll(`[data-permiso]`);
 
   console.log(acciones);
@@ -22,15 +17,31 @@ export const layoutController = async () => {
     }
   }
 
-  // const nombreEmpleado = DOMSelector("#empleado-nombre-header");
-  // const rolEmpleado = DOMSelector("#empleado-rol-header");
-  // nombreEmpleado.textContent = getPer.data.info.nombre;
-  // rolEmpleado.textContent = capitalizarPrimeraLetra(getPer.data.rol.nombre);
 
-  // if (data.id_rol != 1) {
-  //   const opcionesAdmin = document.querySelectorAll(".admin");
-  //   [...opcionesAdmin].forEach((element) => element.remove());
-  // }
+  const { usuario: credencialUsuario } = getCookie("usuario");
+  // console.log(credencialUsuario);
+
+  const { data: usuario } = await get(`usuarios/${credencialUsuario.usuario_id}`);
+
+  const rolesUsuario = await get(`roles-usuarios/usuario/${usuario.id}`);
+  const contenedorRoles = DOMSelector(".contenedor-roles");
+
+  console.log(rolesUsuario);
+
+  if (rolesUsuario.success) {
+    rolesUsuario.data.forEach(async (rolUsuario) => {
+      const pRol = document.createElement("p");
+      pRol.classList.add("roles");
+      const { data: rol } = await get(`roles/${rolUsuario.rol_id}`);
+      console.log(rol);
+
+      pRol.textContent = capitalizarPrimeraLetra(rol.nombre);
+      contenedorRoles.append(pRol);
+    });
+  }
+
+  const nombreEmpleado = DOMSelector("#empleado-nombre-header");
+  nombreEmpleado.textContent = usuario.nombre;
 
   const btnCuenta = DOMSelector("#cuenta");
 

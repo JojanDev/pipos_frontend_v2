@@ -31,7 +31,22 @@ export const profileSpecieController = async (parametros = null) => {
 
   const titulo = document.querySelector("#specie-title");
 
+
   titulo.textContent = response.data.nombre;
+
+  // const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
+
+  // console.log(acciones);
+
+
+  // for (const accion of acciones) {
+  //   console.log(accion.dataset.permiso.split(","));
+  //   console.log(hasPermission(accion.dataset.permiso.split(",")));
+  //   if (!hasPermission(accion.dataset.permiso.split(","))) {
+  //     accion.remove();
+  //   }
+  // }
+
 
   modal.addEventListener("click", async (e) => {
     if (e.target.id == "edit-specie") {

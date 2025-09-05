@@ -60,8 +60,8 @@ export const listarEspecies = async () => {
     const i = document.createElement("i");
     btn.append(i);
     // btn.textContent = "Editar";
-    i.classList.add("ri-edit-box-line");
-    btn.classList.add("btn", "btn--edit");
+    i.classList.add("ri-eye-line");
+    btn.classList.add("btn", "btn--edit", "fw-400");
 
     const row = crearFila([especie.id, especie.nombre, btn]);
 
@@ -132,6 +132,19 @@ export const administrationController = () => {
   listarEspecies();
 
   const tablaRazas = DOMSelector("#breeds");
+
+  // const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
+
+  // console.log(acciones);
+
+
+  // for (const accion of acciones) {
+  //   console.log(accion.dataset.permiso.split(","));
+  //   console.log(hasPermission(accion.dataset.permiso.split(",")));
+  //   if (!hasPermission(accion.dataset.permiso.split(","))) {
+  //     accion.remove();
+  //   }
+  // }
 
   tablaRazas.addEventListener("click", (event) => {
     const fila = event.target.closest("tr[data-id]");

@@ -3,10 +3,12 @@
     <div>
       <h3 class="perfil__nombre" id="mascota">Nombre mascota</h3>
       <p class="roles">Mascota</p>
-      <button type="submit" class="btn btn--lower-height btn--orange perfil__editar-pet" id="edit-pet">
+      <button type="submit" class="btn btn--lower-height btn--orange perfil__editar-pet" id="edit-pet"
+        data-permiso="mascota.update">
         Editar
       </button>
-      <button type="submit" class="btn btn--lower-height btn--red perfil__desactivar-pet" id="desactivar-pet">
+      <button type="submit" class="btn btn--lower-height btn--red perfil__desactivar-pet" id="desactivar-pet"
+        data-permiso="mascota.disable">
         Desactivar
       </button>
     </div>
@@ -64,10 +66,10 @@
   </div>
   <p class="perfil__separador perfil__separador--margin-bottom perfil__separador--sticky">
     Historial Clinico
-    <i class="ri-add-line plus-icon plus-icon--bg" id="register-antecedent"></i>
+    <i class="ri-add-line plus-icon plus-icon--bg" id="register-antecedent" data-permiso="antecedente.create"></i>
   </p>
 
-  <div class="antecedentes-container">
+  <div class="antecedentes-container" data-permiso="antecedente.view">
     <p class="perfil__campo">Antecedentes:</p>
     <div class="contenedor-ant" id="profile-pet-antecedent">
       <!-- Acordeones de antecedentes aquí -->

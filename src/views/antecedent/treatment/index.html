@@ -25,7 +25,8 @@
       Medicamentos
     </p>
 
-    <div class="table-container table-container--fijo" id="pet-antecedent-treatment">
+    <div class="table-container table-container--fijo" id="pet-antecedent-treatment"
+      data-permiso="medicamento-tratamiento.view">
       <div class="table">
         <div class="table__header">
           <div class="table__cell">ID</div>
@@ -44,13 +45,15 @@
     </div>
 
     <div class="form__container-btns">
-      <button class="btn perfil__boton" id="register-antecedent-treatment-medicament">
+      <button class="btn perfil__boton" id="register-antecedent-treatment-medicament"
+        data-permiso="medicamento-tratamiento.create">
         Agregar medicamento
       </button>
-      <button type="submit" class="btn perfil__boton btn--orange" id="edit-treatment">
+      <button type="submit" class="btn perfil__boton btn--orange" id="edit-treatment" data-permiso="tratamiento.update">
         Editar tratamiento
       </button>
-      <button type="submit" class="btn perfil__boton btn--red admin" id="delete-treatment">
+      <button type="submit" class="btn perfil__boton btn--red admin" id="delete-treatment"
+        data-permiso="tratamiento.delete">
         Eliminar tratamiento
       </button>
     </div>

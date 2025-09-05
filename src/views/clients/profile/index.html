@@ -36,7 +36,7 @@
       Lista de mascotas
     </p>
 
-    <div class="table-container" id="pets-client">
+    <div class="table-container" id="pets-client" data-permiso="mascota.view">
       <div class="table">
         <div class="table__header">
           <div class="table__cell">ID</div>
@@ -53,13 +53,14 @@
     </div>
 
     <div class="form__container-btns">
-      <button type="submit" class="btn btn--lower-height btn--orange" id="edit-client">
+      <button type="submit" class="btn btn--lower-height btn--orange" id="edit-client"
+        data-permiso="usuario.update-client">
         Editar cliente
       </button>
       <!-- <button class="btn perfil__boton" id="register-pets-client">
         Registrar mascota
       </button> -->
-      <button type="submit" class="btn btn--lower-height" id="register-pets-client">
+      <button type="submit" class="btn btn--lower-height" id="register-pets-client" data-permiso="mascota.create">
         Registrar mascota
       </button>
     </div>

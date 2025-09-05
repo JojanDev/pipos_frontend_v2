@@ -40,6 +40,8 @@ export const crearCardServicio = (id, nombre, descripcion, precio) => {
   btnEdit.classList.add("btn", "btn--edit", "btn-servicio-edit", "admin");
   btnEdit.title = "Editar servicio";
 
+  btnEdit.dataset.permiso = "servicio.update";
+
   const iconEdit = document.createElement("i");
   iconEdit.classList.add("ri-edit-box-line");
   btnEdit.appendChild(iconEdit);
@@ -54,6 +56,9 @@ export const crearCardServicio = (id, nombre, descripcion, precio) => {
     "admin"
   );
   btnDelete.title = "Eliminar servicio";
+
+  btnDelete.dataset.permiso = "servicio.delete";
+
 
   const iconDelete = document.createElement("i");
   iconDelete.classList.add("ri-delete-bin-line");
@@ -105,14 +110,17 @@ export const servicesController = async () => {
   const contenedorServicios = DOMSelector("#services");
   await listarServicios(contenedorServicios);
 
-  // const dataJSON = localStorage.getItem("data");
-  // const data = JSON.parse(dataJSON);
+  // const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
 
-  // if (data.id_rol != 1) {
-  //   const opcionesAdmin = DOMSelectorAll(".admin");
-  //   [...opcionesAdmin].forEach((element) => {
-  //     element.remove();
-  //   });
+  // console.log(acciones);
+
+
+  // for (const accion of acciones) {
+  //   console.log(accion.dataset.permiso.split(","));
+  //   console.log(hasPermission(accion.dataset.permiso.split(",")));
+  //   if (!hasPermission(accion.dataset.permiso.split(","))) {
+  //     accion.remove();
+  //   }
   // }
 
   contenedorServicios.addEventListener("click", async (event) => {
