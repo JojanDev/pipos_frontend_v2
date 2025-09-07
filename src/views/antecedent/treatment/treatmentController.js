@@ -15,6 +15,7 @@ import {
   errorTemporal,
   mapearDatosEnContenedor,
   successTemporal,
+  convertirDias,
 } from "../../../helpers";
 import hasPermission from "../../../helpers/hasPermission";
 import { routes } from "../../../router/routes";
@@ -49,21 +50,10 @@ const desactivarBotonesPerfilTratamiento = () => {
 };
 
 export const treatmentController = async (parametros = null) => {
-  // const dataJSON = localStorage.getItem("data");
-  // const data = JSON.parse(dataJSON);
-
-  // if (data.id_rol != 1) {
-  //   const opcionesAdmin = DOMSelectorAll(".admin");
-  //   [...opcionesAdmin].forEach((element) => {
-  //     element.remove();
-  //   });
-  // }
   console.log(parametros);
   const { perfil: tratamiento, antecedente } = parametros;
 
-  // const { id, tituloAntecedente, estado_vital } = parametros;
   const contenedorVista = DOMSelector('[data-modal="pet-treatment"]');
-
 
   const modal = DOMSelector('[data-modal="pet-treatment"]');
   const esModal = !location.hash.includes("antecedente/tratamiento");
@@ -121,7 +111,6 @@ export const treatmentController = async (parametros = null) => {
 
         iconEdit.dataset.permiso = "medicamento-tratamiento.update";
 
-
         const { data: infoMedicamento } = await get(
           `info-medicamentos/${info_medicamento_id}`
         );
@@ -133,7 +122,7 @@ export const treatmentController = async (parametros = null) => {
           capitalizarPrimeraLetra(infoMedicamento.via_administracion),
           dosis,
           frecuencia_aplicacion,
-          duracion,
+          convertirDias(duracion),
           iconDelete,
           iconEdit,
         ]);
@@ -145,41 +134,40 @@ export const treatmentController = async (parametros = null) => {
     errorTemporal(responseMedicamentos.message);
   }
 
-  const getMascota = await get(`mascotas/${antecedenteResponse.data.mascota_id}`);
+  const getMascota = await get(
+    `mascotas/${antecedenteResponse.data.mascota_id}`
+  );
 
   if (!getMascota.data.estado_vital) {
     desactivarBotonesPerfilTratamiento();
   }
 
-  // const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
+  const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
 
-  // console.log(acciones);
+  console.log(acciones);
 
-
-  // for (const accion of acciones) {
-  //   console.log(accion.dataset.permiso.split(","));
-  //   console.log(hasPermission(accion.dataset.permiso.split(",")));
-  //   if (!hasPermission(accion.dataset.permiso.split(","))) {
-  //     accion.remove();
-  //   }
-  // }
+  for (const accion of acciones) {
+    console.log(accion.dataset.permiso.split(","));
+    console.log(hasPermission(accion.dataset.permiso.split(",")));
+    if (!hasPermission(accion.dataset.permiso.split(","))) {
+      accion.remove();
+    }
+  }
 
   modal.addEventListener("click", async (e) => {
     if (e.target.id == "register-antecedent-treatment-medicament") {
       console.log("location.hash", location.hash);
 
-      location.hash = location.hash + (location.hash[location.hash.length - 1] == "/" ? + "medicamento/crear" : "/medicamento/crear");
+      location.hash =
+        location.hash +
+        (location.hash[location.hash.length - 1] == "/"
+          ? +"medicamento/crear"
+          : "/medicamento/crear");
       console.log("location.hash", location.hash);
-
-      // await cargarComponente(routes.antecedente.medicamento, {
-      //   idTratamiento: id,
-      // });
     }
 
     if (e.target.id == "back-treatment") {
-      // esModal ?
       cerrarModal("pet-treatment");
-      // : cerrarModalYVolverAVistaBase();
       history.back();
     }
 
@@ -188,7 +176,7 @@ export const treatmentController = async (parametros = null) => {
       const idMedicament = medicament.getAttribute("data-id");
 
       const responseDelete = await del(
-        "medicamentos/tratamiento/" + idMedicament
+        `medicamentos-tratamientos/${idMedicament}`
       );
 
       if (!responseDelete.success) {
@@ -197,42 +185,43 @@ export const treatmentController = async (parametros = null) => {
       }
 
       medicament.remove();
-      // const idAntecedente = fila.getAttribute("data-id");
 
-      // esModal ? cerrarModal("pet-treatment") : cerrarModalYVolverAVistaBase();
-      // history.replaceState(null, "", `#/mascotas/perfil`);
-      await success(responseDelete.message);
-      // esModal ? cerrarModal("pet-treatment") : cerrarModalYVolverAVistaBase();
+      successTemporal(responseDelete.message);
     }
 
     if (e.target.classList.contains("edit-tabla")) {
       const medicament = e.target.closest(`[data-id]`);
       const idMedicament = medicament.getAttribute("data-id");
 
-      location.hash = location.hash + (location.hash[location.hash.length - 1] == "/" ? + `medicamento/editar/id=${idMedicament}` : `/medicamento/editar/id=${idMedicament}`);
+      location.hash =
+        location.hash +
+        (location.hash[location.hash.length - 1] == "/"
+          ? +`medicamento/editar/id=${idMedicament}`
+          : `/medicamento/editar/id=${idMedicament}`);
       // await cargarComponente(routes.antecedente.medicamentoEditar, {
       //   id: idMedicament,
       // });
     }
 
     if (e.target.id == "delete-treatment") {
-      const responseDelete = await del("tratamientos/" + id);
+      const responseDelete = await del(`tratamientos/${tratamiento.id}`);
 
-      if (!responseDelete.success)
-        return await error(responseDelete.message);
-
+      if (!responseDelete.success) return await error(responseDelete.message);
 
       // const idAntecedente = fila.getAttribute("data-id");
-      eliminarTratamiento(id, tratamientoResponse.data.id_antecedente);
+      eliminarTratamiento(tratamiento.id, antecedente.id);
 
       successTemporal(responseDelete.message);
-      cerrarModal("pet-treatment")
+      cerrarModal("pet-treatment");
       history.back();
-      // history.replaceState(null, "", `#/mascotas/perfil`);
     }
 
     if (e.target.id == "edit-treatment") {
-      location.hash = location.hash + (location.hash[location.hash.length - 1] == "/" ? + "editar" : "/editar");
+      location.hash =
+        location.hash +
+        (location.hash[location.hash.length - 1] == "/"
+          ? +"editar"
+          : "/editar");
 
       // await cargarComponente(routes.antecedente.tratamientoEditar, {
       //   tratamiento_id: id,

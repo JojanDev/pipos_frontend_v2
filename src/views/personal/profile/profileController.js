@@ -13,8 +13,11 @@ import {
   DOMSelector,
   mapearDatosEnContenedor,
   configurarBotonCerrar,
+  patch,
+  successTemporal,
 } from "../../../helpers";
 import { cargarTablaEmpleados } from "../personalController";
+import hasPermission from "../../../helpers/hasPermission";
 
 export const profilePersonalController = async (parametros = null) => {
   console.log(parametros);
@@ -24,6 +27,7 @@ export const profilePersonalController = async (parametros = null) => {
 
   const esModal = !location.hash.includes("personal/perfil");
   const btnActivar = DOMSelector("#activar-personal");
+  const btnEdit = DOMSelector("#edit-personal");
   const btnEliminar = DOMSelector("#delete-personal");
   const perfilUsuario = DOMSelector("[data-modal='profile-personal']");
 
@@ -57,15 +61,22 @@ export const profilePersonalController = async (parametros = null) => {
   console.log(rolesUsuario);
 
   if (rolesUsuario.success) {
-    rolesUsuario.data.forEach(async (rolUsuario) => {
-      const pRol = document.createElement("p");
-      pRol.classList.add("roles");
-      const { data: rol } = await get(`roles/${rolUsuario.rol_id}`);
-      console.log(rol);
+    await Promise.all(
+      rolesUsuario.data.map(async (rolUsuario) => {
+        if (rolUsuario.rol_id == 1) {
+          btnEliminar?.remove();
+          btnActivar?.remove();
+          btnEdit?.remove();
+        }
+        const pRol = document.createElement("p");
+        pRol.classList.add("roles");
+        const { data: rol } = await get(`roles/${rolUsuario.rol_id}`);
+        console.log(rol);
 
-      pRol.textContent = capitalizarPrimeraLetra(rol.nombre);
-      contenedorRoles.append(pRol);
-    });
+        pRol.textContent = capitalizarPrimeraLetra(rol.nombre);
+        contenedorRoles.append(pRol);
+      })
+    );
   }
 
   const credencial = await get(`credenciales/usuario/${response.data.id}`);
@@ -73,8 +84,16 @@ export const profilePersonalController = async (parametros = null) => {
 
   if (credencial.success) {
     DOMSelector("#usuario").textContent = credencial.data.usuario;
+
+    if (credencial.data.activo) {
+      btnActivar?.remove();
+    } else {
+      btnEliminar.remove();
+    }
   } else {
     contenedorCredenciales.remove();
+    btnActivar?.remove();
+    btnEliminar.remove();
   }
 
   mapearDatosEnContenedor(
@@ -83,6 +102,18 @@ export const profilePersonalController = async (parametros = null) => {
   );
 
   const modal = DOMSelector("[data-modal='profile-personal']");
+
+  const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
+
+  console.log(acciones);
+
+  for (const accion of acciones) {
+    console.log(accion.dataset.permiso.split(","));
+    console.log(hasPermission(accion.dataset.permiso.split(",")));
+    if (!hasPermission(accion.dataset.permiso.split(","))) {
+      accion.remove();
+    }
+  }
 
   modal.addEventListener("click", async (e) => {
     if (e.target.id == "edit-personal") {
@@ -93,33 +124,40 @@ export const profilePersonalController = async (parametros = null) => {
     }
 
     if (e.target.id == "delete-personal") {
-      if (response.data.rol.id != 1) {
-        const eliminado = await del(`usuarios/${usuario.id}`);
-        // console.log(eliminado);
-        if (!eliminado.success) {
-          await error(eliminado.message);
-          return;
-        }
-
-        cargarTablaEmpleados();
-
-        await success(eliminado.message);
-        cerrarModal("profile-personal");
-        history.back();
+      const eliminado = await patch(`credenciales/${credencial.data.id}`, {
+        activo: false,
+      });
+      // console.log(eliminado);
+      if (!eliminado.success) {
+        await error(eliminado.message);
         return;
       }
+
+      const row = DOMSelector(`#personal [data-id='${usuario.id}']`);
+      row.classList.add("fila-alerta");
+      // cargarTablaEmpleados();
+
+      successTemporal("Usuario desactivado");
+      cerrarModal("profile-personal");
+      history.back();
+      return;
     }
 
     if (e.target.id == "activar-personal") {
-      const activado = await put(`personal/activar/${usuario.id}`);
+      const activado = await patch(`credenciales/${credencial.data.id}`, {
+        activo: true,
+      });
       // console.log(eliminado);
       if (!activado.success) {
         await error(activado.message);
         return;
       }
 
-      cargarTablaEmpleados();
-      await success(activado.message);
+      const row = DOMSelector(`#personal [data-id='${usuario.id}']`);
+      row.classList.remove("fila-alerta");
+
+      // cargarTablaEmpleados();
+      successTemporal("Usuario activado");
       cerrarModal("profile-personal");
       history.back();
       return;

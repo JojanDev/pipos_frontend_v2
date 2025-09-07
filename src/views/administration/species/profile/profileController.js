@@ -9,8 +9,11 @@ import {
   cargarComponente,
   del,
   success,
+  DOMSelector,
+  successTemporal,
 } from "../../../../helpers";
 import { listarEspecies } from "../../administrationController";
+import hasPermission from "../../../../helpers/hasPermission";
 
 export const profileSpecieController = async (parametros = null) => {
   console.log(parametros);
@@ -18,55 +21,49 @@ export const profileSpecieController = async (parametros = null) => {
   const { perfil: especie } = parametros;
   // const { id } = parametros;
 
-  const modal = document.querySelector('[data-modal="specie-profile"]');
-  const esModal = !location.hash.includes("administrar_datos/especiesPerfil");
+  const contenedorVista = DOMSelector('[data-modal="specie-profile"]');
 
   const response = await get(`especies/${especie.id}`);
 
   if (!response.success) {
     await error(response.message);
-    esModal ? cerrarModal("specie-profile") : cerrarModalYVolverAVistaBase();
+    cerrarModal("specie-profile");
+    history.back();
     return;
   }
 
-  const titulo = document.querySelector("#specie-title");
-
+  const titulo = DOMSelector("#specie-title");
 
   titulo.textContent = response.data.nombre;
 
-  // const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
+  const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
 
-  // console.log(acciones);
+  console.log(acciones);
 
+  for (const accion of acciones) {
+    console.log(accion.dataset.permiso.split(","));
+    console.log(hasPermission(accion.dataset.permiso.split(",")));
+    if (!hasPermission(accion.dataset.permiso.split(","))) {
+      accion.remove();
+    }
+  }
 
-  // for (const accion of acciones) {
-  //   console.log(accion.dataset.permiso.split(","));
-  //   console.log(hasPermission(accion.dataset.permiso.split(",")));
-  //   if (!hasPermission(accion.dataset.permiso.split(","))) {
-  //     accion.remove();
-  //   }
-  // }
-
-
-  modal.addEventListener("click", async (e) => {
+  contenedorVista.addEventListener("click", async (e) => {
     if (e.target.id == "edit-specie") {
-      // await cargarComponente(routes.administrar_datos.especiesEditar, {
-      //   id: especie.id,
-      //   nombre: response.data.nombre,
-      // });
-      location.hash = (location.hash + (location.hash[location.hash.length - 1] == "/" ? `editar` : `/editar`));
-
+      location.hash =
+        location.hash +
+        (location.hash[location.hash.length - 1] == "/" ? `editar` : `/editar`);
     }
 
     if (e.target.id == "delete-specie") {
       const response = await del(`especies/${especie.id}`);
 
       if (response.success) {
-        await success(response.message);
-        listarEspecies();
-        cerrarModal("specie-profile")
+        successTemporal(response.message);
+        const fila = DOMSelector(`#species [data-id="${especie.id}"]`);
+        fila.remove();
+        cerrarModal("specie-profile");
         history.back();
-
       } else {
         await error(response.message);
         return;

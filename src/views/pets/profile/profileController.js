@@ -11,6 +11,7 @@ import {
   DOMSelector,
   DOMSelectorAll,
   convertirEdadCorta,
+  successTemporal,
 } from "../../../helpers";
 import { routes } from "../../../router/routes";
 import { mapearDatosEnContenedor } from "../../../helpers/domMapper";
@@ -26,7 +27,7 @@ const desactivarBotonesPerfilMascota = () => {
     "#edit-pet", // Editar mascota
     "#desactivar-pet", // Desactivar mascota
     "#register-antecedent", // Crear antecedente
-    "#register-treatment-antecedent",
+    // "#register-treatment-antecedent",
   ];
 
   botones.forEach((selector) => {
@@ -36,10 +37,18 @@ const desactivarBotonesPerfilMascota = () => {
 
   // Botones de eliminar antecedentes
   const botonesEliminarAntecedente = DOMSelectorAll(".delete-antecedent");
+  console.log(botonesEliminarAntecedente);
+
   botonesEliminarAntecedente.forEach((btn) => btn.remove());
 
   const botonesEditarAntecedente = DOMSelectorAll(".edit-antecedent");
+  console.log(botonesEliminarAntecedente);
   botonesEditarAntecedente.forEach((btn) => btn.remove());
+
+  const botonesCrearTratamiento = DOMSelectorAll(
+    "#register-treatment-antecedent"
+  );
+  botonesCrearTratamiento.forEach((btn) => btn.remove());
 };
 
 // ===============================
@@ -52,23 +61,12 @@ function toggleBody(headerElement) {
 }
 
 export const profilePetController = async (parametros = null) => {
-
   const contenedorVista = DOMSelector("#pet-profile");
 
   let estado_vital = true;
 
   console.log(parametros);
 
-  // const dataJSON = localStorage.getItem("data");
-  // const data = JSON.parse(dataJSON);
-
-  // if (data.id_rol != 1) {
-  //   const opcionesAdmin = DOMSelectorAll(".admin");
-  //   [...opcionesAdmin].forEach((element) => {
-  //     element.remove();
-  //   });
-  // }
-  // ID de la mascota
   const { perfil: mascota } = parametros;
 
   const mascota_id = mascota.id;
@@ -102,12 +100,14 @@ export const profilePetController = async (parametros = null) => {
     const placeholderAnterior = DOMSelector(".placeholder-antecedentes");
     if (placeholderAnterior) placeholderAnterior.remove();
     if (contenedorAntecedente) {
-      responseAntecedentesMascota.data.forEach(async (antecedente) => {
-        const bloqueAntecedenteCreado = await crearBloqueAntecedenteCompleto(
-          antecedente
-        );
-        contenedorAntecedente.append(bloqueAntecedenteCreado);
-      });
+      await Promise.all(
+        responseAntecedentesMascota.data.map(async (antecedente) => {
+          const bloqueAntecedenteCreado = await crearBloqueAntecedenteCompleto(
+            antecedente
+          );
+          contenedorAntecedente.append(bloqueAntecedenteCreado);
+        })
+      );
     }
   } else {
     const placeholder = document.createElement("p");
@@ -122,29 +122,26 @@ export const profilePetController = async (parametros = null) => {
     estado_vital = false;
   }
 
-  // const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
+  const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
 
-  // console.log(acciones);
+  console.log(acciones);
 
-
-  // for (const accion of acciones) {
-  //   console.log(accion.dataset.permiso.split(","));
-  //   console.log(hasPermission(accion.dataset.permiso.split(",")));
-  //   if (!hasPermission(accion.dataset.permiso.split(","))) {
-  //     accion.remove();
-  //   }
-  // }
+  for (const accion of acciones) {
+    console.log(accion.dataset.permiso.split(","));
+    console.log(hasPermission(accion.dataset.permiso.split(",")));
+    if (!hasPermission(accion.dataset.permiso.split(","))) {
+      accion.remove();
+    }
+  }
 
   contenedorVista.addEventListener("click", async (e) => {
     if (e.target.closest(".delete-antecedent")) {
       // toggleBody(e.target.closest(".antecedente-header"));
       const contenedorId = e.target.closest("[data-idAntecendente]");
       const idAntecedente = contenedorId.getAttribute("data-idAntecendente");
-      const responseDelete = await del("antecedentes/" + idAntecedente);
-      if (!responseDelete.success) {
-        await error(responseDelete.message);
-        return;
-      }
+      const responseDelete = await del(`antecedentes/${idAntecedente}`);
+      if (!responseDelete.success) return await error(responseDelete.message);
+
       contenedorId.remove();
       await success(responseDelete.message);
       return;
@@ -205,7 +202,6 @@ export const profilePetController = async (parametros = null) => {
       const contenedorId = e.target.closest("[data-idAntecendente]");
       const idAntecedente = contenedorId.getAttribute("data-idAntecendente");
       location.hash = `#/mascotas/perfil/id=${mascota.id}/antecedente/id=${idAntecedente}/tratamiento/perfil/id=${idTratamiento}`;
-
     }
 
     if (e.target.id == "desactivar-pet") {
@@ -227,16 +223,18 @@ export const profilePetController = async (parametros = null) => {
         return;
       }
 
-      const eliminado = await put("mascotas/desactivar/" + mascota_id);
+      const { data: mascota } = await get(`mascotas/${mascota_id}`);
+      mascota.estado_vital = false;
+      delete mascota.raza;
+      console.log(mascota);
 
-      if (!eliminado.success) {
-        await error(eliminado.message);
-        return;
-      }
+      const eliminado = await put(`mascotas/${mascota_id}`, mascota);
+
+      if (!eliminado.success) return await error(eliminado.message);
 
       desactivarBotonesPerfilMascota();
       estado_vital = false;
-      await success(eliminado.message);
+      successTemporal("Mascota desactivada correctamente");
       return;
     }
 
@@ -246,7 +244,6 @@ export const profilePetController = async (parametros = null) => {
 
       // location.hash = `#/antecedente/tratamientoCrear/idAntecedente=${idAntecedente}`;
       location.hash = `#/mascotas/perfil/id=${mascota_id}/antecedente/id=${idAntecedente}/tratamiento/crear`;
-
     }
   });
 };

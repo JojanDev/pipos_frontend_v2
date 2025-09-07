@@ -191,3 +191,7 @@
 .fila-alerta {
   background-color: #ebbdc1;
 }
+
+.table__row--selected {
+  background-color: #b5d4f1;
+}

@@ -11,6 +11,7 @@ import {
   DOMSelector,
 } from "../../../helpers";
 import { crearCartaMedicamento } from "../medicamentsController";
+import hasPermission from "../../../helpers/hasPermission";
 
 export const profileMedicamentInfoController = async (parametros = null) => {
   console.log(parametros);
@@ -18,9 +19,7 @@ export const profileMedicamentInfoController = async (parametros = null) => {
   // const { id } = parametros;
   const { perfil: infoMedicamento } = parametros;
 
-  const contenedorVista = DOMSelector(
-    `[data-modal="profile-medicament-info"]`
-  );
+  const contenedorVista = DOMSelector(`[data-modal="profile-medicament-info"]`);
   // const dataJSON = localStorage.getItem("data");
   // const data = JSON.parse(dataJSON);
 
@@ -41,66 +40,52 @@ export const profileMedicamentInfoController = async (parametros = null) => {
 
   if (!response.success) {
     await error(response.message);
-    cerrarModal("profile-medicament-info")
+    cerrarModal("profile-medicament-info");
     history.back();
-
 
     return;
   }
 
   mapearDatosEnContenedor(response.data, contenedorVista);
 
-  // const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
+  const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
 
-  // console.log(acciones);
+  console.log(acciones);
 
+  for (const accion of acciones) {
+    console.log(accion.dataset.permiso.split(","));
+    console.log(hasPermission(accion.dataset.permiso.split(",")));
+    if (!hasPermission(accion.dataset.permiso.split(","))) {
+      accion.remove();
+    }
+  }
 
-  // for (const accion of acciones) {
-  //   console.log(accion.dataset.permiso.split(","));
-  //   console.log(hasPermission(accion.dataset.permiso.split(",")));
-  //   if (!hasPermission(accion.dataset.permiso.split(","))) {
-  //     accion.remove();
-  //   }
-  // }
-
-  contenedorVista.addEventListener('click', async (e) => {
+  contenedorVista.addEventListener("click", async (e) => {
     if (e.target.id == "back-profile-medicament-info") {
-      cerrarModal("profile-medicament-info")
+      cerrarModal("profile-medicament-info");
       history.back();
     }
 
     if (e.target.id == "edit-medicament-info") {
-      // await cargarComponente(routes.medicamentos_info.editar, {
-      //   id: response.data.id,
-      // });
-
-      location.hash = (location.hash + (location.hash[location.hash.length - 1] == "/" ? `editar` : `/editar`));
-
+      location.hash =
+        location.hash +
+        (location.hash[location.hash.length - 1] == "/" ? `editar` : `/editar`);
     }
 
     if (e.target.id == "delete-medicament-info") {
-      const eliminado = await del("medicamentos/info/" + infoMedicamento.id);
-
+      const eliminado = await del(`info-medicamentos/${infoMedicamento.id}`);
       console.log(eliminado);
-      if (!eliminado.success) {
-        await error(eliminado.message);
-        return;
-      }
+
+      if (!eliminado.success) return await error(eliminado.message);
 
       const contenedor = DOMSelector("#medicaments-info");
-      contenedor.innerHTML = "";
-
-      const responseAll = await get("medicamentos/info");
-
-      responseAll.data.forEach((medicamento) => {
-        const carta = crearCartaMedicamento(medicamento);
-        contenedor.appendChild(carta);
-      });
+      const row = contenedor.querySelector(`[data-id='${infoMedicamento.id}']`);
+      row.remove();
 
       successTemporal(eliminado.message);
 
-      cerrarModal("profile-medicament-info")
+      cerrarModal("profile-medicament-info");
       history.back();
     }
-  })
+  });
 };

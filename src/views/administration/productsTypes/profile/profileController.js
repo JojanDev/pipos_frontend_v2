@@ -11,6 +11,7 @@ import {
   success,
   configurarBotonCerrar,
   DOMSelector,
+  successTemporal,
 } from "../../../../helpers";
 import { listarTiposProductos } from "../../administrationController";
 
@@ -43,7 +44,6 @@ export const profileProductTypeController = async (parametros = null) => {
 
   // console.log(acciones);
 
-
   // for (const accion of acciones) {
   //   console.log(accion.dataset.permiso.split(","));
   //   console.log(hasPermission(accion.dataset.permiso.split(",")));
@@ -67,8 +67,11 @@ export const profileProductTypeController = async (parametros = null) => {
       const response = await del(`tipos-productos/${tipoProducto.id}`);
 
       if (response.success) {
-        await success(response.message);
-        listarTiposProductos();
+        successTemporal(response.message);
+        const fila = DOMSelector(
+          `#productsTypes [data-id="${tipoProducto.id}"]`
+        );
+        fila.remove();
         cerrarModal("productType-profile");
         history.back();
       } else {

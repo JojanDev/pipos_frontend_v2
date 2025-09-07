@@ -55,9 +55,14 @@ const manejarSubmit = (
         `tipos-documentos/${clientResponse.data.tipo_documento_id}`
       );
 
+      const { data: raza } = await get(`razas/${petResponse.data.raza_id}`);
+      const { data: especie } = await get(`especies/${raza.especie_id}`);
+
+      console.log(petResponse.data);
+
       petResponse.data.mascota = petResponse.data.nombre;
-      petResponse.data.especie = petResponse.data.raza.especie.nombre;
-      petResponse.data.raza = petResponse.data.raza.nombre;
+      petResponse.data.especie = especie.nombre;
+      petResponse.data.raza = raza.nombre;
       petResponse.data.edad = petResponse.data.edad_semanas;
 
       console.log(petResponse);
@@ -72,7 +77,8 @@ const manejarSubmit = (
     successTemporal(petResponse.message);
 
     // actualizarTablas(pet, tbody_perfilCliente, tbody_Mascotas);
-    esModal ? cerrarModal("edit-pet") : cerrarModalYVolverAVistaBase();
+    cerrarModal("edit-pet");
+    history.back();
   });
 };
 

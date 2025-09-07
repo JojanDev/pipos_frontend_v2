@@ -20,6 +20,7 @@ const addRaza = (idEspecie, nuevaRaza) => {
   console.log(especie);
 
   if (!especie) return;
+  console.log(especie);
 
   // 1. actualizar array
   especie.razas.push(nuevaRaza);
@@ -29,7 +30,7 @@ const addRaza = (idEspecie, nuevaRaza) => {
   if (especieSeleccionada?.children[0]?.textContent.trim() == idEspecie) {
     const razasTbody = DOMSelector("#breeds .table__body");
     const row = crearFila([nuevaRaza.id, nuevaRaza.nombre]);
-    razasTbody.append(row);
+    razasTbody.insertAdjacentElement("afterbegin", row);
   }
 };
 

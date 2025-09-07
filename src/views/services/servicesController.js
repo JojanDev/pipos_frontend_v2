@@ -5,7 +5,9 @@ import {
   formatearPrecioConPuntos,
   get,
   success,
+  successTemporal,
 } from "../../helpers";
+import hasPermission from "../../helpers/hasPermission";
 
 export const crearCardServicio = (id, nombre, descripcion, precio) => {
   const card = document.createElement("div");
@@ -59,7 +61,6 @@ export const crearCardServicio = (id, nombre, descripcion, precio) => {
 
   btnDelete.dataset.permiso = "servicio.delete";
 
-
   const iconDelete = document.createElement("i");
   iconDelete.classList.add("ri-delete-bin-line");
   btnDelete.appendChild(iconDelete);
@@ -107,21 +108,21 @@ const listarServicios = async (contenedor) => {
 };
 
 export const servicesController = async () => {
+  const contenedorVista = DOMSelector("#vista-servicios");
   const contenedorServicios = DOMSelector("#services");
   await listarServicios(contenedorServicios);
 
-  // const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
+  const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
 
-  // console.log(acciones);
+  console.log(acciones);
 
-
-  // for (const accion of acciones) {
-  //   console.log(accion.dataset.permiso.split(","));
-  //   console.log(hasPermission(accion.dataset.permiso.split(",")));
-  //   if (!hasPermission(accion.dataset.permiso.split(","))) {
-  //     accion.remove();
-  //   }
-  // }
+  for (const accion of acciones) {
+    console.log(accion.dataset.permiso.split(","));
+    console.log(hasPermission(accion.dataset.permiso.split(",")));
+    if (!hasPermission(accion.dataset.permiso.split(","))) {
+      accion.remove();
+    }
+  }
 
   contenedorServicios.addEventListener("click", async (event) => {
     const card = event.target.closest(".card");
@@ -130,25 +131,28 @@ export const servicesController = async () => {
     const idServicio = card.dataset.id;
 
     if (event.target.closest(".btn-servicio-edit")) {
-      // location.hash = `#/servicios/editar/id=${idServicio}`;
-      location.hash = location.hash + (location.hash[location.hash.length - 1] == "/" ? + `editar/id=${idServicio}` : `/editar/id=${idServicio}`);
+      location.hash =
+        location.hash +
+        (location.hash[location.hash.length - 1] == "/"
+          ? +`editar/id=${idServicio}`
+          : `/editar/id=${idServicio}`);
     }
 
     if (event.target.closest(".btn-servicio-delete")) {
       const response = await del(`servicios/${idServicio}`);
 
       if (response.success) {
-        await success(response.message);
+        successTemporal(response.message);
 
         // Eliminar la card del DOM
         const cardEliminada = DOMSelector(`.card[data-id="${idServicio}"]`);
         if (cardEliminada) cardEliminada.remove();
 
         // Si ya no quedan cards, mostrar el placeholder
-        const cardsRestantes = contenedorCards.querySelectorAll(".card");
+        const cardsRestantes = contenedorServicios.querySelectorAll(".card");
         if (cardsRestantes.length === 0) {
           mostrarPlaceholderServicios(
-            contenedorCards,
+            contenedorServicios,
             "No hay servicios registrados."
           );
         }

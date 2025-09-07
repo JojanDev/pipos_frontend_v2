@@ -10,6 +10,7 @@ import {
   DOMSelector,
   configurarBotonCerrar,
   DOMSelectorAll,
+  successTemporal,
 } from "../../../helpers";
 import { crearCardServicio } from "../servicesController";
 
@@ -42,24 +43,15 @@ export const createServiceController = (parametros = null) => {
       if (placeholderAnterior) placeholderAnterior.remove();
     }
 
-    const dataJSON = localStorage.getItem("data");
-    const data = JSON.parse(dataJSON);
+    successTemporal(responseServicios.message);
 
-    if (data.id_rol != 1) {
-      const opcionesAdmin = DOMSelectorAll(".admin");
-      [...opcionesAdmin].forEach((element) => {
-        element.remove();
-      });
-    }
-
-    await success(responseServicios.message);
-
-    esModal ? cerrarModal("create-service") : cerrarModalYVolverAVistaBase();
+    cerrarModal("create-service");
+    history.back();
   });
 
   const contenedorVista = DOMSelector(`[data-modal="create-service"]`);
 
-  contenedorVista.addEventListener('click', (e) => {
+  contenedorVista.addEventListener("click", (e) => {
     if (e.target.id == "back-register-service") {
       cerrarModal("create-service");
       history.back();

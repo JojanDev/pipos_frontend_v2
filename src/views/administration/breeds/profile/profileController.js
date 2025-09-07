@@ -9,13 +9,14 @@ import {
   cargarComponente,
   del,
   success,
+  DOMSelector,
+  successTemporal,
 } from "../../../../helpers";
 import { listarEspecies } from "../../administrationController";
 
 export const profileBreedController = async (parametros = null) => {
   console.log(parametros);
 
-  const { id } = parametros;
   const { perfil: raza } = parametros;
 
   const contenedorVista = document.querySelector(
@@ -40,11 +41,6 @@ export const profileBreedController = async (parametros = null) => {
 
   contenedorVista.addEventListener("click", async (e) => {
     if (e.target.id == "edit-breed") {
-      // await cargarComponente(routes.administrar_datos.razasEditar, {
-      //   id: raza.id,
-      //   nombre: response.data.nombre,
-      //   especie_id: response.data.especie_id,
-      // });
       location.hash =
         location.hash +
         (location.hash[location.hash.length - 1] == "/" ? `editar` : `/editar`);
@@ -54,8 +50,11 @@ export const profileBreedController = async (parametros = null) => {
       const response = await del(`razas/${raza.id}`);
 
       if (response.success) {
-        await success(response.message);
-        listarEspecies();
+        successTemporal(response.message);
+        const razasTbody = DOMSelector("#breeds .table__body");
+
+        const row = razasTbody.querySelector(`[data-id='${raza.id}']`);
+        row.remove();
         cerrarModal("breed-profile");
         history.back();
       } else {

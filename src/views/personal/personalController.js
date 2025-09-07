@@ -1,4 +1,11 @@
-import { get, crearFila, capitalizarPrimeraLetra, error } from "../../helpers";
+import {
+  get,
+  crearFila,
+  capitalizarPrimeraLetra,
+  error,
+  DOMSelector,
+} from "../../helpers";
+import hasPermission from "../../helpers/hasPermission";
 
 export const cargarTablaEmpleados = async () => {
   const usuarios = await get("usuarios");
@@ -8,7 +15,7 @@ export const cargarTablaEmpleados = async () => {
     await error(usuarios.message);
   }
 
-  const tbody = document.querySelector("#personal .table__body");
+  const tbody = DOMSelector("#personal .table__body");
   tbody.innerHTML = "";
 
   const personalInfo = await Promise.all(
@@ -27,8 +34,6 @@ export const cargarTablaEmpleados = async () => {
         );
       }
 
-      // console.log(nombreRoles);
-
       return [
         usuario.id,
         nombreRoles.join(", ") ?? "No aplica",
@@ -40,37 +45,40 @@ export const cargarTablaEmpleados = async () => {
     })
   );
 
-  personalInfo.forEach((personal) => {
-    const row = crearFila(personal);
+  await Promise.all(
+    personalInfo.map(async (personal) => {
+      const row = crearFila(personal);
 
-    // const encontrado = usuarios.data.find((p) => p.id === personal[0]);
-    // console.log(encontrado);
+      const credencialUsuario = await get(`credenciales/${personal[0]}`);
 
-    // const activo = encontrado ? encontrado.activo : null;
+      if (credencialUsuario.success) {
+        !credencialUsuario.data.activo
+          ? row.classList.add("fila-alerta")
+          : null;
+      }
 
-    // !activo ? row.classList.add("fila-alerta") : null;
-
-    tbody.append(row);
-  });
+      tbody.append(row);
+    })
+  );
 };
 
 export const personalController = async () => {
-  cargarTablaEmpleados();
+  await cargarTablaEmpleados();
 
-  const tablapersonal = document.querySelector("#personal");
+  const tablapersonal = DOMSelector("#personal");
+  const contenedorVista = DOMSelector("#vista-usuarios");
 
-  // const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
+  const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
 
-  // console.log(acciones);
+  console.log(acciones);
 
-
-  // for (const accion of acciones) {
-  //   console.log(accion.dataset.permiso.split(","));
-  //   console.log(hasPermission(accion.dataset.permiso.split(",")));
-  //   if (!hasPermission(accion.dataset.permiso.split(","))) {
-  //     accion.remove();
-  //   }
-  // }
+  for (const accion of acciones) {
+    console.log(accion.dataset.permiso.split(","));
+    console.log(hasPermission(accion.dataset.permiso.split(",")));
+    if (!hasPermission(accion.dataset.permiso.split(","))) {
+      accion.remove();
+    }
+  }
 
   tablapersonal.addEventListener("click", (event) => {
     const fila = event.target.closest("tr[data-id]");
