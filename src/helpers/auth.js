@@ -3,11 +3,15 @@ import { get, url } from "./api";
 export const isAuth = async () => {
   try {
     // let response = await get("auth/protected");
-    const response = await fetch(url + "auth/protected", {
-      method: "GET",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-    });
+    const response = await (
+      await fetch(url + "auth/protected", {
+        method: "GET",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+      })
+    ).json();
+
+    console.log(response);
 
     // Verifica si fue exitoso
     if (response.success) return true;

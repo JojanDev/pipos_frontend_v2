@@ -48,6 +48,8 @@ export const loginController = async () => {
     if (!validarCampos(e)) return;
 
     if (await validarSesion(datos)) {
+      console.log("si");
+
       window.location.hash = "#/inicio";
     }
   });
