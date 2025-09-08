@@ -1,7 +1,7 @@
 import { error } from "./alertas";
 import { isAuth } from "./auth";
 
-const url = "http://localhost:3000/pipos_api/";
+export const url = "http://localhost:3000/pipos_api/";
 
 export const get = async (endpoint) => {
   const respuesta = await fetch(url + endpoint, {
@@ -20,7 +20,7 @@ export const get = async (endpoint) => {
       location.hash = "#/login";
       return;
     } else {
-      return get(endpoint);
+      await get(endpoint);
     }
   } else if (!datos.success && datos.code == 403) {
     if (await isAuth()) {
@@ -48,7 +48,7 @@ export const post = async (endpoint, objeto) => {
       location.hash = "#/login";
       return;
     } else {
-      return post(endpoint, objeto);
+      await post(endpoint, objeto);
     }
   } else if (!datos.success && datos.code == 403) {
     if (await isAuth()) {
@@ -76,7 +76,7 @@ export const put = async (endpoint, objeto) => {
       location.hash = "#/login";
       return;
     } else {
-      return put(endpoint, objeto);
+      await put(endpoint, objeto);
     }
   } else if (!datos.success && datos.code == 403) {
     if (await isAuth()) {
@@ -104,7 +104,7 @@ export const patch = async (endpoint, objeto) => {
       location.hash = "#/login";
       return;
     } else {
-      return patch(endpoint, objeto);
+      await patch(endpoint, objeto);
     }
   } else if (!datos.success && datos.code == 403) {
     if (await isAuth()) {
@@ -131,7 +131,7 @@ export const del = async (endpoint) => {
       location.hash = "#/login";
       return;
     } else {
-      return del(endpoint);
+      await del(endpoint);
     }
   } else if (!datos.success && datos.code == 403) {
     if (await isAuth()) {
