@@ -5,9 +5,14 @@ export const renderLayout = async () => {
   const response = await fetch(`./src/layouts/mainLayout.html`);
   const html = await response.text();
   DOMSelector("#app").innerHTML = html;
-  console.log("SI");
 
   await layoutController();
+};
+
+export const renderNotFound = async () => {
+  const response = await fetch(`./src/views/notFound/index.html`);
+  const html = await response.text();
+  DOMSelector("#app").innerHTML = html;
 };
 
 export const cargarComponente = async ({ path, controller }, param = null) => {

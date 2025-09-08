@@ -21,6 +21,9 @@ export const editAntecedentController = async (parametros = null) => {
 
   const { perfil: mascota, antecedente } = parametros;
   // const { antecedente_id, mascota_id } = parametros;
+  const getMascota = await get(`mascotas/${mascota.id}`);
+
+  if (!getMascota.data.estado_vital) return await renderNotFound();
 
   const containerPerfilMascota = DOMSelector(".contenedor-perfil--pet");
   const contenedorVista = DOMSelector('[data-modal="edit-pet-antecedent"]');
@@ -29,7 +32,8 @@ export const editAntecedentController = async (parametros = null) => {
 
   console.log(antecedenteResponse.data.titulo);
 
-  DOMSelector("#titulo-antecedente-edit").value = antecedenteResponse.data.titulo;
+  DOMSelector("#titulo-antecedente-edit").value =
+    antecedenteResponse.data.titulo;
   DOMSelector("#diagnostico-antecedente-edit").textContent =
     antecedenteResponse.data.diagnostico;
 
@@ -92,7 +96,7 @@ export const editAntecedentController = async (parametros = null) => {
       : cerrarModalYVolverAVistaBase();
   });
 
-  contenedorVista.addEventListener('click', (e) => {
+  contenedorVista.addEventListener("click", (e) => {
     if (e.target.id == "back-edit-pet-antecedent") {
       cerrarModal("edit-pet-antecedent");
       history.back();

@@ -12,13 +12,18 @@ import {
   errorTemporal,
   successTemporal,
   cerrarModal,
+  get,
+  renderNotFound,
 } from "../../../../helpers";
 
 export const createTreatmentController = async (parametros = null) => {
   console.log(parametros);
-  const { antecedente } = parametros;
+  const { antecedente, perfil: mascota } = parametros;
 
   // const { idAntecedente } = parametros;
+  const getMascota = await get(`mascotas/${mascota.id}`);
+
+  if (!getMascota.data.estado_vital) return await renderNotFound();
 
   const form = document.querySelector(
     "#form-register-pet-antecedent-treatment"

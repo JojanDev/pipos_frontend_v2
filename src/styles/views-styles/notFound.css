@@ -1,0 +1,43 @@
+/* ===== ESTILOS BASE ===== */
+.contenedor-pagina-no-encontrada {
+  background-color: #f9f9f9;
+  color: #2c3e50;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+}
+
+/* ===== BLOQUE PRINCIPAL ===== */
+.pagina-no-encontrada {
+  padding: 2rem;
+}
+
+.pagina-no-encontrada__titulo {
+  font-size: 6rem;
+  font-weight: bold;
+  color: #34495e;
+  margin: 0 0 1rem 0;
+}
+
+.pagina-no-encontrada__mensaje {
+  font-size: 1.2rem;
+  color: #555;
+  margin-bottom: 2rem;
+}
+
+.pagina-no-encontrada__boton {
+  display: inline-block;
+  padding: 0.8rem 2rem;
+  background-color: #3498db; /* Azul coherente */
+  color: #fff;
+  text-decoration: none;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.pagina-no-encontrada__boton:hover {
+  background-color: #2980b9;
+}

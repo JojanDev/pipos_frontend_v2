@@ -67,18 +67,21 @@ export const routes = {
       private: true,
       needLayout: true,
       slot: "main",
+      can: ["usuario.view"],
     },
     crear: {
       path: "clients/create/index.html",
       controller: createClientController,
       private: true,
       addHtml: true,
+      can: ["usuario.create-client"],
     },
     crearExistente: {
       path: "clients/createExist/index.html",
       controller: createClienteExistController,
       private: true,
       addHtml: true,
+      can: ["usuario.create-client"],
     },
     perfil: {
       "/": {
@@ -86,12 +89,14 @@ export const routes = {
         controller: profileClientController,
         private: true,
         addHtml: true,
+        can: ["usuario.view"],
       },
       editar: {
         path: "clients/edit/index.html",
         controller: editClientController,
         private: true,
         addHtml: true,
+        can: ["usuario.update"],
       },
       mascotas: {
         crear: {
@@ -99,6 +104,7 @@ export const routes = {
           controller: createPetController,
           private: true,
           addHtml: true,
+          can: ["mascota.create"],
         },
       },
     },
@@ -110,12 +116,14 @@ export const routes = {
       private: true,
       needLayout: true,
       slot: "main",
+      can: ["mascota.view"],
     },
     crear: {
       path: "pets/create/index.html",
       controller: createPetController,
       private: true,
       addHtml: true,
+      can: ["mascota.create"],
     },
     perfil: {
       "/": {
@@ -124,12 +132,14 @@ export const routes = {
         private: true,
         needLayout: true,
         slot: "main",
+        can: ["mascota.view"],
       },
       editar: {
         path: "pets/edit/index.html",
         controller: editPetController,
         private: true,
         addHtml: true,
+        can: ["mascota.update"],
       },
       antecedente: {
         crear: {
@@ -137,12 +147,14 @@ export const routes = {
           controller: createAntecedentController,
           private: true,
           addHtml: true,
+          can: ["antecedente.create"],
         },
         editar: {
           path: "antecedent/edit/index.html",
           controller: editAntecedentController,
           private: true,
           addHtml: true,
+          can: ["antecedente.update"],
         },
         tratamiento: {
           perfil: {
@@ -151,12 +163,14 @@ export const routes = {
               controller: treatmentController,
               private: true,
               addHtml: true,
+              can: ["tratamiento.view"],
             },
             editar: {
               path: "antecedent/treatment/edit/index.html",
               controller: editTreatmentController,
               private: true,
               addHtml: true,
+              can: ["tratamiento.update"],
             },
             medicamento: {
               crear: {
@@ -164,12 +178,14 @@ export const routes = {
                 controller: createMedicamentController,
                 private: true,
                 addHtml: true,
+                can: ["medicamento-tratamiento.create"],
               },
               editar: {
                 path: "antecedent/treatment/medicament/edit/index.html",
                 controller: editMedicamentTreatmentController,
                 private: true,
                 addHtml: true,
+                can: ["medicamento-tratamiento.update"],
               },
             },
           },
@@ -178,6 +194,7 @@ export const routes = {
             controller: createTreatmentController,
             private: true,
             addHtml: true,
+            can: ["tratamiento.create"],
           },
         },
       },
@@ -191,6 +208,8 @@ export const routes = {
       private: true,
       needLayout: true,
       slot: "main",
+      // dashboard admin: requiere acceso a datos de administración (uso 'especie.view' como permiso representativo)
+      can: ["especie.view"],
     },
     especies: {
       razas: {
@@ -199,6 +218,7 @@ export const routes = {
           controller: createBreedController,
           private: true,
           addHtml: true,
+          can: ["raza.create"],
         },
         perfil: {
           "/": {
@@ -206,12 +226,14 @@ export const routes = {
             controller: profileBreedController,
             private: true,
             addHtml: true,
+            can: ["raza.view"],
           },
           editar: {
             path: "administration/breeds/edit/index.html",
             controller: editBreedController,
             private: true,
             addHtml: true,
+            can: ["raza.update"],
           },
         },
       },
@@ -220,6 +242,7 @@ export const routes = {
         controller: createSpecieController,
         private: true,
         addHtml: true,
+        can: ["especie.create"],
       },
       perfil: {
         "/": {
@@ -227,37 +250,24 @@ export const routes = {
           controller: profileSpecieController,
           private: true,
           addHtml: true,
+          can: ["especie.view"],
         },
         editar: {
           path: "administration/species/edit/index.html",
           controller: editSpecieController,
           private: true,
           addHtml: true,
+          can: ["especie.update"],
         },
       },
     },
-    // razas: {
-    //   perfil: {
-    //     "/": {
-    //       path: "administration/breeds/profile/index.html",
-    //       controller: profileBreedController,
-    //       private: true,
-    //       addHtml: true,
-    //     },
-    //     editar: {
-    //       path: "administration/breeds/edit/index.html",
-    //       controller: editBreedController,
-    //       private: true,
-    //       addHtml: true,
-    //     },
-    //   },
-    // },
     "tipos-productos": {
       crear: {
         path: "administration/productsTypes/create/index.html",
         controller: createProductTypeController,
         private: true,
         addHtml: true,
+        can: ["tipo-producto.create"],
       },
       perfil: {
         "/": {
@@ -265,12 +275,14 @@ export const routes = {
           controller: profileProductTypeController,
           private: true,
           addHtml: true,
+          can: ["tipo-producto.view"],
         },
         editar: {
           path: "administration/productsTypes/edit/index.html",
           controller: editProductTypeController,
           private: true,
           addHtml: true,
+          can: ["tipo-producto.update"],
         },
       },
     },
@@ -282,18 +294,21 @@ export const routes = {
       private: true,
       needLayout: true,
       slot: "main",
+      can: ["servicio.view"],
     },
     crear: {
       path: "services/create/index.html",
       controller: createServiceController,
       private: true,
       addHtml: true,
+      can: ["servicio.create"],
     },
     editar: {
       path: "services/edit/index.html",
       controller: editServiceController,
       private: true,
       addHtml: true,
+      can: ["servicio.update"],
     },
   },
   inventario: {
@@ -303,6 +318,8 @@ export const routes = {
       private: true,
       needLayout: true,
       slot: "main",
+      // Inventory dashboard — uso 'producto.view' como permiso representativo
+      can: ["producto.view"],
     },
     productos: {
       crear: {
@@ -310,12 +327,14 @@ export const routes = {
         controller: createProductController,
         private: true,
         addHtml: true,
+        can: ["producto.create"],
       },
       editar: {
         path: "inventory/products/edit/index.html",
         controller: editProductController,
         private: true,
         addHtml: true,
+        can: ["producto.update"],
       },
     },
     medicamentos: {
@@ -325,6 +344,8 @@ export const routes = {
           controller: createMedicamentInventoryController,
           private: true,
           addHtml: true,
+          // creación de ítem en inventario (medicamento)
+          can: ["medicamento.create"],
         },
         "info-medicamentos": {
           crear: {
@@ -332,6 +353,7 @@ export const routes = {
             controller: createMedicamentInfoController,
             private: true,
             addHtml: true,
+            can: ["info-medicamento.create"],
           },
         },
       },
@@ -340,6 +362,7 @@ export const routes = {
         controller: editMedicamentInventoryController,
         private: true,
         addHtml: true,
+        can: ["medicamento.update"],
       },
     },
   },
@@ -350,12 +373,14 @@ export const routes = {
       private: true,
       needLayout: true,
       slot: "main",
+      can: ["info-medicamento.view"],
     },
     crear: {
       path: "medicaments/create/index.html",
       controller: createMedicamentInfoController,
       private: true,
       addHtml: true,
+      can: ["info-medicamento.create"],
     },
     perfil: {
       "/": {
@@ -363,12 +388,14 @@ export const routes = {
         controller: profileMedicamentInfoController,
         private: true,
         addHtml: true,
+        can: ["info-medicamento.view"],
       },
       editar: {
         path: "medicaments/edit/index.html",
         controller: editMedicamentInfoController,
         private: true,
         addHtml: true,
+        can: ["info-medicamento.update"],
       },
     },
   },
@@ -384,6 +411,7 @@ export const routes = {
       private: true,
       needLayout: true,
       slot: "main",
+      can: ["usuario.view"],
     },
     crear: {
       path: "personal/create/index.html",
@@ -391,12 +419,14 @@ export const routes = {
       private: false,
       needLayout: true,
       slot: "main",
+      can: ["usuario.create-personal"],
     },
     crearExistente: {
       path: "personal/createExist/index.html",
       controller: createPersonalExistController,
       private: false,
       addHtml: true,
+      can: ["usuario.create-personal"],
     },
     perfil: {
       "/": {
@@ -404,12 +434,15 @@ export const routes = {
         controller: profilePersonalController,
         private: true,
         addHtml: true,
+        can: ["usuario.view"],
       },
       editar: {
         path: "personal/edit/index.html",
         controller: editPersonalController,
         private: true,
         addHtml: true,
+        // ya tenías este permiso, lo dejé tal cual
+        can: ["usuario.update"],
       },
     },
   },
@@ -421,6 +454,7 @@ export const routes = {
       private: true,
       needLayout: true,
       slot: "main",
+      can: ["venta.view"],
     },
     crear: {
       "/": {
@@ -429,6 +463,7 @@ export const routes = {
         private: false,
         needLayout: true,
         slot: "main",
+        can: ["venta.create"],
       },
       "agregar-elemento": {
         path: "ventas/details/create/index.html",
@@ -437,12 +472,14 @@ export const routes = {
         // needLayout: true,
         // slot: "main",
         addHtml: true,
+        can: ["venta.create"],
       },
       finalizar: {
         path: "ventas/resume/index.html",
         controller: resumeController,
         private: true,
         addHtml: true,
+        can: ["venta.create"],
       },
     },
     perfil: {
@@ -451,12 +488,14 @@ export const routes = {
         controller: profileVentaController,
         private: true,
         addHtml: true,
+        can: ["venta.view"],
       },
       editar: {
         path: "ventas/edit/index.html",
         controller: editVentaController,
         private: true,
         addHtml: true,
+        can: ["venta.update"],
       },
     },
   },

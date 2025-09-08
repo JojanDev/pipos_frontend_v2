@@ -52,8 +52,8 @@ export const createPetController = async (parametros = null) => {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const requiredSelectClient =
-      !containerSelectClient.classList.contains("hidden");
+    // const requiredSelectClient =
+    //   !containerSelectClient.classList.contains("hidden");
 
     if (!validarCampos(e)) return;
 
@@ -65,7 +65,7 @@ export const createPetController = async (parametros = null) => {
       sexo,
       raza_id,
       edad_semanas,
-      usuario_id: requiredSelectClient ? usuario_id : usuario.id,
+      usuario_id: containerSelectClient ? usuario_id : usuario.id,
     });
 
     if (!petResponse.success) return await error(petResponse.message);

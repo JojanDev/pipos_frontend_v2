@@ -14,6 +14,7 @@
 @import url(views-styles/inventory.css);
 @import url(views-styles/services.css);
 @import url(views-styles/venta.css);
+@import url(views-styles/notFound.css);
 
 * {
   padding: 0;

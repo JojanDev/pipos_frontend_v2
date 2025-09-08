@@ -17,11 +17,12 @@ export const layoutController = async () => {
     }
   }
 
-
   const { usuario: credencialUsuario } = getCookie("usuario");
-  // console.log(credencialUsuario);
+  console.log(credencialUsuario);
 
-  const { data: usuario } = await get(`usuarios/${credencialUsuario.usuario_id}`);
+  const { data: usuario } = await get(
+    `usuarios/${credencialUsuario.usuario_id}`
+  );
 
   const rolesUsuario = await get(`roles-usuarios/usuario/${usuario.id}`);
   const contenedorRoles = DOMSelector(".contenedor-roles");

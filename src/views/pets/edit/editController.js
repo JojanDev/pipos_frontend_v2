@@ -15,7 +15,9 @@ import {
   inicializarFormularioMascota,
   successTemporal,
   mapearDatosEnContenedor,
+  renderNotFound,
 } from "../../../helpers";
+import hasPermission from "../../../helpers/hasPermission";
 
 const manejarSubmit = (
   form,
@@ -99,6 +101,7 @@ export const editPetController = async (parametros = null) => {
 
   // Obtener mascota
   const { data } = await get(`mascotas/${mascota.id}`);
+  if (!data.estado_vital) return await renderNotFound();
   const pet = prepararDatosMascota(data);
 
   // Inicializar formulario

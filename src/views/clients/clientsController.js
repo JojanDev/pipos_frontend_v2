@@ -1,4 +1,4 @@
-import { get, crearFila, DOMSelector } from "../../helpers";
+import { get, crearFila, DOMSelector, error } from "../../helpers";
 import hasPermission from "../../helpers/hasPermission";
 
 export const cargarTabla = async () => {
@@ -7,7 +7,7 @@ export const cargarTabla = async () => {
   console.log(clientes);
 
   if (!clientes.success) {
-    await error(response.message);
+    await error(clientes.message);
   }
 
   const tbody = DOMSelector("#clients .table__body");
@@ -37,7 +37,6 @@ export const clientsController = async () => {
   // const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
 
   // console.log(acciones);
-
 
   // for (const accion of acciones) {
   //   console.log(accion.dataset.permiso.split(","));

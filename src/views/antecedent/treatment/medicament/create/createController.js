@@ -11,6 +11,7 @@ import {
   get,
   llenarSelect,
   post,
+  renderNotFound,
   success,
   successTemporal,
   validarCampos,
@@ -28,7 +29,11 @@ const calcularDiasTotales = ({ meses = 0, semanas = 0, dias = 0 }) => {
 
 export const createMedicamentController = async (parametros = null) => {
   console.log(parametros);
-  const { perfil: tratamiento } = parametros;
+  const { perfil: tratamiento, antecedente } = parametros;
+  const getAntecedente = await get(`antecedentes/${antecedente.id}`);
+  const getMascota = await get(`mascotas/${getAntecedente.data.mascota_id}`);
+
+  if (!getMascota.data.estado_vital) return await renderNotFound();
   // const { idTratamiento } = parametros;
 
   llenarSelect({
@@ -138,21 +143,22 @@ export const createMedicamentController = async (parametros = null) => {
 
     successTemporal(responseMedicamentoTratamiento.message);
 
-    cerrarModal("create-pet-antecedent-treatment-medicament")
+    cerrarModal("create-pet-antecedent-treatment-medicament");
     history.back();
-
   });
 
   configurarBotonCerrar(
     "back-register-pet-antecedent-treatment-medicament",
     esModal
   );
-  const contenedorVista = DOMSelector(`[data-modal="create-pet-antecedent-treatment-medicament"]`);
+  const contenedorVista = DOMSelector(
+    `[data-modal="create-pet-antecedent-treatment-medicament"]`
+  );
 
-  contenedorVista.addEventListener('click', (e) => {
+  contenedorVista.addEventListener("click", (e) => {
     if (e.target.id == "back-register-pet-antecedent-treatment-medicament") {
       cerrarModal("create-pet-antecedent-treatment-medicament");
       history.back();
     }
-  })
+  });
 };

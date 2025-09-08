@@ -12,12 +12,17 @@ import {
   DOMSelector,
   successTemporal,
   configurarBotonCerrar,
+  get,
+  renderNotFound,
 } from "../../../helpers";
 
-export const createAntecedentController = (parametros = null) => {
+export const createAntecedentController = async (parametros = null) => {
   console.log(parametros);
 
   const { perfil: mascota } = parametros;
+  const getMascota = await get(`mascotas/${mascota.id}`);
+
+  if (!getMascota.data.estado_vital) return await renderNotFound();
 
   const containerPerfilMascota = DOMSelector(".contenedor-perfil--pet");
 

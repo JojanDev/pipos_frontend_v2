@@ -14,3 +14,4 @@ export * from "./mascotas";
 export * from "./getCookie";
 export * from "./hasPermission";
 export * from "./tratamiento";
+export * from "./auth";

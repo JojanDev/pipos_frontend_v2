@@ -15,11 +15,17 @@ import {
   DOMSelector,
   mapearDatosEnContenedor,
   successTemporal,
+  renderNotFound,
 } from "../../../../helpers";
 
 export const editTreatmentController = async (parametros = null) => {
   console.log(parametros);
-  const { perfil: tratamiento } = parametros;
+  const { perfil: tratamiento, antecedente } = parametros;
+
+  const getAntecedente = await get(`antecedentes/${antecedente.id}`);
+  const getMascota = await get(`mascotas/${getAntecedente.data.mascota_id}`);
+
+  if (!getMascota.data.estado_vital) return await renderNotFound();
 
   // const { tratamiento_id } = parametros;
   const contenedorTratamiento = DOMSelector('[data-modal="pet-treatment"]');
@@ -86,7 +92,7 @@ export const editTreatmentController = async (parametros = null) => {
 
     successTemporal(tratamientoUpdatedResponse.message);
 
-    cerrarModal("edit-pet-antecedent-treatment")
+    cerrarModal("edit-pet-antecedent-treatment");
     history.back();
   });
 

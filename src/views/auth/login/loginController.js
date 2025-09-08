@@ -6,6 +6,7 @@ import {
   datos,
   validarAlfanumericos,
   validarCampos,
+  successTemporal,
 } from "../../../helpers";
 // import { layoutController } from "../../../layouts/layout";
 
@@ -21,11 +22,7 @@ const validarSesion = async ({ usuario, contrasena }) => {
 
   //Se valida el inicio exitoso
   if (response.success) {
-    //Se muestra un mensaje
-    // localStorage.clear();
-    // localStorage.setItem("isAuthenticated", true);
-    // localStorage.setItem("data", JSON.stringify(response.data));
-    await loginSuccess(response.message);
+    successTemporal(response.message);
     return true;
   }
 

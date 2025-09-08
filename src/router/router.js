@@ -1,5 +1,6 @@
-import { DOMSelector } from "../helpers";
-import { renderLayout } from "../helpers/renderView";
+import { DOMSelector, get, isAuth } from "../helpers";
+import hasPermission from "../helpers/hasPermission";
+import { renderLayout, renderNotFound } from "../helpers/renderView";
 import { routes } from "./routes";
 
 const app = document.querySelector("#app");
@@ -8,11 +9,8 @@ let layoutActual = null;
 export const router = async () => {
   const hash = location.hash.slice(2);
   console.log("hash:", hash);
-  const arrayHash = hash.split("/"); // Separa el hash por /
+  const arrayHash = hash.split("/");
   console.log("arrayHash:", arrayHash);
-
-  // const [ruta, parametros] = recorrerRutas(routes, arrayHash); // ✅ Ahora recibimos también la clave base
-  // const auth = isAuthenticated();
 
   const hashSinParams = arrayHash.filter((item) => !item.includes("="));
 
@@ -27,35 +25,26 @@ export const router = async () => {
     DOMSelector("#app").innerHTML = html;
     login.controller();
     return;
-    // const ruta = obtenerRuta(hashBase);
-    // return (location.hash = "#/inicio" || "#/login");
   }
-  // mascotas/perfil/1/antecedente/1/tratamiento/crear
-  // console.log("arrayHash:", arrayHash);
+
+  const ruta = obtenerRuta(arrayHash);
+
+  if (ruta && ruta.private && !(await isAuth())) {
+    const logout = await get(`auth/logout`);
+    console.log(logout);
+    location.hash = "#/login";
+    return;
+  }
+
+  // if (ruta && ruta.can && !hasPermission(ruta.can))
+  //   return await renderNotFound();
 
   const hashBase = arrayHash.slice(0, indexSegBase + 1);
-  // console.log("hashBase:", hashBase);
   arrayHash.splice(0, indexSegBase + 1, hashBase);
-  // [[mascotas, perfil],id =  1, antecedente, 1, tratamiento, crear]
-  // console.log("hashUtil:", hashUtil);
-  // console.log("arrayHash:", arrayHash);
 
   let parametros = {};
   for (let index = 1; index <= arrayHash.length; index++) {
-    // console.log("hashBase:", hashBase);
     const ruta = obtenerRuta(hashBase);
-
-    // console.log("ruta:", ruta);
-
-    // console.log(
-    //   "hashBase[hashBase.length - 1]:",
-    //   hashBase[hashBase.length - 1]
-    // );
-
-    // console.log("arrayHash:", arrayHash);
-    // console.log("index:", index);
-
-    // console.log("arrayHash[index]:", arrayHash[index]);
 
     if (arrayHash[index] && arrayHash[index].includes("=")) {
       const parametrosSeparados = arrayHash[index].split("&");
@@ -64,14 +53,7 @@ export const router = async () => {
         const [clave, valor] = param.split("=");
         objetoParametros[clave] = valor ? decodeURIComponent(valor) : "";
       });
-      console.log("index:", index);
-      console.log("arrayHash[index]:", arrayHash[index]);
-
-      console.log(arrayHash);
-      console.log("objetoParametros:", objetoParametros);
-
       parametros[`${hashBase[hashBase.length - 1]}`] = objetoParametros;
-      console.log("parametros:", parametros);
     }
 
     const hashSinParams = hashBase.filter((item) => !item.includes("="));
@@ -86,9 +68,6 @@ export const router = async () => {
         await renderLayout();
       }
     }
-    console.log("parametros:", parametros);
-
-    console.log("vistaCargada:", vistaCargada);
 
     if (vistaCargada) continue;
 
@@ -96,134 +75,6 @@ export const router = async () => {
     await cargarVistaEnLayout(ruta.path, hashSinParams.join("/"), ruta.addHtml);
     await ruta.controller(parametros);
   }
-  // hashUtil.forEach((segmento) => {
-  //   const ruta = obtenerRuta(segmento);
-  // });
-
-  // let claveBase = null; // ← ✅ Variable para guardar la clave base
-
-  //mascotas/perfil/id=1/antecedente/id=1/tratamiento/crear
-
-  // if (!ruta) {
-  //   location.hash = auth ? "#/inicio" : "#/login";
-  //   return;
-  // }
-
-  // // Si la ruta es privada y no está autenticado
-  // if (ruta.private && !auth) {
-  //   location.hash = "#/login";
-  //   return;
-  // }
-
-  // if (!ruta.private) {
-  //   layoutActual = false;
-  //   // Dependiendo de tu renderLayout, puede que quieras vaciar #app:
-  //   app.innerHTML = "";
-  // }
-
-  // if (ruta.addHtml) {
-  //   const hashBase = arrayHash.splice(
-  //     arrayHash[arrayHash.length - 1].includes("=") ? -2 : -1
-  //   );
-
-  //   const rutasRecorridas = [];
-
-  //   if (!layoutActual || hashBase.join("/") !== hash) {
-  //     //Mal hashbase
-  //     layoutActual = true;
-  //     await renderLayout();
-
-  //     hashBase.forEach(async (segmento, index) => {
-  //       if (segmento.includes("=")) return;
-
-  //       rutasRecorridas.push(segmento);
-
-  //       if (hashBase[index + 1].includes("=")) {
-  //         rutasRecorridas.push(segmento);
-  //       }
-
-  //       const [rutaAnterior, parametrosAnterior] = recorrerRutas(
-  //         routes,
-  //         rutasRecorridas
-  //       ); // ✅ Ahora recibimos también la clave base
-  //       if (!rutaAnterior) return;
-
-  //       await cargarVistaEnLayout(
-  //         rutaAnterior.path,
-  //         "main",
-  //         rutaAnterior.addHtml
-  //       );
-  //       await rutaAnterior.controller(parametrosAnterior);
-  //     });
-  //   }
-  //   await cargarVistaEnLayout(ruta.path, "main", ruta.addHtml);
-  //   await ruta.controller(parametros);
-  // }
-
-  // Ruta con vista encima (modal, addHtml)
-  // if (ruta.addHtml) {
-  //   const baseHash = sessionStorage.getItem("vistaBase");
-
-  //   if (!layoutActual || (baseHash && baseHash !== hash)) {
-  //     const [rutaBase, parametrosBase, claveBaseVista] = recorrerRutas(
-  //       routes,
-  //       baseHash || ""
-  //     ); // ✅ También obtenemos la clave base de la vista base
-
-  //     if (!rutaBase || !rutaBase.layout || !rutaBase.path) {
-  //       console.warn("No se pudo restaurar la vista base:", baseHash);
-  //       location.hash = "#/inicio";
-  //       return;
-  //     }
-
-  //     // Si el layout no es el actual, lo cargamos
-  //     if (layoutActual !== rutaBase.layout) {
-  //       layoutActual = rutaBase.layout;
-  //       await renderLayout(app, rutaBase.layout);
-  //     }
-
-  //     const slot = document.querySelector(
-  //       `[data-slot="${rutaBase.slot || "main"}"]`
-  //     );
-
-  //     const vistaYaCargada =
-  //       slot?.getAttribute("data-vista-base") === claveBaseVista; // ✅ Comparamos contra la clave base
-
-  //     if (!vistaYaCargada) {
-  //       await cargarVistaEnLayout(rutaBase.path, rutaBase.slot);
-  //       slot?.setAttribute("data-vista-base", claveBaseVista); // ✅ Asignamos la clave base, no el path
-  //       await rutaBase.controller(parametrosBase);
-  //     }
-  //   }
-
-  //   // Insertamos la nueva vista encima
-  //   await cargarVistaEnLayout(ruta.path, ruta.slot, true);
-  // }
-
-  // // Ruta normal con layout
-  // else if (ruta.layout) {
-  //   if (layoutActual !== ruta.layout) {
-  //     layoutActual = ruta.layout;
-  //     await renderLayout(app, ruta.layout);
-  //   }
-
-  //   await cargarVistaEnLayout(ruta.path, ruta.slot);
-
-  //   const slot = document.querySelector(`[data-slot="${ruta.slot || "main"}"]`);
-
-  //   slot?.setAttribute("data-vista-base", claveBase); // ✅ Usamos la clave base como identificador único
-
-  //   actualizarVistaBase(ruta);
-  // }
-
-  // // Ruta sin layout (ej: login)
-  // else {
-  //   layoutActual = null;
-  //   await cargarVista(ruta.path, app);
-  //   actualizarVistaBase(ruta);
-  // }
-
-  // await ruta.controller(parametros);
 };
 
 const obtenerIndexSegmentoBase = (arrayHash) => {

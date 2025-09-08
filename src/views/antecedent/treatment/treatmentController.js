@@ -37,12 +37,15 @@ const desactivarBotonesPerfilTratamiento = () => {
   ];
 
   botones.forEach((selector) => {
-    const boton = DOMSelectorAll(selector);
+    const boton = DOMSelector(selector);
+    console.log(boton);
     if (boton) boton.remove();
   });
 
   // Botones de eliminar medicamento dentro de la tabla
   const botonesEliminarMedicamento = DOMSelectorAll(".delete-tabla");
+  console.log(botonesEliminarMedicamento);
+
   botonesEliminarMedicamento.forEach((btn) => btn.remove());
 
   const botonesEditMedicamento = DOMSelectorAll(".edit-tabla");
@@ -86,49 +89,55 @@ export const treatmentController = async (parametros = null) => {
   );
 
   if (responseMedicamentos.success) {
-    responseMedicamentos.data.forEach(
-      async ({
-        id,
-        info_medicamento_id,
-        dosis,
-        duracion,
-        frecuencia_aplicacion,
-      }) => {
-        const iconDelete = document.createElement("i");
-
-        iconDelete.classList.add(
-          "ri-delete-bin-line",
-          "delete-tabla",
-          "btn--red",
-          "admin"
-        );
-
-        iconDelete.dataset.permiso = "medicamento-tratamiento.delete";
-
-        const iconEdit = document.createElement("i");
-
-        iconEdit.classList.add("ri-edit-box-line", "edit-tabla", "btn--orange");
-
-        iconEdit.dataset.permiso = "medicamento-tratamiento.update";
-
-        const { data: infoMedicamento } = await get(
-          `info-medicamentos/${info_medicamento_id}`
-        );
-
-        const row = crearFila([
+    await Promise.all(
+      responseMedicamentos.data.map(
+        async ({
           id,
-          infoMedicamento.nombre,
-          infoMedicamento.uso_general,
-          capitalizarPrimeraLetra(infoMedicamento.via_administracion),
+          info_medicamento_id,
           dosis,
+          duracion,
           frecuencia_aplicacion,
-          convertirDias(duracion),
-          iconDelete,
-          iconEdit,
-        ]);
+        }) => {
+          const iconDelete = document.createElement("i");
 
-        tbody.append(row);
-      }
+          iconDelete.classList.add(
+            "ri-delete-bin-line",
+            "delete-tabla",
+            "btn--red",
+            "admin"
+          );
+
+          iconDelete.dataset.permiso = "medicamento-tratamiento.delete";
+
+          const iconEdit = document.createElement("i");
+
+          iconEdit.classList.add(
+            "ri-edit-box-line",
+            "edit-tabla",
+            "btn--orange"
+          );
+
+          iconEdit.dataset.permiso = "medicamento-tratamiento.update";
+
+          const { data: infoMedicamento } = await get(
+            `info-medicamentos/${info_medicamento_id}`
+          );
+
+          const row = crearFila([
+            id,
+            infoMedicamento.nombre,
+            infoMedicamento.uso_general,
+            capitalizarPrimeraLetra(infoMedicamento.via_administracion),
+            dosis,
+            frecuencia_aplicacion,
+            convertirDias(duracion),
+            iconDelete,
+            iconEdit,
+          ]);
+
+          tbody.append(row);
+        }
+      )
     );
   } else {
     errorTemporal(responseMedicamentos.message);

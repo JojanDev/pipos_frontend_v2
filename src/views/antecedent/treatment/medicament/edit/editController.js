@@ -14,6 +14,7 @@ import {
   mapearDatosEnContenedor,
   post,
   put,
+  renderNotFound,
   success,
   successTemporal,
   validarCampos,
@@ -47,18 +48,15 @@ export const editMedicamentTreatmentController = async (parametros = null) => {
   console.log(parametros);
 
   // const { id } = parametros;
-  const { editar: medicamentoTratamiento } = parametros;
-  // const dataJSON = localStorage.getItem("data");
-  // const data = JSON.parse(dataJSON);
+  const { editar: medicamentoTratamiento, antecedente } = parametros;
+  const getAntecedente = await get(`antecedentes/${antecedente.id}`);
+  const getMascota = await get(`mascotas/${getAntecedente.data.mascota_id}`);
 
-  // if (data.id_rol != 1) {
-  //   const opcionesAdmin = DOMSelectorAll(".admin");
-  //   [...opcionesAdmin].forEach((element) => {
-  //     element.remove();
-  //   });
-  // }
+  if (!getMascota.data.estado_vital) return await renderNotFound();
 
-  const responseMediTrat = await get(`medicamentos-tratamientos/${medicamentoTratamiento.id}`);
+  const responseMediTrat = await get(
+    `medicamentos-tratamientos/${medicamentoTratamiento.id}`
+  );
   const a = await get(`info-medicamentos/`);
   console.log(a);
 
@@ -136,7 +134,9 @@ export const editMedicamentTreatmentController = async (parametros = null) => {
 
     const tbody = DOMSelector("#pet-antecedent-treatment .table__body");
 
-    const oldRow = DOMSelector(`#pet-antecedent-treatment [data-id='${medicamentoTratamiento.id}'`);
+    const oldRow = DOMSelector(
+      `#pet-antecedent-treatment [data-id='${medicamentoTratamiento.id}'`
+    );
     console.log(oldRow);
 
     if (tbody) {
@@ -188,14 +188,14 @@ export const editMedicamentTreatmentController = async (parametros = null) => {
       : cerrarModalYVolverAVistaBase();
   });
 
+  const contenedorVista = DOMSelector(
+    `[data-modal="edit-pet-antecedent-treatment-medicament"]`
+  );
 
-  const contenedorVista = DOMSelector(`[data-modal="edit-pet-antecedent-treatment-medicament"]`);
-
-  contenedorVista.addEventListener('click', (e) => {
+  contenedorVista.addEventListener("click", (e) => {
     if (e.target.id == "back-edit-pet-antecedent-treatment-medicament") {
-      cerrarModal("edit-pet-antecedent-treatment-medicament")
+      cerrarModal("edit-pet-antecedent-treatment-medicament");
       history.back();
     }
-  })
-
+  });
 };
