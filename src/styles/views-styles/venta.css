@@ -74,7 +74,7 @@
 ========================= */
 .producto {
   display: grid;
-  grid-template-columns: 1fr 150px 150px 150px 150px 150px 30px;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr 50px;
   padding: 5px;
   background-color: #cdcdcd;
   color: #000;
@@ -173,7 +173,7 @@
   /* justify-content: space-around; */
 }
 
-.jc-sa{
+.jc-sa {
   justify-content: space-around;
 }
 
@@ -186,6 +186,6 @@
   width: 750px;
 }
 
-.fw-400{
+.fw-400 {
   font-weight: 400;
 }

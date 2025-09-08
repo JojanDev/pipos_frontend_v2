@@ -134,10 +134,9 @@ export const editClientController = async (parametros = null) => {
   contenedorVista.addEventListener("click", (event) => {
     const arrow = event.target.closest("#back-edit-client");
     if (arrow) {
-      // esModal ? cerrarModal("edit-client") : cerrarModalYVolverAVistaBase();
-      // console.log("si");
+
       cerrarModal("edit-client");
-      // location.hash = `#/clientes/perfil/id=${usuario.id}`;
+      
       history.back();
     }
   });

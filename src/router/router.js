@@ -36,8 +36,8 @@ export const router = async () => {
     return;
   }
 
-  // if (ruta && ruta.can && !hasPermission(ruta.can))
-  //   return await renderNotFound();
+  if (ruta && ruta.can && !hasPermission(ruta.can))
+    return await renderNotFound();
 
   const hashBase = arrayHash.slice(0, indexSegBase + 1);
   arrayHash.splice(0, indexSegBase + 1, hashBase);

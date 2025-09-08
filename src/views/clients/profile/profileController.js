@@ -28,7 +28,8 @@ export const profileClientController = async (parametros = null) => {
 
   if (!userResponse.success) {
     await error(userResponse.message);
-    cerrarModalYVolverAVistaBase();
+    history.back();
+
     return;
   }
 
@@ -70,7 +71,6 @@ export const profileClientController = async (parametros = null) => {
   // const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
 
   // console.log(acciones);
-
 
   // for (const accion of acciones) {
   //   console.log(accion.dataset.permiso.split(","));

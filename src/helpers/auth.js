@@ -20,7 +20,16 @@ export const isAuth = async () => {
       const refresh = await refreshToken();
       if (!refresh) return false;
 
-      response = await get("auth/protected");
+      const response = await (
+        await fetch(url + "auth/protected", {
+          method: "GET",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+        })
+      ).json();
+
+      console.log(response);
+
       return response.success;
     }
 
@@ -43,7 +52,15 @@ export const isAuth = async () => {
 };
 
 const refreshToken = async () => {
-  const response = await get("auth/refresh");
+  const response = await (
+    await fetch(url + "auth/refresh", {
+      method: "GET",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+    })
+  ).json();
+  console.log(response);
+
   if (!response.success) console.error("Error al renovar token:", error);
   return response.success;
 };

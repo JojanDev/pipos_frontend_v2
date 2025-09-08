@@ -183,9 +183,8 @@ export const editMedicamentTreatmentController = async (parametros = null) => {
 
     successTemporal(responseMedicamentoTratamiento.message);
 
-    esModal
-      ? cerrarModal("edit-pet-antecedent-treatment-medicament")
-      : cerrarModalYVolverAVistaBase();
+    cerrarModal("edit-pet-antecedent-treatment-medicament");
+    history.back();
   });
 
   const contenedorVista = DOMSelector(

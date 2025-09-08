@@ -35,6 +35,7 @@ export const configurarBotonCerrar = (buttonId, esModal) => {
 
   button.addEventListener("click", () => {
     const modalId = button.dataset.modal;
-    esModal ? cerrarModal(modalId) : cerrarModalYVolverAVistaBase();
+    cerrarModal(modalId);
+    history.back();
   });
 };

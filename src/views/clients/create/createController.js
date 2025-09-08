@@ -4,8 +4,10 @@ import {
   configurarEventosValidaciones,
   crearFila,
   datos,
+  DOMSelector,
   error,
   llenarSelect,
+  llenarSelectTiposDocumentos,
   post,
   successTemporal,
   validarCampos,
@@ -14,14 +16,10 @@ import {
 export const createClientController = async () => {
   const form = document.querySelector("#form-register-client");
   const tbody = document.querySelector("#clients .table__body");
-  const esModal = !location.hash.includes("clientes/crear");
+  const contenedorVista = DOMSelector(`[data-modal="create-client"]`);
 
   //Inicializacion
-  llenarSelect({
-    endpoint: "tipos-documentos",
-    selector: "#tipos-documento",
-    optionMapper: ({ id, nombre }) => ({ id, text: nombre }),
-  });
+  await llenarSelectTiposDocumentos();
 
   configurarEventosValidaciones(form);
 
@@ -40,7 +38,7 @@ export const createClientController = async () => {
 
     const clientRoleResponse = await post("roles-usuarios", {
       usuario_id: createUserResponse.data.id,
-      rol_id: 5, //Rol cliente
+      rol_id: 3, //Rol cliente
     });
 
     successTemporal(createUserResponse.message);
@@ -65,14 +63,11 @@ export const createClientController = async () => {
   });
 
   //Evento de cierre del modal
-  document.addEventListener("click", (event) => {
+  contenedorVista.addEventListener("click", (event) => {
     const target = event.target;
     if (target.closest("#back-register-client")) {
-      // esModal ? cerrarModal("create-client") : cerrarModalYVolverAVistaBase();
       cerrarModal("create-client");
-      // location.hash = "#/clientes";
       history.back();
-
     }
   });
 };

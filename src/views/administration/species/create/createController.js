@@ -77,6 +77,7 @@ export const createSpecieController = (parametros = null) => {
   const btnAtras = document.querySelector("#back-register-specie");
 
   btnAtras.addEventListener("click", () => {
-    esModal ? cerrarModal("create-specie") : cerrarModalYVolverAVistaBase();
+    cerrarModal("create-specie");
+    history.back();
   });
 };

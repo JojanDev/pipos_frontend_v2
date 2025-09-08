@@ -86,8 +86,9 @@ export function renderizarPerfilVenta(venta) {
     : "$0";
 
   // Estado
-  document.getElementById("venta-profile-estado").textContent =
-    capitalizarPrimeraLetra(venta.estado) || "";
+  document.getElementById("venta-profile-estado").textContent = venta.completada
+    ? "Completada"
+    : "Pendiente";
 
   document.getElementById("venta-profile-total").textContent =
     formatearPrecioConPuntos(venta.total) || "";

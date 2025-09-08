@@ -48,7 +48,8 @@ export const profileClientController = async (parametros = null) => {
 
   if (!response.success) {
     await error(response.message);
-    cerrarModalYVolverAVistaBase();
+    history.back();
+
     return;
   }
 
@@ -58,7 +59,9 @@ export const profileClientController = async (parametros = null) => {
 
   if (responseMascotas.code == 500) {
     await error(responseMascotas.message);
-    esModal ? cerrarModal("profile-client") : cerrarModalYVolverAVistaBase();
+    cerrarModal("profile-client");
+    history.back();
+
     return;
   }
 
@@ -81,7 +84,8 @@ export const profileClientController = async (parametros = null) => {
   }
 
   btnAtras.addEventListener("click", () => {
-    esModal ? cerrarModal("profile-client") : cerrarModalYVolverAVistaBase();
+    cerrarModal("profile-client");
+    history.back();
   });
 
   btnRegisterPets.addEventListener("click", async () => {

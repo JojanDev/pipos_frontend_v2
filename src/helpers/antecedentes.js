@@ -8,16 +8,6 @@ export const crearBloqueAntecedenteCompleto = async ({
   tratamientos = [],
   message = "No hay tratamientos registrados",
 }) => {
-  // const dataJSON = localStorage.getItem("data");
-  // const data = JSON.parse(dataJSON);
-  // console.log(data);
-
-  // if (data.id_rol != 1) {
-  //   const opcionesAdmin = document.querySelectorAll(".admin");
-  //   [...opcionesAdmin].forEach((element) => {
-  //     element.remove();
-  //   });
-  // }
   const fechaFormateada = convertirADiaMesAño(fecha_creado);
 
   // 📦 Contenedor principal
@@ -57,7 +47,6 @@ export const crearBloqueAntecedenteCompleto = async ({
   );
 
   iconEdit.dataset.permiso = "antecedente.update";
-
 
   divHeader.appendChild(spanFecha);
   divHeader.appendChild(spanTitulo);
@@ -100,7 +89,6 @@ export const crearBloqueAntecedenteCompleto = async ({
   icono.setAttribute("id", "register-treatment-antecedent");
 
   icono.dataset.permiso = "tratamiento.create";
-
 
   divBody.appendChild(icono);
 

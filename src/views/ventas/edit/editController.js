@@ -51,7 +51,7 @@ export const editVentaController = async (parametros = null) => {
   console.log(venta);
 
   // Si la venta ya está completada → ocultar el botón
-  if (venta.estado === "completada") {
+  if (venta.completada) {
     botonAgregar.style.display = "none";
     valorAgregar.disabled = true;
   } else {
@@ -92,7 +92,7 @@ export const editVentaController = async (parametros = null) => {
 
       // renderizarPerfilVenta(ventaDesdeBackend.data);
 
-      if (responseUpdate.data.estado == "completada") {
+      if (responseUpdate.data.completada) {
         document.querySelector("#venta-finalizar").remove();
       }
       await success(responseUpdate.message);

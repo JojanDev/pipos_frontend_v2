@@ -24,7 +24,8 @@ export const createAntecedentController = async (parametros = null) => {
 
   if (!getMascota.data.estado_vital) return await renderNotFound();
 
-  const containerPerfilMascota = DOMSelector(".contenedor-perfil--pet");
+  const containerPerfilMascota = DOMSelector("#pet-profile");
+  const contenedorVista = DOMSelector('[data-modal="create-pet-antecedent"]');
 
   const selectPets = DOMSelector("#select-pets");
 
@@ -65,9 +66,10 @@ export const createAntecedentController = async (parametros = null) => {
     const contenedorAntecedente = DOMSelector("#profile-pet-antecedent");
 
     if (contenedorAntecedente) {
-      const bloqueAntecedenteCreado = crearBloqueAntecedenteCompleto(
+      const bloqueAntecedenteCreado = await crearBloqueAntecedenteCompleto(
         antecedentResponse.data
       );
+
       contenedorAntecedente.insertAdjacentElement(
         "afterbegin",
         bloqueAntecedenteCreado
@@ -78,20 +80,17 @@ export const createAntecedentController = async (parametros = null) => {
 
     successTemporal(antecedentResponse.message);
 
-    esModal
-      ? cerrarModal("create-pet-antecedent")
-      : cerrarModalYVolverAVistaBase();
+    cerrarModal("create-pet-antecedent");
+    history.back();
   });
 
-  configurarBotonCerrar("back-register-pet-antecedent", esModal);
+  contenedorVista.addEventListener("click", (e) => {
+    if (e.target.id == "back-register-pet-antecedent") {
+      cerrarModal("create-pet-antecedent");
+      // location.hash = `#/mascotas/perfil/id=${mascota.id}`;
+      console.log("si");
 
-  DOMSelector("[data-modal='create-pet-antecedent'").addEventListener(
-    "click",
-    (e) => {
-      if (e.target.id == "back-register-pet-antecedent") {
-        cerrarModal("create-pet-antecedent");
-        location.hash = `#/mascotas/perfil/id=${mascota.id}`;
-      }
+      history.back();
     }
-  );
+  });
 };

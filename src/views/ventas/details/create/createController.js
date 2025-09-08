@@ -9,6 +9,7 @@ import {
   llenarSelectProductos,
   renderizarCarrito,
   success,
+  successTemporal,
   validarCampos,
 } from "../../../../helpers";
 import { venta, ventaInformacion } from "../../create/createController";
@@ -228,7 +229,7 @@ export const createDetailsController = () => {
     renderizarCarrito();
 
     // Mostrar mensaje de éxito y cerrar modal
-    await success("Elemento agregado!");
+    successTemporal("Elemento agregado!");
     cerrarModal("venta-details");
     history.back();
   });

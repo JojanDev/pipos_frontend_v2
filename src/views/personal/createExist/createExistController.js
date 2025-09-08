@@ -66,16 +66,15 @@ export const createPersonalExistController = async () => {
       ]);
       tbody.insertAdjacentElement("afterbegin", row);
     }
-    esModal
-      ? cerrarModal("create-personalExist")
-      : cerrarModalYVolverAVistaBase();
+
+    cerrarModal("create-personalExist");
+    history.back();
   });
 
   const btnAtras = document.querySelector("#back-create-personalExist");
 
   btnAtras.addEventListener("click", () => {
-    esModal
-      ? cerrarModal("create-personalExist")
-      : cerrarModalYVolverAVistaBase();
+    cerrarModal("create-personalExist");
+    history.back();
   });
 };

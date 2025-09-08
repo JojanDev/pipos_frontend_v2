@@ -91,9 +91,8 @@ export const editAntecedentController = async (parametros = null) => {
 
     successTemporal(responseAntecedente.message);
 
-    esModal
-      ? cerrarModal("edit-pet-antecedent")
-      : cerrarModalYVolverAVistaBase();
+    cerrarModal("edit-pet-antecedent");
+    history.back();
   });
 
   contenedorVista.addEventListener("click", (e) => {

@@ -46,9 +46,10 @@ export const createClienteExistController = async () => {
 
     const tbody = document.querySelector("#clients .table__body");
     if (tbody) {
-      const { data: usuario } = await get(`usuarios/${response.data.usuario_id}`);
-      const { id, nombre, telefono, numero_documento, direccion } =
-        usuario;
+      const { data: usuario } = await get(
+        `usuarios/${response.data.usuario_id}`
+      );
+      const { id, nombre, telefono, numero_documento, direccion } = usuario;
 
       const row = crearFila([
         id,
@@ -63,17 +64,14 @@ export const createClienteExistController = async () => {
 
     successTemporal(response.message);
 
-    cerrarModal("create-clienteExist")
+    cerrarModal("create-clienteExist");
     history.back();
   });
 
   const btnAtras = document.querySelector("#back-create-clienteExist");
 
   btnAtras.addEventListener("click", () => {
-    // esModal
     cerrarModal("create-clienteExist");
     history.back();
-
-    // : cerrarModalYVolverAVistaBase();
   });
 };

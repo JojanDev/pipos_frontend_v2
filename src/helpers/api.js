@@ -15,6 +15,8 @@ export const get = async (endpoint) => {
   if (!datos.success && datos.code == 401) {
     if (!(await isAuth())) {
       await error(datos.message);
+      console.log(datos.message);
+
       const logout = await get(`auth/logout`);
       console.log(logout);
       location.hash = "#/login";

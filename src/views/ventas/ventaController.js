@@ -46,7 +46,7 @@ export const cargarTablaVentas = async () => {
         formatearPrecioConPuntos(venta.monto),
         formatearPrecioConPuntos(venta.total - venta.monto),
         formatearPrecioConPuntos(venta.total),
-        capitalizarPrimeraLetra(venta.estado),
+        venta.completada ? "Completada" : "Pendiente",
       ];
     })
   );
@@ -70,7 +70,6 @@ export const ventasController = async () => {
   // const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
 
   // console.log(acciones);
-
 
   // for (const accion of acciones) {
   //   console.log(accion.dataset.permiso.split(","));

@@ -45,7 +45,8 @@ export const editServiceController = async (parametros = null) => {
       descripcion === datos.descripcion &&
       precio === datos.precio
     ) {
-      esModal ? cerrarModal("edit-service") : cerrarModalYVolverAVistaBase();
+      cerrarModal("edit-service");
+      history.back();
       return;
     }
 
@@ -67,12 +68,13 @@ export const editServiceController = async (parametros = null) => {
         "Valor: " + formatearPrecioConPuntos(responseUpdate.data.precio);
     }
 
-    esModal ? cerrarModal("edit-service") : cerrarModalYVolverAVistaBase();
+    cerrarModal("edit-service");
+    history.back();
   });
 
   const contenedorVista = DOMSelector(`[data-modal="edit-service"]`);
 
-  contenedorVista.addEventListener('click', (e) => {
+  contenedorVista.addEventListener("click", (e) => {
     if (e.target.id == "back-edit-service") {
       cerrarModal("edit-service");
       history.back();

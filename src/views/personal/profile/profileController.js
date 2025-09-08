@@ -37,7 +37,8 @@ export const profilePersonalController = async (parametros = null) => {
 
   if (!response.success) {
     await error(response.message);
-    cerrarModalYVolverAVistaBase();
+    history.back();
+
     return;
   }
 

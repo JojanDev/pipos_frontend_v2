@@ -58,14 +58,16 @@ export const layoutController = async () => {
 
   const layout = DOMSelector(".layout");
 
-  layout.addEventListener("click", (e) => {
-    if (e.target.id == "perfil-usuario") {
-      // window.location.hash = "#/personal/";
-    }
+  layout.addEventListener("click", async (e) => {
+    // if (e.target.id == "perfil-usuario") {
+    //   window.location.hash = "#/personal/";
+    // }
 
     if (e.target.id == "salir-usuario") {
-      localStorage.clear();
-      window.location.hash = "#/login/";
+      const logout = await get(`auth/logout`);
+      console.log(logout);
+      location.hash = "#/login";
+      return;
     }
   });
 };
