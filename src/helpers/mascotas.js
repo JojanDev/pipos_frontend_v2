@@ -1,5 +1,6 @@
+import { convertirADiaMesAño } from "./antecedentes";
 import { crearFila } from "./crearFila";
-import { capitalizarPrimeraLetra } from "./diseño";
+import { capitalizarPrimeraLetra, toInputDate } from "./diseño";
 import { mapearDatosEnContenedor } from "./domMapper";
 import { llenarSelectClientes, renderizarSelectEspecies } from "./selects";
 import { configurarEventosValidaciones } from "./validaciones";
@@ -35,13 +36,13 @@ export const calcularSemanasTotales = ({
 };
 
 export const prepararDatosMascota = (pet) => {
-  const { anios, meses, semanas } = calcularEdadPorSemanas(pet.edad_semanas);
+  const fecha_nacimiento = toInputDate(pet.fecha_nacimiento);
+  console.log(fecha_nacimiento);
+
   return {
     ...pet,
     "select-clients": pet.usuario_id,
-    anios,
-    meses,
-    semanas,
+    fecha_nacimiento,
     "select-especies": pet.raza.especie_id,
   };
 };
@@ -81,13 +82,13 @@ export const inicializarFormularioMascota = async (
 
 export const actualizarTablas = (pet, tbody_perfilCliente, tbody_Mascotas) => {
   if (tbody_perfilCliente) {
-    const { id, nombre, raza, especie, sexo, edad_semanas } = pet;
+    const { id, nombre, raza, especie, sexo, fecha_nacimiento } = pet;
     const row = crearFila([
       id,
       nombre,
       especie,
       raza,
-      edad_semanas ? convertirEdadCorta(edad_semanas) : "Desconocida",
+      convertirADiaMesAño(fecha_nacimiento),
       capitalizarPrimeraLetra(sexo),
     ]);
     tbody_perfilCliente.insertAdjacentElement("afterbegin", row);

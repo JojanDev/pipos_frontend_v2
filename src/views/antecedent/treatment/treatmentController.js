@@ -85,7 +85,7 @@ export const treatmentController = async (parametros = null) => {
   mapearDatosEnContenedor(
     {
       ...tratamientoResponse.data,
-      veterinario: veterinario.nombre,
+      veterinario: `${veterinario.nombre} ${veterinario.apellido}`,
       "titulo-antecedente": antecedenteResponse.data.titulo,
     },
     modal

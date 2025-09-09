@@ -17,6 +17,7 @@ import {
   mapearDatosEnContenedor,
   renderNotFound,
   convertirEdadCorta,
+  convertirADiaMesAño,
 } from "../../../helpers";
 import hasPermission from "../../../helpers/hasPermission";
 
@@ -34,15 +35,14 @@ const manejarSubmit = (
 
     if (!validarCampos(e)) return;
 
-    const edad_semanas = calcularSemanasTotales(datos);
-    const { nombre, sexo, raza_id, usuario_id } = datos;
+    const { nombre, sexo, raza_id, usuario_id, fecha_nacimiento } = datos;
 
     const petResponse = await put("mascotas/" + id, {
       id,
       nombre,
       sexo,
       raza_id,
-      edad_semanas,
+      fecha_nacimiento,
       usuario_id,
     });
 
@@ -66,9 +66,7 @@ const manejarSubmit = (
       petResponse.data.mascota = petResponse.data.nombre;
       petResponse.data.especie = especie.nombre;
       petResponse.data.raza = raza.nombre;
-      petResponse.data.edad = petResponse.data.edad_semanas
-        ? convertirEdadCorta(edad_semanas)
-        : "Desconocida";
+      petResponse.data.fecha_nacimiento = convertirADiaMesAño(petResponse.data.fecha_nacimiento);
 
       console.log(petResponse);
       clientResponse.data["tipo_documento"] = typeDocumentResponse.data.nombre;

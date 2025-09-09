@@ -37,7 +37,7 @@ export const cargarTablaEmpleados = async () => {
       return [
         usuario.id,
         nombreRoles.join(", ") ?? "No aplica",
-        usuario.nombre,
+        `${usuario.nombre} ${usuario.apellido}`,
         usuario.telefono,
         usuario.numero_documento,
         usuario.direccion,

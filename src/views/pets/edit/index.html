@@ -1,10 +1,6 @@
 <div class="modal__backdrop" data-modal="edit-pet">
   <section class="section-form modal__container">
-    <i
-      class="ri-arrow-left-line arrow-left arrow-left--bottom"
-      id="back-edit-pet-client"
-      data-modal="edit-pet"
-    ></i>
+    <i class="ri-arrow-left-line arrow-left arrow-left--bottom" id="back-edit-pet-client" data-modal="edit-pet"></i>
 
     <h1 class="section-form__title">Editar Mascota</h1>
     <hr class="section-form__line section-form__line--margin-bottom" />
@@ -13,12 +9,7 @@
       <div class="form form--w-700">
         <div class="form__container-field" id="container-select-clients">
           <label for="" class="form__label">Propietario</label>
-          <select
-            class="form__input form__input--select"
-            required
-            name="usuario_id"
-            id="select-clients"
-          >
+          <select class="form__input form__input--select" required name="usuario_id" id="select-clients">
             <!-- Opciones -->
             <option disabled selected value="">Seleccione un cliente</option>
           </select>
@@ -26,23 +17,11 @@
         <div class="form__container-fields">
           <div class="form__container-field form__container-field--span">
             <label for="" class="form__label">Nombre</label>
-            <input
-              type="text"
-              class="form__input"
-              required
-              data-validate="texto"
-              name="nombre"
-              id="nombre"
-            />
+            <input type="text" class="form__input" required data-validate="texto" name="nombre" id="nombre" />
           </div>
           <div class="form__container-field">
             <label for="" class="form__label">Sexo</label>
-            <select
-              class="form__input form__input--select"
-              required
-              name="sexo"
-              id="sexo"
-            >
+            <select class="form__input form__input--select" required name="sexo" id="sexo">
               <!-- Opciones -->
               <option disabled selected value="">Seleccione un sexo</option>
               <option value="macho">Macho</option>
@@ -54,58 +33,23 @@
         <div class="form__container-fields">
           <div class="form__container-field">
             <label for="" class="form__label">Especie</label>
-            <select
-              class="form__input form__input--select"
-              required
-              name="especie"
-              id="select-especies"
-            >
+            <select class="form__input form__input--select" required name="especie" id="select-especies">
               <!-- Opciones -->
               <option disabled selected value="">Seleccione una especie</option>
             </select>
           </div>
           <div class="form__container-field">
             <label for="" class="form__label">Raza</label>
-            <select
-              class="form__input form__input--select"
-              required
-              id="select-razas"
-              name="raza_id"
-            >
+            <select class="form__input form__input--select" required id="select-razas" name="raza_id">
               <!-- Opciones -->
               <option disabled selected value="">Seleccione una especie</option>
             </select>
           </div>
         </div>
-        <div class="form__container-fields form__container-fields--3-col">
-          <p for="" class="form__label form__label--col-span">Edad</p>
-          <div class="form__container-field">
-            <input
-              type="text"
-              class="form__input"
-              data-validate="numero,limite:2"
-              name="anios"
-              id="anios"
-            />
-          </div>
-          <div class="form__container-field">
-            <input
-              type="text"
-              class="form__input"
-              data-validate="numero"
-              name="meses"
-              id="meses"
-            />
-          </div>
-          <div class="form__container-field">
-            <input
-              type="text"
-              class="form__input"
-              data-validate="numero"
-              name="semanas"
-              id="semanas"
-            />
-          </div>
+        <div class="form__container-field">
+          <label for="" class="form__label">Fecha de Nacimiento</label>
+          <input type="date" class="form__input" required data-validate="fecha_nacimiento" name="fecha_nacimiento"
+            id="fecha_nacimiento" />
         </div>
         <div class="form__container-btns">
           <button type="submit" class="btn btn--lower-height">

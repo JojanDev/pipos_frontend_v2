@@ -1,84 +1,48 @@
 <div class="modal__backdrop" data-modal="edit-client">
   <section class="section-form modal__container">
-    <i
-      class="ri-arrow-left-line arrow-left arrow-left--bottom"
-      id="back-edit-client"
-    ></i>
+    <i class="ri-arrow-left-line arrow-left arrow-left--bottom" id="back-edit-client"></i>
 
     <h1 class="section-form__title">Editar Cliente</h1>
     <hr class="section-form__line section-form__line--margin-bottom" />
 
     <form action="#" id="form-edit-client" novalidate>
       <div class="form">
-        <div class="form__container-field form__container-field--span">
-          <label for="" class="form__label">Nombre Completo</label>
-          <input
-            type="text"
-            class="form__input"
-            required
-            data-validate="texto"
-            name="nombre"
-            id="nombre"
-          />
+        <div class="form__container-fields">
+          <div class="form__container-field form__container-field--span">
+            <label for="" class="form__label">Nombres</label>
+            <input type="text" class="form__input" required data-validate="texto" name="nombre" />
+          </div>
+          <div class="form__container-field form__container-field--span">
+            <label for="" class="form__label">Apellidos</label>
+            <input type="text" class="form__input" required data-validate="texto" name="apellido" />
+          </div>
         </div>
-        <div
-          class="form__container-fields form__container-fields--grid-variant"
-        >
+        <div class="form__container-fields form__container-fields--grid-variant">
           <div class="form__container-field">
             <label for="" class="form__label">Tipo de Documento</label>
-            <select
-              class="form__input form__input--select"
-              required
-              id="select-tipos-documentos"
-              name="tipo_documento_id"
-            >
+            <select class="form__input form__input--select" required id="select-tipos-documentos"
+              name="tipo_documento_id">
               <!-- Opciones -->
               <option disabled selected value="">Seleccione una opcion</option>
             </select>
           </div>
           <div class="form__container-field">
             <label for="" class="form__label">Número</label>
-            <input
-              type="text"
-              class="form__input"
-              required
-              data-validate="numero"
-              name="numero_documento"
-              id="numero_documento"
-            />
+            <input type="text" class="form__input" required data-validate="numero" name="numero_documento"
+              id="numero_documento" />
           </div>
         </div>
         <div class="form__container-field form__container-field--span">
           <label for="" class="form__label">Teléfono</label>
-          <input
-            type="text"
-            class="form__input"
-            required
-            data-validate="numero"
-            name="telefono"
-            id="telefono"
-          />
+          <input type="text" class="form__input" required data-validate="numero" name="telefono" id="telefono" />
         </div>
         <div class="form__container-field form__container-field--span">
           <label for="" class="form__label">Correo</label>
-          <input
-            type="text"
-            class="form__input"
-            required
-            data-validate="correo"
-            name="correo"
-            id="correo"
-          />
+          <input type="text" class="form__input" required data-validate="correo" name="correo" id="correo" />
         </div>
         <div class="form__container-field form__container-field--span">
           <label for="" class="form__label">Dirección / Barrio</label>
-          <input
-            type="text"
-            class="form__input"
-            required
-            name="direccion"
-            id="direccion"
-          />
+          <input type="text" class="form__input" required name="direccion" id="direccion" />
         </div>
         <div class="form__container-btns">
           <button type="submit" class="btn btn--lower-height">

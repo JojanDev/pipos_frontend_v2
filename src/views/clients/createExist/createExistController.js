@@ -24,7 +24,7 @@ export const createClienteExistController = async () => {
     selector: "#select-info",
     optionMapper: (usuario) => ({
       id: usuario.id,
-      text: `${usuario.numero_documento} - ${usuario.nombre}`,
+      text: `${usuario.numero_documento} - ${usuario.nombre} ${usuario.apellido}`,
     }),
   });
 
@@ -49,11 +49,11 @@ export const createClienteExistController = async () => {
       const { data: usuario } = await get(
         `usuarios/${response.data.usuario_id}`
       );
-      const { id, nombre, telefono, numero_documento, direccion } = usuario;
+      const { id, nombre, apellido, telefono, numero_documento, direccion } = usuario;
 
       const row = crearFila([
         id,
-        nombre,
+        `${nombre} ${apellido}`,
         telefono,
         numero_documento,
         direccion,

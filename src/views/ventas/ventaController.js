@@ -44,7 +44,7 @@ export const cargarTablaVentas = async () => {
       return [
         venta.id,
         formatoCorto(venta.fecha_creado),
-        usuarioVenta.nombre,
+        `${usuarioVenta.nombre} ${usuarioVenta.apellido}`,
         formatearPrecioConPuntos(venta.monto),
         formatearPrecioConPuntos(venta.total - venta.monto),
         formatearPrecioConPuntos(venta.total),

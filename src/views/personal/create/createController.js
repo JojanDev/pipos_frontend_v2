@@ -46,6 +46,7 @@ export const createPersonalController = async () => {
 
     const usuario = {
       nombre: datos.nombre,
+      apellido: datos.apellido,
       tipo_documento_id: datos.tipo_documento_id,
       numero_documento: datos.numero_documento,
       telefono: datos.telefono,

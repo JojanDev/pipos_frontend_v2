@@ -33,28 +33,35 @@ export const validarLote = (event) => {
 
   return { valid: true };
 };
-// export const validarFecha = (event) => {
-//   const input = event.target;
-//   const valor = input.value;
 
-//   if (!valor) {
-//     return { valid: false, message: "Fecha requerida" };
-//   }
+export const validarFecha = (event) => {
+  const fechaStr = event.target.value;
+  const fechaIngresada = new Date(fechaStr);
+  const hoy = new Date();
 
-//   const fecha = new Date(valor);
-//   const min = input.getAttribute("min");
-//   const max = input.getAttribute("max");
+  // Fecha límite mínima (20 años atrás desde hoy)
+  const hace20Anios = new Date();
+  hace20Anios.setFullYear(hoy.getFullYear() - 20);
 
-//   if (min && fecha < new Date(min)) {
-//     return { valid: false, message: `Mínimo ${min}` };
-//   }
+  if (isNaN(fechaIngresada)) {
+    event.target.value = ""; // limpiar si es inválida
+    return { valid: false, message: "Fecha inválida" };
+  }
 
-//   if (max && fecha > new Date(max)) {
-//     return { valid: false, message: `Máximo ${max}` };
-//   }
+  if (fechaIngresada > hoy) {
+    event.target.value = ""; // limpiar si es futura
+    return { valid: false, message: "La fecha no puede ser mayor a hoy" };
+  }
 
-//   return { valid: true };
-// };
+  if (fechaIngresada < hace20Anios) {
+    event.target.value = ""; // limpiar si excede el límite
+    return { valid: false, message: "La fecha no puede tener más de 20 años" };
+  }
+
+  return { valid: true };
+};
+
+
 
 export const validarTexto = (event) => {
   const regex = /[^A-Za-zÁÉÍÓÚáéíóúÜüÑñ ]/g;
@@ -246,6 +253,7 @@ const validadoresInput = {
   limite: validarLimite,
   textoNumeros: validarTextoYNumeros,
   lote: validarLote,
+  fecha_nacimiento: validarFecha
   // Puedes seguir agregando más tipos según crezcas
 };
 

@@ -7,14 +7,21 @@
 
     <form action="#" id="form-register-client" novalidate>
       <div class="form">
-        <div class="form__container-field form__container-field--span">
-          <label for="" class="form__label">Nombre Completo</label>
-          <input type="text" class="form__input" required data-validate="texto" name="nombre" />
+        <div class="form__container-fields">
+          <div class="form__container-field form__container-field--span">
+            <label for="" class="form__label">Nombres</label>
+            <input type="text" class="form__input" required data-validate="texto" name="nombre" />
+          </div>
+          <div class="form__container-field form__container-field--span">
+            <label for="" class="form__label">Apellidos</label>
+            <input type="text" class="form__input" required data-validate="texto" name="apellido" />
+          </div>
         </div>
         <div class="form__container-fields form__container-fields--grid-variant">
           <div class="form__container-field">
             <label for="" class="form__label">Tipo de Documento</label>
-            <select class="form__input form__input--select" required id="select-tipos-documentos" name="tipo_documento_id">
+            <select class="form__input form__input--select" required id="select-tipos-documentos"
+              name="tipo_documento_id">
               <!-- Opciones -->
               <option disabled selected value="">Seleccione una opcion</option>
             </select>

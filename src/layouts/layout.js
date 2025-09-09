@@ -42,7 +42,7 @@ export const layoutController = async () => {
   }
 
   const nombreEmpleado = DOMSelector("#empleado-nombre-header");
-  nombreEmpleado.textContent = usuario.nombre;
+  nombreEmpleado.textContent = `${usuario.nombre} ${usuario.apellido}`;
 
   const btnCuenta = DOMSelector("#cuenta");
 

@@ -54,14 +54,14 @@ export const createPetController = async (parametros = null) => {
 
     if (!validarCampos(e)) return;
 
-    const edad_semanas = calcularSemanasTotales(datos);
-    const { nombre, sexo, raza_id, usuario_id } = datos;
+    // const edad_semanas = calcularSemanasTotales(datos);
+    const { nombre, sexo, raza_id, usuario_id, fecha_nacimiento } = datos;
 
     const petResponse = await post("mascotas", {
       nombre,
       sexo,
       raza_id,
-      edad_semanas,
+      fecha_nacimiento,
       usuario_id: containerSelectClient ? usuario_id : usuario.id,
     });
 

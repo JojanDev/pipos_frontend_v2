@@ -46,7 +46,7 @@ const cargarEmpleadoNuevo = async (id) => {
   const row = crearFila([
     usuario.data.id,
     nombreRoles.join(", ") ?? "No aplica",
-    usuario.data.nombre,
+    `${usuario.data.nombre} ${usuario.data.apellido}`,
     usuario.data.telefono,
     usuario.data.numero_documento,
     usuario.data.direccion,
@@ -71,7 +71,7 @@ export const createPersonalExistController = async () => {
     selector: "#select-info",
     optionMapper: (info) => ({
       id: info.id,
-      text: `${info.numero_documento} - ${info.nombre}`,
+      text: `${info.numero_documento} - ${info.nombre} ${info.apellido}`,
     }),
   });
 

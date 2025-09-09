@@ -12,6 +12,7 @@ import {
   DOMSelectorAll,
   convertirEdadCorta,
   successTemporal,
+  convertirADiaMesAño,
 } from "../../../helpers";
 import { routes } from "../../../router/routes";
 import { mapearDatosEnContenedor } from "../../../helpers/domMapper";
@@ -87,13 +88,11 @@ export const profilePetController = async (parametros = null) => {
   petResponse.data.mascota = petResponse.data.nombre;
   petResponse.data.especie = petResponse.data.raza.especie.nombre;
   petResponse.data.raza = petResponse.data.raza.nombre;
-  petResponse.data.edad = petResponse.data.edad_semanas
-    ? convertirEdadCorta(petResponse.data.edad_semanas)
-    : "Desconocida";
+  petResponse.data.fecha_nacimiento = convertirADiaMesAño(petResponse.data.fecha_nacimiento);
 
   console.log(petResponse);
   clientResponse.data["tipo_documento"] = typeDocumentResponse.data.nombre;
-  clientResponse.data["dueño"] = clientResponse.data.nombre;
+  clientResponse.data["dueño"] = `${clientResponse.data.nombre} ${clientResponse.data.apellido}`;
 
   const dataProfile = { ...clientResponse.data, ...petResponse.data };
 

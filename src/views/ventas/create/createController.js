@@ -53,9 +53,9 @@ export const createVentaController = async (parametros = null) => {
   await llenarSelect({
     endpoint: "usuarios/clientes",
     selector: "#select-clientes",
-    optionMapper: ({ id, numero_documento, nombre }) => ({
+    optionMapper: ({ id, numero_documento, nombre, apellido }) => ({
       id: id,
-      text: `${numero_documento} - ${nombre}`,
+      text: `${numero_documento} - ${nombre}  ${apellido}`,
     }),
   });
 
@@ -89,7 +89,7 @@ export const createVentaController = async (parametros = null) => {
       const { data: dataVendedor } = await get(`usuarios/${vendedor.id}`);
 
       venta.vendedor_id = 1;
-      venta.nombrePersonal = dataVendedor.nombre;
+      venta.nombrePersonal = `${dataVendedor.nombre} ${dataVendedor.apellido}`;
 
       // await cargarComponente(routes.ventas.resumenVenta);
       location.hash =

@@ -16,7 +16,7 @@ export const cargarTabla = async () => {
   const clientesInfo = clientes.data.map((cliente) => {
     return [
       cliente.id,
-      cliente.nombre,
+      `${cliente.nombre} ${cliente.apellido}`,
       cliente.telefono,
       cliente.numero_documento,
       cliente.direccion,

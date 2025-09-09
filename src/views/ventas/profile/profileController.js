@@ -59,8 +59,8 @@ export const profileVentaController = async (parametros = null) => {
   mapearDatosEnContenedor(
     {
       ...ventaDesdeBackend.data,
-      vendedor: "Vendedor: " + vendedor.nombre,
-      comprador: "Cliente: " + comprador.nombre,
+      vendedor: `Vendedor: ${vendedor.nombre} ${vendedor.apellido}`,
+      comprador: `Cliente: ${comprador.nombre} ${comprador.apellido}`,
     },
     contenedorVenta
   );
@@ -151,30 +151,24 @@ export const profileVentaController = async (parametros = null) => {
   elementosVentas.forEach((elementoVenta) => {
     contenedorVentaProducto.innerHTML += `
         <div class="producto"">
-          <p class="producto__item producto-nombre">${
-            elementoVenta.elemento || ""
-          }</p>
-          <p class="producto__item producto-categoria">${
-            elementoVenta.categoria
-          }</p>
-          <p class="producto__item producto-precio">${
-            elementoVenta.precio
-              ? `$${elementoVenta.precio.toLocaleString()}`
-              : "$0"
-          }</p>
-          <p class="producto__item producto-cantidad">x${
-            elementoVenta.cantidad || 1
-          }</p>
-          <p class="producto__item producto-adicional">${
-            elementoVenta.valor_adicional
-              ? `$${elementoVenta.valor_adicional.toLocaleString()}`
-              : "$0"
-          }</p>
-          <p class="producto__item producto-subtotal">${
-            elementoVenta.subtotal
-              ? `$${elementoVenta.subtotal.toLocaleString()}`
-              : "$0"
-          }</p>
+          <p class="producto__item producto-nombre">${elementoVenta.elemento || ""
+      }</p>
+          <p class="producto__item producto-categoria">${elementoVenta.categoria
+      }</p>
+          <p class="producto__item producto-precio">${elementoVenta.precio
+        ? `$${elementoVenta.precio.toLocaleString()}`
+        : "$0"
+      }</p>
+          <p class="producto__item producto-cantidad">x${elementoVenta.cantidad || 1
+      }</p>
+          <p class="producto__item producto-adicional">${elementoVenta.valor_adicional
+        ? `$${elementoVenta.valor_adicional.toLocaleString()}`
+        : "$0"
+      }</p>
+          <p class="producto__item producto-subtotal">${elementoVenta.subtotal
+        ? `$${elementoVenta.subtotal.toLocaleString()}`
+        : "$0"
+      }</p>
         </div>
       `;
   });

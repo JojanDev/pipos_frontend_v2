@@ -33,7 +33,7 @@ export const llenarSelectClientes = async () => {
     selector: "#select-clients",
     optionMapper: (c) => ({
       id: c.id,
-      text: `${c.numero_documento} - ${c.nombre}`,
+      text: `${c.numero_documento} - ${c.nombre} ${c.apellido}`,
     }),
   });
 };
@@ -55,7 +55,7 @@ export const llenarSelectVeterinarios = async () => {
     selector: "#select-veterinarios",
     optionMapper: (veterinario) => ({
       id: veterinario.id,
-      text: veterinario.nombre,
+      text: `${veterinario.nombre} ${veterinario.apellido}`,
     }),
   });
 };

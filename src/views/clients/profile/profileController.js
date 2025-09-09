@@ -37,7 +37,7 @@ export const profileClientController = async (parametros = null) => {
     "tipos-documentos/" + userResponse.data.tipo_documento_id
   );
   userResponse.data["tipo_documento"] = typeDocumentResponse.data.nombre;
-  userResponse.data["cliente"] = userResponse.data.nombre;
+  userResponse.data["cliente"] = `${userResponse.data.nombre} ${userResponse.data.apellido}`;
 
   mapearDatosEnContenedor(userResponse.data, contenedorVista);
 

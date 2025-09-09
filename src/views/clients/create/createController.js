@@ -44,12 +44,12 @@ export const createClientController = async () => {
     successTemporal(createUserResponse.message);
 
     if (tbody) {
-      const { id, nombre, telefono, numero_documento, direccion } =
+      const { id, nombre, apellido, telefono, numero_documento, direccion } =
         createUserResponse.data;
 
       const row = crearFila([
         id,
-        nombre,
+        `${nombre} ${apellido}`,
         telefono,
         numero_documento,
         direccion,

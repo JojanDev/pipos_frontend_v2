@@ -1,10 +1,7 @@
 <div class="modal__backdrop" data-modal="create-pet">
   <section class="section-form modal__container">
-    <i
-      class="ri-arrow-left-line arrow-left arrow-left--bottom"
-      id="back-register-pet-client"
-      data-modal="create-pet"
-    ></i>
+    <i class="ri-arrow-left-line arrow-left arrow-left--bottom" id="back-register-pet-client"
+      data-modal="create-pet"></i>
 
     <h1 class="section-form__title">Registro de Mascota</h1>
     <hr class="section-form__line section-form__line--margin-bottom" />
@@ -13,12 +10,7 @@
       <div class="form form--w-700">
         <div class="form__container-field" id="container-select-clients">
           <label for="" class="form__label">Propietario</label>
-          <select
-            class="form__input form__input--select"
-            required
-            name="usuario_id"
-            id="select-clients"
-          >
+          <select class="form__input form__input--select" required name="usuario_id" id="select-clients">
             <!-- Opciones -->
             <option disabled selected value="">Seleccione un cliente</option>
           </select>
@@ -26,21 +18,11 @@
         <div class="form__container-fields">
           <div class="form__container-field form__container-field--span">
             <label for="" class="form__label">Nombre</label>
-            <input
-              type="text"
-              class="form__input"
-              required
-              data-validate="texto"
-              name="nombre"
-            />
+            <input type="text" class="form__input" required data-validate="texto" name="nombre" />
           </div>
           <div class="form__container-field">
             <label for="" class="form__label">Sexo</label>
-            <select
-              class="form__input form__input--select"
-              required
-              name="sexo"
-            >
+            <select class="form__input form__input--select" required name="sexo">
               <!-- Opciones -->
               <option disabled selected value="">Seleccione un sexo</option>
               <option value="macho">Macho</option>
@@ -52,30 +34,25 @@
         <div class="form__container-fields">
           <div class="form__container-field">
             <label for="" class="form__label">Especie</label>
-            <select
-              class="form__input form__input--select"
-              required
-              id="select-especies"
-              name="especie"
-            >
+            <select class="form__input form__input--select" required id="select-especies" name="especie">
               <!-- Opciones -->
               <option disabled selected value="">Seleccione una especie</option>
             </select>
           </div>
           <div class="form__container-field">
             <label for="" class="form__label">Raza</label>
-            <select
-              class="form__input form__input--select"
-              required
-              id="select-razas"
-              name="raza_id"
-            >
+            <select class="form__input form__input--select" required id="select-razas" name="raza_id">
               <!-- Opciones -->
               <option disabled selected value="">Seleccione una especie</option>
             </select>
           </div>
         </div>
-        <div class="form__container-fields form__container-fields--3-col">
+        <div class="form__container-field">
+          <label for="" class="form__label">Fecha de Nacimiento</label>
+          <input type="date" class="form__input" required data-validate="fecha_nacimiento" name="fecha_nacimiento"
+            id="fecha_nacimiento" />
+        </div>
+        <!-- <div class="form__container-fields form__container-fields--3-col">
           <p for="" class="form__label form__label--col-span">Edad</p>
           <div class="form__container-field">
             <input
@@ -101,7 +78,7 @@
               name="semanas"
             />
           </div>
-        </div>
+        </div> -->
         <div class="form__container-btns">
           <button type="submit" class="btn btn--lower-height">Registrar</button>
         </div>
