@@ -13,13 +13,13 @@ import {
   errorTemporal,
   convertirEdadCorta,
 } from "../../../helpers";
+import hasPermission from "../../../helpers/hasPermission";
 
 export const profileClientController = async (parametros = null) => {
   console.log(parametros);
 
   const tbody = DOMSelector("#pets-client .table__body");
-  const esModal = !location.hash.includes("clientes/perfil");
-  const profileClient = DOMSelector(`[data-modal="profile-client"]`);
+  const contenedorVista = DOMSelector(`[data-modal="profile-client"]`);
 
   const { perfil: usuario } = parametros;
   const id = usuario.id;
@@ -39,7 +39,7 @@ export const profileClientController = async (parametros = null) => {
   userResponse.data["tipo_documento"] = typeDocumentResponse.data.nombre;
   userResponse.data["cliente"] = userResponse.data.nombre;
 
-  mapearDatosEnContenedor(userResponse.data, profileClient);
+  mapearDatosEnContenedor(userResponse.data, contenedorVista);
 
   const petsUserResponse = await get(`mascotas/usuario/${id}`);
 
@@ -56,7 +56,7 @@ export const profileClientController = async (parametros = null) => {
             nombre,
             especie,
             raza,
-            convertirEdadCorta(edad_semanas),
+            edad_semanas ? convertirEdadCorta(edad_semanas) : "Desconocida",
             capitalizarPrimeraLetra(sexo),
           ]);
 
@@ -68,36 +68,28 @@ export const profileClientController = async (parametros = null) => {
     }
   }
 
-  // const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
+  const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
 
-  // console.log(acciones);
+  console.log(acciones);
 
-  // for (const accion of acciones) {
-  //   console.log(accion.dataset.permiso.split(","));
-  //   console.log(hasPermission(accion.dataset.permiso.split(",")));
-  //   if (!hasPermission(accion.dataset.permiso.split(","))) {
-  //     accion.remove();
-  //   }
-  // }
+  for (const accion of acciones) {
+    console.log(accion.dataset.permiso.split(","));
+    console.log(hasPermission(accion.dataset.permiso.split(",")));
+    if (!hasPermission(accion.dataset.permiso.split(","))) {
+      accion.remove();
+    }
+  }
 
-  profileClient.addEventListener("click", async (e) => {
+  contenedorVista.addEventListener("click", async (e) => {
     if (e.target.id == "register-pets-client") {
-      // await cargarComponente(routes.mascotas.crear, id);
-      // location.hash = `#/clientes/perfil/id=${id}/mascotas/crear`;
       location.hash =
         location.hash +
         (location.hash[location.hash.length - 1] == "/"
           ? `mascotas/crear`
           : `/mascotas/crear`);
-      // const selectCliente = DOMSelector("#select-clients");
-      // const contenedor = selectCliente?.closest(".form__container-field");
-      // // contenedor.classList.add("hidden");
-      // contenedor.remove();
     }
 
     if (e.target.id == "edit-client") {
-      // await cargarComponente(routes.clientes.editar, { id });
-      // location.hash = `#/clientes/perfil/id=${id}/editar`;
       location.hash =
         location.hash +
         (location.hash[location.hash.length - 1] == "/" ? `editar` : `/editar`);
@@ -105,10 +97,7 @@ export const profileClientController = async (parametros = null) => {
 
     if (e.target.id == "back-perfil") {
       cerrarModal("profile-client");
-      // location.hash = `#/clientes`;
       history.back();
     }
   });
-
-  // configurarBotonCerrar("back-perfil", esModal);
 };

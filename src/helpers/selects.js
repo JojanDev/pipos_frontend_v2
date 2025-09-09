@@ -71,9 +71,31 @@ export const llenarSelectMedicamentos = async () => {
   });
 };
 
+export const llenarSelectMedicamentosStock = async () => {
+  return llenarSelect({
+    endpoint: "medicamentos/stock",
+    selector: "#select-elementos",
+    optionMapper: (elemento) => ({
+      id: elemento.id,
+      text: `${elemento.numero_lote} - ${elemento.nombre}`,
+    }),
+  });
+};
+
 export const llenarSelectProductos = async () => {
   return llenarSelect({
     endpoint: "productos",
+    selector: "#select-elementos",
+    optionMapper: (elemento) => ({
+      id: elemento.id,
+      text: `${elemento.tipo_producto} - ${elemento.nombre}`,
+    }),
+  });
+};
+
+export const llenarSelectProductosStock = async () => {
+  return llenarSelect({
+    endpoint: "productos/stock",
     selector: "#select-elementos",
     optionMapper: (elemento) => ({
       id: elemento.id,

@@ -32,6 +32,9 @@ const addRaza = (idEspecie, nuevaRaza) => {
     const row = crearFila([nuevaRaza.id, nuevaRaza.nombre]);
     razasTbody.insertAdjacentElement("afterbegin", row);
   }
+
+  const placeholder = DOMSelector("#breeds .table__body .placeholder");
+  placeholder?.remove();
 };
 
 export const createBreedController = (parametros = null) => {

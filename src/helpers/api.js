@@ -13,7 +13,8 @@ export const get = async (endpoint) => {
   });
   const datos = await respuesta.json();
   if (!datos.success && datos.code == 401) {
-    if (!(await isAuth())) {
+    const auth = await isAuth();
+    if (!auth) {
       await error(datos.message);
       console.log(datos.message);
 
@@ -22,7 +23,7 @@ export const get = async (endpoint) => {
       location.hash = "#/login";
       return;
     } else {
-      await get(endpoint);
+      return await get(endpoint);
     }
   } else if (!datos.success && datos.code == 403) {
     if (await isAuth()) {
@@ -50,7 +51,7 @@ export const post = async (endpoint, objeto) => {
       location.hash = "#/login";
       return;
     } else {
-      await post(endpoint, objeto);
+      return await post(endpoint, objeto);
     }
   } else if (!datos.success && datos.code == 403) {
     if (await isAuth()) {
@@ -78,7 +79,7 @@ export const put = async (endpoint, objeto) => {
       location.hash = "#/login";
       return;
     } else {
-      await put(endpoint, objeto);
+      return await put(endpoint, objeto);
     }
   } else if (!datos.success && datos.code == 403) {
     if (await isAuth()) {
@@ -106,7 +107,7 @@ export const patch = async (endpoint, objeto) => {
       location.hash = "#/login";
       return;
     } else {
-      await patch(endpoint, objeto);
+      return await patch(endpoint, objeto);
     }
   } else if (!datos.success && datos.code == 403) {
     if (await isAuth()) {
@@ -133,7 +134,7 @@ export const del = async (endpoint) => {
       location.hash = "#/login";
       return;
     } else {
-      await del(endpoint);
+      return await del(endpoint);
     }
   } else if (!datos.success && datos.code == 403) {
     if (await isAuth()) {

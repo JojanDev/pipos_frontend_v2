@@ -12,7 +12,11 @@ import {
   DOMSelector,
   successTemporal,
 } from "../../../../helpers";
-import { listarEspecies } from "../../administrationController";
+import {
+  especiesConRazas,
+  listarEspecies,
+  mostrarMensajePlaceholderRazas,
+} from "../../administrationController";
 
 export const profileBreedController = async (parametros = null) => {
   console.log(parametros);
@@ -24,10 +28,11 @@ export const profileBreedController = async (parametros = null) => {
   );
   const esModal = !location.hash.includes("administrar_datos/razasPerfil");
 
-  const response = await get(`razas/${raza.id}`);
+  const getRaza = await get(`razas/${raza.id}`);
+  console.log(getRaza);
 
-  if (!response.success) {
-    await error(response.message);
+  if (!getRaza.success) {
+    await error(getRaza.message);
     cerrarModal("breed-profile");
     history.back();
     return;
@@ -36,8 +41,8 @@ export const profileBreedController = async (parametros = null) => {
   const titulo = document.querySelector("#breed-title");
   const especieNombre = document.querySelector("#breed-specie");
 
-  titulo.textContent = response.data.nombre;
-  especieNombre.textContent = `Raza de la especie ${response.data.especie.nombre}`;
+  titulo.textContent = getRaza.data.nombre;
+  especieNombre.textContent = `Raza de la especie ${getRaza.data.especie.nombre}`;
 
   contenedorVista.addEventListener("click", async (e) => {
     if (e.target.id == "edit-breed") {
@@ -54,6 +59,24 @@ export const profileBreedController = async (parametros = null) => {
         const razasTbody = DOMSelector("#breeds .table__body");
 
         const row = razasTbody.querySelector(`[data-id='${raza.id}']`);
+        console.log(especiesConRazas);
+
+        const especie = especiesConRazas.find(
+          (e) => e.id === getRaza.data.especie_id
+        );
+        if (especie) {
+          especie.razas = especie.razas.filter((r) => r.id !== getRaza.data.id);
+          console.log("Razas actualizadas:", especie.razas);
+        }
+
+        if (!especie.razas || especie.razas.length === 0) {
+          mostrarMensajePlaceholderRazas(
+            "No hay razas registradas para esta especie"
+          );
+        }
+
+        // if (!especie) return;
+
         row.remove();
         cerrarModal("breed-profile");
         history.back();

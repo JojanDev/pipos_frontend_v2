@@ -192,15 +192,10 @@
   color: #404040;
 }
 
-@media (width <= 900px) {
-  .sidebar{
-    max-width: 0;
-  }
+.menu-hamburguesa {
+  display: none;
+}
 
-  .layout{
-    grid-template-columns: 1fr;
-    grid-template-areas:
-        "header header"
-        "main main";
-  }
+.menu-activar {
+  display: none;
 }

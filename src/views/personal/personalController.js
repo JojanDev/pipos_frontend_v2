@@ -8,7 +8,7 @@ import {
 import hasPermission from "../../helpers/hasPermission";
 
 export const cargarTablaEmpleados = async () => {
-  const usuarios = await get("usuarios");
+  const usuarios = await get("usuarios/empleados");
   console.log(usuarios);
 
   if (!usuarios.success) {

@@ -85,6 +85,8 @@ export const createProductController = async () => {
 
     if (!resultado.valid);
 
+    console.log(datos);
+
     const response = await post("productos", datos);
 
     if (!response.success) return await error(response.message);

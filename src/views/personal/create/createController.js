@@ -20,7 +20,7 @@ export const createPersonalController = async () => {
   const selectTipoDocumento = document.querySelector("#tipos-documento");
 
   await llenarSelect({
-    endpoint: "roles",
+    endpoint: "roles/empleados",
     selector: "#select-roles",
     optionMapper: (rol) => ({
       id: rol.id,
@@ -36,6 +36,13 @@ export const createPersonalController = async () => {
 
     if (!validarCampos(e)) return;
     console.log(datos);
+
+    const usuarioExistente = await get(
+      `credenciales/nickname/${datos.usuario}`
+    );
+
+    if (usuarioExistente.success)
+      return await error("Nombre de usuario ya existe, escribe otro.");
 
     const usuario = {
       nombre: datos.nombre,

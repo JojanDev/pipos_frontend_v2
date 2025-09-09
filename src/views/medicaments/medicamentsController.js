@@ -4,6 +4,7 @@ import {
   DOMSelector,
   get,
 } from "../../helpers";
+import hasPermission from "../../helpers/hasPermission";
 import { routes } from "../../router/routes";
 
 export function crearCartaMedicamento(medicamento) {
@@ -86,26 +87,30 @@ export const medicamentsController = async () => {
   });
 
   const contenedorMedicaments = DOMSelector("#medicaments-info");
+  const contenedorVista = DOMSelector("#vista-info-medicamento");
 
-  // const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
+  const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
 
-  // console.log(acciones);
+  console.log(acciones);
 
-
-  // for (const accion of acciones) {
-  //   console.log(accion.dataset.permiso.split(","));
-  //   console.log(hasPermission(accion.dataset.permiso.split(",")));
-  //   if (!hasPermission(accion.dataset.permiso.split(","))) {
-  //     accion.remove();
-  //   }
-  // }
+  for (const accion of acciones) {
+    console.log(accion.dataset.permiso.split(","));
+    console.log(hasPermission(accion.dataset.permiso.split(",")));
+    if (!hasPermission(accion.dataset.permiso.split(","))) {
+      accion.remove();
+    }
+  }
 
   contenedorMedicaments.addEventListener("click", async (event) => {
     const fila = event.target.closest(".card[data-id]");
 
     if (fila) {
       const id_info = fila.getAttribute("data-id");
-      location.hash = (location.hash + (location.hash[location.hash.length - 1] == "/" ? `perfil/id=${id_info}` : `/perfil/id=${id_info}`));
+      location.hash =
+        location.hash +
+        (location.hash[location.hash.length - 1] == "/"
+          ? `perfil/id=${id_info}`
+          : `/perfil/id=${id_info}`);
     }
   });
 };

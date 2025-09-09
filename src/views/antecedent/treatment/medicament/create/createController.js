@@ -3,6 +3,7 @@ import {
   cerrarModal,
   configurarBotonCerrar,
   configurarEventosValidaciones,
+  convertirDias,
   crearElementoTratamiento,
   crearFila,
   datos,
@@ -133,7 +134,7 @@ export const createMedicamentController = async (parametros = null) => {
         capitalizarPrimeraLetra(infoMedicamento.via_administracion),
         dosis,
         frecuencia_aplicacion,
-        duracion,
+        convertirDias(duracion),
         iconDelete,
         iconEdit,
       ]);

@@ -4,10 +4,12 @@
       <div>
         <h3 class="perfil__nombre" id="titulo">Suero controlado</h3>
         <div class="perfil__rol d-flex">
-          <p class="roles">Tratamiento</p> para: <span id="titulo-antecedente"></span>
+          <p class="roles">Tratamiento</p>
+          para: <span id="titulo-antecedente"></span>
         </div>
         <p class="perfil__rol perfil__rol--margin" id="treatment-date">
-          28/01/2025
+          Fecha:
+          <span id="fecha_creado"></span>
         </p>
         <p class="perfil__rol perfil__rol--margin">
           Veterinario asociado: <span id="veterinario"></span>
@@ -17,7 +19,10 @@
     </div>
     <p class="perfil__separador">Descripcion</p>
 
-    <p class="perfil__valor perfil__valor--margin perfil__valor--scroll" id="descripcion">
+    <p
+      class="perfil__valor perfil__valor--margin perfil__valor--scroll"
+      id="descripcion"
+    >
       Lorem ipsum dolor sit amet consectetur adipisicing elit. ...
     </p>
 
@@ -25,8 +30,11 @@
       Medicamentos
     </p>
 
-    <div class="table-container table-container--fijo" id="pet-antecedent-treatment"
-      data-permiso="medicamento-tratamiento.view">
+    <div
+      class="table-container table-container--fijo"
+      id="pet-antecedent-treatment"
+      data-permiso="medicamento-tratamiento.view"
+    >
       <div class="table">
         <div class="table__header">
           <div class="table__cell">ID</div>
@@ -45,15 +53,27 @@
     </div>
 
     <div class="form__container-btns">
-      <button class="btn perfil__boton" id="register-antecedent-treatment-medicament"
-        data-permiso="medicamento-tratamiento.create">
+      <button
+        class="btn perfil__boton"
+        id="register-antecedent-treatment-medicament"
+        data-permiso="medicamento-tratamiento.create"
+      >
         Agregar medicamento
       </button>
-      <button type="submit" class="btn perfil__boton btn--orange" id="edit-treatment" data-permiso="tratamiento.update">
+      <button
+        type="submit"
+        class="btn perfil__boton btn--orange"
+        id="edit-treatment"
+        data-permiso="tratamiento.update"
+      >
         Editar tratamiento
       </button>
-      <button type="submit" class="btn perfil__boton btn--red admin" id="delete-treatment"
-        data-permiso="tratamiento.delete">
+      <button
+        type="submit"
+        class="btn perfil__boton btn--red admin"
+        id="delete-treatment"
+        data-permiso="tratamiento.delete"
+      >
         Eliminar tratamiento
       </button>
     </div>

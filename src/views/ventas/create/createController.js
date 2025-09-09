@@ -6,6 +6,7 @@ import {
   llenarSelect,
   renderizarCarrito,
 } from "../../../helpers";
+import getCookie from "../../../helpers/getCookie.js";
 
 export let venta = {};
 export let ventaInformacion = {};
@@ -83,10 +84,12 @@ export const createVentaController = async (parametros = null) => {
       const data = JSON.parse(dataJSON);
       venta.cliente = selectClientes.options[selectClientes.selectedIndex].text;
       venta.comprador_id = selectClientes.value;
-      // const personal = await get("personal/" + data.id);
+      // const {data: vendedor} = await get("usuarios/" + data.id);
+      const { usuario: vendedor } = getCookie("usuario");
+      const { data: dataVendedor } = await get(`usuarios/${vendedor.id}`);
 
       venta.vendedor_id = 1;
-      venta.nombrePersonal = "personal.data.info.nombre";
+      venta.nombrePersonal = dataVendedor.nombre;
 
       // await cargarComponente(routes.ventas.resumenVenta);
       location.hash =

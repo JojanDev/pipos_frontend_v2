@@ -115,22 +115,21 @@ export const inventoryController = () => {
 
   const vistaInventory = DOMSelector("#inventory");
 
-  vistaInventory.addEventListener("click", (e) => { });
+  vistaInventory.addEventListener("click", (e) => {});
 
   const tablaProductos = DOMSelector("#products");
 
-  // const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
+  const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
 
-  // console.log(acciones);
+  console.log(acciones);
 
-
-  // for (const accion of acciones) {
-  //   console.log(accion.dataset.permiso.split(","));
-  //   console.log(hasPermission(accion.dataset.permiso.split(",")));
-  //   if (!hasPermission(accion.dataset.permiso.split(","))) {
-  //     accion.remove();
-  //   }
-  // }
+  for (const accion of acciones) {
+    console.log(accion.dataset.permiso.split(","));
+    console.log(hasPermission(accion.dataset.permiso.split(",")));
+    if (!hasPermission(accion.dataset.permiso.split(","))) {
+      accion.remove();
+    }
+  }
 
   tablaProductos.addEventListener("click", async (event) => {
     const fila = event.target.closest("tr[data-id]");

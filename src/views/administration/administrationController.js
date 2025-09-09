@@ -51,7 +51,7 @@ export const listarEspecies = async () => {
   especiesConRazas = await Promise.all(
     response.data.map(async (especie) => {
       const razasEspecie = await get(`razas/especie/${especie.id}`);
-      return { ...especie, razas: razasEspecie.data };
+      return { ...especie, razas: razasEspecie.data ?? [] };
     })
   );
 
@@ -119,7 +119,7 @@ export const cargarRazasDeEspecie = (especie) => {
   });
 };
 
-const mostrarMensajePlaceholderRazas = (mensaje) => {
+export const mostrarMensajePlaceholderRazas = (mensaje) => {
   const razasTbody = DOMSelector("#breeds .table__body");
   razasTbody.innerHTML = "";
   const placeholder = document.createElement("p");

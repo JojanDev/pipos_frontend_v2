@@ -3,6 +3,7 @@ import {
   cerrarModal,
   configurarBotonCerrar,
   configurarEventosValidaciones,
+  convertirDias,
   crearElementoTratamiento,
   crearFila,
   datos,
@@ -30,7 +31,7 @@ const calcularDiasTotales = ({ meses = 0, semanas = 0, dias = 0 }) => {
   return Math.floor(totalDias);
 };
 
-function convertirDias(diasTotales) {
+function convertirDiasMapeador(diasTotales) {
   const meses = Math.floor(diasTotales / 30) || null;
   const diasRestantesMeses = diasTotales % 30;
 
@@ -73,7 +74,7 @@ export const editMedicamentTreatmentController = async (parametros = null) => {
     }),
   });
 
-  const { meses, semanas, dias } = convertirDias(
+  const { meses, semanas, dias } = convertirDiasMapeador(
     responseMediTrat.data.duracion
   );
 
@@ -173,7 +174,7 @@ export const editMedicamentTreatmentController = async (parametros = null) => {
         capitalizarPrimeraLetra(infoMedicamento.via_administracion),
         dosis,
         frecuencia_aplicacion,
-        duracion,
+        convertirDias(duracion),
         iconDelete,
         iconEdit,
       ]);

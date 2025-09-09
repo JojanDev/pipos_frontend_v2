@@ -134,6 +134,10 @@ export const editProductController = async (parametros = null) => {
         convertirADiaMesAño(fecha_caducidad),
       ]);
 
+      if (stock == 0) {
+        updatedRow.classList.add("fila-alerta");
+      }
+
       const oldRow = tbodyProducts.querySelector(`[data-id='${id}']`);
 
       tbodyProducts.replaceChild(updatedRow, oldRow);

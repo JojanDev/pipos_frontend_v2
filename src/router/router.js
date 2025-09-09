@@ -18,13 +18,17 @@ export const router = async () => {
   console.log("indexSegBase:", indexSegBase);
 
   if (indexSegBase == null) {
-    console.log("redireccionado a inicio");
-    const login = obtenerRuta(["login"]);
-    const response = await fetch(`./src/views/${login.path}`);
-    const html = await response.text();
-    DOMSelector("#app").innerHTML = html;
-    login.controller();
-    return;
+    if (await isAuth()) {
+      location.hash = "#/inicio";
+      return;
+    } else {
+      const login = obtenerRuta(["login"]);
+      const response = await fetch(`./src/views/${login.path}`);
+      const html = await response.text();
+      DOMSelector("#app").innerHTML = html;
+      login.controller();
+      return;
+    }
   }
 
   const ruta = obtenerRuta(arrayHash);
@@ -57,8 +61,9 @@ export const router = async () => {
     }
 
     const hashSinParams = hashBase.filter((item) => !item.includes("="));
+
     const vistaCargada = DOMSelector(
-      `[data-route="${hashSinParams.join("/")}"]`
+      `[data-route="${hashSinParams.join("")}"]`
     );
     hashBase.push(arrayHash[index]);
 
@@ -68,11 +73,12 @@ export const router = async () => {
         await renderLayout();
       }
     }
+    console.log(vistaCargada);
 
     if (vistaCargada) continue;
 
     if (ruta == null) continue;
-    await cargarVistaEnLayout(ruta.path, hashSinParams.join("/"), ruta.addHtml);
+    await cargarVistaEnLayout(ruta.path, hashSinParams.join(""), ruta.addHtml);
     await ruta.controller(parametros);
   }
 };
@@ -258,16 +264,4 @@ const esGrupoRutas = (obj) => {
     }
   }
   return true;
-};
-
-const isAuthenticated = () => {
-  return localStorage.getItem("isAuthenticated") === "true";
-};
-
-const actualizarVistaBase = (ruta) => {
-  if (ruta.layout) {
-    sessionStorage.setItem("vistaBase", location.hash.slice(2));
-  } else if (!ruta.addHtml) {
-    sessionStorage.removeItem("vistaBase");
-  }
 };

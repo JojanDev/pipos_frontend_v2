@@ -9,6 +9,7 @@ import {
   put,
   renderizarPerfilVenta,
   success,
+  successTemporal,
 } from "../../../helpers";
 import { cargarTablaVentas } from "../ventaController";
 
@@ -38,12 +39,15 @@ export const editVentaController = async (parametros = null) => {
   );
 
   const { data: vendedorVenta } = await get(
-    `usuarios/${response.data.comprador_id}`
+    `usuarios/${response.data.vendedor_id}`
   );
 
   cliente.textContent = clienteVenta.nombre;
   empleado.textContent = "Empleado: " + vendedorVenta.nombre;
   total.textContent = venta.total;
+
+  DOMSelector("#monto-acumulado").textContent = venta.monto;
+  DOMSelector("#monto-faltante").textContent = venta.total - venta.monto;
 
   // Setear el monto actual
   valorAgregar.value = venta.total - venta.monto;
@@ -95,18 +99,16 @@ export const editVentaController = async (parametros = null) => {
       if (responseUpdate.data.completada) {
         document.querySelector("#venta-finalizar").remove();
       }
-      await success(responseUpdate.message);
+
+      DOMSelector("#monto").textContent = responseUpdate.data.monto;
+      DOMSelector("#completada").textContent = responseUpdate.data.completada
+        ? "Completada"
+        : "Pendiente";
+      successTemporal(responseUpdate.message);
       cerrarModal("venta-edit");
       history.back();
     });
   }
-
-  // document.addEventListener("click", (event) => {
-  //   const arrow = event.target.closest("#back-perfil-venta");
-  //   if (arrow) {
-  //     cerrarModal("venta-edit");
-  //   }
-  // });
 
   contenedorVista.addEventListener("click", async (e) => {
     if (e.target.id == "back-perfil-venta") {
@@ -114,6 +116,4 @@ export const editVentaController = async (parametros = null) => {
       history.back();
     }
   });
-
-  // configurarBotonCerrar("back-perfil-venta", em);
 };

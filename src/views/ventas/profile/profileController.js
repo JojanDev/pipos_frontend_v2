@@ -4,9 +4,10 @@ import {
   get,
   mapearDatosEnContenedor,
 } from "../../../helpers";
+import hasPermission from "../../../helpers/hasPermission";
 import { routes } from "../../../router/routes";
 
-function formatoCorto(fechaIsoUtc) {
+export const formatoCorto = (fechaIsoUtc) => {
   if (!fechaIsoUtc) return "Fecha inválida";
 
   const fecha = new Date(fechaIsoUtc);
@@ -23,7 +24,7 @@ function formatoCorto(fechaIsoUtc) {
 
   // Devuelve algo como "02/09/2025 11:18"
   return new Intl.DateTimeFormat("es-ES", opciones).format(fecha);
-}
+};
 
 export let venta = {};
 export let ventaInformacion = {};
@@ -52,6 +53,9 @@ export const profileVentaController = async (parametros = null) => {
     `usuarios/${ventaDesdeBackend.data.comprador_id}`
   );
 
+  ventaDesdeBackend.data.completada = ventaDesdeBackend.data.completada
+    ? "Completada"
+    : "Pendiente";
   mapearDatosEnContenedor(
     {
       ...ventaDesdeBackend.data,
@@ -175,21 +179,21 @@ export const profileVentaController = async (parametros = null) => {
       `;
   });
 
-  const contenedor = DOMSelector("#venta");
+  const contenedorVista = DOMSelector("#venta");
 
-  // const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
+  const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
 
-  // console.log(acciones);
+  console.log(acciones);
 
-  // for (const accion of acciones) {
-  //   console.log(accion.dataset.permiso.split(","));
-  //   console.log(hasPermission(accion.dataset.permiso.split(",")));
-  //   if (!hasPermission(accion.dataset.permiso.split(","))) {
-  //     accion.remove();
-  //   }
-  // }
+  for (const accion of acciones) {
+    console.log(accion.dataset.permiso.split(","));
+    console.log(hasPermission(accion.dataset.permiso.split(",")));
+    if (!hasPermission(accion.dataset.permiso.split(","))) {
+      accion.remove();
+    }
+  }
 
-  contenedor.addEventListener("click", async (event) => {
+  contenedorVista.addEventListener("click", async (event) => {
     if (event.target.id == "venta-finalizar") {
       const idVenta = ventaParams.id;
       // await cargarComponente(routes.ventas.editar, { id: idVenta });
@@ -199,7 +203,6 @@ export const profileVentaController = async (parametros = null) => {
     }
 
     if (event.target.id == "venta-cancelar") {
-      // window.location.hash = "#/ventas";
       history.back();
     }
   });

@@ -16,6 +16,7 @@ import {
   successTemporal,
   mapearDatosEnContenedor,
   renderNotFound,
+  convertirEdadCorta,
 } from "../../../helpers";
 import hasPermission from "../../../helpers/hasPermission";
 
@@ -65,7 +66,9 @@ const manejarSubmit = (
       petResponse.data.mascota = petResponse.data.nombre;
       petResponse.data.especie = especie.nombre;
       petResponse.data.raza = raza.nombre;
-      petResponse.data.edad = petResponse.data.edad_semanas;
+      petResponse.data.edad = petResponse.data.edad_semanas
+        ? convertirEdadCorta(edad_semanas)
+        : "Desconocida";
 
       console.log(petResponse);
       clientResponse.data["tipo_documento"] = typeDocumentResponse.data.nombre;

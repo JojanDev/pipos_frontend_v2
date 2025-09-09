@@ -6,7 +6,9 @@ import {
   get,
   llenarSelect,
   llenarSelectMedicamentos,
+  llenarSelectMedicamentosStock,
   llenarSelectProductos,
+  llenarSelectProductosStock,
   renderizarCarrito,
   success,
   successTemporal,
@@ -63,11 +65,11 @@ export const createDetailsController = () => {
     // Llenar el select según el tipo seleccionado
     if (selectTipo.value == "medicamento") {
       // Para medicamentos: mostrar número de lote y nombre
-      await llenarSelectMedicamentos();
+      await llenarSelectMedicamentosStock();
       inputPrecio.placeholder = "Seleccione un elemento";
     } else if (selectTipo.value == "producto") {
       // Para productos: mostrar tipo de producto y nombre
-      await llenarSelectProductos();
+      await llenarSelectProductosStock();
       inputPrecio.placeholder = "Seleccione un elemento";
     } else if (selectTipo.value == "servicio") {
       // Para servicios: mostrar solo el nombre

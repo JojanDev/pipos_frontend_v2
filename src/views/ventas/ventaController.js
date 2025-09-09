@@ -3,7 +3,9 @@ import {
   crearFila,
   capitalizarPrimeraLetra,
   formatearPrecioConPuntos,
+  DOMSelector,
 } from "../../helpers";
+import hasPermission from "../../helpers/hasPermission";
 
 function formatoCorto(localDateTime) {
   const fecha = new Date(localDateTime);
@@ -31,7 +33,7 @@ export const cargarTablaVentas = async () => {
     return;
   }
 
-  const tbody = document.querySelector("#ventas .table__body");
+  const tbody = DOMSelector("#ventas .table__body");
   tbody.innerHTML = "";
 
   const ventasInfo = await Promise.all(
@@ -65,19 +67,20 @@ export const cargarTablaVentas = async () => {
 export const ventasController = async () => {
   cargarTablaVentas();
 
-  const tablaventas = document.querySelector("#ventas");
+  const contenedorVista = DOMSelector(`#vista-ventas`);
+  const tablaventas = DOMSelector("#ventas");
 
-  // const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
+  const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
 
-  // console.log(acciones);
+  console.log(acciones);
 
-  // for (const accion of acciones) {
-  //   console.log(accion.dataset.permiso.split(","));
-  //   console.log(hasPermission(accion.dataset.permiso.split(",")));
-  //   if (!hasPermission(accion.dataset.permiso.split(","))) {
-  //     accion.remove();
-  //   }
-  // }
+  for (const accion of acciones) {
+    console.log(accion.dataset.permiso.split(","));
+    console.log(hasPermission(accion.dataset.permiso.split(",")));
+    if (!hasPermission(accion.dataset.permiso.split(","))) {
+      accion.remove();
+    }
+  }
 
   tablaventas.addEventListener("click", async (event) => {
     const fila = event.target.closest("tr[data-id]");

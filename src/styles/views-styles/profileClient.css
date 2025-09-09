@@ -69,6 +69,9 @@
   white-space: nowrap; /* No saltar de línea */
   overflow: hidden; /* Ocultar lo que se sale */
   text-overflow: ellipsis;
+}
+
+[data-modal="profile-personal"] .perfil__nombre {
   width: 640px;
 }
 

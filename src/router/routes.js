@@ -96,7 +96,7 @@ export const routes = {
         controller: editClientController,
         private: true,
         addHtml: true,
-        can: ["usuario.update"],
+        can: ["usuario.update-client"],
       },
       mascotas: {
         crear: {
@@ -487,7 +487,8 @@ export const routes = {
         path: "ventas/profile/index.html",
         controller: profileVentaController,
         private: true,
-        addHtml: true,
+        needLayout: true,
+
         can: ["venta.view"],
       },
       editar: {

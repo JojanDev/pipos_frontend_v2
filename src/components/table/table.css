@@ -25,7 +25,10 @@
 
 .table__header {
   display: grid;
-  grid-template-columns: 50px 1fr 1fr 1fr 1.5fr;
+  grid-template-columns: 50px minmax(100px, 1fr) minmax(100px, 1fr) minmax(
+      100px,
+      1fr
+    ) minmax(100px, 1.5fr);
 }
 
 .table__header {
@@ -47,12 +50,16 @@
   overflow-y: auto;
   background-color: #e0eefc;
   position: relative;
+  overflow-x: hidden;
 }
 
 .table__row {
   cursor: pointer;
   display: grid;
-  grid-template-columns: 50px 1fr 1fr 1fr 1.5fr;
+  grid-template-columns: 50px minmax(100px, 1fr) minmax(100px, 1fr) minmax(
+      100px,
+      1fr
+    ) minmax(100px, 1.5fr);
   max-height: 40px; /* ← aquí estableces el mínimo */
   transition: 0.5s ease;
 }
@@ -91,48 +98,66 @@
 }
 
 .table__body::-webkit-scrollbar-thumb {
-  background: #ccc;
+  background: #0161b5;
   border-radius: 4px;
 }
 
 #pets-client .table__header,
 #pets-client .table__row {
-  grid-template-columns: 50px 1fr 0.7fr 1fr 1.2fr 1fr;
+  grid-template-columns: 50px minmax(100px, 1fr) minmax(100px, 0.7fr) minmax(
+      100px,
+      1fr
+    ) minmax(100px, 1.2fr) minmax(100px, 1fr);
 }
 
 #pets .table__header,
 #pets .table__row {
-  grid-template-columns: 50px 1fr 0.7fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 50px minmax(100px, 1fr) minmax(100px, 0.7fr) minmax(
+      100px,
+      1fr
+    ) minmax(100px, 1fr) minmax(100px, 1fr) minmax(100px, 1fr);
 }
 
 #pet-antecedent-treatment .table__header,
 #pet-antecedent-treatment .table__row {
-  grid-template-columns: 50px 1fr 1.5fr 1fr 0.8fr 1.2fr 1fr 40px 40px;
+  grid-template-columns: 50px minmax(100px, 1fr) minmax(100px, 1.5fr) minmax(
+      100px,
+      1fr
+    ) minmax(100px, 0.8fr) minmax(100px, 1.2fr) minmax(100px, 1fr) 40px 40px;
 }
 
 #products .table__header,
 #products .table__row {
-  grid-template-columns: 50px 1.5fr repeat(4, 1fr);
+  grid-template-columns: 50px minmax(100px, 1.5fr) repeat(4, minmax(100px, 1fr));
 }
 
 #medicaments .table__header,
 #medicaments .table__row {
-  grid-template-columns: 50px 110px 1fr 1fr 1fr 1fr 120px 100px;
+  grid-template-columns: 50px 110px minmax(100px, 1fr) minmax(100px, 1fr) minmax(
+      100px,
+      1fr
+    ) minmax(100px, 1fr) 120px 100px;
 }
 
 .table-container--administrar_datos .table__header,
 .table-container--administrar_datos .table__row {
-  grid-template-columns: 50px 1fr 50px;
+  grid-template-columns: 50px minmax(100px, 1fr) 50px;
 }
 
 #personal .table__header,
 #personal .table__row {
-  grid-template-columns: 50px 2fr 1.5fr 1fr 1fr 1.3fr;
+  grid-template-columns: 50px minmax(150px, 1fr) minmax(100px, 1.5fr) minmax(
+      100px,
+      1fr
+    ) minmax(100px, 1fr) minmax(100px, 1.3fr);
 }
 
 #ventas .table__header,
 #ventas .table__row {
-  grid-template-columns: 50px 170px 1.7fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 50px 170px minmax(100px, 1.7fr) minmax(100px, 1fr) minmax(
+      100px,
+      1fr
+    ) minmax(100px, 1fr) minmax(100px, 1fr);
 }
 
 .placeholder {

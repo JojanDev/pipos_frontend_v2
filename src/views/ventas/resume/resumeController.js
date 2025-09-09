@@ -33,6 +33,8 @@ export const resumeController = () => {
   // Muestra el nombre del cliente (separa el ID del nombre con split)
   cliente.textContent = venta.cliente.split("-")[1].slice(1);
 
+  console.log(venta);
+
   // Muestra el nombre del empleado que atiende la venta
   personalNombre.textContent = "Empleado: " + venta.nombrePersonal;
 
@@ -92,6 +94,7 @@ export const resumeController = () => {
       };
 
       console.log(objeto);
+      console.log({ total: parseFloat(precioTotal) });
 
       // Envío de datos al servidor
       const ventaResponse = await post("ventas/", {

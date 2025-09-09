@@ -20,15 +20,6 @@ export const profileMedicamentInfoController = async (parametros = null) => {
   const { perfil: infoMedicamento } = parametros;
 
   const contenedorVista = DOMSelector(`[data-modal="profile-medicament-info"]`);
-  // const dataJSON = localStorage.getItem("data");
-  // const data = JSON.parse(dataJSON);
-
-  // if (data.id_rol != 1) {
-  //   const opcionesAdmin = DOMSelectorAll(".admin");
-  //   [...opcionesAdmin].forEach((element) => {
-  //     element.remove();
-  //   });
-  // }
 
   const tbody = DOMSelector("#pets-client .table__body");
   const btnAtras = DOMSelector("#back-profile-medicament-info");

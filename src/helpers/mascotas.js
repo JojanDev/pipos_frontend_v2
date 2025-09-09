@@ -87,7 +87,7 @@ export const actualizarTablas = (pet, tbody_perfilCliente, tbody_Mascotas) => {
       nombre,
       especie,
       raza,
-      convertirEdadCorta(edad_semanas),
+      edad_semanas ? convertirEdadCorta(edad_semanas) : "Desconocida",
       capitalizarPrimeraLetra(sexo),
     ]);
     tbody_perfilCliente.insertAdjacentElement("afterbegin", row);

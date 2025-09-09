@@ -7,25 +7,26 @@ import {
   DOMSelectorAll,
 } from "../../helpers";
 import hasPermission from "../../helpers/hasPermission";
+import { formatoCorto } from "../ventas/profile/profileController";
 
 export const petsController = async () => {
   const contenedorVista = DOMSelector("#mascotas");
-  // const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
+  const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
 
-  // console.log(acciones);
+  console.log(acciones);
 
-
-  // for (const accion of acciones) {
-  //   console.log(accion.dataset.permiso.split(","));
-  //   console.log(hasPermission(accion.dataset.permiso.split(",")));
-  //   if (!hasPermission(accion.dataset.permiso.split(","))) {
-  //     accion.remove();
-  //   }
-  // }
+  for (const accion of acciones) {
+    console.log(accion.dataset.permiso.split(","));
+    console.log(hasPermission(accion.dataset.permiso.split(",")));
+    if (!hasPermission(accion.dataset.permiso.split(","))) {
+      accion.remove();
+    }
+  }
   const tbody = DOMSelector("#pets .table__body");
   const tablePets = DOMSelector("#pets");
 
   const petsResponse = await get("mascotas");
+  console.log(petsResponse);
 
   console.log(petsResponse);
 
@@ -41,7 +42,7 @@ export const petsController = async () => {
       cliente,
       especie,
       telefono,
-      ultimo_registro,
+      ultimo_antecedente,
       estado_vital,
     }) => {
       const row = crearFila([
@@ -51,11 +52,8 @@ export const petsController = async () => {
         raza,
         cliente,
         telefono,
-        ultimo_registro
-          ? convertirFechaLocalDate(ultimo_registro)
-          : "Sin registros", //PENDIENTE HACER OBTENER LA FECHA DEL ULTIMO ANTECEDENTE
+        ultimo_antecedente ? formatoCorto(ultimo_antecedente) : "Sin registros", //PENDIENTE HACER OBTENER LA FECHA DEL ULTIMO ANTECEDENTE
       ]);
-
       !estado_vital ? row.classList.add("fila-roja") : null;
 
       tbody.append(row);

@@ -16,9 +16,11 @@ import {
   mapearDatosEnContenedor,
   successTemporal,
   convertirDias,
+  convertirFechaLocalDate,
 } from "../../../helpers";
 import hasPermission from "../../../helpers/hasPermission";
 import { routes } from "../../../router/routes";
+import { formatoCorto } from "../../ventas/profile/profileController";
 
 function eliminarTratamiento(idTratamiento, idAntecedente) {
   const tratamiento = DOMSelector(`[data-idTratamiento='${idTratamiento}']`);
@@ -67,6 +69,8 @@ export const treatmentController = async (parametros = null) => {
     `usuarios/${tratamientoResponse.data.usuario_id}`
   );
 
+  console.log(tratamientoResponse);
+
   if (!tratamientoResponse.success) {
     await error(tratamientoResponse.message);
     cerrarModal("create-client");
@@ -75,6 +79,9 @@ export const treatmentController = async (parametros = null) => {
 
   const antecedenteResponse = await get(`antecedentes/${antecedente.id}`);
 
+  tratamientoResponse.data.fecha_creado = formatoCorto(
+    tratamientoResponse.data.fecha_creado
+  );
   mapearDatosEnContenedor(
     {
       ...tratamientoResponse.data,

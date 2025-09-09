@@ -73,6 +73,8 @@ export const profilePetController = async (parametros = null) => {
 
   //Peticion para obtener la informacion de la mascota
   const petResponse = await get(`mascotas/${mascota_id}`);
+  console.log(petResponse);
+
   const clientResponse = await get(`usuarios/${petResponse.data.usuario_id}`);
   const typeDocumentResponse = await get(
     `tipos-documentos/${clientResponse.data.tipo_documento_id}`
@@ -85,7 +87,9 @@ export const profilePetController = async (parametros = null) => {
   petResponse.data.mascota = petResponse.data.nombre;
   petResponse.data.especie = petResponse.data.raza.especie.nombre;
   petResponse.data.raza = petResponse.data.raza.nombre;
-  petResponse.data.edad = convertirEdadCorta(petResponse.data.edad_semanas);
+  petResponse.data.edad = petResponse.data.edad_semanas
+    ? convertirEdadCorta(petResponse.data.edad_semanas)
+    : "Desconocida";
 
   console.log(petResponse);
   clientResponse.data["tipo_documento"] = typeDocumentResponse.data.nombre;
@@ -136,35 +140,26 @@ export const profilePetController = async (parametros = null) => {
 
   contenedorVista.addEventListener("click", async (e) => {
     if (e.target.closest(".delete-antecedent")) {
-      // toggleBody(e.target.closest(".antecedente-header"));
       const contenedorId = e.target.closest("[data-idAntecendente]");
       const idAntecedente = contenedorId.getAttribute("data-idAntecendente");
       const responseDelete = await del(`antecedentes/${idAntecedente}`);
       if (!responseDelete.success) return await error(responseDelete.message);
 
       contenedorId.remove();
-      await success(responseDelete.message);
+      successTemporal(responseDelete.message);
+      if (contenedorAntecedente.children.length <= 0) {
+        const placeholder = document.createElement("p");
+        placeholder.classList.add("placeholder-antecedentes");
+        placeholder.textContent = "No hay antecedentes registrados";
+        contenedorAntecedente.append(placeholder);
+      }
       return;
     }
 
     if (e.target.closest(".edit-antecedent")) {
-      // toggleBody(e.target.closest(".antecedente-header"));
       const contenedorId = e.target.closest("[data-idAntecendente]");
       const idAntecedente = contenedorId.getAttribute("data-idAntecendente");
-
-      // await cargarComponente(routes.antecedente.editar, {
-      //   antecedente_id: idAntecedente,
-      //   mascota_id,
-      // });
       location.hash = `#/mascotas/perfil/id=${mascota_id}/antecedente/id=${idAntecedente}/editar`;
-      // const responseDelete = await del("antecedentes/" + idAntecedente);
-      // if (!responseDelete.success) {
-      //   await error(responseDelete.message);
-      //   return;
-      // }
-      // contenedorId.remove();
-      // await success(responseDelete.message);
-      // return;
     }
 
     if (e.target.closest(".antecedente-header")) {

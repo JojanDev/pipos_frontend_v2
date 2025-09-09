@@ -14,6 +14,7 @@ import {
   successTemporal,
 } from "../../../../helpers";
 import { listarTiposProductos } from "../../administrationController";
+import hasPermission from "../../../../helpers/hasPermission";
 
 export const profileProductTypeController = async (parametros = null) => {
   console.log(parametros);
@@ -40,17 +41,17 @@ export const profileProductTypeController = async (parametros = null) => {
 
   titulo.textContent = response.data.nombre;
 
-  // const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
+  const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
 
-  // console.log(acciones);
+  console.log(acciones);
 
-  // for (const accion of acciones) {
-  //   console.log(accion.dataset.permiso.split(","));
-  //   console.log(hasPermission(accion.dataset.permiso.split(",")));
-  //   if (!hasPermission(accion.dataset.permiso.split(","))) {
-  //     accion.remove();
-  //   }
-  // }
+  for (const accion of acciones) {
+    console.log(accion.dataset.permiso.split(","));
+    console.log(hasPermission(accion.dataset.permiso.split(",")));
+    if (!hasPermission(accion.dataset.permiso.split(","))) {
+      accion.remove();
+    }
+  }
 
   modal.addEventListener("click", async (e) => {
     if (e.target.id == "edit-productType") {

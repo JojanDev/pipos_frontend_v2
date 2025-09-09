@@ -52,9 +52,6 @@ export const createPetController = async (parametros = null) => {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    // const requiredSelectClient =
-    //   !containerSelectClient.classList.contains("hidden");
-
     if (!validarCampos(e)) return;
 
     const edad_semanas = calcularSemanasTotales(datos);
@@ -80,11 +77,7 @@ export const createPetController = async (parametros = null) => {
   contenedorVista.addEventListener("click", (e) => {
     if (e.target.id == "back-register-pet-client") {
       cerrarModal("create-pet");
-
-      // location.hash = "#/mascotas";
       history.back();
     }
   });
-
-  // configurarBotonCerrar("back-register-pet-client", esModal);
 };

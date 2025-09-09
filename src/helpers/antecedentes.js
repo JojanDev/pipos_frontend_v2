@@ -35,7 +35,7 @@ export const crearBloqueAntecedenteCompleto = async ({
     "admin"
   );
 
-  iconDelete.dataset.permiso = "antecedente.create";
+  iconDelete.dataset.permiso = "antecedente.delete";
 
   const iconEdit = document.createElement("i");
   // spanTitulo.textContent = titulo;

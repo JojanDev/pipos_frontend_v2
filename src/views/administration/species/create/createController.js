@@ -43,8 +43,8 @@ export const createSpecieController = (parametros = null) => {
     const btn = document.createElement("button");
     const i = document.createElement("i");
     btn.append(i);
-    i.classList.add("ri-edit-box-line");
-    btn.classList.add("btn", "btn--edit");
+    i.classList.add("ri-eye-line");
+    btn.classList.add("btn", "btn--edit", "fw-400");
 
     const row = crearFila([
       responseEspecie.data.id,
