@@ -33,6 +33,7 @@ export const clientsController = async () => {
   cargarTabla();
 
   const tablaClientes = DOMSelector("#clients");
+  const contenedorVista = DOMSelector("#vista-clientes");
 
   const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
 

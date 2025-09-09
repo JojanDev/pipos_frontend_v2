@@ -2,12 +2,14 @@ import getCookie from "./getCookie";
 
 export default (permisosRequeridos) => {
   const permisosUsuario = getCookie("permisos");
+  console.log(permisosUsuario);
+  console.log(permisosRequeridos);
 
   // Extrae los permisos del usuario desde el token decodificado
 
   // Verifica que el usuario tenga todos los permisos requeridos
   // Verifica si el usuario tiene todos los permisos requeridos
-  return permisosRequeridos.every((requerido) => {
+  return permisosRequeridos.some((requerido) => {
     // Para cada permiso requerido, buscamos si el usuario tiene algún permiso que lo cubra
     return permisosUsuario.some((asignado) => {
       // ✅ Coincidencia exacta: el permiso asignado es igual al requerido

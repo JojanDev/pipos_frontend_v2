@@ -67,7 +67,7 @@ export const routes = {
       private: true,
       needLayout: true,
       slot: "main",
-      can: ["usuario.view"],
+      can: ["usuario.view", "usuario.view-client"],
     },
     crear: {
       path: "clients/create/index.html",
