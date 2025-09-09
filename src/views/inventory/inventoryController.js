@@ -100,22 +100,10 @@ export const listarMedicamentos = async () => {
 };
 
 export const inventoryController = () => {
-  // const dataJSON = localStorage.getItem("data");
-  // const data = JSON.parse(dataJSON);
-
-  // if (data.id_rol != 1) {
-  //   const opcionesAdmin = DOMSelectorAll(".admin");
-  //   [...opcionesAdmin].forEach((element) => {
-  //     element.remove();
-  //   });
-  // }
-
   listarProductos();
   listarMedicamentos();
 
-  const vistaInventory = DOMSelector("#inventory");
-
-  vistaInventory.addEventListener("click", (e) => {});
+  const contenedorVista = DOMSelector("#inventory");
 
   const tablaProductos = DOMSelector("#products");
 
@@ -136,15 +124,8 @@ export const inventoryController = () => {
 
     if (fila) {
       const idProducto = fila.getAttribute("data-id");
-
-      // location.hash = `#/inventario/productosPerfil/id=${idProducto}`;
-
-      // if (data.id_rol == 1) {
-      // await cargarComponente(routes.inventario.productosEditar, {
-      //   id: idProducto,
-      // });
       if (!hasPermission(["producto.update"])) {
-        // return;
+        return;
       }
       location.hash =
         location.hash +

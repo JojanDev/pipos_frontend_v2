@@ -2,8 +2,6 @@ import getCookie from "./getCookie";
 
 export default (permisosRequeridos) => {
   const permisosUsuario = getCookie("permisos");
-  console.log(permisosUsuario);
-  console.log(permisosRequeridos);
 
   // Extrae los permisos del usuario desde el token decodificado
 

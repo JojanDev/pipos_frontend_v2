@@ -19,7 +19,7 @@ export const cargarTablaEmpleados = async () => {
   tbody.innerHTML = "";
 
   const personalInfo = await Promise.all(
-    usuarios.data.map(async (usuario) => {
+    await usuarios.data.map(async (usuario) => {
       const rolesUsuario = await get(`roles-usuarios/usuario/${usuario.id}`);
       // console.log(rolesUsuario);
       let nombreRoles;

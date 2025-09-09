@@ -43,11 +43,6 @@ export const createMedicamentInventoryController = async () => {
 
   // Referencias a elementos del DOM
   const form = document.querySelector("#form-register-medicament-inventory");
-  const selectTipoDocumento = document.querySelector("#tipos-documento");
-  const tbody = document.querySelector("#medicament-inventorys .table__body");
-
-  // Detecta si se está usando en modal o en vista completa
-  const esModal = !location.hash.includes("inventario/medicamentosCrear");
 
   // Configura las validaciones automáticas de los campos del formulario
   configurarEventosValidaciones(form);
@@ -82,6 +77,10 @@ export const createMedicamentInventoryController = async () => {
     // Verifica validaciones generales
     if (!validarCampos(e)) return;
 
+    if (datos.cantidad <= 0) {
+      return await error("Debe ingresar una cantidad valida");
+    }
+
     // Verifica específicamente la fecha de caducidad
     const resultado = validarFechaCaducidad(inputFecha.value);
     if (!resultado.valid) return;
@@ -113,6 +112,7 @@ export const createMedicamentInventoryController = async () => {
         cantidad,
       ];
       const row = crearFila(filaNueva);
+      response.data.cantidad == 0 ? row.classList.add("fila-alerta") : null;
       tbody.insertAdjacentElement("afterbegin", row);
     }
 

@@ -85,6 +85,9 @@ export const createProductController = async () => {
 
     if (!resultado.valid);
 
+    if (datos.stock <= 0) {
+      return await error("Debe ingresar un stock valido");
+    }
     console.log(datos);
 
     const response = await post("productos", datos);
@@ -110,6 +113,7 @@ export const createProductController = async () => {
         convertirADiaMesAño(fecha_caducidad),
       ]);
       tbodyProducts.insertAdjacentElement("afterbegin", row);
+      response.data.stock == 0 ? row.classList.add("fila-alerta") : null;
     }
 
     cerrarModal("create-product");

@@ -56,7 +56,6 @@ export const editProductController = async (parametros = null) => {
 
   const form = DOMSelector("#form-register-product");
   const tbodyProducts = DOMSelector("#products .table__body");
-  const esModal = !location.hash.includes("inventario/productosCrear");
 
   await llenarSelect({
     endpoint: "tipos-productos",
