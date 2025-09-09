@@ -38,7 +38,7 @@
 .section-form__subtitle {
   margin-left: 20px;
   font-size: 30px;
-  color: #0161b5;
+  color: var(--color-primario);
   margin: 20px 0 10px 0;
 }
 
@@ -60,7 +60,7 @@
   top: 15px;
   left: 25px;
   cursor: pointer;
-  background-color: #0161b5;
+  background-color: var(--color-primario);
   border-radius: 10px;
 }
 

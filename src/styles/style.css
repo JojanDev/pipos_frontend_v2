@@ -1,3 +1,5 @@
+/*=============== Custom Properties ===============*/
+@import url(customProperties.css);
 /*=============== Layout ===============*/
 @import url(layouts/mainLayout.css);
 /*=============== Components ===============*/

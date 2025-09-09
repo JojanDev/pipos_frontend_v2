@@ -1,12 +1,12 @@
 .btn {
-  /* background-color: #0161b5; */
+  /* background-color: var(--color-primario); */
   /* width: 194px; */
   padding: 10px 25px;
   /* height: 68px; */
   border-radius: 10px;
   font-size: 16px;
   font-weight: 600;
-  background-color: #0161b5;
+  background-color: var(--color-primario);
   color: #fff;
   border: none;
   align-self: center;

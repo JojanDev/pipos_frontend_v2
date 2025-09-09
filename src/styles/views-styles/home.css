@@ -10,7 +10,7 @@
 
 .home__title {
   font-size: 35px;
-  color: #0161b5;
+  color: var(--color-primario);
 }
 
 .home__message {

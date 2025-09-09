@@ -98,7 +98,7 @@
 }
 
 .table__body::-webkit-scrollbar-thumb {
-  background: #0161b5;
+  background: var(--color-primario);
   border-radius: 4px;
 }
 

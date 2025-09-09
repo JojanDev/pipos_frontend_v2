@@ -80,7 +80,7 @@
 }
 
 .perfil__separador {
-  background-color: #0161b5;
+  background-color: var(--color-primario);
   margin: 0 -10px;
   padding: 5px 20px;
   color: #fff;
@@ -290,7 +290,7 @@
 }
 
 .plus-icon {
-  background-color: #0161b5;
+  background-color: var(--color-primario);
   color: #fff;
   font-size: 30px;
   width: 40px;
@@ -318,7 +318,7 @@
   width: 35px;
   right: 20px;
   bottom: initial;
-  color: #0161b5;
+  color: var(--color-primario);
 }
 
 .antecedentes-container .perfil__campo {

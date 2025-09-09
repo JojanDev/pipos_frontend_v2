@@ -74,7 +74,7 @@
 }
 
 .card__title {
-  color: #0161b5;
+  color: var(--color-primario);
   word-break: break-word;
 }
 
