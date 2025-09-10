@@ -13,6 +13,7 @@ import {
   successTemporal,
   renderNotFound,
 } from "../../../../helpers";
+import { formatoCorto } from "../../../ventas/profile/profileController";
 
 /**
  * Controlador para editar un tratamiento asociado a un antecedente de mascota.
@@ -86,6 +87,8 @@ export const editTreatmentController = async (parametros = null) => {
     // Obtenemos datos del veterinario asociado al tratamiento actualizado
     const vetResp = await get(`usuarios/${updateResp.data.usuario_id}`);
 
+    // Formateamos fecha de creación y mapeamos datos en el modal
+    updateResp.data.fecha_creado = formatoCorto(updateResp.data.fecha_creado);
     // Actualizamos el contenido del modal con los nuevos datos
     mapearDatosEnContenedor(
       {

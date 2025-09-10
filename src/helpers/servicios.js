@@ -23,12 +23,6 @@ export function crearCardServicio(id, nombre, descripcion, precio) {
   imagen.classList.add("card__img");
   card.appendChild(imagen);
 
-  // Mostrar precio formateado con separador de miles
-  const precioP = document.createElement("p");
-  precioP.classList.add("card__precio");
-  precioP.textContent = "Valor: " + formatearPrecioConPuntos(precio);
-  card.appendChild(precioP);
-
   // Contenedor para titulo y descripcion con scroll si es necesario
   const contenido = document.createElement("div");
   contenido.classList.add("scroll-cont");
@@ -47,6 +41,12 @@ export function crearCardServicio(id, nombre, descripcion, precio) {
 
   card.appendChild(contenido);
 
+  // Mostrar precio formateado con separador de miles
+  const precioP = document.createElement("p");
+  precioP.classList.add("card__precio");
+  precioP.textContent = "Valor: " + formatearPrecioConPuntos(precio);
+  card.appendChild(precioP);
+
   // Boton de editar servicio (requiere permiso servicio.update)
   const btnEdit = document.createElement("button");
   btnEdit.classList.add("btn", "btn--edit", "btn-servicio-edit", "admin");
@@ -59,7 +59,13 @@ export function crearCardServicio(id, nombre, descripcion, precio) {
 
   // Boton de eliminar servicio (requiere permiso servicio.delete)
   const btnDelete = document.createElement("button");
-  btnDelete.classList.add("btn", "btn--red", "btn-servicio-delete", "admin");
+  btnDelete.classList.add(
+    "btn",
+    "btn--edit",
+    "btn--red",
+    "btn-servicio-delete",
+    "admin"
+  );
   btnDelete.title = "Eliminar servicio";
   btnDelete.dataset.permiso = "servicio.delete";
   const iconDelete = document.createElement("i");

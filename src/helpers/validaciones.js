@@ -388,6 +388,8 @@ const obtenerCamposValidables = (formulario) => {
   );
 };
 
+export let datos = {};
+
 /**
  * Valida todos los campos de un formulario disparado por submit o evento.
  *

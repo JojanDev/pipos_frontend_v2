@@ -11,6 +11,7 @@ import {
   DOMSelectorAll,
   successTemporal,
   convertirADiaMesAño,
+  toInputDate,
 } from "../../../helpers";
 import { routes } from "../../../router/routes";
 import { mapearDatosEnContenedor } from "../../../helpers/domMapper";
@@ -221,6 +222,7 @@ export const profilePetController = async (parametros = null) => {
 
       const { data: mascota } = await get(`mascotas/${mascota_id}`);
       mascota.estado_vital = false;
+      mascota.fecha_nacimiento = toInputDate(mascota.fecha_nacimiento);
       delete mascota.raza;
       console.log(mascota);
 

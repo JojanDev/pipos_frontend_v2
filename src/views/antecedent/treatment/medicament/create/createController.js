@@ -25,11 +25,13 @@ import {
  * @param {number} duracion.dias - Cantidad de días.
  * @returns {number} - Total de días redondeado hacia abajo.
  */
-const calcularDiasTotales = ({ meses = 0, semanas = 0, dias = 0 }) => {
+export const calcularDiasTotales = ({ meses = 0, semanas = 0, dias = 0 }) => {
   const diasPorMes = 30.4375;
   const diasPorSemana = 7;
   const total =
-    meses * diasPorMes + semanas * diasPorSemana + parseInt(dias, 10);
+    Number(meses) * diasPorMes +
+    Number(semanas) * diasPorSemana +
+    parseInt(Number(dias), 10);
   return Math.floor(total);
 };
 
@@ -94,13 +96,15 @@ export const createMedicamentController = async (parametros = null) => {
 
     // Preparamos datos para la petición POST
     datos.antecedente_id = antecedente.id;
+    const duracion = calcularDiasTotales(datos);
     const medData = {
       tratamiento_id: tratamiento.id,
       info_medicamento_id: datos.info_medicamento_id,
       frecuencia_aplicacion: datos.frecuencia_aplicacion,
-      duracion: calcularDiasTotales(datos),
+      duracion,
       dosis: datos.dosis,
     };
+    console.log(medData);
 
     // Creamos la relación medicamento-tratamiento
     const medResp = await post("medicamentos-tratamientos/", medData);

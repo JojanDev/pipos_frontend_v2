@@ -39,16 +39,6 @@ export const profilePersonalController = async (parametros = null) => {
     return;
   }
 
-  // if (response.data.activo) {
-  //   btnActivar.remove();
-  // } else {
-  //   btnEliminar.remove();
-  // }
-
-  // if (response.data.rol.id == 1) {
-  //   btnEliminar?.remove();
-  //   btnActivar?.remove();
-  // }
   const { data: tipoDocumento } = await get(
     `tipos-documentos/${response.data.tipo_documento_id}`
   );
@@ -78,6 +68,8 @@ export const profilePersonalController = async (parametros = null) => {
   }
 
   const credencial = await get(`credenciales/usuario/${response.data.id}`);
+  console.log(credencial);
+
   const contenedorCredenciales = DOMSelector(`#credenciales`);
 
   if (credencial.success) {

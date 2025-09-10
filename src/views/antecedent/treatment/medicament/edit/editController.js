@@ -16,6 +16,7 @@ import {
   successTemporal,
   validarCampos,
 } from "../../../../../helpers";
+import { calcularDiasTotales } from "../create/createController";
 
 /**
  * Convierte duración total en meses, semanas y días.
@@ -35,23 +36,6 @@ const convertirDiasMapeador = (diasTotales) => {
   const dias = diasRestantesMeses % 7 || null;
 
   return { meses, semanas, dias };
-};
-
-/**
- * Calcula el total de días a partir de meses, semanas y días individuales.
- *
- * @param {Object} duracion - Valores de duración.
- * @param {number} duracion.meses - Cantidad de meses.
- * @param {number} duracion.semanas - Cantidad de semanas.
- * @param {number} duracion.dias - Cantidad de días.
- * @returns {number} - Total de días redondeado hacia abajo.
- */
-const calcularDiasTotales = ({ meses = 0, semanas = 0, dias = 0 }) => {
-  const diasPorMes = 30.4375;
-  const diasPorSemana = 7;
-  return Math.floor(
-    meses * diasPorMes + semanas * diasPorSemana + parseInt(dias, 10)
-  );
 };
 
 /**

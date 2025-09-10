@@ -69,7 +69,9 @@ const manejarSubmit = (
 
       console.log(petResponse);
       clientResponse.data["tipo_documento"] = typeDocumentResponse.data.nombre;
-      clientResponse.data["dueño"] = clientResponse.data.nombre;
+      clientResponse.data[
+        "dueño"
+      ] = `${clientResponse.data.nombre} ${clientResponse.data.apellido}`;
 
       const dataProfile = { ...clientResponse.data, ...petResponse.data };
 
@@ -127,9 +129,6 @@ export const editPetController = async (parametros = null) => {
     if (e.target.id == "back-edit-pet-client") {
       cerrarModal("edit-pet");
       history.back();
-
     }
   });
-
-
 };

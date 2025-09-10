@@ -19,9 +19,7 @@ import {
   DOMSelector,
 } from "../../../../helpers"; // Utilidades y funciones auxiliares
 
-import { routes } from "../../../../router/routes"; // Rutas del sistema
 import { listarMedicamentos } from "../../inventoryController";
-import { validarFechaCaducidad } from "../../products/create/createController"; // Función para validar fechas de caducidad
 
 export function validarFechaEdicion(fechaOriginal, fechaNueva) {
   // Si la fecha no cambió → no validar
@@ -56,7 +54,6 @@ export const editMedicamentInventoryController = async (parametros = null) => {
     `[data-modal="edit-medicament-inventory"]`
   );
 
-  // const { id } = parametros;
   const { editar: medicamento } = parametros;
 
   const responseMedi = await get(`medicamentos/${medicamento.id}`);
@@ -135,7 +132,29 @@ export const editMedicamentInventoryController = async (parametros = null) => {
 
     // Mensaje de éxito temporal
     successTemporal(response.message);
-    await listarMedicamentos();
+    const tbody = document.querySelector("#medicaments .table__body");
+    const oldRow = tbody.querySelector(`[data-id="${response.data.id}"]`);
+
+    if (tbody) {
+      const { id, info_medicamento_id, precio, cantidad, numero_lote } =
+        response.data;
+      const { data: info } = await get(
+        `info-medicamentos/${info_medicamento_id}`
+      );
+      const filaNueva = [
+        id,
+        numero_lote,
+        info.nombre,
+        info.uso_general,
+        capitalizarPrimeraLetra(info.via_administracion),
+        capitalizarPrimeraLetra(info.presentacion),
+        formatearPrecioConPuntos(precio), // Formatea precio con puntos
+        cantidad,
+      ];
+      const newRow = crearFila(filaNueva);
+      response.data.cantidad == 0 ? newRow.classList.add("fila-alerta") : null;
+      tbody.replaceChild(newRow, oldRow);
+    }
 
     // Cierra modal o vuelve a vista base según el contexto
     cerrarModal("edit-medicament-inventory");
