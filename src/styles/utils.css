@@ -1,0 +1,44 @@
+/* ==== Width ==== */
+.w {
+  width: auto;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.w-750 {
+  width: 750px;
+}
+
+.w-800 {
+  width: 800px;
+}
+
+.w-1200 {
+  width: 1200px;
+}
+
+/* ==== Height ==== */
+.h {
+  height: auto;
+}
+
+/* ==== Typography ==== */
+.fw-400 {
+  font-weight: 400;
+}
+
+/* ==== Flexbox ==== */
+.d-flex {
+  display: flex;
+}
+
+.jc-sa {
+  justify-content: space-around;
+}
+
+/* ==== Spacing ==== */
+.mt-10 {
+  margin-top: 10px;
+}

@@ -3,12 +3,10 @@ import {
   success,
   get,
   cerrarModal,
-  cerrarModalYVolverAVistaBase,
   datos,
   validarCampos,
   put,
   DOMSelector,
-  configurarBotonCerrar,
   calcularSemanasTotales,
   actualizarTablas,
   prepararDatosMascota,
@@ -16,7 +14,6 @@ import {
   successTemporal,
   mapearDatosEnContenedor,
   renderNotFound,
-  convertirEdadCorta,
   convertirADiaMesAño,
 } from "../../../helpers";
 import hasPermission from "../../../helpers/hasPermission";
@@ -66,7 +63,9 @@ const manejarSubmit = (
       petResponse.data.mascota = petResponse.data.nombre;
       petResponse.data.especie = especie.nombre;
       petResponse.data.raza = raza.nombre;
-      petResponse.data.fecha_nacimiento = convertirADiaMesAño(petResponse.data.fecha_nacimiento);
+      petResponse.data.fecha_nacimiento = convertirADiaMesAño(
+        petResponse.data.fecha_nacimiento
+      );
 
       console.log(petResponse);
       clientResponse.data["tipo_documento"] = typeDocumentResponse.data.nombre;
@@ -128,9 +127,9 @@ export const editPetController = async (parametros = null) => {
     if (e.target.id == "back-edit-pet-client") {
       cerrarModal("edit-pet");
       history.back();
-      // location.hash = `#/mascotas/perfil/id=${mascota.id}`;
+
     }
   });
 
-  // configurarBotonCerrar("back-edit-pet-client", esModal);
+
 };

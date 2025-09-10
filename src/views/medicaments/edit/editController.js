@@ -2,7 +2,6 @@ import {
   error,
   successTemporal,
   cerrarModal,
-  cerrarModalYVolverAVistaBase,
   configurarEventosValidaciones,
   datos,
   validarCampos,
@@ -10,9 +9,8 @@ import {
   put,
   DOMSelector,
   mapearDatosEnContenedor,
-  configurarBotonCerrar,
+  crearCartaMedicamento,
 } from "../../../helpers";
-import { crearCartaMedicamento } from "../medicamentsController";
 
 export const editMedicamentInfoController = async (parametros = null) => {
   const form = DOMSelector("#form-edit-medicament-info");
@@ -38,7 +36,10 @@ export const editMedicamentInfoController = async (parametros = null) => {
 
     if (!validarCampos(e)) return;
 
-    const response = await put(`info-medicamentos/${infoMedicamento.id}`, datos);
+    const response = await put(
+      `info-medicamentos/${infoMedicamento.id}`,
+      datos
+    );
 
     if (!response.success) {
       await error(response.message);
@@ -47,7 +48,9 @@ export const editMedicamentInfoController = async (parametros = null) => {
 
     const contenedor = DOMSelector("#medicaments-info");
 
-    const oldRow = contenedor.querySelector(`[data-id='${infoMedicamento.id}']`);
+    const oldRow = contenedor.querySelector(
+      `[data-id='${infoMedicamento.id}']`
+    );
 
     const updatedRow = crearCartaMedicamento(response.data);
 
@@ -57,14 +60,14 @@ export const editMedicamentInfoController = async (parametros = null) => {
 
     successTemporal(response.message);
 
-    cerrarModal("edit-medicament-info")
+    cerrarModal("edit-medicament-info");
     history.back();
   });
 
-  contenedorVista.addEventListener('click', (e) => {
+  contenedorVista.addEventListener("click", (e) => {
     if (e.target.id == "back-edit-medicament-info") {
-      cerrarModal("edit-medicament-info")
+      cerrarModal("edit-medicament-info");
       history.back();
     }
-  })
+  });
 };

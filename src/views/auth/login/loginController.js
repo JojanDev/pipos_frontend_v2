@@ -1,56 +1,62 @@
+// Helpers
 import {
   error,
-  loginSuccess,
   post,
   configurarEventosValidaciones,
   datos,
-  validarAlfanumericos,
   validarCampos,
   successTemporal,
 } from "../../../helpers";
-// import { layoutController } from "../../../layouts/layout";
 
-//Funcion para validar los datos de inicio de sesion
-const validarSesion = async ({ usuario, contrasena }) => {
-  //Se realiza la peticion
-  const response = await post("auth/login", {
-    usuario,
-    contrasena,
+/**
+ * Controlador para gestionar el inicio de sesión de usuarios.
+ * Configura validaciones del formulario, envía credenciales y redirige tras login exitoso.
+ *
+ * @returns {Promise<void>} - No retorna valor; controla validaciones, muestra mensajes y cambia la ruta.
+ *
+ */
+export const loginController = async () => {
+  // Referencia al formulario de login
+  const form = document.querySelector("#form");
+
+  // Configura validaciones de campos al interactuar con el formulario
+  configurarEventosValidaciones(form);
+
+  // Listener para el envío del formulario
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    // Si la validación de campos falla, no continuamos
+    if (!validarCampos(e)) return;
+
+    // Intentamos iniciar sesión con los datos del formulario
+    if (await validarSesion(datos)) {
+      // Redirigimos al panel de inicio tras login exitoso
+      window.location.hash = "#/inicio";
+    }
   });
+};
 
-  console.log(response);
+/**
+ * Envía las credenciales al backend y procesa la respuesta de inicio de sesión.
+ *
+ * @param {Object} creds - Objeto con usuario y contraseña.
+ * @param {string} creds.usuario - Nombre de usuario.
+ * @param {string} creds.contrasena - Contraseña del usuario.
+ * @returns {Promise<boolean>} - True si login exitoso; false en caso de error (muestra mensaje).
+ *
+ */
+const validarSesion = async ({ usuario, contrasena }) => {
+  // Enviamos petición de autenticación al servidor
+  const response = await post("auth/login", { usuario, contrasena });
 
-  //Se valida el inicio exitoso
+  // En caso de éxito, mostramos mensaje y devolvemos true
   if (response.success) {
     successTemporal(response.message);
     return true;
   }
 
-  //Se valida si ocurrio un error
-  if (!response.success) {
-    //Se muestra un mensaje
-    await error(response.message);
-    return false;
-  }
-};
-
-export const loginController = async () => {
-  // localStorage.clear();
-  const form = document.querySelector("#form");
-
-  configurarEventosValidaciones(form);
-
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    console.log("hoal");
-    // localStorage.setItem("isAuthenticated", true);
-
-    if (!validarCampos(e)) return;
-
-    if (await validarSesion(datos)) {
-      console.log("si");
-
-      window.location.hash = "#/inicio";
-    }
-  });
+  // En caso de error, mostramos mensaje y devolvemos false
+  await error(response.message);
+  return false;
 };

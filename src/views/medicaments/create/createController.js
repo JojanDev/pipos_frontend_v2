@@ -3,16 +3,14 @@ import {
   successTemporal,
   post,
   cerrarModal,
-  cerrarModalYVolverAVistaBase,
   configurarEventosValidaciones,
   datos,
   validarCampos,
   capitalizarPrimeraLetra,
-  configurarBotonCerrar,
   DOMSelectorAll,
   DOMSelector,
+  crearCartaMedicamento,
 } from "../../../helpers";
-import { crearCartaMedicamento } from "../medicamentsController";
 
 export const createMedicamentInfoController = async () => {
   const contenedorVista = DOMSelector(`[data-modal="create-medicament-info"]`);
@@ -76,10 +74,10 @@ export const createMedicamentInfoController = async () => {
     history.back();
   });
 
-  contenedorVista.addEventListener('click', (e) => {
+  contenedorVista.addEventListener("click", (e) => {
     if (e.target.id == "back-register-medicament-info") {
       cerrarModal("create-medicament-info");
       history.back();
     }
-  })
+  });
 };

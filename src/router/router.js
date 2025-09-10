@@ -3,25 +3,39 @@ import hasPermission from "../helpers/hasPermission";
 import { renderLayout, renderNotFound } from "../helpers/renderView";
 import { routes } from "./routes";
 
-const app = document.querySelector("#app");
-let layoutActual = null;
-
+/**
+ * Controlador de rutas principal de la aplicación.
+ *
+ * Lee el hash de la URL, determina la ruta a renderizar, valida autenticación
+ * y permisos, carga el layout si es necesario y monta la vista correspondiente.
+ *
+ * @returns {Promise<void>}
+ *   No retorna valor; realiza fetch de vistas, modifica el DOM y puede cambiar window.location.hash.
+ *
+ */
 export const router = async () => {
+  // Obtenemos la parte del hash tras "#/"
   const hash = location.hash.slice(2);
   console.log("hash:", hash);
+
+  // Separamos por "/" para identificar segmentos y parámetros
   const arrayHash = hash.split("/");
   console.log("arrayHash:", arrayHash);
 
+  // Eliminamos segmentos que contienen "=" para obtener sólo la ruta base
   const hashSinParams = arrayHash.filter((item) => !item.includes("="));
 
+  // Identificamos el índice del último segmento que requiere layout
   const indexSegBase = obtenerIndexSegmentoBase(hashSinParams);
   console.log("indexSegBase:", indexSegBase);
 
+  // Si no hay segmento base válido, redirigimos a login o inicio según auth
   if (indexSegBase == null) {
     if (await isAuth()) {
       location.hash = "#/inicio";
       return;
     } else {
+      // Cargamos la vista de login sin layout
       const login = obtenerRuta(["login"]);
       const response = await fetch(`./src/views/${login.path}`);
       const html = await response.text();
@@ -31,43 +45,55 @@ export const router = async () => {
     }
   }
 
+  // Intentamos resolver la ruta completa (incluyendo parámetros)
   const ruta = obtenerRuta(arrayHash);
 
+  // Si la ruta es privada y no hay auth, forzamos logout y redirigimos a login
   if (ruta && ruta.private && !(await isAuth())) {
-    const logout = await get(`auth/logout`);
-    console.log(logout);
+    await get(`auth/logout`);
     location.hash = "#/login";
     return;
   }
 
-  if (ruta && ruta.can && !hasPermission(ruta.can))
-    return await renderNotFound();
+  // Si la ruta exige permisos y el usuario no los tiene, mostramos notFound
+  if (ruta && ruta.can && !hasPermission(ruta.can)) {
+    await renderNotFound();
+    return;
+  }
 
+  // Preparamos el fragmento de ruta base para montar la vista
   const hashBase = arrayHash.slice(0, indexSegBase + 1);
   arrayHash.splice(0, indexSegBase + 1, hashBase);
 
+  // Objeto para recolectar parámetros de consulta por sección
   let parametros = {};
-  for (let index = 1; index <= arrayHash.length; index++) {
-    const ruta = obtenerRuta(hashBase);
 
+  // Iteramos por cada segmento para cargar vistas y controladores
+  for (let index = 1; index <= arrayHash.length; index++) {
+    const rutaActual = obtenerRuta(hashBase);
+
+    // Si elemento contiene "=", lo interpretamos como parámetros de la sección
     if (arrayHash[index] && arrayHash[index].includes("=")) {
-      const parametrosSeparados = arrayHash[index].split("&");
-      let objetoParametros = {};
-      parametrosSeparados.forEach((param) => {
+      const pares = arrayHash[index].split("&");
+      let objParams = {};
+      pares.forEach((param) => {
         const [clave, valor] = param.split("=");
-        objetoParametros[clave] = valor ? decodeURIComponent(valor) : "";
+        objParams[clave] = valor ? decodeURIComponent(valor) : "";
       });
-      parametros[`${hashBase[hashBase.length - 1]}`] = objetoParametros;
+      parametros[hashBase[hashBase.length - 1]] = objParams;
     }
 
-    const hashSinParams = hashBase.filter((item) => !item.includes("="));
-
+    // Identificamos la vista ya montada en el DOM
+    const rutaSinParams = hashBase.filter((item) => !item.includes("="));
     const vistaCargada = DOMSelector(
-      `[data-route="${hashSinParams.join("")}"]`
+      `[data-route="${rutaSinParams.join("")}"]`
     );
+
+    // Avanzamos al siguiente segmento para futuras iteraciones
     hashBase.push(arrayHash[index]);
 
-    if (ruta && ruta.needLayout) {
+    // Si la ruta requiere layout y aún no está presente, lo renderizamos
+    if (rutaActual && rutaActual.needLayout) {
       const layoutCargado = DOMSelector("#layout");
       if (!layoutCargado) {
         await renderLayout();
@@ -75,77 +101,78 @@ export const router = async () => {
     }
     console.log(vistaCargada);
 
+    // Si la vista ya existe, continuamos sin volver a cargar
     if (vistaCargada) continue;
 
-    if (ruta == null) continue;
-    await cargarVistaEnLayout(ruta.path, hashSinParams.join(""), ruta.addHtml);
-    await ruta.controller(parametros);
+    // Si no existe ruta definida, ignoramos y continuamos
+    if (rutaActual == null) continue;
+
+    // Montamos la vista dentro del layout y ejecutamos su controlador
+    await cargarVistaEnLayout(
+      rutaActual.path,
+      rutaSinParams.join(""),
+      rutaActual.addHtml
+    );
+    await rutaActual.controller(parametros);
   }
 };
 
+/**
+ * Determina el índice del último segmento de ruta que utiliza layout.
+ *
+ * @param {string[]} arrayHash - Array de segmentos de la ruta sin parámetros.
+ * @returns {number|null}
+ *   Índice del segmento base donde aplicar layout, o null si no se encontró.
+ */
 const obtenerIndexSegmentoBase = (arrayHash) => {
   let segmentoBase = null;
-  let rutaActual = routes;
-  let rutaEncontrada = false;
-  let rutaBase = null;
-  // mascotas/perfil/1/antecedente/1/tratamiento/crear
+  let nodoRuta = routes;
+
   arrayHash.forEach((segmento, index) => {
     if (segmento.includes("=")) return;
 
-    if (rutaActual[segmento]) {
-      //mascotas
-      rutaActual = rutaActual[segmento]; //mascotas
-      rutaEncontrada = true;
+    // Avanzamos por el árbol de rutas
+    if (nodoRuta[segmento]) {
+      nodoRuta = nodoRuta[segmento];
     } else {
-      rutaEncontrada = false;
+      return;
     }
 
-    console.log("rutaActual:", rutaActual);
-
-    //Mascotas = true;
-    if (
-      (rutaActual["/"] && rutaActual["/"].needLayout) ||
-      rutaActual.needLayout
-    ) {
-      // rutaBase = rutaActual["/"];
+    // Si el nodo actual o su "/" interno exige layout, actualizamos el índice
+    if ((nodoRuta["/"] && nodoRuta["/"].needLayout) || nodoRuta.needLayout) {
       segmentoBase = index;
     }
-    if (esGrupoRutas(rutaActual)) {
-      // Si es un CRUD
-      //Guardamos la vista base si no hay mas segmentos
-      // if (rutaActual["/"] && index === arrayHash.length - 1) {
-      //   //Si es mascotas/ se muestra la ruta ["/"]
-      //   rutaActual = rutaActual["/"];
-      //   rutaEncontrada = true;
-      // } else {
-      //   rutaEncontrada = false;
-      // }
-    }
-
-    // if (rutaEncontrada && rutaActual.needLayout) {
-    //   segmentoBase = index;
-    // }
   });
+
   return segmentoBase;
 };
 
+/**
+ * Busca la definición de ruta según segmentos de hash.
+ *
+ * @param {string[]} arrayHash - Array de segmentos de ruta (incluyendo parámetros).
+ * @returns {object|null}
+ *   Objeto de ruta definido en routes, o null si no existe.
+ */
 const obtenerRuta = (arrayHash) => {
-  let rutaActual = routes;
+  let nodoRuta = routes;
   let rutaEncontrada = false;
 
-  arrayHash.forEach((segmento, index) => {
+  arrayHash.forEach((segmento, idx) => {
     if (segmento.includes("=")) return;
 
-    if (rutaActual[segmento]) {
-      rutaActual = rutaActual[segmento];
+    // Avanzamos por la propiedad que coincide con el segmento
+    if (nodoRuta[segmento]) {
+      nodoRuta = nodoRuta[segmento];
       rutaEncontrada = true;
     } else {
       rutaEncontrada = false;
     }
 
-    if (esGrupoRutas(rutaActual)) {
-      if (rutaActual["/"] && index === arrayHash.length - 1) {
-        rutaActual = rutaActual["/"];
+    // Si se trata de un grupo de rutas, validamos "/" final
+    if (esGrupoRutas(nodoRuta)) {
+      if (nodoRuta["/"] && idx === arrayHash.length - 1) {
+        nodoRuta = nodoRuta["/"];
         rutaEncontrada = true;
       } else {
         rutaEncontrada = false;
@@ -153,102 +180,46 @@ const obtenerRuta = (arrayHash) => {
     }
   });
 
-  if (rutaEncontrada) {
-    return rutaActual;
-  }
-
-  return null;
+  return rutaEncontrada ? nodoRuta : null;
 };
 
-const recorrerRutas = (routes, arrayHash) => {
-  let parametros = {};
-
-  if (arrayHash[arrayHash.length - 1].includes("=")) {
-    const parametrosSeparados = arrayHash[arrayHash.length - 1].split("&");
-
-    parametrosSeparados.forEach((param) => {
-      const [clave, valor] = param.split("=");
-      parametros[clave] = valor ? decodeURIComponent(valor) : "";
-    });
-
-    arrayHash.pop(); // Quitamos los parámetros
-  }
-
-  let rutaActual = routes;
-  let rutaEncontrada = false;
-  // let claveBase = null; // ← ✅ Variable para guardar la clave base
-
-  arrayHash.forEach((segmento, index) => {
-    if (segmento.includes("=")) return;
-
-    if (rutaActual[segmento]) {
-      rutaActual = rutaActual[segmento]; //Si la ruta existe se convierte en la actual
-      rutaEncontrada = true;
-
-      // if (index === 0) {
-      //   claveBase = segmento; // ← ✅ Guardamos la primera clave (base)
-      // }
-    } else {
-      rutaEncontrada = false;
-    }
-
-    if (esGrupoRutas(rutaActual)) {
-      // Si es un CRUD
-      if (rutaActual["/"] && index === arrayHash.length - 1) {
-        //Si es mascotas/ se muestra la ruta ["/"]
-        rutaActual = rutaActual["/"];
-        rutaEncontrada = true;
-      } else {
-        rutaEncontrada = false;
-      }
-    }
-  });
-
-  if (rutaEncontrada) {
-    return [rutaActual, parametros]; // ← ✅ Ahora también retornamos la clave base
-  }
-  return [null, null];
-  // const rutaFallback = isAuthenticated() ? routes.inicio : routes.login;
-  // const claveFallback = isAuthenticated() ? "inicio" : "login"; // ← ✅ Por si hay que retornar fallback
-  // return [rutaFallback, parametros, claveFallback];
-};
-
-const cargarVista = async (path, elemento) => {
-  const section = await fetch(`./src/views/${path}`);
-  elemento.innerHTML = await section.text();
-};
-
-const cargarVistaEnLayout = async (
-  vistaPath,
-  route,
-  // slotName = "main",
-  append = false
-) => {
+/**
+ * Carga el HTML de una vista en el slot principal del layout.
+ *
+ * @param {string} vistaPath - Ruta al archivo de vista dentro de src/views.
+ * @param {string} route - Clave de data-route para el nodo raíz de la vista.
+ * @param {boolean} [append=false] - Si es true, agrega; si no, reemplaza el contenido.
+ * @returns {Promise<void>}
+ *
+ * @throws {Error} Si no encuentra el slot en el layout o la vista no contiene nodo raíz.
+ */
+const cargarVistaEnLayout = async (vistaPath, route, append = false) => {
+  // Localizamos el slot de contenido principal en el layout
   const slot = document.querySelector(`[data-slot="main"]`);
-  if (!slot)
-    throw new Error(`No se encontró el slot "${slotName}" en el layout actual`);
+  if (!slot) {
+    throw new Error(`No se encontró el slot "main" en el layout actual`);
+  }
 
+  // Fetch y parse del HTML de la vista
   const response = await fetch(`./src/views/${vistaPath}`);
   const html = await response.text();
-  // console.log("HTML recibido:", JSON.stringify(html));
-
-  // 1. Parsear en un template
   const template = document.createElement("template");
   template.innerHTML = html.trim();
 
-  // 2. Extraer el elemento raíz de tu vista
-  // const rootNode = template.content.firstElementChild;
+  // Seleccionamos el primer nodo elemento como raíz de la vista
   const rootNode = Array.from(template.content.childNodes).find(
     (node) =>
       node.nodeType === Node.ELEMENT_NODE &&
       node.tagName.toLowerCase() !== "script"
   );
-  if (!rootNode) throw new Error("La vista debe tener un nodo raíz");
+  if (!rootNode) {
+    throw new Error("La vista debe tener un nodo raíz");
+  }
 
-  // 3. Añadir data-route directamente
+  // Etiquetamos el nodo para futuras referencias
   rootNode.setAttribute("data-route", route);
 
-  // 4. Insertar en el slot
+  // Insertamos el nodo en el slot, reemplazando o agregando según append
   if (append) {
     slot.appendChild(rootNode);
   } else {
@@ -257,6 +228,12 @@ const cargarVistaEnLayout = async (
   }
 };
 
+/**
+ * Determina si un objeto de rutas es un grupo de rutas (sub-árbol).
+ *
+ * @param {object} obj - Objeto a evaluar.
+ * @returns {boolean} True si todas sus propiedades son objetos (grupo), false en caso contrario.
+ */
 const esGrupoRutas = (obj) => {
   for (let key in obj) {
     if (typeof obj[key] !== "object" || obj[key] === null) {

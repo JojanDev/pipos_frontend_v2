@@ -1,6 +1,5 @@
 import {
   agregarError,
-  configurarBotonCerrar,
   convertirADiaMesAño,
   DOMSelector,
   formatearPrecioConPuntos,
@@ -14,7 +13,6 @@ import {
   post,
   crearFila,
   cerrarModal,
-  cerrarModalYVolverAVistaBase,
   configurarEventosValidaciones,
   datos,
   validarCampos,
@@ -120,7 +118,6 @@ export const createProductController = async () => {
     history.back();
   });
 
-  // configurarBotonCerrar("back-register-product", esModal);
   contenedorVista.addEventListener("click", (e) => {
     if (e.target.id == "back-register-product") {
       cerrarModal("create-product");

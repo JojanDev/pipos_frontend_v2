@@ -5,36 +5,35 @@ import { mapearDatosEnContenedor } from "./domMapper";
 import { llenarSelectClientes, renderizarSelectEspecies } from "./selects";
 import { configurarEventosValidaciones } from "./validaciones";
 
-export const calcularEdadPorSemanas = (edadEnSemanas) => {
-  const semanasPorAno = 52;
-  const semanasPorMes = 4;
-
-  let anos = Math.floor(edadEnSemanas / semanasPorAno);
-  let semanasRestantes = edadEnSemanas % semanasPorAno;
-
-  let meses = Math.floor(semanasRestantes / semanasPorMes);
-  let semanas = semanasRestantes % semanasPorMes;
-
-  return {
-    anios: anos === 0 ? null : anos,
-    meses: meses === 0 ? null : meses,
-    semanas: semanas === 0 ? null : semanas,
-  };
-};
-
+/**
+ * Calcula el total de semanas a partir de años, meses y semanas.
+ *
+ * @param {{ anios?: number, meses?: number, semanas?: number }} partes
+ * @param {number} [partes.anios=0]   - Años a convertir.
+ * @param {number} [partes.meses=0]   - Meses a convertir.
+ * @param {number} [partes.semanas=0] - Semanas adicionales.
+ * @returns {number} Total de semanas redondeado hacia abajo.
+ */
 export const calcularSemanasTotales = ({
   anios = 0,
   meses = 0,
   semanas = 0,
 }) => {
   const semanasPorMes = 4.345;
-
-  const totalSemanas =
-    anios * 12 * semanasPorMes + meses * semanasPorMes + parseInt(semanas || 0);
-
-  return Math.floor(totalSemanas);
+  const total =
+    anios * 12 * semanasPorMes + meses * semanasPorMes + parseInt(semanas, 10);
+  return Math.floor(total);
 };
 
+/**
+ * Prepara el objeto de datos de una mascota para poblar un formulario.
+ *
+ * Convierte la fecha de nacimiento a formato "YYYY-MM-DD" y asigna
+ * los selectores de cliente y especie según los IDs correspondientes.
+ *
+ * @param {Object} pet - Objeto con datos de la mascota.
+ * @returns {Object} Datos extendidos listos para mapear en el formulario.
+ */
 export const prepararDatosMascota = (pet) => {
   const fecha_nacimiento = toInputDate(pet.fecha_nacimiento);
   console.log(fecha_nacimiento);
@@ -47,6 +46,19 @@ export const prepararDatosMascota = (pet) => {
   };
 };
 
+/**
+ * Inicializa el formulario de mascota con selects y validaciones.
+ *
+ * Carga el listado de clientes, renderiza especies y razas,
+ * configura validaciones y preselecciona datos si se proporciona petData.
+ *
+ * @param {HTMLFormElement} form                    - Formulario a inicializar.
+ * @param {HTMLSelectElement} selectEspecie         - Select de especies.
+ * @param {HTMLSelectElement} selectRazas           - Select de razas.
+ * @param {HTMLElement|null} containerSelectClient  - Contenedor del select de clientes.
+ * @param {Object|null} petData                     - Datos de mascota para edición.
+ * @returns {Promise<void>}
+ */
 export const inicializarFormularioMascota = async (
   form,
   selectEspecie,
@@ -54,9 +66,10 @@ export const inicializarFormularioMascota = async (
   containerSelectClient,
   petData = null
 ) => {
-  if (containerSelectClient) await llenarSelectClientes();
+  if (containerSelectClient) {
+    await llenarSelectClientes();
+  }
 
-  // 1. renderizar select de especies devuelve la función actualizarRazas
   const actualizarRazas = await renderizarSelectEspecies(
     selectEspecie,
     selectRazas
@@ -65,14 +78,8 @@ export const inicializarFormularioMascota = async (
 
   if (petData) {
     mapearDatosEnContenedor(petData, form);
-
-    // 2. preseleccionar especie
     selectEspecie.value = petData.raza.especie_id;
-
-    // 3. esperar a que razas se carguen
     await actualizarRazas();
-
-    // 4. asignar raza
     selectRazas.value = petData.raza.id;
   } else {
     selectRazas.innerHTML =
@@ -80,6 +87,16 @@ export const inicializarFormularioMascota = async (
   }
 };
 
+/**
+ * Inserta una nueva fila en la tabla de perfil o en la tabla de mascotas.
+ *
+ * Si existe tbody_perfilCliente, agrega una fila con datos básicos;
+ * en caso contrario, agrega a tbody_Mascotas con información extendida.
+ *
+ * @param {Object} pet                       - Datos de la mascota.
+ * @param {HTMLElement|null} tbody_perfilCliente - Cuerpo de tabla de perfil de cliente.
+ * @param {HTMLElement|null} tbody_Mascotas      - Cuerpo de tabla de mascotas.
+ */
 export const actualizarTablas = (pet, tbody_perfilCliente, tbody_Mascotas) => {
   if (tbody_perfilCliente) {
     const { id, nombre, raza, especie, sexo, fecha_nacimiento } = pet;
@@ -106,31 +123,4 @@ export const actualizarTablas = (pet, tbody_perfilCliente, tbody_Mascotas) => {
     ]);
     tbody_Mascotas.insertAdjacentElement("afterbegin", row);
   }
-};
-
-export const convertirEdadCorta = (semanasTotales) => {
-  const semanasPorAno = 52;
-  const semanasPorMes = 4;
-
-  const anos = Math.floor(semanasTotales / semanasPorAno);
-  const restoDespuesAnos = semanasTotales % semanasPorAno;
-
-  const meses = Math.floor(restoDespuesAnos / semanasPorMes);
-  const semanas = restoDespuesAnos % semanasPorMes;
-
-  const partes = [];
-
-  if (anos > 0) partes.push(`${anos} año${anos > 1 ? "s" : ""}`);
-  if (meses > 0) partes.push(`${meses} mes${meses > 1 ? "es" : ""}`);
-
-  if (semanas > 0) {
-    // Si hay años y meses al mismo tiempo
-    if (anos > 0 && meses > 0) {
-      partes.push(`${semanas} sem`);
-    } else {
-      partes.push(`${semanas} semana${semanas > 1 ? "s" : ""}`);
-    }
-  }
-
-  return partes.join(" ");
 };

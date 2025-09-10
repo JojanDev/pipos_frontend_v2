@@ -5,13 +5,10 @@ import {
   crearFila,
   capitalizarPrimeraLetra,
   cerrarModal,
-  cerrarModalYVolverAVistaBase,
-  cargarComponente,
   mapearDatosEnContenedor,
   DOMSelector,
-  configurarBotonCerrar,
   errorTemporal,
-  convertirEdadCorta,
+  convertirADiaMesAño,
 } from "../../../helpers";
 import hasPermission from "../../../helpers/hasPermission";
 
@@ -37,7 +34,9 @@ export const profileClientController = async (parametros = null) => {
     "tipos-documentos/" + userResponse.data.tipo_documento_id
   );
   userResponse.data["tipo_documento"] = typeDocumentResponse.data.nombre;
-  userResponse.data["cliente"] = `${userResponse.data.nombre} ${userResponse.data.apellido}`;
+  userResponse.data[
+    "cliente"
+  ] = `${userResponse.data.nombre} ${userResponse.data.apellido}`;
 
   mapearDatosEnContenedor(userResponse.data, contenedorVista);
 
@@ -50,13 +49,21 @@ export const profileClientController = async (parametros = null) => {
   if (petsUserResponse.success) {
     if (tbody) {
       petsUserResponse.data.forEach(
-        ({ id, edad_semanas, nombre, raza, especie, sexo, estado_vital }) => {
+        ({
+          id,
+          fecha_nacimiento,
+          nombre,
+          raza,
+          especie,
+          sexo,
+          estado_vital,
+        }) => {
           const row = crearFila([
             id,
             nombre,
             especie,
             raza,
-            edad_semanas ? convertirEdadCorta(edad_semanas) : "Desconocida",
+            convertirADiaMesAño(fecha_nacimiento),
             capitalizarPrimeraLetra(sexo),
           ]);
 

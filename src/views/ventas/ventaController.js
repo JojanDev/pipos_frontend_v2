@@ -6,97 +6,100 @@ import {
   DOMSelector,
 } from "../../helpers";
 import hasPermission from "../../helpers/hasPermission";
+import { formatoCorto } from "./profile/profileController";
 
-function formatoCorto(localDateTime) {
-  const fecha = new Date(localDateTime);
+/**
+ * Obtiene el listado de ventas desde la API y las muestra en la tabla de ventas.
+ * Formatea fechas y montos, y marca con estilo las ventas pendientes.
+ *
+ * @returns {Promise<void>}
+ *   No retorna valor; limpia y llena el tbody de "#ventas .table__body".
+ *
+ */
+const cargarTablaVentas = async () => {
+  // Solicitamos las ventas registradas al backend
+  const ventasResponse = await get("ventas");
+  console.log(ventasResponse);
 
-  const opciones = {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-  };
-
-  // Formato corto en español
-  return new Intl.DateTimeFormat("es-ES", opciones).format(fecha);
-}
-
-export const cargarTablaVentas = async () => {
-  const ventas = await get("ventas");
-
-  console.log(ventas);
-
-  if (!ventas.success) {
-    // await error(response.message);
+  // Si la petición falla, salimos sin modificar la tabla
+  if (!ventasResponse.success) {
     return;
   }
 
+  // Seleccionamos y vaciamos el cuerpo de la tabla
   const tbody = DOMSelector("#ventas .table__body");
   tbody.innerHTML = "";
 
+  // Preparamos los datos formateados para cada venta
   const ventasInfo = await Promise.all(
-    ventas.data.map(async (venta) => {
+    ventasResponse.data.map(async (venta) => {
+      // Obtenemos datos del comprador para mostrar su nombre completo
       const { data: usuarioVenta } = await get(
         `usuarios/${venta.comprador_id}`
       );
+
       return [
         venta.id,
-        formatoCorto(venta.fecha_creado),
-        `${usuarioVenta.nombre} ${usuarioVenta.apellido}`,
-        formatearPrecioConPuntos(venta.monto),
-        formatearPrecioConPuntos(venta.total - venta.monto),
-        formatearPrecioConPuntos(venta.total),
-        venta.completada ? "Completada" : "Pendiente",
+        formatoCorto(venta.fecha_creado), // Fecha con formato corto
+        `${usuarioVenta.nombre} ${usuarioVenta.apellido}`, // Nombre completo del comprador
+        formatearPrecioConPuntos(venta.monto), // Monto pagado
+        formatearPrecioConPuntos(venta.total - venta.monto), // Cambio o saldo restante
+        formatearPrecioConPuntos(venta.total), // Total de la venta
+        venta.completada ? "Completada" : "Pendiente", // Estado de la venta
       ];
     })
   );
 
-  ventasInfo.forEach((venta) => {
-    const row = crearFila(venta);
-    console.log(venta[venta.length - 1]);
-    venta[venta.length - 1] == "Pendiente"
-      ? row.classList.add("fila-naranja")
-      : null;
-
+  // Insertamos cada fila y señalizamos las pendientes en naranja
+  ventasInfo.forEach((filaDatos) => {
+    const row = crearFila(filaDatos);
+    if (filaDatos[filaDatos.length - 1] === "Pendiente") {
+      row.classList.add("fila-naranja");
+    }
     tbody.append(row);
   });
 };
 
+/**
+ * Controlador principal de la vista de ventas.
+ * Carga la tabla de ventas, filtra acciones según permisos y gestiona la navegación al perfil.
+ *
+ * @returns {Promise<void>}
+ *   No retorna valor; configura la UI, filtra elementos y asigna listeners.
+ *
+ */
 export const ventasController = async () => {
-  cargarTablaVentas();
+  // Renderizamos la tabla con los datos de ventas
+  await cargarTablaVentas();
 
-  const contenedorVista = DOMSelector(`#vista-ventas`);
-  const tablaventas = DOMSelector("#ventas");
-
-  const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
-
-  console.log(acciones);
-
-  for (const accion of acciones) {
-    console.log(accion.dataset.permiso.split(","));
-    console.log(hasPermission(accion.dataset.permiso.split(",")));
-    if (!hasPermission(accion.dataset.permiso.split(","))) {
-      accion.remove();
+  // Filtramos botones y enlaces de la interfaz según permisos
+  const contenedorVista = DOMSelector("#vista-ventas");
+  Array.from(contenedorVista.querySelectorAll("[data-permiso]")).forEach(
+    (accion) => {
+      const permisosRequeridos = accion.dataset.permiso.split(",");
+      if (!hasPermission(permisosRequeridos)) {
+        accion.remove();
+      }
     }
-  }
+  );
 
-  tablaventas.addEventListener("click", async (event) => {
+  // Al hacer clic en una fila, navegamos al perfil de la venta correspondiente
+  const tablaVentas = DOMSelector("#ventas");
+  tablaVentas.addEventListener("click", (event) => {
     const fila = event.target.closest("tr[data-id]");
+    if (!fila) return;
 
-    if (fila) {
-      const idVenta = fila.getAttribute("data-id");
-      // await cargarComponente(routes.ventas.perfil, { id: idVenta });
-      // location.hash = `#/ventas/perfil/id=${idVenta}`;
-      location.hash =
-        location.hash +
-        (location.hash[location.hash.length - 1] == "/"
-          ? `perfil/id=${idVenta}`
-          : `/perfil/id=${idVenta}`);
-
-      // Aquí puedes llamar a una función para ver más detalles, abrir modal, etc.
-      // ejemplo: mostrarDetalleCliente(idCliente);
+    // Verificamos permiso de lectura antes de cambiar la ruta
+    if (!hasPermission(["venta.read"])) {
+      return;
     }
+
+    const idVenta = fila.getAttribute("data-id");
+    const baseHash = location.hash.endsWith("/")
+      ? location.hash
+      : `${location.hash}/`;
+
+    // Actualizamos el hash para dirigir al perfil de la venta
+    location.hash = `${baseHash}perfil/id=${idVenta}`;
   });
 };

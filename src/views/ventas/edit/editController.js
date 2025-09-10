@@ -1,6 +1,5 @@
 import {
   cerrarModal,
-  configurarBotonCerrar,
   DOMSelector,
   error,
   formatearPrecioConPuntos,
@@ -11,7 +10,6 @@ import {
   success,
   successTemporal,
 } from "../../../helpers";
-import { cargarTablaVentas } from "../ventaController";
 
 export const editVentaController = async (parametros = null) => {
   console.log(parametros);

@@ -9,7 +9,6 @@ import {
   validarCampos,
   llenarSelect,
   crearFila,
-  cerrarModalYVolverAVistaBase,
   cerrarModal,
   successTemporal,
 } from "../../../helpers";
@@ -49,7 +48,8 @@ export const createClienteExistController = async () => {
       const { data: usuario } = await get(
         `usuarios/${response.data.usuario_id}`
       );
-      const { id, nombre, apellido, telefono, numero_documento, direccion } = usuario;
+      const { id, nombre, apellido, telefono, numero_documento, direccion } =
+        usuario;
 
       const row = crearFila([
         id,

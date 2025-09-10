@@ -3,14 +3,11 @@ import {
   error,
   get,
   cerrarModal,
-  cerrarModalYVolverAVistaBase,
-  cargarComponente,
   del,
   successTemporal,
   mapearDatosEnContenedor,
   DOMSelector,
 } from "../../../helpers";
-import { crearCartaMedicamento } from "../medicamentsController";
 import hasPermission from "../../../helpers/hasPermission";
 
 export const profileMedicamentInfoController = async (parametros = null) => {

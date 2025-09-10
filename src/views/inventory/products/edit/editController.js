@@ -1,6 +1,5 @@
 import {
   agregarError,
-  configurarBotonCerrar,
   convertirADiaMesAño,
   crearFila,
   DOMSelector,
@@ -16,12 +15,10 @@ import {
   error,
   successTemporal,
   cerrarModal,
-  cerrarModalYVolverAVistaBase,
   configurarEventosValidaciones,
   datos,
   validarCampos,
 } from "../../../../helpers";
-import { listarProductos } from "../../inventoryController";
 import { validarFechaEdicion } from "../../medicaments/edit/editController";
 
 export function validarFechaCaducidad(valorFecha) {
@@ -146,7 +143,6 @@ export const editProductController = async (parametros = null) => {
     history.back();
   });
 
-  // configurarBotonCerrar("back-edit-product", esModal);
   contenedorVista.addEventListener("click", async (e) => {
     if (e.target.id == "back-edit-product") {
       cerrarModal("edit-product");

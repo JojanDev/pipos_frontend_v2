@@ -1,6 +1,6 @@
+// Helpers
 import {
   capitalizarPrimeraLetra,
-  cargarComponente,
   convertirADiaMesAño,
   crearFila,
   DOMSelector,
@@ -8,19 +8,32 @@ import {
   formatearPrecioConPuntos,
   get,
 } from "../../helpers";
+
+// Permissions
 import hasPermission from "../../helpers/hasPermission";
-import { routes } from "../../router/routes";
 
-export const listarProductos = async () => {
+/**
+ * Obtiene el listado de productos desde la API y los muestra en la tabla de inventario.
+ *
+ * @returns {Promise<void>}
+ *   No retorna valor; actualiza el DOM o muestra un mensaje temporal de error.
+ *
+ */
+const listarProductos = async () => {
+  // Solicitamos la lista de productos al servidor
   const responseProductos = await get("productos");
-  // console.log(responseProductos);
+  if (!responseProductos.success) {
+    // En caso de error, mostramos mensaje temporal y abortamos
+    errorTemporal(responseProductos.message);
+    return;
+  }
 
-  if (!responseProductos.success) return errorTemporal(response.message);
-
+  // Seleccionamos y limpiamos la tabla de productos
   const tbody = DOMSelector("#products .table__body");
   tbody.innerHTML = "";
 
-  const productosFilas = await Promise.all(
+  // Construimos filas con datos formateados para cada producto
+  const filas = await Promise.all(
     responseProductos.data.map(
       async ({
         id,
@@ -30,9 +43,12 @@ export const listarProductos = async () => {
         stock,
         fecha_caducidad,
       }) => {
+        // Obtenemos el nombre del tipo de producto para mostrarlo
         const { data: tipoProducto } = await get(
           `tipos-productos/${tipo_producto_id}`
         );
+
+        // Devolvemos arreglo de valores para crear la fila
         return [
           id,
           nombre,
@@ -45,35 +61,44 @@ export const listarProductos = async () => {
     )
   );
 
-  productosFilas.forEach((producto) => {
-    const row = crearFila(producto);
-
-    producto[producto.length - 2] == 0
-      ? row.classList.add("fila-alerta")
-      : null;
-
+  // Insertamos cada fila en la tabla y señalamos alerta si stock == 0
+  filas.forEach((datosFila) => {
+    const row = crearFila(datosFila);
+    if (datosFila[4] === 0) {
+      row.classList.add("fila-alerta");
+    }
     tbody.append(row);
   });
 };
 
+/**
+ * Obtiene el listado de medicamentos desde la API y los muestra en la tabla de inventario.
+ *
+ * @returns {Promise<void>}
+ *   No retorna valor; actualiza el DOM o silencia el error si no hay registros.
+ *
+ */
 export const listarMedicamentos = async () => {
   const responseMedicamentos = await get("medicamentos");
-
   if (!responseMedicamentos.success) {
-    // await error(response.message);
-    //MESSAGE DE NO HAY MEDICAMENTOS REGISTRADOS
+    // Sin registros, simplemente salimos silenciosamente
     return;
   }
 
+  // Seleccionamos y limpiamos la tabla de medicamentos
   const tbody = DOMSelector("#medicaments .table__body");
   tbody.innerHTML = "";
 
-  const medicamentosFilas = await Promise.all(
+  // Construimos filas con datos formateados para cada medicamento
+  const filas = await Promise.all(
     responseMedicamentos.data.map(
       async ({ id, info_medicamento_id, precio, cantidad, numero_lote }) => {
+        // Obtenemos los detalles del medicamento
         const { data: info } = await get(
           `info-medicamentos/${info_medicamento_id}`
         );
+
+        // Devolvemos arreglo de valores para crear la fila
         return [
           id,
           numero_lote,
@@ -88,82 +113,63 @@ export const listarMedicamentos = async () => {
     )
   );
 
-  medicamentosFilas.forEach((medicamento) => {
-    const row = crearFila(medicamento);
-
-    medicamento[medicamento.length - 1] == 0
-      ? row.classList.add("fila-alerta")
-      : null;
-
+  // Insertamos cada fila en la tabla y señalamos alerta si cantidad == 0
+  filas.forEach((datosFila) => {
+    const row = crearFila(datosFila);
+    if (datosFila[7] === 0) {
+      row.classList.add("fila-alerta");
+    }
     tbody.append(row);
   });
 };
 
+/**
+ * Controlador principal para la vista de inventario.
+ * Carga productos y medicamentos, filtra acciones por permisos y maneja eventos de clic.
+ *
+ * @returns {void}
+ *   No retorna valor; configura la UI y sus eventos.
+ *
+ */
 export const inventoryController = () => {
+  // Carga inicial de datos en ambas tablas
   listarProductos();
   listarMedicamentos();
 
+  // Filtra botones y acciones según permisos del usuario
   const contenedorVista = DOMSelector("#inventory");
-
-  const tablaProductos = DOMSelector("#products");
-
-  const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
-
-  console.log(acciones);
-
-  for (const accion of acciones) {
-    console.log(accion.dataset.permiso.split(","));
-    console.log(hasPermission(accion.dataset.permiso.split(",")));
-    if (!hasPermission(accion.dataset.permiso.split(","))) {
-      accion.remove();
-    }
-  }
-
-  tablaProductos.addEventListener("click", async (event) => {
-    const fila = event.target.closest("tr[data-id]");
-
-    if (fila) {
-      const idProducto = fila.getAttribute("data-id");
-      if (!hasPermission(["producto.update"])) {
-        return;
+  Array.from(contenedorVista.querySelectorAll("[data-permiso]")).forEach(
+    (accion) => {
+      const permisos = accion.dataset.permiso.split(",");
+      if (!hasPermission(permisos)) {
+        accion.remove();
       }
-      location.hash =
-        location.hash +
-        (location.hash[location.hash.length - 1] == "/"
-          ? `productos/editar/id=${idProducto}`
-          : `/productos/editar/id=${idProducto}`);
-      // }
-
-      // Aquí puedes llamar a una función para ver más detalles, abrir modal, etc.
-      // ejemplo: mostrarDetalleCliente(idCliente);
     }
+  );
+
+  // Navegación al formulario de edición de producto
+  const tablaProductos = DOMSelector("#products");
+  tablaProductos.addEventListener("click", (event) => {
+    const fila = event.target.closest("tr[data-id]");
+    if (!fila || !hasPermission(["producto.update"])) return;
+
+    const idProducto = fila.getAttribute("data-id");
+    const baseHash = location.hash.endsWith("/")
+      ? location.hash
+      : `${location.hash}/`;
+    location.hash = `${baseHash}productos/editar/id=${idProducto}`;
   });
 
+  // Navegación al formulario de edición de medicamento
   const tablaMedicamentos = DOMSelector("#medicaments");
-
-  tablaMedicamentos.addEventListener("click", async (event) => {
+  tablaMedicamentos.addEventListener("click", (event) => {
     const fila = event.target.closest("tr[data-id]");
+    if (!fila || !hasPermission(["medicamento.update"])) return;
 
-    if (fila) {
-      const id = fila.getAttribute("data-id");
-
-      // if (data.id_rol == 1) {
-      // location.hash = `#/inventario/medicamentosEditar/id=${id}`;
-
-      if (!hasPermission(["medicamento.update"])) {
-        // return;
-      }
-
-      location.hash =
-        location.hash +
-        (location.hash[location.hash.length - 1] == "/"
-          ? `medicamentos/editar/id=${id}`
-          : `/medicamentos/editar/id=${id}`);
-      // }
-      // await cargarComponente(routes);
-
-      // Aquí puedes llamar a una función para ver más detalles, abrir modal, etc.
-      // ejemplo: mostrarDetalleCliente(idCliente);
-    }
+    const idMedicamento = fila.getAttribute("data-id");
+    const baseHash = location.hash.endsWith("/")
+      ? location.hash
+      : `${location.hash}/`;
+    location.hash = `${baseHash}medicamentos/editar/id=${idMedicamento}`;
   });
 };

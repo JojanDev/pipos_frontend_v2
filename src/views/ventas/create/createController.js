@@ -1,11 +1,5 @@
 // import { routes } from "../../../router/routes";
-import {
-  cargarComponente,
-  error,
-  get,
-  llenarSelect,
-  renderizarCarrito,
-} from "../../../helpers";
+import { error, get, llenarSelect, renderizarCarrito } from "../../../helpers";
 import getCookie from "../../../helpers/getCookie.js";
 
 export let venta = {};

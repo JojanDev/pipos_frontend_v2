@@ -44,17 +44,15 @@
 }
 
 .container-form__caption {
-  font-size: 24px;
+  font-size: var(--font-size-xl);
   font-weight: 600;
   margin-left: 15px;
 }
 
 .container-form__link {
   color: #104676;
-  font-size: 20px;
+  font-size: var(--font-size-lg);
   font-weight: 500;
-  /* align-self: flex-end; */
-  /* padding-left: 20px; */
   justify-self: center;
 }
 
@@ -65,15 +63,14 @@
 .eye-icon {
   cursor: pointer;
   transition: 1s;
-  font-size: 20px;
+  font-size: var(--font-size-lg);
   color: #000;
   position: absolute;
   bottom: 0px;
   right: 20px;
   background-color: #dfdfdf;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   height: 40px;
-  /* width: 40px; */
   display: flex;
   justify-content: center;
   align-items: center;

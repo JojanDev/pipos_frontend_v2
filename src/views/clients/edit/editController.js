@@ -2,7 +2,6 @@ import {
   error,
   successTemporal,
   cerrarModal,
-  cerrarModalYVolverAVistaBase,
   configurarEventosValidaciones,
   datos,
   validarCampos,
@@ -13,8 +12,6 @@ import {
   DOMSelector,
   crearFila,
 } from "../../../helpers";
-// import { asignarDatosCliente } from "../../personal/profile/profileController";
-import { cargarTabla } from "../clientsController";
 
 const asignarDatosCliente = (data) => {
   const spanNombre = DOMSelector("#profile-nombre");

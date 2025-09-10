@@ -1,428 +1,424 @@
 @media (width <=767px) {
-
-    /* LOGIN */
-    .main-login {
-        grid-template-rows: 20vh 5px 1fr;
-    }
-
-    .container-form {
-        width: 90%;
-        margin-top: 100px;
-    }
-
-    .container-form__title {
-        font-size: 40px;
-    }
-
-    .menu-hamburguesa {
-        width: 35px;
-        height: 35px;
-        font-size: 25px;
-    }
-
-    .header__user {
-        font-size: 20px;
-    }
-
-    .roles {
-        font-size: 12px;
-    }
-
-    .home__title {
-        font-size: 25px;
-    }
-
-    .home__message {
-        font-size: 18px;
-    }
-
-    /* SIDEBAR */
-    .sidebar {
-        width: 200px;
-    }
-
-    .sidebar__title {
-        font-size: 20px;
-    }
-
-    .sidebar__nav {
-        margin-top: 10px;
-    }
-
-    .sidebar__link {
-        font-size: 14px;
-    }
-
-    .cuenta-contenedor {
-        width: auto;
-    }
-
-    .cuenta-opciones {
-        left: 220px;
-    }
-
-    /* ARREGLOS EN VISTAS */
-
-    .main {
-        margin: 10px;
-        padding: 10px;
-    }
-
-    .block-header {
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .block-header__title {
-        font-size: 25px;
-        margin-left: 10px;
-    }
-
-    .table {
-        font-size: 14px;
-    }
-
-    .table__header {
-        font-size: 16px;
-    }
-
-    .block-header__right {
-        margin-right: 0;
-        justify-content: space-between;
-    }
-
-    .btn:not(.btn--edit) {
-        padding: 8px 15px;
-        min-width: 120px;
-    }
-
-    .contenedor-perfil {
-        padding: 15px;
-    }
-
-    /* MASCOTA */
-    #pet-profile .perfil__rol-contenedor {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: 1fr 1fr;
-    }
-
-    #pet-profile .perfil__nombre {
-        grid-column: span 3;
-        grid-row: 1 / 2;
-    }
-
-    .main .roles {
-        display: none;
-    }
-
-    .main [data-modal='pet-treatment'] .roles {
-        display: block;
-    }
-
-
-    #pet-profile .perfil__editar-pet {
-        grid-column: 1 / 2;
-        grid-row: 2 / 3;
-        position: static;
-        margin-right: 10px;
-    }
-
-    #pet-profile .perfil__desactivar-pet {
-        grid-column: 2 / 3;
-        grid-row: 2 / 3;
-        position: static;
-        margin-left: 10px;
-    }
-
-    .perfil__contenedor-datos-personales {
-        display: flex;
-        flex-direction: column;
-        margin: 15px 10px;
-    }
-
-    #venta .perfil__separador.profile,
-    .perfil__separador {
-        font-size: 18px;
-        margin: 0 -5px;
-        align-items: center;
-    }
-
-    .perfil__campo {
-        font-size: 15px;
-    }
-
-    .plus-icon {
-        font-size: 24px;
-        width: 35px;
-        height: 35px;
-    }
-
-    .plus-icon--bg {
-        width: 30px;
-        height: 30px;
-    }
-
-
-    .placeholder-antecedentes {
-        font-size: 20px;
-    }
-
-    .antecedentes-container .perfil__campo {
-        font-size: 18px;
-    }
-
-    .antecedente-header {
-        font-size: 16px;
-        grid-template-columns: auto 1fr;
-        gap: 5px;
-    }
-
-    .edit-antecedent,
-    .delete-antecedent {
-        top: 50%;
-        transform: translateY(-50%);
-    }
-
-    .antecedente-body {
-        font-size: 14px;
-    }
-
-    .antecedente-body.open {
-        padding: 10px;
-    }
-
-    .perfil__separador--treatment {
-        font-size: 16px;
-        margin: 10px -5px;
-    }
-
-    .tratamiento {
-        font-size: 14px;
-        align-items: center;
-    }
-
-    .perfil__nombre {
-        font-size: 30px;
-    }
-
-    /* VENTAS */
-
-    .venta-profile.contenedor-perfil#venta {
-        grid-template-rows: auto auto 1fr;
-    }
-
-    .venta-productos-placeholder {
-        font-size: 25px;
-    }
-
-    .producto {
-        font-size: 14px;
-        height: 35px;
-        gap: 4px;
-    }
-
-    #venta:not(.venta-profile) .producto {
-        grid-template-columns: repeat(4, 1fr) 30px;
-    }
-
-    .producto {
-        grid-template-columns: repeat(5, 1fr);
-    }
-
-    .delete-producto {
-        width: 25px;
-        height: 25px;
-        font-size: 18px;
-    }
-
-    #venta .form__input--select {
-        font-size: 16px;
-        height: auto;
-        padding: 5px 10px;
-        padding-right: 30px;
-    }
-
-    #venta .perfil__campo {
-        font-size: 20px;
-    }
-
-    #venta .form__container-btns {
-        align-self: flex-end;
-        margin: 0;
-        gap: 10px;
-    }
-
-    #venta .perfil__campo#vendedor {
-        padding-bottom: 10px;
-        height: max-content;
-    }
-
-    #venta.venta-profile .perfil__nombre {
-        font-size: 28px;
-    }
-
-    #datos-venta .perfil__campo {
-        font-size: 14px;
-    }
-
-    .venta-cuerpo {
-        gap: 15px;
-    }
-
-    #venta-details .form__container-fields--3-col {
-        grid-template-rows: 1fr;
-    }
-
-    /* MEDICAMENTOS */
-
-    #medicaments-info.grid-container,
-    .grid-container {
-        grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
-    }
-
-
-    /* REGISTRO EMPLEADO */
-
-    .section-form {
-        width: 100%;
-        padding-bottom: 20px;
-    }
-
-    .arrow-left {
-        left: 15px;
-        font-size: 25px;
-        width: 35px;
-        height: 35px;
-    }
-
-    .section-form__title {
-        font-size: 26px;
-        margin-left: 40px;
-    }
-
-    .section-form__subtitle {
-        font-size: 20px;
-        margin-left: 10px;
-    }
-
-    .section-form form {
-        padding: 0 10px;
-        width: 100%;
-    }
-
-    .form {
-        width: 100%;
-        gap: 10px;
-        padding: 15px;
-    }
-
-    .form__container-field {
-        gap: 5px;
-    }
-
-    .form__label {
-        font-size: 16px;
-        font-weight: 600;
-    }
-
-    .form__input {
-        font-size: 16px;
-        height: 35px;
-        margin: 0 10px;
-        width: calc(100% - 20px);
-    }
-
-    .btn--big {
-        font-size: 18px;
-    }
-
-    .eye-icon {
-        height: 35px;
-        right: 10px;
-    }
-
-    /* MODALES */
-    .arrow-left--bottom {
-        top: 15px;
-    }
-
-    .modal__container {
-        padding: 0 10px 15px;
-        min-width: 95vw;
-        max-width: 95vw;
-        max-height: 650px;
-        height: auto;
-    }
-
-    .modal__container .section-form__title {
-        display: block;
-        margin-left: 30px;
-        word-wrap: break-word;
-        white-space: normal !important;
-        width: 300px;
-    }
-
-    .section-form__description {
-        text-align: center;
-        font-size: 16px;
-    }
-
-    #pet-antecedent-treatment.table-container,
-    #pets-client.table-container {
-        margin-top: 10px;
-    }
-
-    .form__container-fields:not(.form__container-fields--3-col) {
-        gap: 10px;
-    }
-
-    .form__container-field:has(input[name="anios"])::before,
-    .form__container-field:has(input[name="meses"])::before,
-    .form__container-field:has(input[name="semanas"])::before,
-    .form__container-field:has(input[name="dias"])::before {
-        font-size: 15px;
-        right: 20px;
-        top: 7px;
-    }
-
-    #form-register-pet-antecedent .form,
-    #form-register-medicament-inventory .form,
-    #form-register-pet-antecedent-treatment-medicament .form {
-        width: 100%;
-    }
-
-    .modal__container .perfil__rol-contenedor>div {
-        font-size: 14px;
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-    }
-
-    .perfil__valor {
-        font-size: 16px;
-    }
-
-    .modal__container .form__container-btns {
-        flex-direction: column;
-        gap: 5px;
-    }
-
-    .form__container-btns .btn {
-        white-space: nowrap;
-        width: min-content;
-        margin: 0;
-        width: 100%;
-        justify-content: center;
-    }
-
-    .form__container-fields--btn .btn {
-        min-width: auto;
-    }
-
-    .form__input--textarea {        
-        max-height: 200px;
-        height: 100px;
-        min-height: 40px;
-    }
+  /* LOGIN */
+  .main-login {
+    grid-template-rows: 20vh 5px 1fr;
+  }
+
+  .container-form {
+    width: 90%;
+    margin-top: 100px;
+  }
+
+  .container-form__title {
+    font-size: 40px;
+  }
+
+  .menu-hamburguesa {
+    width: 35px;
+    height: 35px;
+    font-size: var(--font-size-xl);
+  }
+
+  .header__user {
+    font-size: var(--font-size-lg);
+  }
+
+  .roles {
+    font-size: 12px;
+  }
+
+  .home__title {
+    font-size: var(--font-size-xl);
+  }
+
+  .home__message {
+    font-size: var(--font-size-md);
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 200px;
+  }
+
+  .sidebar__title {
+    font-size: var(--font-size-lg);
+  }
+
+  .sidebar__nav {
+    margin-top: 10px;
+  }
+
+  .sidebar__link {
+    font-size: 14px;
+  }
+
+  .cuenta-contenedor {
+    width: auto;
+  }
+
+  .cuenta-opciones {
+    left: 220px;
+  }
+
+  /* ARREGLOS EN VISTAS */
+
+  .main {
+    margin: 10px;
+    padding: 10px;
+  }
+
+  .block-header {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .block-header__title {
+    font-size: var(--font-size-xl);
+    margin-left: 10px;
+  }
+
+  .table {
+    font-size: 14px;
+  }
+
+  .table__header {
+    font-size: var(--font-size-sm);
+  }
+
+  .block-header__right {
+    margin-right: 0;
+    justify-content: space-between;
+  }
+
+  .btn:not(.btn--edit) {
+    padding: 8px 15px;
+    min-width: 120px;
+  }
+
+  .contenedor-perfil {
+    padding: 15px;
+  }
+
+  /* MASCOTA */
+  #pet-profile .perfil__rol-contenedor {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+
+  #pet-profile .perfil__nombre {
+    grid-column: span 3;
+    grid-row: 1 / 2;
+  }
+
+  .main .roles {
+    display: none;
+  }
+
+  .main [data-modal="pet-treatment"] .roles {
+    display: block;
+  }
+
+  #pet-profile .perfil__editar-pet {
+    grid-column: 1 / 2;
+    grid-row: 2 / 3;
+    position: static;
+    margin-right: 10px;
+  }
+
+  #pet-profile .perfil__desactivar-pet {
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+    position: static;
+    margin-left: 10px;
+  }
+
+  .perfil__contenedor-datos-personales {
+    display: flex;
+    flex-direction: column;
+    margin: 15px 10px;
+  }
+
+  #venta .perfil__separador.profile,
+  .perfil__separador {
+    font-size: var(--font-size-md);
+    margin: 0 -5px;
+    align-items: center;
+  }
+
+  .perfil__campo {
+    font-size: 15px;
+  }
+
+  .plus-icon {
+    font-size: var(--font-size-xl);
+    width: 35px;
+    height: 35px;
+  }
+
+  .plus-icon--bg {
+    width: 30px;
+    height: 30px;
+  }
+
+  .placeholder-antecedentes {
+    font-size: var(--font-size-lg);
+  }
+
+  .antecedentes-container .perfil__campo {
+    font-size: var(--font-size-md);
+  }
+
+  .antecedente-header {
+    font-size: var(--font-size-sm);
+    grid-template-columns: auto 1fr;
+    gap: 5px;
+  }
+
+  .edit-antecedent,
+  .delete-antecedent {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .antecedente-body {
+    font-size: 14px;
+  }
+
+  .antecedente-body.open {
+    padding: 10px;
+  }
+
+  .perfil__separador--treatment {
+    font-size: var(--font-size-sm);
+    margin: 10px -5px;
+  }
+
+  .tratamiento {
+    font-size: 14px;
+    align-items: center;
+  }
+
+  .perfil__nombre {
+    font-size: 30px;
+  }
+
+  /* VENTAS */
+
+  .venta-profile.contenedor-perfil#venta {
+    grid-template-rows: auto auto 1fr;
+  }
+
+  .venta-productos-placeholder {
+    font-size: var(--font-size-xl);
+  }
+
+  .producto {
+    font-size: 14px;
+    height: 35px;
+    gap: 4px;
+  }
+
+  #venta:not(.venta-profile) .producto {
+    grid-template-columns: repeat(4, 1fr) 30px;
+  }
+
+  .producto {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  .delete-producto {
+    width: 25px;
+    height: 25px;
+    font-size: var(--font-size-md);
+  }
+
+  #venta .form__input--select {
+    font-size: var(--font-size-sm);
+    height: auto;
+    padding: 5px 10px;
+    padding-right: 30px;
+  }
+
+  #venta .perfil__campo {
+    font-size: var(--font-size-lg);
+  }
+
+  #venta .form__container-btns {
+    align-self: flex-end;
+    margin: 0;
+    gap: 10px;
+  }
+
+  #venta .perfil__campo#vendedor {
+    padding-bottom: 10px;
+    height: max-content;
+  }
+
+  #venta.venta-profile .perfil__nombre {
+    font-size: 28px;
+  }
+
+  #datos-venta .perfil__campo {
+    font-size: 14px;
+  }
+
+  .venta-cuerpo {
+    gap: 15px;
+  }
+
+  #venta-details .form__container-fields--3-col {
+    grid-template-rows: 1fr;
+  }
+
+  /* MEDICAMENTOS */
+
+  #medicaments-info.grid-container,
+  .grid-container {
+    grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
+  }
+
+  /* REGISTRO EMPLEADO */
+
+  .section-form {
+    width: 100%;
+    padding-bottom: 20px;
+  }
+
+  .arrow-left {
+    left: 15px;
+    font-size: var(--font-size-xl);
+    width: 35px;
+    height: 35px;
+  }
+
+  .section-form__title {
+    font-size: 26px;
+    margin-left: 40px;
+  }
+
+  .section-form__subtitle {
+    font-size: var(--font-size-lg);
+    margin-left: 10px;
+  }
+
+  .section-form form {
+    padding: 0 10px;
+    width: 100%;
+  }
+
+  .form {
+    width: 100%;
+    gap: 10px;
+    padding: 15px;
+  }
+
+  .form__container-field {
+    gap: 5px;
+  }
+
+  .form__label {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+  }
+
+  .form__input {
+    font-size: var(--font-size-sm);
+    height: 35px;
+    margin: 0 10px;
+    width: calc(100% - 20px);
+  }
+
+  .btn--big {
+    font-size: var(--font-size-md);
+  }
+
+  .eye-icon {
+    height: 35px;
+    right: 10px;
+  }
+
+  /* MODALES */
+  .arrow-left--bottom {
+    top: 15px;
+  }
+
+  .modal__container {
+    padding: 0 10px 15px;
+    min-width: 95vw;
+    max-width: 95vw;
+    max-height: 650px;
+    height: auto;
+  }
+
+  .modal__container .section-form__title {
+    display: block;
+    margin-left: 30px;
+    word-wrap: break-word;
+    white-space: normal !important;
+    width: 300px;
+  }
+
+  .section-form__description {
+    text-align: center;
+    font-size: var(--font-size-sm);
+  }
+
+  #pet-antecedent-treatment.table-container,
+  #pets-client.table-container {
+    margin-top: 10px;
+  }
+
+  .form__container-fields:not(.form__container-fields--3-col) {
+    gap: 10px;
+  }
+
+  .form__container-field:has(input[name="anios"])::before,
+  .form__container-field:has(input[name="meses"])::before,
+  .form__container-field:has(input[name="semanas"])::before,
+  .form__container-field:has(input[name="dias"])::before {
+    font-size: 15px;
+    right: 20px;
+    top: 7px;
+  }
+
+  #form-register-pet-antecedent .form,
+  #form-register-medicament-inventory .form,
+  #form-register-pet-antecedent-treatment-medicament .form {
+    width: 100%;
+  }
+
+  .modal__container .perfil__rol-contenedor > div {
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .perfil__valor {
+    font-size: var(--font-size-sm);
+  }
+
+  .modal__container .form__container-btns {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .form__container-btns .btn {
+    white-space: nowrap;
+    width: min-content;
+    margin: 0;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .form__container-fields--btn .btn {
+    min-width: auto;
+  }
+
+  .form__input--textarea {
+    max-height: 200px;
+    height: 100px;
+    min-height: 40px;
+  }
 }

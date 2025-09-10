@@ -6,11 +6,9 @@ import {
   del,
   error,
   success,
-  cargarComponente,
   put,
   DOMSelector,
   DOMSelectorAll,
-  convertirEdadCorta,
   successTemporal,
   convertirADiaMesAño,
 } from "../../../helpers";
@@ -88,11 +86,15 @@ export const profilePetController = async (parametros = null) => {
   petResponse.data.mascota = petResponse.data.nombre;
   petResponse.data.especie = petResponse.data.raza.especie.nombre;
   petResponse.data.raza = petResponse.data.raza.nombre;
-  petResponse.data.fecha_nacimiento = convertirADiaMesAño(petResponse.data.fecha_nacimiento);
+  petResponse.data.fecha_nacimiento = convertirADiaMesAño(
+    petResponse.data.fecha_nacimiento
+  );
 
   console.log(petResponse);
   clientResponse.data["tipo_documento"] = typeDocumentResponse.data.nombre;
-  clientResponse.data["dueño"] = `${clientResponse.data.nombre} ${clientResponse.data.apellido}`;
+  clientResponse.data[
+    "dueño"
+  ] = `${clientResponse.data.nombre} ${clientResponse.data.apellido}`;
 
   const dataProfile = { ...clientResponse.data, ...petResponse.data };
 

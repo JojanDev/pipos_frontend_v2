@@ -4,11 +4,9 @@ import {
   post,
   crearFila,
   cerrarModal,
-  cerrarModalYVolverAVistaBase,
   configurarEventosValidaciones,
   datos,
   validarCampos,
-  cargarComponente,
   llenarSelect,
   capitalizarPrimeraLetra,
   agregarError,
@@ -18,7 +16,6 @@ import {
   put,
   mapearDatosEnContenedor,
   toInputDate,
-  configurarBotonCerrar,
   DOMSelector,
 } from "../../../../helpers"; // Utilidades y funciones auxiliares
 
@@ -136,16 +133,15 @@ export const editMedicamentInventoryController = async (parametros = null) => {
 
     if (!response.success) return await error(response.message); // Muestra error si la respuesta no es exitosa
 
-    listarMedicamentos();
     // Mensaje de éxito temporal
     successTemporal(response.message);
+    await listarMedicamentos();
 
     // Cierra modal o vuelve a vista base según el contexto
     cerrarModal("edit-medicament-inventory");
     history.back();
   });
 
-  // configurarBotonCerrar("back-edit-medicament-inventory", esModal);
   contenedorVista.addEventListener("click", async (e) => {
     if (e.target.id == "back-edit-medicament-inventory") {
       cerrarModal("edit-medicament-inventory");

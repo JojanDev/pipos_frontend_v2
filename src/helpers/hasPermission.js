@@ -1,30 +1,29 @@
 import getCookie from "./getCookie";
 
-export default (permisosRequeridos) => {
-  const permisosUsuario = getCookie("permisos");
+/**
+ * Verifica si el usuario posee al menos uno de los permisos requeridos.
+ *
+ * Admite coincidencia exacta y comodines (por ejemplo, "recurso.*" cubre
+ * "recurso.crear", "recurso.editar", etc.).
+ *
+ * @param {string[]} requiredPermissions - Array de permisos a verificar.
+ * @returns {boolean} True si el usuario tiene al menos un permiso requerido.
+ */
+export default function hasPermission(requiredPermissions) {
+  const userPermissions = getCookie("permisos") || [];
 
-  // Extrae los permisos del usuario desde el token decodificado
-
-  // Verifica que el usuario tenga todos los permisos requeridos
-  // Verifica si el usuario tiene todos los permisos requeridos
-  return permisosRequeridos.some((requerido) => {
-    // Para cada permiso requerido, buscamos si el usuario tiene algún permiso que lo cubra
-    return permisosUsuario.some((asignado) => {
-      // ✅ Coincidencia exacta: el permiso asignado es igual al requerido
-      if (asignado === requerido) return true;
-
-      // ✅ Coincidencia con comodín: por ejemplo, "tabla.*" cubre "tabla.crear", "tabla.editar", etc.
-      if (asignado.endsWith(".*")) {
-        // Extraemos la parte base del permiso, por ejemplo "tabla" desde "tabla.*"
-        const base = asignado.replace(".*", "");
-
-        // Verificamos si el permiso requerido comienza con esa base seguida de un punto
-        // Ejemplo: "tabla.crear".startsWith("tabla.") → true
-        return requerido.startsWith(base + ".");
+  return requiredPermissions.some((required) =>
+    userPermissions.some((assigned) => {
+      // Coincidencia exacta
+      if (assigned === required) {
+        return true;
       }
-
-      // Si no hay coincidencia exacta ni por comodín, este permiso asignado no cubre el requerido
+      // Coincidencia con comodín al final ("modulo.*")
+      if (assigned.endsWith(".*")) {
+        const base = assigned.slice(0, -2);
+        return required.startsWith(base + ".");
+      }
       return false;
-    });
-  });
-};
+    })
+  );
+}

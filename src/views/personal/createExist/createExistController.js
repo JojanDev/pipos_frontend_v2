@@ -7,7 +7,6 @@ import {
   validarCampos,
   llenarSelect,
   crearFila,
-  cerrarModalYVolverAVistaBase,
   capitalizarPrimeraLetra,
   cerrarModal,
   DOMSelector,

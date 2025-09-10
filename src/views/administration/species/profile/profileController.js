@@ -1,30 +1,34 @@
-import { routes } from "../../../../router/routes";
+// Helpers
 import {
   error,
-  convertirADiaMesAño,
   get,
-  crearFila,
-  cerrarModal,
-  cerrarModalYVolverAVistaBase,
-  cargarComponente,
   del,
-  success,
-  DOMSelector,
   successTemporal,
+  DOMSelector,
+  cerrarModal,
 } from "../../../../helpers";
-import { listarEspecies } from "../../administrationController";
 import hasPermission from "../../../../helpers/hasPermission";
 
+/**
+ * Controlador para mostrar el perfil de una especie.
+ * Recupera datos de la API, filtra acciones según permisos y maneja eventos de edición, borrado y navegación.
+ *
+ * @param {Object|null} parametros - Parámetros de entrada para el controlador.
+ * @param {Object} parametros.perfil - Perfil de la especie a mostrar.
+ * @returns {Promise<void>} - No retorna nada, maneja la vista modal y posibles modales de error.
+ *
+ */
 export const profileSpecieController = async (parametros = null) => {
-  console.log(parametros);
-
+  // Extraemos el perfil de la especie desde los parámetros
   const { perfil: especie } = parametros;
-  // const { id } = parametros;
 
+  // Seleccionamos el contenedor principal del modal de perfil
   const contenedorVista = DOMSelector('[data-modal="specie-profile"]');
 
+  // Petición para obtener datos detallados de la especie
   const response = await get(`especies/${especie.id}`);
 
+  // Si la petición falla, mostramos error, cerramos modal y navegamos atrás
   if (!response.success) {
     await error(response.message);
     cerrarModal("specie-profile");
@@ -32,45 +36,46 @@ export const profileSpecieController = async (parametros = null) => {
     return;
   }
 
+  // Actualizamos el título del modal con el nombre de la especie
   const titulo = DOMSelector("#specie-title");
-
   titulo.textContent = response.data.nombre;
 
-  const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
-
-  console.log(acciones);
-
+  // Filtramos botones de acción según permisos del usuario
+  const acciones = Array.from(
+    contenedorVista.querySelectorAll("[data-permiso]")
+  );
   for (const accion of acciones) {
-    console.log(accion.dataset.permiso.split(","));
-    console.log(hasPermission(accion.dataset.permiso.split(",")));
-    if (!hasPermission(accion.dataset.permiso.split(","))) {
+    const permisosRequeridos = accion.dataset.permiso.split(",");
+    if (!hasPermission(permisosRequeridos)) {
       accion.remove();
     }
   }
 
+  // Manejamos clicks en el modal para editar, borrar o volver
   contenedorVista.addEventListener("click", async (e) => {
-    if (e.target.id == "edit-specie") {
-      location.hash =
-        location.hash +
-        (location.hash[location.hash.length - 1] == "/" ? `editar` : `/editar`);
+    // Editar: navegamos a la ruta de edición
+    if (e.target.id === "edit-specie") {
+      const needsSlash = location.hash.endsWith("/");
+      location.hash = `${location.hash}${needsSlash ? "" : "/"}editar`;
     }
 
-    if (e.target.id == "delete-specie") {
-      const response = await del(`especies/${especie.id}`);
-
-      if (response.success) {
-        successTemporal(response.message);
+    // Eliminar: petición DELETE y actualizaciones DOM
+    if (e.target.id === "delete-specie") {
+      const deleteResp = await del(`especies/${especie.id}`);
+      if (deleteResp.success) {
+        successTemporal(deleteResp.message);
+        // Eliminamos la fila correspondiente en la lista principal
         const fila = DOMSelector(`#species [data-id="${especie.id}"]`);
         fila.remove();
         cerrarModal("specie-profile");
         history.back();
       } else {
-        await error(response.message);
-        return;
+        await error(deleteResp.message);
       }
     }
 
-    if (e.target.id == "back-specie-profile") {
+    // Volver: cerrar modal y navegar atrás
+    if (e.target.id === "back-specie-profile") {
       cerrarModal("specie-profile");
       history.back();
     }

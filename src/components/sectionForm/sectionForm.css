@@ -1,6 +1,6 @@
 .section-form {
   background-color: #f6f6f6;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -38,14 +38,14 @@
 .section-form__subtitle {
   margin-left: 20px;
   font-size: 30px;
-  color: var(--color-primario);
+  color: var(--color-primary);
   margin: 20px 0 10px 0;
 }
 
 .section-form__description {
   color: #707070;
   margin: 20px 0 10px;
-  font-size: 18px;
+  font-size: var(--font-size-md);
 }
 
 .arrow-left {
@@ -60,8 +60,8 @@
   top: 15px;
   left: 25px;
   cursor: pointer;
-  background-color: var(--color-primario);
-  border-radius: 10px;
+  background-color: var(--color-primary);
+  border-radius: var(--radius-md);
 }
 
 .arrow-left:hover {
@@ -76,9 +76,8 @@
 .form__container-field:has(input[name="meses"])::before,
 .form__container-field:has(input[name="semanas"])::before,
 .form__container-field:has(input[name="dias"])::before {
-  /* content: "Años"; */
   position: absolute;
-  font-size: 18px;
+  font-size: var(--font-size-md);
   color: #707070;
   font-weight: 500;
   right: 30px;
@@ -103,8 +102,4 @@
 
 .hidden {
   display: none;
-}
-
-.form--w-800 {
-  width: 800px;
 }

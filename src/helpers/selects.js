@@ -1,18 +1,20 @@
 import { get } from "./api";
-import { DOMSelector } from "./dom";
+import { DOMSelector } from "./domMapper";
 
-// Ejemplo de usabilidad
-// await llenarSelect({
-//     endpoint: 'tipos-documento',
-//     selector: '#tipos-documentos',
-//     optionMapper: tipo => ({ id: tipo.id, text: tipo.id })
-// });
-
-// funcion
+/**
+ * Llena un elemento <select> con opciones obtenidas de la API.
+ *
+ * @param {Object}   params
+ * @param {string}   params.endpoint     - Ruta del recurso en la API.
+ * @param {string}   params.selector     - Selector CSS del <select> a poblar.
+ * @param {Function} params.optionMapper - Función que recibe cada ítem de datos
+ *                                         y devuelve un objeto { id, text }.
+ * @returns {Promise<void>}
+ */
 export async function llenarSelect({ endpoint, selector, optionMapper }) {
   const select = DOMSelector(selector);
-
   const respuesta = await get(endpoint);
+
   if (!respuesta.success) {
     console.error(respuesta.message || respuesta.errors);
     return;
@@ -27,8 +29,13 @@ export async function llenarSelect({ endpoint, selector, optionMapper }) {
   });
 }
 
+/**
+ * Llena el <select> de clientes con su número de documento y nombre completo.
+ *
+ * @returns {Promise<void>}
+ */
 export const llenarSelectClientes = async () => {
-  return await llenarSelect({
+  await llenarSelect({
     endpoint: "usuarios/clientes",
     selector: "#select-clients",
     optionMapper: (c) => ({
@@ -38,8 +45,13 @@ export const llenarSelectClientes = async () => {
   });
 };
 
+/**
+ * Llena el <select> de tipos de documento.
+ *
+ * @returns {Promise<void>}
+ */
 export const llenarSelectTiposDocumentos = async () => {
-  return await llenarSelect({
+  await llenarSelect({
     endpoint: "tipos-documentos",
     selector: "#select-tipos-documentos",
     optionMapper: (t) => ({
@@ -49,61 +61,93 @@ export const llenarSelectTiposDocumentos = async () => {
   });
 };
 
+/**
+ * Llena el <select> de veterinarios con nombre y apellido.
+ *
+ * @returns {Promise<void>}
+ */
 export const llenarSelectVeterinarios = async () => {
-  return await llenarSelect({
-    endpoint: "usuarios/veterinarios/",
+  await llenarSelect({
+    endpoint: "usuarios/veterinarios",
     selector: "#select-veterinarios",
-    optionMapper: (veterinario) => ({
-      id: veterinario.id,
-      text: `${veterinario.nombre} ${veterinario.apellido}`,
+    optionMapper: (v) => ({
+      id: v.id,
+      text: `${v.nombre} ${v.apellido}`,
     }),
   });
 };
 
+/**
+ * Llena el <select> de medicamentos (todos los lotes).
+ *
+ * @returns {Promise<void>}
+ */
 export const llenarSelectMedicamentos = async () => {
-  return llenarSelect({
+  await llenarSelect({
     endpoint: "medicamentos",
     selector: "#select-elementos",
-    optionMapper: (elemento) => ({
-      id: elemento.id,
-      text: `${elemento.numero_lote} - ${elemento.nombre}`,
+    optionMapper: (m) => ({
+      id: m.id,
+      text: `${m.numero_lote} - ${m.nombre}`,
     }),
   });
 };
 
+/**
+ * Llena el <select> de medicamentos con stock disponible.
+ *
+ * @returns {Promise<void>}
+ */
 export const llenarSelectMedicamentosStock = async () => {
-  return llenarSelect({
+  await llenarSelect({
     endpoint: "medicamentos/stock",
     selector: "#select-elementos",
-    optionMapper: (elemento) => ({
-      id: elemento.id,
-      text: `${elemento.numero_lote} - ${elemento.nombre}`,
+    optionMapper: (m) => ({
+      id: m.id,
+      text: `${m.numero_lote} - ${m.nombre}`,
     }),
   });
 };
 
+/**
+ * Llena el <select> de productos (todos los tipos).
+ *
+ * @returns {Promise<void>}
+ */
 export const llenarSelectProductos = async () => {
-  return llenarSelect({
+  await llenarSelect({
     endpoint: "productos",
     selector: "#select-elementos",
-    optionMapper: (elemento) => ({
-      id: elemento.id,
-      text: `${elemento.tipo_producto} - ${elemento.nombre}`,
+    optionMapper: (p) => ({
+      id: p.id,
+      text: `${p.tipo_producto} - ${p.nombre}`,
     }),
   });
 };
 
+/**
+ * Llena el <select> de productos con stock disponible.
+ *
+ * @returns {Promise<void>}
+ */
 export const llenarSelectProductosStock = async () => {
-  return llenarSelect({
+  await llenarSelect({
     endpoint: "productos/stock",
     selector: "#select-elementos",
-    optionMapper: (elemento) => ({
-      id: elemento.id,
-      text: `${elemento.tipo_producto} - ${elemento.nombre}`,
+    optionMapper: (p) => ({
+      id: p.id,
+      text: `${p.tipo_producto} - ${p.nombre}`,
     }),
   });
 };
 
+/**
+ * Renderiza el <select> de especies y enlaza su cambio para actualizar razas.
+ *
+ * @param {HTMLSelectElement} selectEspecie - Elemento <select> de especies.
+ * @param {HTMLSelectElement} selectRazas   - Elemento <select> de razas.
+ * @returns {Promise<Function>} Función que recarga las razas según la especie seleccionada.
+ */
 export const renderizarSelectEspecies = async (selectEspecie, selectRazas) => {
   const especiesResp = await get("especies");
   if (!especiesResp.success) return;
@@ -114,7 +158,11 @@ export const renderizarSelectEspecies = async (selectEspecie, selectRazas) => {
       .map((e) => `<option value="${e.id}">${e.nombre}</option>`)
       .join("");
 
-  // función reutilizable para cargar razas
+  /**
+   * Carga las razas para la especie seleccionada.
+   *
+   * @returns {Promise<void>}
+   */
   const actualizarRazas = async () => {
     const especieId = selectEspecie.value;
     if (!especieId) {
@@ -133,12 +181,8 @@ export const renderizarSelectEspecies = async (selectEspecie, selectRazas) => {
         .join("");
   };
 
-  // 4. bind del change (no await aquí)
   selectEspecie.addEventListener("change", actualizarRazas);
-
-  // 5. carga inicial de razas
   await actualizarRazas();
 
-  // Devolvemos la función para usarla en el init
   return actualizarRazas;
 };

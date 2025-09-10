@@ -2,7 +2,6 @@ import {
   error,
   successTemporal,
   cerrarModal,
-  cerrarModalYVolverAVistaBase,
   configurarEventosValidaciones,
   datos,
   validarCampos,
@@ -14,7 +13,6 @@ import {
   crearFila,
   capitalizarPrimeraLetra,
 } from "../../../helpers";
-import { cargarTablaEmpleados } from "../personalController";
 
 export const editPersonalController = async (parametros = null) => {
   const { id } = parametros;

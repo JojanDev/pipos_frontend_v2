@@ -1,6 +1,5 @@
 import {
   cerrarModal,
-  cerrarModalYVolverAVistaBase,
   configurarEventosValidaciones,
   crearFila,
   datos,

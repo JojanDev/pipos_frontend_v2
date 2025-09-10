@@ -208,7 +208,6 @@ export const routes = {
       private: true,
       needLayout: true,
       slot: "main",
-      // dashboard admin: requiere acceso a datos de administración (uso 'especie.view' como permiso representativo)
       can: ["especie.view"],
     },
     especies: {
@@ -318,7 +317,6 @@ export const routes = {
       private: true,
       needLayout: true,
       slot: "main",
-      // Inventory dashboard — uso 'producto.view' como permiso representativo
       can: ["producto.view"],
     },
     productos: {
@@ -344,7 +342,7 @@ export const routes = {
           controller: createMedicamentInventoryController,
           private: true,
           addHtml: true,
-          // creación de ítem en inventario (medicamento)
+
           can: ["medicamento.create"],
         },
         "info-medicamentos": {
@@ -441,7 +439,7 @@ export const routes = {
         controller: editPersonalController,
         private: true,
         addHtml: true,
-        // ya tenías este permiso, lo dejé tal cual
+
         can: ["usuario.update"],
       },
     },
@@ -469,8 +467,7 @@ export const routes = {
         path: "ventas/details/create/index.html",
         controller: createDetailsController,
         private: false,
-        // needLayout: true,
-        // slot: "main",
+
         addHtml: true,
         can: ["venta.create"],
       },

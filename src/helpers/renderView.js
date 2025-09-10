@@ -1,6 +1,16 @@
 import { layoutController } from "../layouts/layout";
-import { DOMSelector } from "./dom";
+import { DOMSelector } from "./domMapper";
 
+/**
+ * Carga y renderiza el layout principal de la aplicación.
+ *
+ * - Recupera el HTML de `mainLayout.html` mediante fetch.
+ * - Inserta el contenido en el elemento con id "app".
+ * - Ejecuta layoutController() para inicializar permisos, menús y eventos.
+ *
+ * @returns {Promise<void>}
+ *   Se resuelve una vez que el HTML se ha insertado y se ha ejecutado layoutController.
+ */
 export const renderLayout = async () => {
   const response = await fetch(`./src/layouts/mainLayout.html`);
   const html = await response.text();
@@ -9,28 +19,17 @@ export const renderLayout = async () => {
   await layoutController();
 };
 
+/**
+ * Carga y renderiza la vista de "No encontrado" (404).
+ *
+ * - Recupera el HTML de `notFound/index.html` mediante fetch.
+ * - Inserta el contenido en el elemento con id "app".
+ *
+ * @returns {Promise<void>}
+ *   Se resuelve una vez que el HTML de la vista 404 se ha insertado.
+ */
 export const renderNotFound = async () => {
   const response = await fetch(`./src/views/notFound/index.html`);
   const html = await response.text();
   DOMSelector("#app").innerHTML = html;
-};
-
-export const cargarComponente = async ({ path, controller }, param = null) => {
-  try {
-    // Cargamos el archivo HTML desde la ruta indicada
-    const response = await fetch(`./src/views/${path}`);
-    const html = await response.text();
-
-    // Insertamos el HTML al final del contenedor, sin eliminar lo que ya tenía
-    document
-      .querySelector(`[data-slot="main"]`)
-      .insertAdjacentHTML("beforeend", html);
-
-    // Si hay controlador, lo ejecutamos
-    if (typeof controller === "function") {
-      controller(param);
-    }
-  } catch (error) {
-    console.error("Error al cargar el componente:", error);
-  }
 };

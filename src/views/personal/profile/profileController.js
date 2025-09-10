@@ -5,18 +5,15 @@ import {
   crearFila,
   capitalizarPrimeraLetra,
   cerrarModal,
-  cerrarModalYVolverAVistaBase,
-  cargarComponente,
   del,
   success,
   put,
   DOMSelector,
   mapearDatosEnContenedor,
-  configurarBotonCerrar,
   patch,
   successTemporal,
 } from "../../../helpers";
-import { cargarTablaEmpleados } from "../personalController";
+
 import hasPermission from "../../../helpers/hasPermission";
 
 export const profilePersonalController = async (parametros = null) => {
@@ -165,7 +162,6 @@ export const profilePersonalController = async (parametros = null) => {
     }
   });
 
-  // configurarBotonCerrar("back-profile-personal", esModal);
   contenedorVista.addEventListener("click", async (e) => {
     if (e.target.id == "back-profile-personal") {
       cerrarModal("profile-personal");

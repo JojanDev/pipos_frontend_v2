@@ -2,42 +2,30 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-  /* padding: 2rem; */
   max-height: 100%;
   overflow: auto;
   box-shadow: 0 5px 10px -8px #3d3d3d;
 }
 
-/* .table-container--fijo {
-  min-height: 200px;
-} */
-
 .table {
   display: grid;
   grid-template-rows: auto 1fr;
-  /* border: 1px solid #ccc; */
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   overflow: hidden;
   flex: 1;
-  font-size: 16px;
+  font-size: var(--font-size-sm);
   color: #000;
 }
 
 .table__header {
   display: grid;
-  grid-template-columns: 50px minmax(100px, 1fr) minmax(100px, 1fr) minmax(
-      100px,
-      1fr
-    ) minmax(100px, 1.5fr);
-}
-
-.table__header {
-  background-color: #293241;
+  grid-template-columns:
+    50px minmax(100px, 1fr) minmax(100px, 1fr) minmax(100px, 1fr)
+    minmax(100px, 1.5fr);
+  background-color: var(--color-thead-bg);
   color: #fff;
   font-weight: 600;
-  font-size: 18px;
-  /* border-bottom: 2px solid rgb(171, 171, 171); */
-  /* box-shadow: 0 2px 10px 2px #000; */
+  font-size: var(--font-size-md);
 }
 
 .table__header .table__cell:first-child {
@@ -46,50 +34,42 @@
 
 .table__body {
   display: grid;
-  grid-auto-rows: 40px; /* ← evita que las filas se expandan por espacio libre */
+  grid-auto-rows: 40px;
   overflow-y: auto;
-  background-color: #e0eefc;
-  position: relative;
   overflow-x: hidden;
+  background-color: var(--color-tbody-bg);
+  position: relative;
 }
 
 .table__row {
-  cursor: pointer;
   display: grid;
-  grid-template-columns: 50px minmax(100px, 1fr) minmax(100px, 1fr) minmax(
-      100px,
-      1fr
-    ) minmax(100px, 1.5fr);
-  max-height: 40px; /* ← aquí estableces el mínimo */
+  grid-template-columns:
+    50px minmax(100px, 1fr) minmax(100px, 1fr) minmax(100px, 1fr)
+    minmax(100px, 1.5fr);
+  max-height: 40px;
+  cursor: pointer;
   transition: 0.5s ease;
 }
 
 .table__row:hover {
   background-color: #b5d4f1;
-  /* transition: background-color 0.5s ease; */
   font-size: 16.5px;
+}
+
+.table__cell {
+  padding-left: 10px;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  align-self: center;
 }
 
 .table__header .table__cell {
   padding: 10px 0 10px 5px;
-  /* padding-left: 5px; */
-}
-
-.table__cell {
-  /* padding: 0 10px; */
-  padding-left: 10px;
-  /* display: flex;
-  align-items: center; */
-  line-height: 1.2;
-  white-space: nowrap; /* No saltar de línea */
-  overflow: hidden; /* Ocultar lo que se sale */
-  text-overflow: ellipsis; /* Mostrar puntos suspensivos */
-  align-self: center;
 }
 
 .table__body .table__cell:first-child {
-  /* display: flex;
-  justify-content: center; */
   text-align: center;
 }
 
@@ -98,32 +78,30 @@
 }
 
 .table__body::-webkit-scrollbar-thumb {
-  background: var(--color-primario);
-  border-radius: 4px;
+  background: var(--color-primary);
+  border-radius: var(--radius-sm);
 }
 
+/* Variantes según vista */
 #pets-client .table__header,
 #pets-client .table__row {
-  grid-template-columns: 50px minmax(100px, 1fr) minmax(100px, 0.7fr) minmax(
-      100px,
-      1fr
-    ) minmax(100px, 1.2fr) minmax(100px, 1fr);
+  grid-template-columns:
+    50px minmax(100px, 1fr) minmax(100px, 0.7fr) minmax(100px, 1fr)
+    minmax(100px, 1.2fr) minmax(100px, 1fr);
 }
 
 #pets .table__header,
 #pets .table__row {
-  grid-template-columns: 50px minmax(100px, 1fr) minmax(100px, 0.7fr) minmax(
-      100px,
-      1fr
-    ) minmax(100px, 1fr) minmax(100px, 1fr) minmax(100px, 1fr);
+  grid-template-columns:
+    50px minmax(100px, 1fr) minmax(100px, 0.7fr) minmax(100px, 1fr)
+    minmax(100px, 1fr) minmax(100px, 1fr) minmax(100px, 1fr);
 }
 
 #pet-antecedent-treatment .table__header,
 #pet-antecedent-treatment .table__row {
-  grid-template-columns: 50px minmax(100px, 1fr) minmax(100px, 1.5fr) minmax(
-      100px,
-      1fr
-    ) minmax(100px, 0.8fr) minmax(100px, 1.2fr) minmax(100px, 1fr) 40px 40px;
+  grid-template-columns:
+    50px minmax(100px, 1fr) minmax(100px, 1.5fr) minmax(100px, 1fr)
+    minmax(100px, 0.8fr) minmax(100px, 1.2fr) minmax(100px, 1fr) 40px 40px;
 }
 
 #products .table__header,
@@ -133,10 +111,9 @@
 
 #medicaments .table__header,
 #medicaments .table__row {
-  grid-template-columns: 50px 110px minmax(100px, 1fr) minmax(100px, 1fr) minmax(
-      100px,
-      1fr
-    ) minmax(100px, 1fr) 120px 100px;
+  grid-template-columns:
+    50px 110px minmax(100px, 1fr) minmax(100px, 1fr) minmax(100px, 1fr)
+    minmax(100px, 1fr) 120px 100px;
 }
 
 .table-container--administrar_datos .table__header,
@@ -146,20 +123,19 @@
 
 #personal .table__header,
 #personal .table__row {
-  grid-template-columns: 50px minmax(150px, 1fr) minmax(100px, 1.5fr) minmax(
-      100px,
-      1fr
-    ) minmax(100px, 1fr) minmax(100px, 1.3fr);
+  grid-template-columns:
+    50px minmax(150px, 1fr) minmax(100px, 1.5fr) minmax(100px, 1fr)
+    minmax(100px, 1fr) minmax(100px, 1.3fr);
 }
 
 #ventas .table__header,
 #ventas .table__row {
-  grid-template-columns: 50px 170px minmax(100px, 1.7fr) minmax(100px, 1fr) minmax(
-      100px,
-      1fr
-    ) minmax(100px, 1fr) minmax(100px, 1fr);
+  grid-template-columns:
+    50px 170px minmax(100px, 1.7fr) minmax(100px, 1fr) minmax(100px, 1fr)
+    minmax(100px, 1fr) minmax(100px, 1fr);
 }
 
+/* Placeholders y acciones */
 .placeholder {
   font-size: 30px;
   font-weight: 600;
@@ -172,27 +148,13 @@
   text-align: center;
 }
 
-.delete-tabla {
-  border-radius: 10px;
-  /* background-color: rgb(165, 0, 0); */
-  color: #fff;
-  font-size: 20px;
-  padding: 5px;
-  font-weight: 400;
-  z-index: 1;
-  cursor: pointer;
-  width: 30px;
-  height: 30px;
-  margin-left: -5px;
-}
-
+.delete-tabla,
 .edit-tabla {
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   width: 30px;
   height: 30px;
-  /* background-color: rgb(165, 0, 0); */
   color: #fff;
-  font-size: 20px;
+  font-size: var(--font-size-lg);
   padding: 5px;
   font-weight: 400;
   z-index: 1;
@@ -200,12 +162,13 @@
   margin-left: -5px;
 }
 
+/* Estados de fila */
 .completada {
   background-color: #00ff0442;
 }
 
 .fila-roja {
-  background-color: #d3d3d3; /* gris claro */
+  background-color: #d3d3d3;
   color: #171717;
 }
 

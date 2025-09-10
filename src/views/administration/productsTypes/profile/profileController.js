@@ -1,35 +1,45 @@
-import { routes } from "../../../../router/routes";
 import {
-  error,
-  convertirADiaMesAño,
-  get,
-  crearFila,
-  cerrarModal,
-  cerrarModalYVolverAVistaBase,
-  cargarComponente,
-  del,
-  success,
-  configurarBotonCerrar,
-  DOMSelector,
-  successTemporal,
+  error, // muestra mensajes de error
+  get, // GET al backend
+  cerrarModal, // cierra modal por id
+  del, // DELETE al backend
+  DOMSelector, // selector simplificado del DOM
+  successTemporal, // muestra mensaje de éxito temporal
 } from "../../../../helpers";
-import { listarTiposProductos } from "../../administrationController";
-import hasPermission from "../../../../helpers/hasPermission";
+import hasPermission from "../../../../helpers/hasPermission"; // verifica permisos de usuario
 
+/**
+ * Controlador del perfil de tipo de producto.
+ * - Carga datos del tipo desde el backend
+ * - Renderiza título
+ * - Filtra acciones según permisos
+ * - Maneja editar, eliminar y volver
+ *
+ * @param {Object|null} parametros - Parámetros pasados desde la vista (debe contener `perfil` con el tipo).
+ * @returns {Promise<void>}
+ */
 export const profileProductTypeController = async (parametros = null) => {
-  console.log(parametros);
+  // Extrae el perfil del tipo de producto desde los parámetros
+  const { perfil: tipoProducto } = parametros ?? {};
+
+  // Si no se recibió el perfil correctamente, no continuar
+  if (!tipoProducto || !tipoProducto.id) return;
+
+  // Contenedor/modal de la vista (se usa para escuchar eventos)
   const contenedorVista = DOMSelector(`[data-modal="productType-profile"]`);
 
-  // const { id } = parametros;
-  const { perfil: tipoProducto } = parametros;
+  // Modal (misma referencia, nombre distinto por claridad de uso)
+  const modal = contenedorVista;
 
-  const modal = DOMSelector('[data-modal="productType-profile"]');
+  // Determina si estamos en modal o en ruta directa (no se usa aquí, pero se mantiene la idea)
   const esModal = !location.hash.includes(
     "administrar_datos/tipos_productosPerfil"
   );
 
+  // Obtiene el tipo desde el backend (asegura datos actualizados)
   const response = await get(`tipos-productos/${tipoProducto.id}`);
 
+  // Si la petición falla, mostrar error, cerrar modal y retroceder
   if (!response.success) {
     await error(response.message);
     cerrarModal("productType-profile");
@@ -37,55 +47,71 @@ export const profileProductTypeController = async (parametros = null) => {
     return;
   }
 
+  // Rellena el título del modal/contenedor con el nombre del tipo
   const titulo = DOMSelector("#productType-title");
+  if (titulo) titulo.textContent = response.data.nombre;
 
-  titulo.textContent = response.data.nombre;
-
-  const [...acciones] = contenedorVista.querySelectorAll(`[data-permiso]`);
-
-  console.log(acciones);
+  // Filtra acciones en la vista según permisos (attribute: data-permiso)
+  const acciones = Array.from(
+    contenedorVista.querySelectorAll(`[data-permiso]`)
+  );
 
   for (const accion of acciones) {
-    console.log(accion.dataset.permiso.split(","));
-    console.log(hasPermission(accion.dataset.permiso.split(",")));
-    if (!hasPermission(accion.dataset.permiso.split(","))) {
+    // Asegura que el atributo exista antes de split
+    const permisosAttr = accion.dataset.permiso ?? "";
+    const permisos = permisosAttr
+      .split(",")
+      .map((p) => p.trim())
+      .filter(Boolean);
+
+    // Si el usuario no tiene ninguno de los permisos requeridos, remueve la acción
+    if (permisos.length > 0 && !hasPermission(permisos)) {
       accion.remove();
     }
   }
 
+  // Eventos del modal: editar y eliminar
   modal.addEventListener("click", async (e) => {
-    if (e.target.id == "edit-productType") {
-      // await cargarComponente(routes.administrar_datos.tipos_productosEditar, {
-      //   id: tipoProducto.id,
-      //   nombre: response.data.nombre,
-      // });
+    // EDITAR: redirige a la ruta de edición relativa
+    if (e.target.id === "edit-productType") {
       location.hash =
         location.hash +
         (location.hash[location.hash.length - 1] == "/" ? `editar` : `/editar`);
+      return;
     }
 
-    if (e.target.id == "delete-productType") {
-      const response = await del(`tipos-productos/${tipoProducto.id}`);
+    // ELIMINAR: realiza DELETE y actualiza UI si es exitoso
+    if (e.target.id === "delete-productType") {
+      const responseDel = await del(`tipos-productos/${tipoProducto.id}`);
 
-      if (response.success) {
-        successTemporal(response.message);
+      if (responseDel.success) {
+        // Muestra mensaje de éxito temporal
+        successTemporal(responseDel.message);
+
+        // Elimina la fila correspondiente en la tabla principal si existe
         const fila = DOMSelector(
           `#productsTypes [data-id="${tipoProducto.id}"]`
         );
-        fila.remove();
+        if (fila) fila.remove();
+
+        // Cierra modal y vuelve en el historial
         cerrarModal("productType-profile");
         history.back();
-      } else {
-        await error(response.message);
         return;
       }
+
+      // Si hubo error al eliminar, mostrarlo
+      await error(responseDel.message);
+      return;
     }
   });
 
+  // Listener para el botón de volver/cerrar dentro del contenedor/modal
   contenedorVista.addEventListener("click", (e) => {
-    if (e.target.id == "back-productType-profile") {
+    if (e.target.id === "back-productType-profile") {
       cerrarModal("productType-profile");
       history.back();
+      return;
     }
   });
 };

@@ -1,5 +1,13 @@
 import Swal from "sweetalert2";
 
+/**
+ * Muestra un modal de éxito con título predefinido.
+ *
+ * @param {string} message - Mensaje a mostrar dentro del modal.
+ * @returns {Promise<SweetAlertResult>}
+ *   Promise que se resuelve cuando el usuario cierra el modal.
+ *
+ */
 export const success = (message) => {
   return Swal.fire({
     title: "Exito!",
@@ -9,16 +17,15 @@ export const success = (message) => {
   });
 };
 
+/**
+ * Muestra un toast temporal de éxito en la esquina superior.
+ *
+ * @param {string} message - Mensaje breve a mostrar en el toast.
+ * @returns {Promise<SweetAlertToastResult>}
+ *   Promise que se resuelve cuando expira el timer o el usuario interactúa.
+ *
+ */
 export const successTemporal = (message) => {
-  // return Swal.fire({
-  //   icon: "success",
-  //   title: "Exito!",
-  //   text: message,
-  //   showConfirmButton: false,
-  //   timer: 2000,
-  //   timerProgressBar: true,
-  // });
-
   const Toast = Swal.mixin({
     toast: true,
     position: "top-end",
@@ -37,6 +44,14 @@ export const successTemporal = (message) => {
   });
 };
 
+/**
+ * Muestra un toast temporal de advertencia en la esquina superior.
+ *
+ * @param {string} message - Mensaje breve a mostrar en el toast de advertencia.
+ * @returns {Promise<SweetAlertToastResult>}
+ *   Promise que se resuelve tras expirar el timer o tras interacción del usuario.
+ *
+ */
 export const errorTemporal = (message) => {
   const Toast = Swal.mixin({
     toast: true,
@@ -56,6 +71,14 @@ export const errorTemporal = (message) => {
   });
 };
 
+/**
+ * Muestra un modal de error con título y confirmación.
+ *
+ * @param {string} message - Texto descriptivo del error.
+ * @returns {Promise<SweetAlertResult>}
+ *   Promise que se resuelve cuando el usuario presiona "Ok".
+ *
+ */
 export const error = (message) => {
   return Swal.fire({
     title: "Error!",
@@ -65,6 +88,14 @@ export const error = (message) => {
   });
 };
 
+/**
+ * Muestra un modal de "Inicio de sesión" con spinner y timer.
+ *
+ * @param {string} message - Mensaje HTML o texto a mostrar durante la carga.
+ * @returns {Promise<SweetAlertResult>}
+ *   Promise que se resuelve cuando finaliza el timer (2000ms).
+ *
+ */
 export const loginSuccess = (message) => {
   return Swal.fire({
     title: "Inicio de sesión",
@@ -78,6 +109,13 @@ export const loginSuccess = (message) => {
   });
 };
 
+/**
+ * Muestra un modal de confirmación antes de eliminar o continuar.
+ *
+ * @returns {Promise<SweetAlertResult>}
+ *   Promise que se resuelve con la respuesta del usuario (confirmado o cancelado).
+ *
+ */
 export const confirm = () => {
   return Swal.fire({
     title: "Precaución",

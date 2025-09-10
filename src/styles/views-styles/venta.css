@@ -30,13 +30,12 @@
 }
 
 .venta-productos {
-  overflow-y: auto;
-  /* flex-grow: 1; */
-  max-height: none; /* Evita restricciones fijas */
-  gap: 10px;
   display: flex;
   flex-direction: column;
+  gap: 10px;
   padding-right: 10px;
+  overflow-y: auto;
+  max-height: none; /* Evita restricciones fijas */
 }
 
 .venta-productos-placeholder {
@@ -75,13 +74,12 @@
 .producto {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr 1fr 50px;
-  padding: 5px;
-  background-color: #cdcdcd;
-  color: #000;
-  border-radius: 10px;
   align-items: center;
   gap: 10px;
-  padding-left: 10px;
+  padding: 5px 5px 5px 10px;
+  background-color: #cdcdcd;
+  color: #000;
+  border-radius: var(--radius-md);
 }
 
 .m-r-12 {
@@ -90,12 +88,12 @@
   box-shadow: 0 0 5px 0 #c0c0c0;
   font-weight: 600;
   height: 45px;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
 }
 
 .producto__item {
   text-overflow: ellipsis;
-  text-wrap: nowrap;
+  white-space: nowrap;
   overflow: hidden;
 }
 
@@ -105,11 +103,11 @@
   align-items: center;
   width: 30px;
   padding: 5px;
-  font-size: 20px;
+  font-size: var(--font-size-lg);
   font-weight: 400;
   color: #fff;
-  background-color: #cc1010;
-  border-radius: 5px;
+  background-color: var(--color-danger);
+  border-radius: var(--radius-sm);
   cursor: pointer;
   z-index: 1;
 }
@@ -120,7 +118,7 @@
 .icon-container {
   width: 100%;
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   margin-top: 20px;
 }
 
@@ -134,12 +132,9 @@
   margin: 0;
 }
 
-.w-550 {
-  width: 550px;
-}
-
-/* RESUMEN */
-
+/* =========================
+   RESUMEN
+========================= */
 .valorAgregado {
   display: flex;
   align-items: center;
@@ -159,33 +154,10 @@
   justify-content: space-between;
 }
 
-.mt-10 {
-  margin-top: 10px;
-}
-
 .venta-profile.contenedor-perfil#venta {
   grid-template-rows: 60px 50px 1fr;
 }
 
-.d-flex {
-  display: flex;
-  /* font-size: 16px; */
-  /* justify-content: space-around; */
-}
-
-.jc-sa {
-  justify-content: space-around;
-}
-
 #datos-venta .perfil__campo {
-  /* display: flex; */
-  font-size: 18px;
-}
-
-.w-750 {
-  width: 750px;
-}
-
-.fw-400 {
-  font-weight: 400;
+  font-size: var(--font-size-md);
 }

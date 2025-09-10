@@ -1,4 +1,21 @@
 :root {
-  --color-primario: #0161b5;
-  /* --tamano-fuente: 16px; */
+  --color-primary: #0161b5;
+  --color-secondary: #9bc3ee;
+  --color-tbody-bg: #e0eefc;
+  --color-thead-bg: #293241;
+
+  --color-danger: #cc1010;
+  --color-warning: #ea9c0e;
+
+  --color-text: #1f2937;
+  --color-bg: #f6f6f6;
+
+  --radius-sm: 5px;
+  --radius-md: 10px;
+  --radius-full: 50%;
+
+  --font-size-sm: 16px;
+  --font-size-md: 18px;
+  --font-size-lg: 20px;
+  --font-size-xl: 24px;
 }
